@@ -1,5 +1,5 @@
 # RDFSharp.Semantics - Ontology modeling with RDFSharp
-RDFSharp.Semantics is an extension of <a href="https://github.com/mdesalvo/RDFSharp">RDFSharp</a> which makes it possible to create, validate and reason with OWL-DL ontologies. 
+RDFSharp.Semantics is a plugin of <a href="https://github.com/mdesalvo/RDFSharp">RDFSharp</a> which makes it possible to create, validate and reason with OWL-DL ontologies. 
 
 <hr>
 There are many ways that you can contribute to the RDFSharp.Semantics project: 
