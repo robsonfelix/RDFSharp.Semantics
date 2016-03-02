@@ -212,7 +212,7 @@ namespace RDFSharp.Semantics
 
                     //Raise warning event to inform the user: Standard RDFS/OWL
                     //annotation properties cannot be used in custom annotations
-                    RDFSemanticsEvents.RaiseSemanticsWarning("SEMANTICS WARNING: Standard RDFS/OWL annotation properties cannot be used in custom annotations.");
+                    RDFSemanticsEvents.RaiseSemanticsWarning("Standard RDFS/OWL annotation properties cannot be used in custom annotations.");
 
                     return this;
                 }
@@ -230,6 +230,8 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFOntologyData AddClassTypeRelation(RDFOntologyFact ontologyFact, RDFOntologyClass ontologyClass) {
             if (ontologyFact != null && ontologyClass != null) {
+
+                //Classtype relations can be explicitly assigned only to plain classes
                 if (!ontologyClass.IsRestrictionClass() && !ontologyClass.IsCompositeClass() &&
                     !ontologyClass.IsEnumerateClass()   && !ontologyClass.IsDataRangeClass()) {
                      this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFOntologyVocabulary.ObjectProperties.TYPE, ontologyClass));
@@ -238,9 +240,10 @@ namespace RDFSharp.Semantics
 
                      //Raise warning event to inform the user: ClassType relation cannot be added to the data
                      //because only plain classes can be explicitly assigned as class types of facts
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
                      
                 }
+
             }
             return this;
         }
@@ -250,7 +253,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFOntologyData AddSameAsRelation(RDFOntologyFact aFact, RDFOntologyFact bFact) {
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
-                if (!RDFOntologyReasonerHelper.IsDifferentFactFrom(aFact, bFact, this)) {
+                if (!RDFOntologyReasoningHelper.IsDifferentFactFrom(aFact, bFact, this)) {
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFOntologyVocabulary.ObjectProperties.SAME_AS, bFact));
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFOntologyVocabulary.ObjectProperties.SAME_AS, aFact).SetInference(true));
                 }
@@ -258,7 +261,7 @@ namespace RDFSharp.Semantics
 
                      //Raise warning event to inform the user: SameAs relation cannot be 
                      //added to the data because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SameAs relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SameAs relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
 
                 }
             }
@@ -270,7 +273,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFOntologyData AddDifferentFromRelation(RDFOntologyFact aFact, RDFOntologyFact bFact) {
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
-                if (!RDFOntologyReasonerHelper.IsSameFactAs(aFact, bFact, this)) {
+                if (!RDFOntologyReasoningHelper.IsSameFactAs(aFact, bFact, this)) {
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFOntologyVocabulary.ObjectProperties.DIFFERENT_FROM, bFact));
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFOntologyVocabulary.ObjectProperties.DIFFERENT_FROM, aFact).SetInference(true));
                 }
@@ -278,7 +281,7 @@ namespace RDFSharp.Semantics
                      
                      //Raise warning event to inform the user: DifferentFrom relation cannot be 
                      //added to the data because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: DifferentFrom relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
 
                 }
             }
@@ -290,7 +293,16 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFOntologyData AddAssertionRelation(RDFOntologyFact aFact, RDFOntologyObjectProperty objectProperty, RDFOntologyFact bFact) {
             if (aFact != null && objectProperty != null && bFact != null) {
-                this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
+                if(!RDFOntologyReasoningHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
+                    this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
+                }
+                else {
+
+                    //Raise warning event to inform the user: Assertion relation cannot be 
+                    //added to the data because it violates the taxonomy transitive consistency
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and fact '{1}' with transitive property '{2}' cannot be added to the data because it would violate the taxonomy consistency (transitive cycle detected).", aFact, bFact, objectProperty));
+
+                }
             }
             return this;
         }

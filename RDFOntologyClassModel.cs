@@ -240,7 +240,7 @@ namespace RDFSharp.Semantics {
 
                     //Raise warning event to inform the user: Standard RDFS/OWL
                     //annotation properties cannot be used in custom annotations
-                    RDFSemanticsEvents.RaiseSemanticsWarning("SEMANTICS WARNING: Standard RDFS/OWL annotation properties cannot be used in custom annotations.");
+                    RDFSemanticsEvents.RaiseSemanticsWarning("Standard RDFS/OWL annotation properties cannot be used in custom annotations.");
 
                     return this;
                 }
@@ -256,16 +256,16 @@ namespace RDFSharp.Semantics {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
                 //Enforce taxonomy checks before adding the subClassOf relation, in order to not model inconsistencies
-                if (!RDFOntologyReasonerHelper.IsSubClassOf(motherClass,        childClass, this) &&
-                    !RDFOntologyReasonerHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
-                    !RDFOntologyReasonerHelper.IsDisjointClassWith(motherClass, childClass, this)) {
+                if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this) &&
+                    !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
+                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this)) {
                      this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFOntologyVocabulary.ObjectProperties.SUB_CLASS_OF, motherClass));
                 }
                 else {
                      
                      //Raise warning event to inform the user: SubClassOf relation cannot be 
                      //added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
 
                 }
 
@@ -280,9 +280,9 @@ namespace RDFSharp.Semantics {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
                 //Enforce taxonomy checks before adding the equivalentClass relation, in order to not model inconsistencies
-                if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this) &&
-                    !RDFOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this) &&
-                    !RDFOntologyReasonerHelper.IsDisjointClassWith(aClass, bClass, this)) {
+                if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
+                    !RDFOntologyReasoningHelper.IsSuperClassOf(aClass,      bClass, this) &&
+                    !RDFOntologyReasoningHelper.IsDisjointClassWith(aClass, bClass, this)) {
                      this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_CLASS, bClass));
                      this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_CLASS, aClass).SetInference(true));
                 }
@@ -290,7 +290,7 @@ namespace RDFSharp.Semantics {
 
                      //Raise warning event to inform the user: EquivalentClass relation cannot be 
                      //added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
 
                 }
 
@@ -305,9 +305,9 @@ namespace RDFSharp.Semantics {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
                 //Enforce taxonomy checks before adding the disjointWith relation, in order to not model inconsistencies
-                if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this) &&
-                    !RDFOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this) &&
-                    !RDFOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this)) {
+                if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
+                    !RDFOntologyReasoningHelper.IsSuperClassOf(aClass,      bClass, this) &&
+                    !RDFOntologyReasoningHelper.IsEquivalentClassOf(aClass, bClass, this)) {
                      this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFOntologyVocabulary.ObjectProperties.DISJOINT_WITH, bClass));
                      this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFOntologyVocabulary.ObjectProperties.DISJOINT_WITH, aClass).SetInference(true));
                 }
@@ -315,7 +315,7 @@ namespace RDFSharp.Semantics {
 
                      //Raise warning event to inform the user: DisjointWith relation cannot be 
                      //added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
 
                 }
 

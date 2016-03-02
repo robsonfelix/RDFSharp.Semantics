@@ -49,6 +49,7 @@ namespace RDFSharp.Semantics
             //Taxonomies - Primitive Datatypes
             var rdfsLiteralCls   = ontology.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
             var rdfXmlLitCls     = ontology.Model.ClassModel.SelectClass(RDFVocabulary.RDF.XML_LITERAL.ToString());
+            var rdfHtmlCls       = ontology.Model.ClassModel.SelectClass(RDFVocabulary.RDF.HTML.ToString());
             var xsdStringCls     = ontology.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString());
             var xsdBooleanCls    = ontology.Model.ClassModel.SelectClass(RDFVocabulary.XSD.BOOLEAN.ToString());
             var xsdBase64Cls     = ontology.Model.ClassModel.SelectClass(RDFVocabulary.XSD.BASE64_BINARY.ToString());
@@ -69,6 +70,7 @@ namespace RDFSharp.Semantics
             var xsdGDayCls       = ontology.Model.ClassModel.SelectClass(RDFVocabulary.XSD.G_DAY.ToString());
             var xsdGMonthCls     = ontology.Model.ClassModel.SelectClass(RDFVocabulary.XSD.G_MONTH.ToString());
             ontology.Model.ClassModel.AddSubClassOfRelation(rdfXmlLitCls,     rdfsLiteralCls);
+            ontology.Model.ClassModel.AddSubClassOfRelation(rdfHtmlCls,       rdfsLiteralCls);
             ontology.Model.ClassModel.AddSubClassOfRelation(xsdStringCls,     rdfsLiteralCls);
             ontology.Model.ClassModel.AddSubClassOfRelation(xsdBooleanCls,    rdfsLiteralCls);
             ontology.Model.ClassModel.AddSubClassOfRelation(xsdBase64Cls,     rdfsLiteralCls);
@@ -191,8 +193,8 @@ namespace RDFSharp.Semantics
             // Step 2: Enlist equivalent classes of subclasses
             result2     = result2.UnionWith(result1);
             foreach(var sc in result1) {
-                result2 = result2.UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(sc, classModel)
-                                                .UnionWith(RDFOntologyReasonerHelper.EnlistSubClassesOf(sc, classModel)));
+                result2 = result2.UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(sc, classModel)
+                                                .UnionWith(RDFOntologyReasoningHelper.EnlistSubClassesOf(sc, classModel)));
             }
             
             return result2;
@@ -224,8 +226,8 @@ namespace RDFSharp.Semantics
             // Step 2: Enlist equivalent classes of superclasses
             result2     = result2.UnionWith(result1);
             foreach(var sc in result1) {
-                result2 = result2.UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(sc, classModel)
-                                                .UnionWith(RDFOntologyReasonerHelper.EnlistSuperClassesOf(sc, classModel)));
+                result2 = result2.UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(sc, classModel)
+                                                .UnionWith(RDFOntologyReasoningHelper.EnlistSuperClassesOf(sc, classModel)));
             }
 
             return result2;
@@ -298,8 +300,8 @@ namespace RDFSharp.Semantics
             result1           = result1.UnionWith(result2);
 
             // Inference: ((A EQUIVALENTCLASS B || A SUBCLASSOF B)  &&  (B DISJOINTWITH C))     =>  (A DISJOINTWITH C)
-            var compatibleCls = RDFOntologyReasonerHelper.EnlistSuperClassesOf(ontClass, classModel)
-                                        .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(ontClass, classModel));
+            var compatibleCls = RDFOntologyReasoningHelper.EnlistSuperClassesOf(ontClass, classModel)
+                                        .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(ontClass, classModel));
             foreach (var      ec in compatibleCls) {
                 result1       = result1.UnionWith(RDFSemanticsUtilities.EnlistDisjointClassesWith_Core(ec, classModel, visitContext));
             }
@@ -337,8 +339,8 @@ namespace RDFSharp.Semantics
             // Step 2: Enlist equivalent properties of subproperties
             result2     = result2.UnionWith(result1);
             foreach(var sp in result1) {
-                result2 = result2.UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(sp, propertyModel)
-                                                .UnionWith(RDFOntologyReasonerHelper.EnlistSubPropertiesOf(sp, propertyModel)));
+                result2 = result2.UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(sp, propertyModel)
+                                                .UnionWith(RDFOntologyReasoningHelper.EnlistSubPropertiesOf(sp, propertyModel)));
             }
 
             return result2;
@@ -370,8 +372,8 @@ namespace RDFSharp.Semantics
             // Step 2: Enlist equivalent properties of subproperties
             result2     = result2.UnionWith(result1);
             foreach(var sp in result1) {
-                result2 = result2.UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(sp, propertyModel)
-                                                .UnionWith(RDFOntologyReasonerHelper.EnlistSuperPropertiesOf(sp, propertyModel)));
+                result2 = result2.UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(sp, propertyModel)
+                                                .UnionWith(RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(sp, propertyModel)));
             }
 
             return result2;
@@ -480,8 +482,43 @@ namespace RDFSharp.Semantics
             }
 
             // Inference: (A SAMEAS B         &&  B DIFFERENTFROM C  =>  A DIFFERENTFROM C)
-            foreach (var     sa in RDFOntologyReasonerHelper.EnlistSameFactsAs(ontFact, data)) {
+            foreach (var     sa in RDFOntologyReasoningHelper.EnlistSameFactsAs(ontFact, data)) {
                 result        = result.UnionWith(RDFSemanticsUtilities.EnlistDifferentFactsFrom_Core(sa, data, visitContext));
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region TransitiveProperty
+        /// <summary>
+        /// Enlists the transitive assertions of the given fact and the given property within the given data
+        /// </summary>
+        internal static RDFOntologyData EnlistTransitiveAssertionsOf_Core(RDFOntologyFact ontFact,
+                                                                          RDFOntologyObjectProperty ontProp,
+                                                                          RDFOntologyData data,
+                                                                          Dictionary<Int64, RDFOntologyFact> visitContext) {
+            var result        = new RDFOntologyData();
+
+            #region visitContext
+            if(visitContext  == null) {
+                visitContext  = new Dictionary<Int64, RDFOntologyFact>() { { ontFact.PatternMemberID, ontFact } };
+            }
+            else {
+                if(!visitContext.ContainsKey(ontFact.PatternMemberID)) {
+                    visitContext.Add(ontFact.PatternMemberID, ontFact);
+                }
+                else {
+                    return result;
+                }
+            }
+            #endregion
+
+            // ((F1 P F2)    &&  (F2 P F3))  =>  (F1 P F3)
+            foreach(var ta   in data.Relations.Assertions.SelectEntriesBySubject(ontFact)
+                                                         .SelectEntriesByPredicate(ontProp)) {
+                result.AddFact((RDFOntologyFact)ta.TaxonomyObject);
+                result        = result.UnionWith(RDFSemanticsUtilities.EnlistTransitiveAssertionsOf_Core((RDFOntologyFact)ta.TaxonomyObject, ontProp, data, visitContext));
             }
 
             return result;
@@ -496,8 +533,8 @@ namespace RDFSharp.Semantics
             var result     = new RDFOntologyData();
 
             //Enlist the properties which are compatible with the restriction's "OnProperty"
-            var compProps  = RDFOntologyReasonerHelper.EnlistSubPropertiesOf(ontRestriction.OnProperty, ontology.Model.PropertyModel)
-                                 .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(ontRestriction.OnProperty, ontology.Model.PropertyModel))
+            var compProps  = RDFOntologyReasoningHelper.EnlistSubPropertiesOf(ontRestriction.OnProperty, ontology.Model.PropertyModel)
+                                 .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(ontRestriction.OnProperty, ontology.Model.PropertyModel))
                                     .AddProperty(ontRestriction.OnProperty);
             
             //Filter assertions made with enlisted compatible properties
@@ -560,8 +597,8 @@ namespace RDFSharp.Semantics
                 var fCount      = new Dictionary<Int64, Tuple<RDFOntologyFact, Int64, Int64>>();
 
                 //Enlist the classes which are compatible with the restricted "FromClass"
-                var compClasses = RDFOntologyReasonerHelper.EnlistSubClassesOf(((RDFOntologyAllValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel)
-                                      .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(((RDFOntologyAllValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel))
+                var compClasses = RDFOntologyReasoningHelper.EnlistSubClassesOf(((RDFOntologyAllValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel)
+                                      .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(((RDFOntologyAllValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel))
                                          .AddClass(((RDFOntologyAllValuesFromRestriction)ontRestriction).FromClass);
 
                 //Iterate the compatible assertions
@@ -576,8 +613,8 @@ namespace RDFSharp.Semantics
                     var fromClassFound            = false;
                     var objFactClassTypes         = ontology.Data.Relations.ClassType.SelectEntriesBySubject(tEntry.TaxonomyObject);
                     foreach (var objFactClassType in objFactClassTypes) {
-                        var compObjFactClassTypes = RDFOntologyReasonerHelper.EnlistSubClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel)
-                                                        .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel))
+                        var compObjFactClassTypes = RDFOntologyReasoningHelper.EnlistSubClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel)
+                                                        .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel))
                                                             .AddClass((RDFOntologyClass)objFactClassType.TaxonomyObject);
                         if  (compObjFactClassTypes.IntersectWith(compClasses).ClassesCount > 0) {
                              fromClassFound       = true;
@@ -616,8 +653,8 @@ namespace RDFSharp.Semantics
                 var fCount      = new Dictionary<Int64, Tuple<RDFOntologyFact, Int64, Int64>>();
 
                 //Enlist the classes which are compatible with the restricted "FromClass"
-                var compClasses = RDFOntologyReasonerHelper.EnlistSubClassesOf(((RDFOntologySomeValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel)
-                                      .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(((RDFOntologySomeValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel))
+                var compClasses = RDFOntologyReasoningHelper.EnlistSubClassesOf(((RDFOntologySomeValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel)
+                                      .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(((RDFOntologySomeValuesFromRestriction)ontRestriction).FromClass, ontology.Model.ClassModel))
                                          .AddClass(((RDFOntologySomeValuesFromRestriction)ontRestriction).FromClass);
 
                 //Iterate the compatible assertions
@@ -632,8 +669,8 @@ namespace RDFSharp.Semantics
                     var fromClassFound            = false;
                     var objFactClassTypes         = ontology.Data.Relations.ClassType.SelectEntriesBySubject(tEntry.TaxonomyObject);
                     foreach (var objFactClassType in objFactClassTypes) {
-                        var compObjFactClassTypes = RDFOntologyReasonerHelper.EnlistSubClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel)
-                                                        .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel))
+                        var compObjFactClassTypes = RDFOntologyReasoningHelper.EnlistSubClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel)
+                                                        .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf((RDFOntologyClass)objFactClassType.TaxonomyObject, ontology.Model.ClassModel))
                                                             .AddClass((RDFOntologyClass)objFactClassType.TaxonomyObject);
                         if  (compObjFactClassTypes.IntersectWith(compClasses).ClassesCount > 0) {
                              fromClassFound       = true;
@@ -669,14 +706,14 @@ namespace RDFSharp.Semantics
                 if (((RDFOntologyHasValueRestriction)ontRestriction).RequiredValue.IsFact()) {
 
                     //Enlist the same facts of the restriction's "RequiredValue"
-                    var compFacts = RDFOntologyReasonerHelper.EnlistSameFactsAs((RDFOntologyFact)((RDFOntologyHasValueRestriction)ontRestriction).RequiredValue, ontology.Data)
+                    var compFacts = RDFOntologyReasoningHelper.EnlistSameFactsAs((RDFOntologyFact)((RDFOntologyHasValueRestriction)ontRestriction).RequiredValue, ontology.Data)
                                         .AddFact((RDFOntologyFact)((RDFOntologyHasValueRestriction)ontRestriction).RequiredValue);
 
                     //Iterate the compatible assertions
                     foreach (var  tEntry in fTaxonomy) {
                         if  (tEntry.TaxonomyObject.IsFact()) {
                              if (compFacts.SelectFact(tEntry.TaxonomyObject.ToString()) != null) {
-                                 result.AddFact((RDFOntologyFact)tEntry.TaxonomyObject);
+                                 result.AddFact((RDFOntologyFact)tEntry.TaxonomySubject);
                              }
                         }
                     }
@@ -715,29 +752,9 @@ namespace RDFSharp.Semantics
             foreach (var   tEntry in enTaxonomy) {
                 
                 //Add the fact and its synonyms
-                if  (tEntry.TaxonomyObject.IsFact()) {
-                     result= result.UnionWith(RDFOntologyReasonerHelper.EnlistSameFactsAs((RDFOntologyFact)tEntry.TaxonomyObject, ontology.Data))
+                if  (tEntry.TaxonomySubject.IsEnumerateClass() && tEntry.TaxonomyObject.IsFact()) {
+                     result= result.UnionWith(RDFOntologyReasoningHelper.EnlistSameFactsAs((RDFOntologyFact)tEntry.TaxonomyObject, ontology.Data))
                                       .AddFact((RDFOntologyFact)tEntry.TaxonomyObject);
-                }
-
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Enlists the literals which are members of the given datarange within the given ontology
-        /// </summary>
-        internal static RDFOntologyData EnlistMembersOfDataRange(RDFOntologyDataRangeClass ontDataRangeClass, RDFOntology ontology) {
-            var result     = new RDFOntologyData();
-
-            //Filter "oneOf" relations made with the given datarange class
-            var drTaxonomy = ontology.Model.ClassModel.Relations.OneOf.SelectEntriesBySubject(ontDataRangeClass);
-            foreach (var   tEntry  in drTaxonomy) {
-
-                //Add the literal
-                if  (tEntry.TaxonomyObject.IsLiteral()) {
-                     result.AddLiteral((RDFOntologyLiteral)tEntry.TaxonomyObject);
                 }
 
             }
@@ -759,11 +776,11 @@ namespace RDFSharp.Semantics
                 var iTaxonomy     = ontology.Model.ClassModel.Relations.IntersectionOf.SelectEntriesBySubject(ontCompClass);
                 foreach (var      tEntry in iTaxonomy) {
                     if  (firstIter) {
-                        result    = RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology);
+                        result    = RDFOntologyReasoningHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology);
                         firstIter = false;
                     }
                     else {
-                        result    = result.IntersectWith(RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology));
+                        result    = result.IntersectWith(RDFOntologyReasoningHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology));
                     }
                 }
 
@@ -775,14 +792,93 @@ namespace RDFSharp.Semantics
                 //Filter "unionOf" relations made with the given union class
                 var uTaxonomy     = ontology.Model.ClassModel.Relations.UnionOf.SelectEntriesBySubject(ontCompClass);
                 foreach (var      tEntry in uTaxonomy) {
-                    result        = result.UnionWith(RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology));
+                    result        = result.UnionWith(RDFOntologyReasoningHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology));
                 }
 
             }
 
             //Complement
             else if (ontCompClass is RDFOntologyComplementClass) {
-                result            = ontology.Data.DifferenceWith(RDFOntologyReasonerHelper.EnlistMembersOf(ontCompClass, ontology));
+                result            = ontology.Data.DifferenceWith(RDFOntologyReasoningHelper.EnlistMembersOf(ontCompClass, ontology));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Enlists the literals which are members of the given literal-compatible class within the given ontology
+        /// </summary>
+        internal static RDFOntologyData EnlistMembersOfLiteralCompatibleClass(RDFOntologyClass ontClass, RDFOntology ontology) {
+            var result         = new RDFOntologyData();
+
+            //DataRange
+            if(ontClass.IsDataRangeClass()) {
+
+                //Filter "oneOf" relations made with the given datarange class
+                var drTaxonomy = ontology.Model.ClassModel.Relations.OneOf.SelectEntriesBySubject(ontClass);
+                foreach(var tEntry in drTaxonomy) {
+
+                    //Add the literal
+                    if(tEntry.TaxonomySubject.IsDataRangeClass() && tEntry.TaxonomyObject.IsLiteral()) {
+                        result.AddLiteral((RDFOntologyLiteral)tEntry.TaxonomyObject);
+                    }
+
+                }
+
+            }
+
+            //Pure Literal
+            else if(ontClass.Equals(RDFOntologyVocabulary.Classes.LITERAL) || RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, RDFOntologyVocabulary.Classes.LITERAL, ontology.Model.ClassModel)) {
+                foreach(var ontLit in ontology.Data.Literals.Values) {
+                    result.AddLiteral(ontLit);
+                }
+            }
+
+            //Derived Literal
+            else {
+
+                //String-Literals
+                var xsdStringClass          = ontology.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString());
+                if(ontClass.Equals(xsdStringClass) || RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, xsdStringClass, ontology.Model.ClassModel)) {
+                    foreach(var ontLit in ontology.Data.Literals.Values) {
+                        if(ontLit.Value is RDFPlainLiteral) {
+                            result.AddLiteral(ontLit);
+                        }
+                        else {
+                            var dTypeClass  = ontology.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
+                            if(dTypeClass != null) {
+                                if(dTypeClass.Equals(ontClass) || RDFOntologyReasoningHelper.IsSubClassOf(dTypeClass, ontClass, ontology.Model.ClassModel) 
+                                                               || RDFOntologyReasoningHelper.IsEquivalentClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)) {
+                                    result.AddLiteral(ontLit);
+                                }
+                            }
+                            else {
+                                if(dTypeClass.Equals(ontClass)) {
+                                    result.AddLiteral(ontLit);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Other Literals
+                else {
+                    foreach(var ontLit in ontology.Data.Literals.Values.Where(l => l.Value is RDFTypedLiteral)) {
+                        var  dTypeClass   = ontology.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
+                        if(dTypeClass != null) {
+                            if(dTypeClass.Equals(ontClass) || RDFOntologyReasoningHelper.IsSubClassOf(dTypeClass, ontClass, ontology.Model.ClassModel) 
+                                                           || RDFOntologyReasoningHelper.IsEquivalentClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)) {
+                                result.AddLiteral(ontLit);
+                            }
+                        }
+                        else {
+                            if(dTypeClass.Equals(ontClass)) {
+                                result.AddLiteral(ontLit);
+                            }
+                        }
+                    }
+                }
+
             }
 
             return result;
@@ -792,119 +888,28 @@ namespace RDFSharp.Semantics
         /// Enlists the facts which are members of the given class within the given ontology
         /// </summary>
         internal static RDFOntologyData EnlistMembersOfClass(RDFOntologyClass ontClass, RDFOntology ontology) {
-            var result         = new RDFOntologyData();
+            var result     = new RDFOntologyData();
 
-            //DataRange / Literal
-            if (ontClass.IsDataRangeClass()                                                         
-                || ontClass.Equals(RDFOntologyVocabulary.Classes.LITERAL)
-                || RDFOntologyReasonerHelper.IsSubClassOf(ontClass, RDFOntologyVocabulary.Classes.LITERAL, ontology.Model.ClassModel)
-                || RDFOntologyReasonerHelper.IsEquivalentClassOf(ontClass, RDFOntologyVocabulary.Classes.LITERAL, ontology.Model.ClassModel)) {
+            //Get the compatible classes
+            var compCls    = RDFOntologyReasoningHelper.EnlistSubClassesOf(ontClass, ontology.Model.ClassModel)
+                                    .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(ontClass, ontology.Model.ClassModel))
+                                    .AddClass(ontClass);
 
-                //DataRange
-                if (ontClass.IsDataRangeClass()) {
-                    result     = RDFSemanticsUtilities.EnlistMembersOfDataRange((RDFOntologyDataRangeClass)ontClass, ontology);
-                }
+            //Filter "classType" relations made with compatible classes
+            var fTaxonomy  = new RDFOntologyTaxonomy();
+            foreach (var   c in compCls) {
+                fTaxonomy  = fTaxonomy.UnionWith(ontology.Data.Relations.ClassType.SelectEntriesByObject(c));
+            }
+            foreach (var   tEntry in fTaxonomy) {
 
-                //Literal
-                else { 
-                    
-                    //Pure Literal
-                    if (ontClass.Equals(RDFOntologyVocabulary.Classes.LITERAL)                                                            || 
-                        RDFOntologyReasonerHelper.IsEquivalentClassOf(ontClass, RDFOntologyVocabulary.Classes.LITERAL, ontology.Model.ClassModel)) {
-                        foreach (var ontLit in ontology.Data.Literals.Values) {
-                            result.AddLiteral(ontLit);
-                        }
-                    }
-
-                    //Derived Literal
-                    else {
-
-                        //String-Literals
-                        var xsdStringClass          = ontology.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString());
-                        if (ontClass.Equals(xsdStringClass)                                                            || 
-                            RDFOntologyReasonerHelper.IsEquivalentClassOf(ontClass, xsdStringClass, ontology.Model.ClassModel)) {
-                            foreach (var ontLit    in ontology.Data.Literals.Values) {
-                                if  (ontLit.Value  is RDFPlainLiteral) {
-                                     result.AddLiteral(ontLit);
-                                }
-                                else {
-                                    var dTypeClass  = ontology.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
-                                    if (dTypeClass != null) {
-                                        if (dTypeClass.Equals(ontClass)                                                     ||
-                                            RDFOntologyReasonerHelper.IsSubClassOf(dTypeClass, ontClass, ontology.Model.ClassModel) ||
-                                            RDFOntologyReasonerHelper.IsEquivalentClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)) {
-                                            result.AddLiteral(ontLit);
-                                        }
-                                    }
-                                    else {
-                                        if (dTypeClass.Equals(ontClass)) {
-                                            result.AddLiteral(ontLit);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        //Other Literals
-                        else {
-                            foreach (var ontLit  in ontology.Data.Literals.Values.Where(l => l.Value is RDFTypedLiteral)) {
-                                var  dTypeClass   = ontology.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
-                                if  (dTypeClass  != null) {
-                                    if (dTypeClass.Equals(ontClass)                                                            ||
-                                        RDFOntologyReasonerHelper.IsSubClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)        ||
-                                        RDFOntologyReasonerHelper.IsEquivalentClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)) {
-                                        result.AddLiteral(ontLit);
-                                    }
-                                }
-                                else {
-                                    if (dTypeClass.Equals(ontClass)) {
-                                        result.AddLiteral(ontLit);
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-
+                //Add the fact and its synonyms
+                if (tEntry.TaxonomySubject.IsFact()) {
+                    result = result.UnionWith(RDFOntologyReasoningHelper.EnlistSameFactsAs((RDFOntologyFact)tEntry.TaxonomySubject, ontology.Data))
+                                        .AddFact((RDFOntologyFact)tEntry.TaxonomySubject);
                 }
 
             }
-
-            //Composite
-            else if (ontClass.IsCompositeClass()) {
-                result         = RDFSemanticsUtilities.EnlistMembersOfComposite(ontClass, ontology);
-            }
-
-            //Enumerate
-            else if (ontClass.IsEnumerateClass()) {
-                result         = RDFSemanticsUtilities.EnlistMembersOfEnumerate((RDFOntologyEnumerateClass)ontClass, ontology);
-            }
-
-            //Class
-            else {
-
-                //Get the compatible classes
-                var compCls    = RDFOntologyReasonerHelper.EnlistSubClassesOf(ontClass, ontology.Model.ClassModel)
-                                     .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(ontClass, ontology.Model.ClassModel))
-                                        .AddClass(ontClass);
-
-                //Filter "classType" relations made with compatible classes
-                var fTaxonomy  = new RDFOntologyTaxonomy();
-                foreach (var   c in compCls) {
-                    fTaxonomy  = fTaxonomy.UnionWith(ontology.Data.Relations.ClassType.SelectEntriesByObject(c));
-                }
-                foreach (var   tEntry in fTaxonomy) {
-
-                    //Add the fact and its synonyms
-                    if (tEntry.TaxonomySubject.IsFact()) {
-                        result = result.UnionWith(RDFOntologyReasonerHelper.EnlistSameFactsAs((RDFOntologyFact)tEntry.TaxonomySubject, ontology.Data))
-                                          .AddFact((RDFOntologyFact)tEntry.TaxonomySubject);
-                    }
-
-                }
-
-            }
-
+ 
             return result;
         }
         #endregion
@@ -1146,7 +1151,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: restriction cannot be imported from 
                             //graph, because definition of its applied property is not found in the model
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Restriction '{0}' cannot be imported from graph, because definition of its applied property '{1}' is not found in the model.", r.Subject, op.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Restriction '{0}' cannot be imported from graph, because definition of its applied property '{1}' is not found in the model.", r.Subject, op.Object));
 
                         }
                     }
@@ -1194,7 +1199,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: union class cannot be completely imported
                                         //from graph, because definition of its compositing class is not found in the model
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: UnionClass '{0}' cannot be completely imported from graph, because definition of its compositing class '{1}' is not found in the model.", u.Subject, first.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("UnionClass '{0}' cannot be completely imported from graph, because definition of its compositing class '{1}' is not found in the model.", u.Subject, first.Object));
                                     
                                     }
 
@@ -1257,7 +1262,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: intersection class cannot be completely imported
                                         //from graph, because definition of its compositing class is not found in the model
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: IntersectionClass '{0}' cannot be completely imported from graph, because definition of its compositing class '{1}' is not found in the model.", i.Subject, first.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IntersectionClass '{0}' cannot be completely imported from graph, because definition of its compositing class '{1}' is not found in the model.", i.Subject, first.Object));
                                     
                                     }
 
@@ -1304,7 +1309,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: complement class cannot be imported
                                  //from graph, because definition of its complemented class is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Class '{0}' cannot be imported from graph, because definition of its complement class '{1}' is not found in the model.", c.Subject, c.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Class '{0}' cannot be imported from graph, because definition of its complement class '{1}' is not found in the model.", c.Subject, c.Object));
 
                              }
                          }
@@ -1312,7 +1317,7 @@ namespace RDFSharp.Semantics
 
                              //Raise warning event to inform the user: complement class cannot be imported 
                              //from graph, because its definition is not found in the model
-                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Class '{0}' cannot be imported from graph, because its definition is not found in the model.", c.Subject));
+                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Class '{0}' cannot be imported from graph, because its definition is not found in the model.", c.Subject));
 
                          }
                     }
@@ -1425,7 +1430,7 @@ namespace RDFSharp.Semantics
 
                                 //Raise warning event to inform the user: hasvalue restriction cannot be imported
                                 //from graph, because definition of its required fact is not found in the data
-                                RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Restriction '{0}' cannot be imported from graph, because definition of its required fact '{1}' is not found in the data.", r.Value, hvRes.Object));
+                                RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Restriction '{0}' cannot be imported from graph, because definition of its required fact '{1}' is not found in the data.", r.Value, hvRes.Object));
 
                             }
                         }
@@ -1450,7 +1455,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: allvaluesfrom restriction cannot be imported
                             //from graph, because definition of its required class is not found in the model
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Restriction '{0}' cannot be imported from graph, because definition of its required class '{1}' is not found in the model.", r.Value, avfRes.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Restriction '{0}' cannot be imported from graph, because definition of its required class '{1}' is not found in the model.", r.Value, avfRes.Object));
 
                         }
                     }
@@ -1469,7 +1474,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: somevaluesfrom restriction cannot be imported
                             //from graph, because definition of its required class is not found in the model
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Restriction '{0}' cannot be imported from graph, because definition of its required class '{1}' is not found in the model.", r.Value, svfRes.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Restriction '{0}' cannot be imported from graph, because definition of its required class '{1}' is not found in the model.", r.Value, svfRes.Object));
 
                         }
                     }
@@ -1509,7 +1514,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: enumerate class cannot be completely imported
                                         //from graph, because definition of its fact member is not found in the data
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: EnumerateClass '{0}' cannot be completely imported from graph, because definition of its fact member '{1}' is not found in the data.", e.Subject, first.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EnumerateClass '{0}' cannot be completely imported from graph, because definition of its fact member '{1}' is not found in the data.", e.Subject, first.Object));
 
 			                        }
 
@@ -1542,7 +1547,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: enumerate class cannot be imported
                                  //from graph, because its definition is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: EnumerateClass '{0}' cannot be imported from graph, because its definition is not found in the model.", e.Subject));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EnumerateClass '{0}' cannot be imported from graph, because its definition is not found in the model.", e.Subject));
 
                              }
                          }
@@ -1604,7 +1609,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: datarange class cannot be imported from
                                  //graph, because its definition is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: DataRangeClass '{0}' cannot be imported from graph, because its definition is not found in the model.", d.Subject));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DataRangeClass '{0}' cannot be imported from graph, because its definition is not found in the model.", d.Subject));
 
                              }
                          }
@@ -1626,7 +1631,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: domain constraint cannot be imported from graph, 
                             //because definition of required class is not found in the model
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Domain constraint on property '{0}' cannot be imported from graph, because definition of required class '{1}' is not found in the model.", p.Value, d.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Domain constraint on property '{0}' cannot be imported from graph, because definition of required class '{1}' is not found in the model.", p.Value, d.Object));
 
                         }
                     }
@@ -1643,7 +1648,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: range constraint cannot be imported from graph, 
                             //because definition of required class is not found in the model
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Range constraint on property '{0}' cannot be imported from graph, because definition of required class '{1}' is not found in the model.", p.Value, r.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Range constraint on property '{0}' cannot be imported from graph, because definition of required class '{1}' is not found in the model.", p.Value, r.Object));
 
                         }
                     }
@@ -1671,7 +1676,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: subpropertyof relation cannot be imported
                                  //from graph, because definition of property is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SubPropertyOf relation on property '{0}' cannot be imported from graph, because definition of property '{1}' is not found in the model.", p.Value, spof.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubPropertyOf relation on property '{0}' cannot be imported from graph, because definition of property '{1}' is not found in the model.", p.Value, spof.Object));
 
                              }
                         }
@@ -1694,7 +1699,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: equivalentproperty relation cannot be imported
                                  //from graph, because definition of property is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: EquivalentProperty relation on property '{0}' cannot be imported from graph, because definition of property '{1}' is not found in the model.", p.Value, eqpr.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentProperty relation on property '{0}' cannot be imported from graph, because definition of property '{1}' is not found in the model.", p.Value, eqpr.Object));
 
                              }
                         }
@@ -1713,7 +1718,7 @@ namespace RDFSharp.Semantics
 
                                      //Raise warning event to inform the user: inverseof relation cannot be imported
                                      //from graph, because definition of property is not found in the model
-                                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: InverseOf relation on property '{0}' cannot be imported from graph, because definition of property '{1}' is not found in the model.", p.Value, inof.Object));
+                                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("InverseOf relation on property '{0}' cannot be imported from graph, because definition of property '{1}' is not found in the model.", p.Value, inof.Object));
 
                                  }
                             }
@@ -1738,7 +1743,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: subclassof relation cannot be imported
                                  //from graph, because definition of class is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SubClassOf relation on class '{0}' cannot be imported from graph, because definition of class '{1}' is not found in the model.", c.Value, scof.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation on class '{0}' cannot be imported from graph, because definition of class '{1}' is not found in the model.", c.Value, scof.Object));
 
                              }
                         }
@@ -1756,7 +1761,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: equivalentclass relation cannot be imported
                                  //from graph, because definition of class is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: EquivalentClass relation on class '{0}' cannot be imported from graph, because definition of class '{1}' is not found in the model.", c.Value, eqcl.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation on class '{0}' cannot be imported from graph, because definition of class '{1}' is not found in the model.", c.Value, eqcl.Object));
 
                              }
                         }
@@ -1774,7 +1779,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: disjointwith relation cannot be imported
                                  //from graph, because definition of class is not found in the model
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: DisjointWith relation on class '{0}' cannot be imported from graph, because definition of class '{1}' is not found in the model.", c.Value, djwt.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation on class '{0}' cannot be imported from graph, because definition of class '{1}' is not found in the model.", c.Value, djwt.Object));
 
                              }
                         }
@@ -1799,7 +1804,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: sameas relation cannot be imported
                                  //from graph, because definition of fact is not found in the data
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SameAs relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SameAs relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
 
                              }
                          }
@@ -1807,7 +1812,7 @@ namespace RDFSharp.Semantics
 
                              //Raise warning event to inform the user: sameas relation cannot be imported
                              //from graph, because definition of fact is not found in the data
-                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SameAs relation on fact '{0}' cannot be imported from graph, because its definition is not found in the data.", t.Subject));
+                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SameAs relation on fact '{0}' cannot be imported from graph, because its definition is not found in the data.", t.Subject));
 
                          }
                     }
@@ -1827,7 +1832,7 @@ namespace RDFSharp.Semantics
 
                                  //Raise warning event to inform the user: differentfrom relation cannot be imported
                                  //from graph, because definition of fact is not found in the data
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: DifferentFrom relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
 
                              }
                          }
@@ -1835,7 +1840,7 @@ namespace RDFSharp.Semantics
 
                              //Raise warning event to inform the user: differentfrom relation cannot be imported
                              //from graph, because its definition is not found in the data
-                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: DifferentFrom relation on fact '{0}' cannot be imported from graph, because its definition is not found in the data.", t.Subject));
+                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation on fact '{0}' cannot be imported from graph, because its definition is not found in the data.", t.Subject));
 
                          }
                     }
@@ -1857,7 +1862,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: assertion relation cannot be imported
                                         //from graph, because definition of fact is not found in the data
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Assertion relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
 
                                     }
                                 }
@@ -1865,7 +1870,7 @@ namespace RDFSharp.Semantics
 
                                     //Raise warning event to inform the user: assertion relation cannot be imported
                                     //from graph, because object property links to a literal
-                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Assertion relation on fact '{0}' cannot be imported from graph, because object property '{1}' links to a literal.", t.Subject, p));
+                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because object property '{1}' links to a literal.", t.Subject, p));
 
                                 }
                             }
@@ -1877,7 +1882,7 @@ namespace RDFSharp.Semantics
 
                                      //Raise warning event to inform the user: assertion relation cannot be imported
                                      //from graph, because datatype property links to a fact
-                                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Assertion relation on fact '{0}' cannot be imported from graph, because datatype property '{1}' links to a fact.", t.Subject, p));
+                                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because datatype property '{1}' links to a fact.", t.Subject, p));
 
                                  }
                             }
@@ -1886,7 +1891,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: assertion relation cannot be imported
                             //from graph, because definition of fact is not found in the data
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Assertion relation on fact '{0}' cannot be imported from graph, because its definition is not found in the data.", t.Subject));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because definition of the fact is not found in the data. Ensure its classtype relation is specified.", t.Subject));
 
                         }
                     }
@@ -1908,7 +1913,7 @@ namespace RDFSharp.Semantics
 
                         //Raise warning event to inform the user: versioninfo annotation on ontology 
                         //cannot be imported from graph, because it does not link a literal
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: VersionInfo annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
 
                     }
                 }
@@ -1923,7 +1928,7 @@ namespace RDFSharp.Semantics
 
                         //Raise warning event to inform the user: comment annotation on ontology 
                         //cannot be imported from graph, because it does not link a literal
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Comment annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
 
                     }
                 }
@@ -1938,7 +1943,7 @@ namespace RDFSharp.Semantics
 
                         //Raise warning event to inform the user: label annotation on ontology 
                         //cannot be imported from graph, because it does not link a literal
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Label annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
 
                     }
                 }
@@ -1962,7 +1967,7 @@ namespace RDFSharp.Semantics
 
                                     //Raise warning event to inform the user: seealso annotation on ontology 
                                     //has been imported from graph, but linking an unknown generic resource
-                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SeeAlso annotation on ontology '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", ontology.Value, t.Object));
+                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SeeAlso annotation on ontology '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", ontology.Value, t.Object));
 
                                 }
                             }
@@ -1990,7 +1995,7 @@ namespace RDFSharp.Semantics
 
                                     //Raise warning event to inform the user: isdefinedby annotation on ontology 
                                     //has been imported from graph, but linking an unknown generic resource
-                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: IsDefinedBy annotation on ontology '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", ontology.Value, t.Object));
+                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IsDefinedBy annotation on ontology '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", ontology.Value, t.Object));
 
                                 }
                             }
@@ -2009,7 +2014,7 @@ namespace RDFSharp.Semantics
 
                         //Raise warning event to inform the user: backwardcompatiblewith annotation on ontology 
                         //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: BackwardCompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("BackwardCompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
 
                     }
                 }
@@ -2024,7 +2029,7 @@ namespace RDFSharp.Semantics
 
                         //Raise warning event to inform the user: incompatiblewith annotation on ontology 
                         //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: IncompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IncompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
 
                     }
                 }
@@ -2039,7 +2044,7 @@ namespace RDFSharp.Semantics
 
                         //Raise warning event to inform the user: priorversion annotation on ontology 
                         //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: PriorVersion annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("PriorVersion annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
 
                     }
                 }
@@ -2054,7 +2059,7 @@ namespace RDFSharp.Semantics
 
                         //Raise warning event to inform the user: imports annotation on ontology 
                         //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Imports annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Imports annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
 
                     }
                 }
@@ -2081,7 +2086,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: custom annotation on ontology 
                                         //has been imported from graph, but linking an unknown generic resource
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Custom annotation '{0}' on ontology '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, ontology.Value, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Custom annotation '{0}' on ontology '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, ontology.Value, t.Object));
 
                                     }
                                 }
@@ -2107,7 +2112,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: versioninfo annotation on class 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: VersionInfo annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
 
                         }
                     }
@@ -2122,7 +2127,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: comment annotation on class 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Comment annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
 
                         }
                     }
@@ -2137,7 +2142,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: label annotation on class 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Label annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
 
                         }
                     }
@@ -2161,7 +2166,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: seealso annotation on class 
                                         //has been imported from graph, but linking an unknown generic resource
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SeeAlso annotation on class '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", c.Value, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SeeAlso annotation on class '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", c.Value, t.Object));
 
                                     }
                                 }
@@ -2189,7 +2194,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: isdefinedby annotation on class 
                                         //has been imported from graph, but linking an unknown generic resource
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: IsDefinedBy annotation on class '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", c.Value, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IsDefinedBy annotation on class '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", c.Value, t.Object));
 
                                     }
                                 }
@@ -2220,7 +2225,7 @@ namespace RDFSharp.Semantics
 
                                             //Raise warning event to inform the user: custom annotation on class 
                                             //has been imported from graph, but linking an unknown generic resource
-                                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Custom annotation '{0}' on class '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, c.Value, t.Object));
+                                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Custom annotation '{0}' on class '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, c.Value, t.Object));
 
                                         }
                                     }
@@ -2247,7 +2252,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: versioninfo annotation on property 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: VersionInfo annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
 
                         }
                     }
@@ -2262,7 +2267,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: comment annotation on property 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Comment annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
 
                         }
                     }
@@ -2277,7 +2282,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: label annotation on property 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Label annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
 
                         }
                     }
@@ -2301,7 +2306,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: seealso annotation on property 
                                         //has been imported from graph, but linking an unknown generic resource
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SeeAlso annotation on property '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", p.Value, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SeeAlso annotation on property '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", p.Value, t.Object));
 
                                     }
                                 }
@@ -2329,7 +2334,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: isdefinedby annotation on property 
                                         //has been imported from graph, but linking an unknown generic resource
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: IsDefinedBy annotation on property '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", p.Value, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IsDefinedBy annotation on property '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", p.Value, t.Object));
 
                                     }
                                 }
@@ -2360,7 +2365,7 @@ namespace RDFSharp.Semantics
 
                                             //Raise warning event to inform the user: custom annotation on property 
                                             //has been imported from graph, but linking an unknown generic resource
-                                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Custom annotation '{0}' on property '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, p.Value, t.Object));
+                                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Custom annotation '{0}' on property '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, p.Value, t.Object));
 
                                         }
                                     }
@@ -2387,7 +2392,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: versioninfo annotation on fact 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: VersionInfo annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
 
                         }
                     }
@@ -2402,7 +2407,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: comment annotation on fact 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Comment annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
 
                         }
                     }
@@ -2417,7 +2422,7 @@ namespace RDFSharp.Semantics
 
                             //Raise warning event to inform the user: label annotation on fact 
                             //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Label annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
 
                         }
                     }
@@ -2441,7 +2446,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: seealso annotation on fact 
                                         //has been imported from graph, but linking an unknown generic resource
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: SeeAlso annotation on fact '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", f.Value, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SeeAlso annotation on fact '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", f.Value, t.Object));
 
                                     }
                                 }
@@ -2469,7 +2474,7 @@ namespace RDFSharp.Semantics
 
                                         //Raise warning event to inform the user: isdefinedby annotation on fact 
                                         //has been imported from graph, but linking an unknown generic resource
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: IsDefinedBy annotation on fact '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", f.Value, t.Object));
+                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IsDefinedBy annotation on fact '{0}' has been imported from graph, but linking an unknown generic resource '{1}'.", f.Value, t.Object));
 
                                     }
                                 }
@@ -2500,7 +2505,7 @@ namespace RDFSharp.Semantics
 
                                             //Raise warning event to inform the user: custom annotation on fact 
                                             //has been imported from graph, but linking an unknown generic resource
-                                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SEMANTICS WARNING: Custom annotation '{0}' on fact '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, f.Value, t.Object));
+                                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Custom annotation '{0}' on fact '{1}' has been imported from graph, but linking an unknown generic resource '{2}'.", annotProps.Current.Value, f.Value, t.Object));
 
                                         }
                                     }
@@ -2559,181 +2564,29 @@ namespace RDFSharp.Semantics
         }
         #endregion
 
-    }
-
-    /// <summary>
-    /// RDFOntologyVocabulary is an helper for handy usage of supported RDF/RDFS/OWL classes and properties.
-    /// </summary>
-    internal static class RDFOntologyVocabulary {
-
-        #region Classes
+        #region Reason
         /// <summary>
-        /// Standard RDF/RDFS/OWL classes
+        /// Triggers the execution of the given rule on the given ontology. 
+        /// Returns a boolean indicating if new evidences have been found.
         /// </summary>
-        internal static class Classes {
+        internal static Boolean TriggerRule(String ruleName, RDFOntologyReasoner reasoner, RDFOntology ontology, RDFOntologyReasoningReport report) {
+            var reasonerRule  = reasoner.SelectRule(ruleName);
+            if (reasonerRule != null) {
 
-            /// <summary>
-            /// owl:Thing
-            /// </summary>
-            internal static readonly RDFOntologyClass THING = new RDFOntologyClass(RDFVocabulary.OWL.THING);
+                //Raise launching signal
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", ruleName));
 
-            /// <summary>
-            /// owl:Nothing
-            /// </summary>
-            internal static readonly RDFOntologyClass NOTHING = new RDFOntologyClass(RDFVocabulary.OWL.NOTHING);
+                //Launch the reasoning rule
+                var oldCnt    = report.EvidencesCount;
+                reasonerRule.ExecuteRule(ontology, report);
+                var newCnt    = report.EvidencesCount - oldCnt;
 
-            /// <summary>
-            /// rdfs:Literal
-            /// </summary>
-            internal static readonly RDFOntologyClass LITERAL = new RDFOntologyClass(RDFVocabulary.RDFS.LITERAL);
+                //Raise termination signal
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, newCnt));
 
-            /// <summary>
-            /// rdf:XMLLiteral
-            /// </summary>
-            internal static readonly RDFOntologyClass XML_LITERAL = new RDFOntologyClass(RDFVocabulary.RDF.XML_LITERAL);
-
-        }
-        #endregion
-
-        #region AnnotationProperties
-        /// <summary>
-        /// Standard RDFS/OWL annotation properties
-        /// </summary>
-        internal static class AnnotationProperties {
-
-            /// <summary>
-            /// owl:versionInfo
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty VERSION_INFO  = new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.VERSION_INFO);
-
-            /// <summary>
-            /// rdfs:comment
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty COMMENT = new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.COMMENT);
-
-            /// <summary>
-            /// rdfs:label
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty LABEL = new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.LABEL);
-
-            /// <summary>
-            /// rdfs:seeAlso
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty SEE_ALSO = new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.SEE_ALSO);
-
-            /// <summary>
-            /// rdfs:isDefinedBy
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty IS_DEFINED_BY = new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.IS_DEFINED_BY);
-
-            /// <summary>
-            /// owl:imports
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty IMPORTS = new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.IMPORTS);
-
-            /// <summary>
-            /// owl:BackwardCompatibleWith
-            /// </summary>
-            internal static readonly  RDFOntologyAnnotationProperty BACKWARD_COMPATIBLE_WITH = new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH);
-
-            /// <summary>
-            /// owl:incompatibleWith
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty INCOMPATIBLE_WITH = new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH);
-
-            /// <summary>
-            /// owl:priorVersion
-            /// </summary>
-            internal static readonly RDFOntologyAnnotationProperty PRIOR_VERSION = new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.PRIOR_VERSION);
-
-        }
-        #endregion
-
-        #region ObjectProperties
-        /// <summary>
-        /// Standard RDFS/OWL object properties
-        /// </summary>
-        internal static class ObjectProperties {
-
-            /// <summary>
-            /// rdf:type
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty TYPE = new RDFOntologyObjectProperty(RDFVocabulary.RDF.TYPE);
-
-            /// <summary>
-            /// rdfs:subClassOf
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty SUB_CLASS_OF = new RDFOntologyObjectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF);
-
-            /// <summary>
-            /// rdfs:subPropertyOf
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty SUB_PROPERTY_OF = new RDFOntologyObjectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF);
-
-            /// <summary>
-            /// owl:equivalentClass
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty EQUIVALENT_CLASS = new RDFOntologyObjectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS);
-
-            /// <summary>
-            /// owl:equivalentProperty
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty EQUIVALENT_PROPERTY = new RDFOntologyObjectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY);
-
-            /// <summary>
-            /// owl:disjointWith
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty DISJOINT_WITH = new RDFOntologyObjectProperty(RDFVocabulary.OWL.DISJOINT_WITH);
-
-            /// <summary>
-            /// owl:inverseOf
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty INVERSE_OF = new RDFOntologyObjectProperty(RDFVocabulary.OWL.INVERSE_OF);
-
-            /// <summary>
-            /// owl:oneOf
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty ONE_OF = new RDFOntologyObjectProperty(RDFVocabulary.OWL.ONE_OF);
-
-            /// <summary>
-            /// owl:intersectionOf
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty INTERSECTION_OF = new RDFOntologyObjectProperty(RDFVocabulary.OWL.INTERSECTION_OF);
-
-            /// <summary>
-            /// owl:unionOf
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty UNION_OF = new RDFOntologyObjectProperty(RDFVocabulary.OWL.UNION_OF);
-
-            /// <summary>
-            /// owl:complementOf
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty COMPLEMENT_OF = new RDFOntologyObjectProperty(RDFVocabulary.OWL.COMPLEMENT_OF);
-
-            /// <summary>
-            /// owl:sameAs
-            /// </summary>
-            internal static readonly  RDFOntologyObjectProperty SAME_AS = new RDFOntologyObjectProperty(RDFVocabulary.OWL.SAME_AS);
-
-            /// <summary>
-            /// owl:differentFrom
-            /// </summary>
-            internal static readonly RDFOntologyObjectProperty DIFFERENT_FROM = new RDFOntologyObjectProperty(RDFVocabulary.OWL.DIFFERENT_FROM);
-
-        }
-        #endregion
-
-        #region DatatypeProperties
-        /// <summary>
-        /// Standard RDFS/OWL datatype properties
-        /// </summary>
-        internal static class DatatypeProperties {
-
-            /// <summary>
-            /// owl:oneOf
-            /// </summary>
-            internal static readonly RDFOntologyDatatypeProperty ONE_OF = new RDFOntologyDatatypeProperty(RDFVocabulary.OWL.ONE_OF);
-
+                return newCnt > 0;
+            }
+            return false;
         }
         #endregion
 
