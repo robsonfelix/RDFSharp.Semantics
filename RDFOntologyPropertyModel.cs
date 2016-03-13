@@ -227,6 +227,7 @@ namespace RDFSharp.Semantics {
                         ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.SEE_ALSO)                 ||
                         ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IS_DEFINED_BY)            ||
                         ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_INFO)             ||
+                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_IRI)              ||
                         ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.PRIOR_VERSION)            ||
                         ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.INCOMPATIBLE_WITH)        ||
                         ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.BACKWARD_COMPATIBLE_WITH) ||
@@ -325,6 +326,7 @@ namespace RDFSharp.Semantics {
             if (ontologyProperty != null && ontologyAnnotationProperty != null && ontologyResource != null) {
                 if (!ontologyProperty.IsAnnotationProperty()) {
                      if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_INFO)             ||
+                         ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_IRI)              ||
                          ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.COMMENT)                 ||
                          ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.LABEL)                   ||
                          ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.SEE_ALSO)                ||

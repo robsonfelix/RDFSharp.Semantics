@@ -78,6 +78,16 @@ namespace RDFSharp.Semantics
         }
 
         /// <summary>
+        /// Adds the "ontology -> owl:VersionIRI -> ontology" annotation to the ontology
+        /// </summary>
+        public RDFOntology AddVersionIRIAnnotation(RDFOntology ontology) {
+            if (ontology != null) {
+                this.Annotations.VersionIRI.AddEntry(new RDFOntologyTaxonomyEntry(this, RDFOntologyVocabulary.AnnotationProperties.VERSION_IRI, ontology));
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Adds the "ontology -> rdfs:comment -> ontologyLiteral" annotation to the ontology
         /// </summary>
         public RDFOntology AddCommentAnnotation(RDFOntologyLiteral ontologyLiteral) {
@@ -163,6 +173,7 @@ namespace RDFSharp.Semantics
         public RDFOntology AddCustomAnnotation(RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
             if (ontologyAnnotationProperty != null && ontologyResource != null) {
                 if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_INFO)             ||
+                    ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_IRI)              ||
                     ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.COMMENT)                 ||
                     ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.LABEL)                   ||
                     ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.SEE_ALSO)                ||
@@ -191,6 +202,16 @@ namespace RDFSharp.Semantics
         public RDFOntology RemoveVersionInfoAnnotation(RDFOntologyLiteral ontologyLiteral) {
             if (ontologyLiteral != null) {
                 this.Annotations.VersionInfo.RemoveEntry(new RDFOntologyTaxonomyEntry(this, RDFOntologyVocabulary.AnnotationProperties.VERSION_INFO, ontologyLiteral));
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the "ontology -> owl:VersionIRI -> ontology" annotation from the ontology
+        /// </summary>
+        public RDFOntology RemoveVersionIRIAnnotation(RDFOntology ontology) {
+            if (ontology != null) {
+                this.Annotations.VersionIRI.RemoveEntry(new RDFOntologyTaxonomyEntry(this, RDFOntologyVocabulary.AnnotationProperties.VERSION_IRI, ontology));
             }
             return this;
         }
@@ -302,6 +323,7 @@ namespace RDFSharp.Semantics
 
                 //Intersect the annotations            
                 result.Annotations.VersionInfo            = this.Annotations.VersionInfo.IntersectWith(ontology.Annotations.VersionInfo);
+                result.Annotations.VersionIRI             = this.Annotations.VersionIRI.IntersectWith(ontology.Annotations.VersionIRI);
                 result.Annotations.Comment                = this.Annotations.Comment.IntersectWith(ontology.Annotations.Comment);
                 result.Annotations.Label                  = this.Annotations.Label.IntersectWith(ontology.Annotations.Label);
                 result.Annotations.SeeAlso                = this.Annotations.SeeAlso.IntersectWith(ontology.Annotations.SeeAlso);
@@ -330,6 +352,7 @@ namespace RDFSharp.Semantics
 
             //Use this annotations
             result.Annotations.VersionInfo            = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
+            result.Annotations.VersionIRI             = result.Annotations.VersionIRI.UnionWith(this.Annotations.VersionIRI);
             result.Annotations.Comment                = result.Annotations.Comment.UnionWith(this.Annotations.Comment);
             result.Annotations.Label                  = result.Annotations.Label.UnionWith(this.Annotations.Label);
             result.Annotations.SeeAlso                = result.Annotations.SeeAlso.UnionWith(this.Annotations.SeeAlso);
@@ -351,6 +374,7 @@ namespace RDFSharp.Semantics
 
                 //Union the annotations
                 result.Annotations.VersionInfo            = result.Annotations.VersionInfo.UnionWith(ontology.Annotations.VersionInfo);
+                result.Annotations.VersionIRI             = result.Annotations.VersionIRI.UnionWith(ontology.Annotations.VersionIRI);
                 result.Annotations.Comment                = result.Annotations.Comment.UnionWith(ontology.Annotations.Comment);
                 result.Annotations.Label                  = result.Annotations.Label.UnionWith(ontology.Annotations.Label);
                 result.Annotations.SeeAlso                = result.Annotations.SeeAlso.UnionWith(ontology.Annotations.SeeAlso);
@@ -379,6 +403,7 @@ namespace RDFSharp.Semantics
 
             //Use this annotations
             result.Annotations.VersionInfo            = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
+            result.Annotations.VersionIRI             = result.Annotations.VersionIRI.UnionWith(this.Annotations.VersionIRI);
             result.Annotations.Comment                = result.Annotations.Comment.UnionWith(this.Annotations.Comment);
             result.Annotations.Label                  = result.Annotations.Label.UnionWith(this.Annotations.Label);
             result.Annotations.SeeAlso                = result.Annotations.SeeAlso.UnionWith(this.Annotations.SeeAlso);
@@ -400,6 +425,7 @@ namespace RDFSharp.Semantics
 
                 //Difference the annotations
                 result.Annotations.VersionInfo            = result.Annotations.VersionInfo.DifferenceWith(ontology.Annotations.VersionInfo);
+                result.Annotations.VersionIRI             = result.Annotations.VersionIRI.DifferenceWith(ontology.Annotations.VersionIRI);
                 result.Annotations.Comment                = result.Annotations.Comment.DifferenceWith(ontology.Annotations.Comment);
                 result.Annotations.Label                  = result.Annotations.Label.DifferenceWith(ontology.Annotations.Label);
                 result.Annotations.SeeAlso                = result.Annotations.SeeAlso.DifferenceWith(ontology.Annotations.SeeAlso);

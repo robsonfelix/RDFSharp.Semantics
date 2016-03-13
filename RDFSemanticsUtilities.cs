@@ -929,6 +929,7 @@ namespace RDFSharp.Semantics
 
                 #region Prefetch
                 var versionInfo   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
+                var versionIRI    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_IRI);
                 var comment       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.COMMENT);
                 var label         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.LABEL);
                 var seeAlso       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SEE_ALSO);
@@ -1919,6 +1920,21 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
+                #region VersionIRI
+                foreach(var t in versionIRI.SelectTriplesBySubject((RDFResource)ontology.Value)) {
+                    if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
+                        ontology.AddVersionIRIAnnotation(new RDFOntology((RDFResource)t.Object));
+                    }
+                    else {
+
+                        //Raise warning event to inform the user: versioniri annotation on ontology 
+                        //cannot be imported from graph, because it does not link a resource
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionIRI annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+
+                    }
+                }
+                #endregion
+
                 #region Comment
                 foreach (var t in comment.SelectTriplesBySubject((RDFResource)ontology.Value)) {
                     if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
@@ -2540,6 +2556,7 @@ namespace RDFSharp.Semantics
                 //Ontology
                 result.AddTriple(new RDFTriple((RDFResource)ontology.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ONTOLOGY));
                 result    = result.UnionWith(ontology.Annotations.VersionInfo.ToRDFGraph(includeInferences))
+                                  .UnionWith(ontology.Annotations.VersionIRI.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.Comment.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.Label.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.SeeAlso.ToRDFGraph(includeInferences))

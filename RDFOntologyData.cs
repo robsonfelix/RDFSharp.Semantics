@@ -201,6 +201,7 @@ namespace RDFSharp.Semantics
         public RDFOntologyData AddCustomAnnotation(RDFOntologyFact ontologyFact, RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
             if (ontologyFact   != null && ontologyAnnotationProperty != null && ontologyResource != null) {
                 if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_INFO)             ||
+                    ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_IRI)              ||
                     ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.COMMENT)                 ||
                     ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.LABEL)                   ||
                     ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.SEE_ALSO)                ||

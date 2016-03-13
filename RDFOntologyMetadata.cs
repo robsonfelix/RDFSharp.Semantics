@@ -14,12 +14,6 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
-
 namespace RDFSharp.Semantics {
 
     #region Metadata
@@ -33,6 +27,11 @@ namespace RDFSharp.Semantics {
         /// "owl:versionInfo" annotations
         /// </summary>
         public RDFOntologyTaxonomy VersionInfo { get; internal set; }
+
+        /// <summary>
+        /// "owl:versionIRI" annotations
+        /// </summary>
+        public RDFOntologyTaxonomy VersionIRI { get; internal set; }
 
         /// <summary>
         /// "rdfs:comment" annotations
@@ -86,6 +85,7 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal RDFOntologyAnnotationsMetadata() {
             this.VersionInfo            = new RDFOntologyTaxonomy();
+            this.VersionIRI             = new RDFOntologyTaxonomy();
             this.Comment                = new RDFOntologyTaxonomy();
             this.Label                  = new RDFOntologyTaxonomy();
             this.SeeAlso                = new RDFOntologyTaxonomy();

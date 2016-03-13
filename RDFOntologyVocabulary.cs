@@ -65,6 +65,11 @@ namespace RDFSharp.Semantics {
             public static readonly RDFOntologyAnnotationProperty VERSION_INFO  = new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.VERSION_INFO);
 
             /// <summary>
+            /// owl:versionIRI
+            /// </summary>
+            public static readonly RDFOntologyAnnotationProperty VERSION_IRI  = new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.VERSION_IRI);
+
+            /// <summary>
             /// rdfs:comment
             /// </summary>
             public static readonly RDFOntologyAnnotationProperty COMMENT = new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.COMMENT);
