@@ -41,7 +41,7 @@ namespace RDFSharp.Semantics
             ontology.Model.ClassModel.AddClass(RDFOntologyVocabulary.Classes.NOTHING);
             
             //Datatypes
-            foreach (var dType  in RDFDatatypeRegister.Instance.Value) {
+            foreach (var dType  in RDFDatatypeRegister.Instance) {
                 var  dTypeCls    = new RDFOntologyClass(new RDFResource(dType.ToString()));
                 ontology.Model.ClassModel.AddClass(dTypeCls);
             }
@@ -132,7 +132,7 @@ namespace RDFSharp.Semantics
             ontology.Model.ClassModel.AddSubClassOfRelation(xsdUByteCls,      xsdUShortCls);
 
             //Taxonomy - Custom Datatypes
-            foreach (var customDType  in RDFDatatypeRegister.Instance.Value.Where(dt =>
+            foreach (var customDType  in RDFDatatypeRegister.Instance.Where(dt =>
                                              !dt.Prefix.Equals(RDFVocabulary.XSD.PREFIX,  StringComparison.Ordinal)  &&
                                              !dt.Prefix.Equals(RDFVocabulary.RDF.PREFIX,  StringComparison.Ordinal)  &&
                                              !dt.Prefix.Equals(RDFVocabulary.RDFS.PREFIX, StringComparison.Ordinal))) {
