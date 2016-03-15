@@ -234,7 +234,9 @@ namespace RDFSharp.Semantics
 
                 //Classtype relations can be explicitly assigned only to plain classes
                 if (!ontologyClass.IsRestrictionClass() && !ontologyClass.IsCompositeClass() &&
-                    !ontologyClass.IsEnumerateClass()   && !ontologyClass.IsDataRangeClass()) {
+                    !ontologyClass.IsEnumerateClass()   && !ontologyClass.IsDataRangeClass() &&
+                    //owl:Nothing cannot be assigned as classtype of facts
+                    !ontologyClass.Equals(RDFOntologyVocabulary.Classes.NOTHING)) {
                      this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFOntologyVocabulary.ObjectProperties.TYPE, ontologyClass));
                 }
                 else {
