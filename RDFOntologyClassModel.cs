@@ -261,7 +261,9 @@ namespace RDFSharp.Semantics {
                     !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
                     !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this) &&
                     //"owl:Nothing" cannot have subclasses
-                    !motherClass.Equals(RDFOntologyVocabulary.Classes.NOTHING)) {
+                    !motherClass.Equals(RDFOntologyVocabulary.Classes.NOTHING)                     &&
+                    //"owl:Thing" cannot have superclasses
+                    !childClass.Equals(RDFOntologyVocabulary.Classes.THING)) {
                      this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFOntologyVocabulary.ObjectProperties.SUB_CLASS_OF, motherClass));
                 }
                 else {
