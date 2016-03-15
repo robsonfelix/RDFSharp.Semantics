@@ -259,7 +259,9 @@ namespace RDFSharp.Semantics {
                 //Enforce taxonomy checks before adding the subClassOf relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
-                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this)) {
+                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this) &&
+                    //"owl:Nothing" cannot have subclasses
+                    !motherClass.Equals(RDFOntologyVocabulary.Classes.NOTHING)) {
                      this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFOntologyVocabulary.ObjectProperties.SUB_CLASS_OF, motherClass));
                 }
                 else {
