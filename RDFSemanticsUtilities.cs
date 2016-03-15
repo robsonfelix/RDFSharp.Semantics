@@ -967,7 +967,9 @@ namespace RDFSharp.Semantics
 
                 #region Ontology
                 if (!rdfType.ContainsTriple(new RDFTriple((RDFResource)ontology.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ONTOLOGY))) {
-                     var ont     = rdfType.SelectTriplesByObject(RDFVocabulary.OWL.ONTOLOGY).FirstOrDefault();
+                     var ont     = rdfType.SelectTriplesByObject(RDFVocabulary.OWL.ONTOLOGY)
+                                          .SelectTriplesByPredicate(RDFVocabulary.RDF.TYPE)
+                                          .FirstOrDefault();
                      if (ont    != null) {
                          ontology.Value           = ont.Subject;
                          ontology.PatternMemberID = ontology.Value.PatternMemberID;
