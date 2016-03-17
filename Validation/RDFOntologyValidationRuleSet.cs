@@ -41,7 +41,7 @@ namespace RDFSharp.Semantics {
             foreach (var  c in ontology.Model.ClassModel.Where(cls => cls.ToString().StartsWith(RDFVocabulary.RDF.BASE_URI)  ||
                                                                       cls.ToString().StartsWith(RDFVocabulary.RDFS.BASE_URI) ||
                                                                       cls.ToString().StartsWith(RDFVocabulary.OWL.BASE_URI))) {
-                if (!c.Equals(RDFVocabulary.OWL.THING)       && !c.Equals(RDFVocabulary.OWL.NOTHING) &&
+                if (!c.Equals(RDFVocabulary.OWL.THING)       && !c.Equals(RDFVocabulary.OWL.NOTHING) && !c.Equals(RDFVocabulary.OWL.INDIVIDUAL) &&
                     !c.Equals(RDFVocabulary.RDFS.LITERAL)    && 
                     !c.Equals(RDFVocabulary.RDF.XML_LITERAL) && !c.Equals(RDFVocabulary.RDF.HTML)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(

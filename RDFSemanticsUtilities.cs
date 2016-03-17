@@ -39,7 +39,8 @@ namespace RDFSharp.Semantics
             //Classes
             ontology.Model.ClassModel.AddClass(RDFOntologyVocabulary.Classes.THING);
             ontology.Model.ClassModel.AddClass(RDFOntologyVocabulary.Classes.NOTHING);
-            
+            ontology.Model.ClassModel.AddClass(RDFOntologyVocabulary.Classes.INDIVIDUAL);
+
             //Datatypes
             foreach (var dType  in RDFDatatypeRegister.Instance) {
                 var  dTypeCls    = new RDFOntologyClass(new RDFResource(dType.ToString()));
@@ -968,7 +969,6 @@ namespace RDFSharp.Semantics
                 #region Ontology
                 if (!rdfType.ContainsTriple(new RDFTriple((RDFResource)ontology.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ONTOLOGY))) {
                      var ont     = rdfType.SelectTriplesByObject(RDFVocabulary.OWL.ONTOLOGY)
-                                          .SelectTriplesByPredicate(RDFVocabulary.RDF.TYPE)
                                           .FirstOrDefault();
                      if (ont    != null) {
                          ontology.Value           = ont.Subject;
@@ -1117,12 +1117,32 @@ namespace RDFSharp.Semantics
                 #endregion
                 #endregion
 
+                #region Property
+                foreach(var  p  in rdfType.SelectTriplesByObject(RDFVocabulary.RDF.PROPERTY)) {
+
+                    //Simple property-type detection euristics: if it has "rdfs:Range" contained
+                    //in the RDFDatatypeRegister, it can be promoted to "owl:DatatypeProperty"
+                    foreach (var t    in range.SelectTriplesBySubject((RDFResource)p.Subject)) {
+                        var  objDType  = RDFModelUtilities.GetDatatypeFromString(t.Object.ToString());
+                        if  (objDType != null && RDFDatatypeRegister.GetByNamespaceAndDatatype(objDType.Namespace.ToString(), objDType.Datatype) != null) {
+                             ontology.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty((RDFResource)p.Subject));
+                             break;
+                        }
+                    }
+
+                    //Otherwise, it is added as simple RDFS property
+                    ontology.Model.PropertyModel.AddProperty(new RDFOntologyProperty((RDFResource)p.Subject));
+
+                }
+                #endregion
+
                 #endregion
 
                 #region ClassModel
 
                 #region Class
-                foreach (var c   in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
+                foreach(var c   in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)
+                                        .UnionWith(rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS))) {
                     var ontClass  = new RDFOntologyClass((RDFResource)c.Subject);
                     ontology.Model.ClassModel.AddClass(ontClass);
                     if   (ontGraph.ContainsTriple(new RDFTriple((RDFResource)ontClass.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS))) {

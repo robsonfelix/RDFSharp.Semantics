@@ -190,7 +190,7 @@ namespace RDFSharp.Semantics {
 
         #region Properties
         /// <summary>
-        /// Flag enabling the limit of recursion during application of standard rules
+        /// If enabled, this flag limits the evaluation of recursive reasoning rules to a maximum of 3 iterations
         /// </summary>
         public Boolean EnableRecursionLimit { get; set; }
         #endregion

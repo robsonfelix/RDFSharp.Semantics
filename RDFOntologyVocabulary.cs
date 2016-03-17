@@ -22,7 +22,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyVocabulary is an helper for handy usage of supported RDF/RDFS/OWL classes and properties.
     /// </summary>
-    public static class RDFOntologyVocabulary {
+    public class RDFOntologyVocabulary {
 
         #region Classes
         /// <summary>
@@ -39,6 +39,11 @@ namespace RDFSharp.Semantics {
             /// owl:Nothing
             /// </summary>
             public static readonly RDFOntologyClass NOTHING = new RDFOntologyClass(RDFVocabulary.OWL.NOTHING);
+
+            /// <summary>
+            /// owl:Individual
+            /// </summary>
+            public static readonly RDFOntologyClass INDIVIDUAL = new RDFOntologyClass(RDFVocabulary.OWL.INDIVIDUAL);
 
             /// <summary>
             /// rdfs:Literal
