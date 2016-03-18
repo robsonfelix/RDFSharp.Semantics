@@ -41,11 +41,6 @@ namespace RDFSharp.Semantics {
             public static readonly RDFOntologyClass NOTHING = new RDFOntologyClass(RDFVocabulary.OWL.NOTHING);
 
             /// <summary>
-            /// owl:Individual
-            /// </summary>
-            public static readonly RDFOntologyClass INDIVIDUAL = new RDFOntologyClass(RDFVocabulary.OWL.INDIVIDUAL);
-
-            /// <summary>
             /// rdfs:Literal
             /// </summary>
             public static readonly RDFOntologyClass LITERAL = new RDFOntologyClass(RDFVocabulary.RDFS.LITERAL);

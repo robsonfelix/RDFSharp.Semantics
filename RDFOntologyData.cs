@@ -119,8 +119,6 @@ namespace RDFSharp.Semantics
             if (ontologyFact  != null) {
                 if (!this.Facts.ContainsKey(ontologyFact.PatternMemberID)) {
                      this.Facts.Add(ontologyFact.PatternMemberID, ontologyFact);
-                     //Ontology facts are always instances of "owl:Individual"
-                     this.Relations.ClassType.AddEntry((new RDFOntologyTaxonomyEntry(ontologyFact, RDFOntologyVocabulary.ObjectProperties.TYPE, RDFOntologyVocabulary.Classes.INDIVIDUAL)).SetInference(true));
                 }
             }
             return this;
@@ -202,28 +200,59 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFOntologyData AddCustomAnnotation(RDFOntologyFact ontologyFact, RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
             if (ontologyFact   != null && ontologyAnnotationProperty != null && ontologyResource != null) {
-                if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_INFO)             ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_IRI)              ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.COMMENT)                 ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.LABEL)                   ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.SEE_ALSO)                ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.IS_DEFINED_BY)           ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.IMPORTS)                  ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH) ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.INCOMPATIBLE_WITH)        ||
-                    ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.PRIOR_VERSION)) {
 
-                    //Raise warning event to inform the user: Standard RDFS/OWL
-                    //annotation properties cannot be used in custom annotations
-                    RDFSemanticsEvents.RaiseSemanticsWarning("Standard RDFS/OWL annotation properties cannot be used in custom annotations.");
+                //owl:versionInfo
+                if (ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_INFO)) {
+                    if (ontologyResource.IsLiteral()) {
+                        this.AddVersionInfoAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
+                    }
+                }
 
-                    return this;
+                //rdfs:comment
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.COMMENT)) {
+                     if(ontologyResource.IsLiteral()) {
+                        this.AddCommentAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
+                     }
                 }
-                
-                this.Annotations.CustomAnnotations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, ontologyAnnotationProperty, ontologyResource));
-                if (ontologyResource.IsLiteral()) {
-                    this.AddLiteral((RDFOntologyLiteral)ontologyResource);
+
+                //rdfs:label
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.LABEL)) {
+                     if(ontologyResource.IsLiteral()) {
+                        this.AddLabelAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
+                     }
                 }
+
+                //rdfs:seeAlso
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.SEE_ALSO)) {
+                     this.AddSeeAlsoAnnotation(ontologyFact, ontologyResource);
+                }
+
+                //rdfs:isDefinedBy
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IS_DEFINED_BY)) {
+                     this.AddIsDefinedByAnnotation(ontologyFact, ontologyResource);
+                }
+
+                //ontology-specific
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_IRI)              ||
+                        ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IMPORTS)                  ||
+                        ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.BACKWARD_COMPATIBLE_WITH) ||
+                        ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.INCOMPATIBLE_WITH)        ||
+                        ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.PRIOR_VERSION)) {
+
+                     //Raise warning event to inform the user: Ontology-specific
+                     //annotation properties cannot be used for facts
+                     RDFSemanticsEvents.RaiseSemanticsWarning("Ontology-specific annotation properties cannot be used for facts.");
+
+                }
+
+                //custom
+                else {
+                    this.Annotations.CustomAnnotations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, ontologyAnnotationProperty, ontologyResource));
+                    if (ontologyResource.IsLiteral()) {
+                        this.AddLiteral((RDFOntologyLiteral)ontologyResource);
+                    }
+                }
+
             }
             return this;
         }
@@ -332,8 +361,6 @@ namespace RDFSharp.Semantics
             if (ontologyFact != null) {
                 if (this.Facts.ContainsKey(ontologyFact.PatternMemberID)) {
                     this.Facts.Remove(ontologyFact.PatternMemberID);
-                    //Ontology facts are always instances of "owl:Individual"
-                    this.Relations.ClassType.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFOntologyVocabulary.ObjectProperties.TYPE, RDFOntologyVocabulary.Classes.INDIVIDUAL));
                 }
             }
             return this;

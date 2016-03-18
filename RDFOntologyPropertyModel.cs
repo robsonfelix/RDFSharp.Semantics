@@ -222,37 +222,6 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel AddProperty(RDFOntologyProperty ontologyProperty) {
             if (ontologyProperty != null) {
                 if (!this.Properties.ContainsKey(ontologyProperty.PatternMemberID)) {
-                     if(ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.COMMENT)                  ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.LABEL)                    ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.SEE_ALSO)                 ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IS_DEFINED_BY)            ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_INFO)             ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_IRI)              ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.PRIOR_VERSION)            ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.INCOMPATIBLE_WITH)        ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.BACKWARD_COMPATIBLE_WITH) ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IMPORTS)                  ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.DatatypeProperties.ONE_OF)                     ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.ONE_OF)                       ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.TYPE)                         ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.SUB_PROPERTY_OF)              ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.SUB_CLASS_OF)                 ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.SAME_AS)                      ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.DIFFERENT_FROM)               ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.UNION_OF)                     ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.INTERSECTION_OF)              ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.COMPLEMENT_OF)                ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.DISJOINT_WITH)                ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_CLASS)             ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_PROPERTY)          ||
-                        ontologyProperty.Equals(RDFOntologyVocabulary.ObjectProperties.INVERSE_OF)) {
-
-                        //Raise warning event to inform the user: Reserved annotation and 
-                        //taxonomy properties cannot be added to the property model
-                        RDFSemanticsEvents.RaiseSemanticsWarning("Reserved annotation and taxonomy properties cannot be added to the property model.");
-
-                        return this;
-                     }
                      this.Properties.Add(ontologyProperty.PatternMemberID, ontologyProperty);
                 }
             }
@@ -323,26 +292,58 @@ namespace RDFSharp.Semantics {
         /// Adds the "ontologyProperty -> ontologyAnnotationProperty -> ontologyResource" annotation to the class model 
         /// </summary>
         public RDFOntologyPropertyModel AddCustomAnnotation(RDFOntologyProperty ontologyProperty, RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
-            if (ontologyProperty != null && ontologyAnnotationProperty != null && ontologyResource != null) {
-                if (!ontologyProperty.IsAnnotationProperty()) {
-                     if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_INFO)             ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_IRI)              ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.COMMENT)                 ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.LABEL)                   ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.SEE_ALSO)                ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.IS_DEFINED_BY)           ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.IMPORTS)                  ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH) ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.INCOMPATIBLE_WITH)        ||
-                         ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.PRIOR_VERSION)) {
+            if (ontologyProperty   != null && ontologyAnnotationProperty != null && ontologyResource != null) {
+                if(!ontologyProperty.IsAnnotationProperty()) {
 
-                         //Raise warning event to inform the user: Standard RDFS/OWL
-                         //annotation properties cannot be used in custom annotations
-                         RDFSemanticsEvents.RaiseSemanticsWarning("Standard RDFS/OWL annotation properties cannot be used in custom annotations.");
+                    //owl:versionInfo
+                    if (ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_INFO)) {
+                        if (ontologyResource.IsLiteral()) {
+                            this.AddVersionInfoAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
+                        }
+                    }
 
-                         return this;
-                     }
-                     this.Annotations.CustomAnnotations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, ontologyAnnotationProperty, ontologyResource));
+                    //rdfs:comment
+                    else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.COMMENT)) {
+                         if(ontologyResource.IsLiteral()) {
+                            this.AddCommentAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
+                         }
+                    }
+
+                    //rdfs:label
+                    else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.LABEL)) {
+                         if(ontologyResource.IsLiteral()) {
+                            this.AddLabelAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
+                         }
+                    }
+
+                    //rdfs:seeAlso
+                    else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.SEE_ALSO)) {
+                         this.AddSeeAlsoAnnotation(ontologyProperty, ontologyResource);
+                    }
+
+                    //rdfs:isDefinedBy
+                    else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IS_DEFINED_BY)) {
+                         this.AddIsDefinedByAnnotation(ontologyProperty, ontologyResource);
+                    }
+
+                    //ontology-specific
+                    else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_IRI)              ||
+                            ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IMPORTS)                  ||
+                            ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.BACKWARD_COMPATIBLE_WITH) ||
+                            ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.INCOMPATIBLE_WITH)        ||
+                            ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.PRIOR_VERSION)) {
+
+                         //Raise warning event to inform the user: Ontology-specific
+                         //annotation properties cannot be used for properties
+                         RDFSemanticsEvents.RaiseSemanticsWarning("Ontology-specific annotation properties cannot be used for properties.");
+
+                    }
+
+                    //custom
+                    else {
+                        this.Annotations.CustomAnnotations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, ontologyAnnotationProperty, ontologyResource));
+                    }
+
                 }
                 else {
 

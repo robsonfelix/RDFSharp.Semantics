@@ -41,7 +41,7 @@ namespace RDFSharp.Semantics {
             foreach (var  c in ontology.Model.ClassModel.Where(cls => cls.ToString().StartsWith(RDFVocabulary.RDF.BASE_URI)  ||
                                                                       cls.ToString().StartsWith(RDFVocabulary.RDFS.BASE_URI) ||
                                                                       cls.ToString().StartsWith(RDFVocabulary.OWL.BASE_URI))) {
-                if (!c.Equals(RDFVocabulary.OWL.THING)       && !c.Equals(RDFVocabulary.OWL.NOTHING) && !c.Equals(RDFVocabulary.OWL.INDIVIDUAL) &&
+                if (!c.Equals(RDFVocabulary.OWL.THING)       && !c.Equals(RDFVocabulary.OWL.NOTHING) &&
                     !c.Equals(RDFVocabulary.RDFS.LITERAL)    && 
                     !c.Equals(RDFVocabulary.RDF.XML_LITERAL) && !c.Equals(RDFVocabulary.RDF.HTML)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
@@ -113,7 +113,7 @@ namespace RDFSharp.Semantics {
             #endregion
 
             #region PropertyModel
-            foreach (var p in ontology.Model.PropertyModel) {
+            foreach(var p in ontology.Model.PropertyModel) {
                 if (ontology.Data.Facts.ContainsKey(p.PatternMemberID)) {
                     report.AddEvidence(new RDFOntologyValidationEvidence(
                         RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
@@ -263,7 +263,7 @@ namespace RDFSharp.Semantics {
             }
 
             //Domain / Range
-            foreach (var p in ontology.Model.PropertyModel.Where(prop => prop.Domain != null || prop.Range != null)) {
+            foreach (var p    in ontology.Model.PropertyModel.Where(prop => prop.Domain != null || prop.Range != null)) {
                 if  (p.Domain != null) {
                      if (!ontology.Model.ClassModel.Classes.ContainsKey(p.Domain.PatternMemberID)) {
                           report.AddEvidence(new RDFOntologyValidationEvidence(
