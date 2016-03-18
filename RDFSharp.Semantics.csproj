@@ -54,6 +54,7 @@
     <Compile Include="RDFOntologyClassModel.cs" />
     <Compile Include="RDFOntologyData.cs" />
     <Compile Include="RDFOntologyFact.cs" />
+    <Compile Include="RDFOntologyInitializer.cs" />
     <Compile Include="RDFOntologyLiteral.cs" />
     <Compile Include="RDFOntologyMetadata.cs" />
     <Compile Include="RDFOntologyModel.cs" />

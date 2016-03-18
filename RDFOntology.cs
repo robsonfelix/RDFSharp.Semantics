@@ -56,7 +56,7 @@ namespace RDFSharp.Semantics
                 this.Model           = new RDFOntologyModel();
                 this.Data            = new RDFOntologyData();
                 this.Annotations     = new RDFOntologyAnnotationsMetadata();
-                RDFSemanticsUtilities.InitializeOntology(this);
+                RDFOntologyInitializer.PrepareOntology(this);
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntology because given \"ontologyName\" parameter is null.");
