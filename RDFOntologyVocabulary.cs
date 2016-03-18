@@ -33,7 +33,7 @@ namespace RDFSharp.Semantics {
             /// <summary>
             /// owl:Thing
             /// </summary>
-            public static readonly RDFOntologyClass THING = new RDFOntologyClass(RDFVocabulary.OWL.THING);
+            public static readonly RDFOntologyClass THING   = new RDFOntologyClass(RDFVocabulary.OWL.THING);
 
             /// <summary>
             /// owl:Nothing
@@ -44,11 +44,6 @@ namespace RDFSharp.Semantics {
             /// rdfs:Literal
             /// </summary>
             public static readonly RDFOntologyClass LITERAL = new RDFOntologyClass(RDFVocabulary.RDFS.LITERAL);
-
-            /// <summary>
-            /// rdf:XMLLiteral
-            /// </summary>
-            public static readonly RDFOntologyClass XML_LITERAL = new RDFOntologyClass(RDFVocabulary.RDF.XML_LITERAL);
 
         }
         #endregion

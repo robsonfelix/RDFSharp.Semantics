@@ -75,6 +75,8 @@ namespace RDFSharp.Semantics {
         #endregion
 
         #region Methods
+
+        #region Management
         /// <summary>
         /// Adds the given rule to the reasoner
         /// </summary>
@@ -105,6 +107,32 @@ namespace RDFSharp.Semantics {
         public RDFOntologyReasoningRule SelectRule(String ruleName = "") {
             return this.Rules.Find(r => r.RuleName.ToUpperInvariant().Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
         }
+        #endregion
+
+        #region Reasoning
+        /// <summary>
+        /// Triggers the execution of the given rule on the given ontology. 
+        /// Returns a boolean indicating if new evidences have been found.
+        /// </summary>
+        internal Boolean TriggerRule(String ruleName, RDFOntology ontology, RDFOntologyReasoningReport report) {
+            var reasonerRule  = this.SelectRule(ruleName);
+            if (reasonerRule != null) {
+
+                //Raise launching signal
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", ruleName));
+
+                //Launch the reasoning rule
+                var oldCnt    = report.EvidencesCount;
+                reasonerRule.ExecuteRule(ontology, report);
+                var newCnt    = report.EvidencesCount - oldCnt;
+
+                //Raise termination signal
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, newCnt));
+
+                return newCnt > 0;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Applies the reasoner on the given ontology, producing a reasoning report.
@@ -128,30 +156,30 @@ namespace RDFSharp.Semantics {
                     }
 
                     //Step 1: Inflate ontology class model
-                    RDFSemanticsUtilities.TriggerRule("EquivalentClassTransitivity",    this, ontology, rReport);
-                    RDFSemanticsUtilities.TriggerRule("SubClassTransitivity",           this, ontology, rReport);
-                    RDFSemanticsUtilities.TriggerRule("DisjointWithEntailment",         this, ontology, rReport);
+                    this.TriggerRule("EquivalentClassTransitivity",    ontology, rReport);
+                    this.TriggerRule("SubClassTransitivity",           ontology, rReport);
+                    this.TriggerRule("DisjointWithEntailment",         ontology, rReport);
 
                     //Step 2: Inflate ontology property model
-                    RDFSemanticsUtilities.TriggerRule("EquivalentPropertyTransitivity", this, ontology, rReport);
-                    RDFSemanticsUtilities.TriggerRule("SubPropertyTransitivity",        this, ontology, rReport);
+                    this.TriggerRule("EquivalentPropertyTransitivity", ontology, rReport);
+                    this.TriggerRule("SubPropertyTransitivity",        ontology, rReport);
 
                     //Step 3: Inflate ontology data
-                    RDFSemanticsUtilities.TriggerRule("SameAsTransitivity",             this, ontology, rReport);
-                    RDFSemanticsUtilities.TriggerRule("DifferentFromEntailment",        this, ontology, rReport);
-                    RDFSemanticsUtilities.TriggerRule("ClassTypeEntailment",            this, ontology, rReport);
-                    RDFSemanticsUtilities.TriggerRule("DomainEntailment",               this, ontology, rReport);
-                    RDFSemanticsUtilities.TriggerRule("RangeEntailment",                this, ontology, rReport);
+                    this.TriggerRule("SameAsTransitivity",             ontology, rReport);
+                    this.TriggerRule("DifferentFromEntailment",        ontology, rReport);
+                    this.TriggerRule("ClassTypeEntailment",            ontology, rReport);
+                    this.TriggerRule("DomainEntailment",               ontology, rReport);
+                    this.TriggerRule("RangeEntailment",                ontology, rReport);
 
                     //Step 4: Trigger standard rules
                     var stepCnt   = 0;
                     var infCnt    = new List<Boolean>() { false, false, false, false, false };
                     while (true)  {
-                        infCnt[0] = RDFSemanticsUtilities.TriggerRule("InverseOfEntailment",          this, ontology, rReport);
-                        infCnt[1] = RDFSemanticsUtilities.TriggerRule("SymmetricPropertyEntailment",  this, ontology, rReport);
-                        infCnt[2] = RDFSemanticsUtilities.TriggerRule("TransitivePropertyEntailment", this, ontology, rReport);
-                        infCnt[3] = RDFSemanticsUtilities.TriggerRule("PropertyEntailment",           this, ontology, rReport);
-                        infCnt[4] = RDFSemanticsUtilities.TriggerRule("SameAsEntailment",             this, ontology, rReport);
+                        infCnt[0] = this.TriggerRule("InverseOfEntailment",          ontology, rReport);
+                        infCnt[1] = this.TriggerRule("SymmetricPropertyEntailment",  ontology, rReport);
+                        infCnt[2] = this.TriggerRule("TransitivePropertyEntailment", ontology, rReport);
+                        infCnt[3] = this.TriggerRule("PropertyEntailment",           ontology, rReport);
+                        infCnt[4] = this.TriggerRule("SameAsEntailment",             ontology, rReport);
 
                         //Exit Condition A: none of the rules have produced new inferences
                         if (infCnt.TrueForAll(inf => inf == false)) {
@@ -170,7 +198,7 @@ namespace RDFSharp.Semantics {
 
                     //Step 5: Trigger user-defined rules
                     foreach(var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasoningRuleType.UserDefined)) {
-                        RDFSemanticsUtilities.TriggerRule(sr.RuleName, this, ontology, rReport);
+                        this.TriggerRule(sr.RuleName, ontology, rReport);
                     }
 
                     return rReport;
@@ -179,6 +207,8 @@ namespace RDFSharp.Semantics {
             }
             throw new RDFSemanticsException("Cannot apply RDFOntologyReasoner because given \"ontology\" parameter is null.");
         }
+        #endregion
+
         #endregion
 
     }
