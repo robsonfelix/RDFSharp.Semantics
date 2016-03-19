@@ -554,9 +554,43 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyPropertyModel RemoveCustomAnnotation(RDFOntologyProperty ontologyProperty, RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
             if (ontologyProperty != null && ontologyAnnotationProperty != null && ontologyResource != null) {
-                if (!ontologyProperty.IsAnnotationProperty()) {
+
+                //owl:versionInfo
+                if (ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.VERSION_INFO)) {
+                    if (ontologyResource.IsLiteral()) {
+                        this.RemoveVersionInfoAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
+                    }
+                }
+
+                //rdfs:comment
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.COMMENT)) {
+                     if(ontologyResource.IsLiteral()) {
+                        this.RemoveCommentAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
+                     }
+                }
+
+                //rdfs:label
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.LABEL)) {
+                     if(ontologyResource.IsLiteral()) {
+                        this.RemoveLabelAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
+                     }
+                }
+
+                //rdfs:seeAlso
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.SEE_ALSO)) {
+                     this.RemoveSeeAlsoAnnotation(ontologyProperty, ontologyResource);
+                }
+
+                //rdfs:isDefinedBy
+                else if(ontologyAnnotationProperty.Equals(RDFOntologyVocabulary.AnnotationProperties.IS_DEFINED_BY)) {
+                     this.RemoveIsDefinedByAnnotation(ontologyProperty, ontologyResource);
+                }
+
+                //custom
+                else {
                      this.Annotations.CustomAnnotations.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, ontologyAnnotationProperty, ontologyResource));
                 }
+
             }
             return this;
         }
