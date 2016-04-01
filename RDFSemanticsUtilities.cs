@@ -995,31 +995,31 @@ namespace RDFSharp.Semantics
                 #region ClassModel
 
                 #region Class
-                foreach(var c        in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
-                    var ontClass      = new RDFOntologyClass((RDFResource)c.Subject);
+                foreach(var c    in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
+                    var ontClass  = new RDFOntologyClass((RDFResource)c.Subject);
                     ontology.Model.ClassModel.AddClass(ontClass);
                     if   (ontGraph.ContainsTriple(new RDFTriple((RDFResource)ontClass.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS))) {
                           ontClass.SetDeprecated(true);
                     }
                 }
-                foreach(var c        in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS)) {
-                    var ontClass      = new RDFOntologyClass((RDFResource)c.Subject);
+                foreach(var c    in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS)) {
+                    var ontClass  = new RDFOntologyClass((RDFResource)c.Subject);
                     ontology.Model.ClassModel.AddClass(ontClass);
                 }
                 #endregion
 
                 #region DeprecatedClass
-                foreach (var dc      in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.DEPRECATED_CLASS)) {
-                    var ontClass      = new RDFOntologyClass((RDFResource)dc.Subject);
+                foreach (var dc  in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.DEPRECATED_CLASS)) {
+                    var ontClass  = new RDFOntologyClass((RDFResource)dc.Subject);
                     ontClass.SetDeprecated(true);
                     ontology.Model.ClassModel.AddClass(ontClass);
                 }
                 #endregion
 
                 #region Datatype
-                foreach(var d        in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
-                	var ontClass  = new RDFOntologyClass((RDFResource)d.Subject);
-                        ontology.Model.ClassModel.AddClass(ontClass);
+                foreach(var dt   in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
+                    var ontClass  = new RDFOntologyClass((RDFResource)dt.Subject);
+                    ontology.Model.ClassModel.AddClass(ontClass);
                 }
                 #endregion
 
