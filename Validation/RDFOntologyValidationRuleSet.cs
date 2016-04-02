@@ -48,7 +48,7 @@ namespace RDFSharp.Semantics {
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                          "Vocabulary_Reservation",
                          String.Format("RDF/RDFS/OWL vocabularies are reserved, they cannot be used for class names."),
-                         String.Format("Remove ontology class '{0}' from the class model.", c)
+                         String.Format("Remove reserved ontology class '{0}' from the class model.", c)
                      ));
                 }
             }
@@ -62,7 +62,7 @@ namespace RDFSharp.Semantics {
                     RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                     "Vocabulary_Reservation",
                     String.Format("RDF/RDFS/OWL vocabularies are reserved, they cannot be used for property names."),
-                    String.Format("Remove ontology property '{0}' from the property model.", p)
+                    String.Format("Remove reserved ontology property '{0}' from the property model.", p)
                 ));
             }
             #endregion
@@ -75,7 +75,7 @@ namespace RDFSharp.Semantics {
                     RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                     "Vocabulary_Reservation",
                     String.Format("RDF/RDFS/OWL vocabularies are reserved, they cannot be used for fact names."),
-                    String.Format("Remove ontology fact '{0}' from the data.", f)
+                    String.Format("Remove reserved ontology fact '{0}' from the data.", f)
                 ));
             }
             #endregion
@@ -144,7 +144,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a 'rdfs:subclassOf' relation.", c),
+                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a 'rdfs:subclassOf' relation.", c.TaxonomySubject),
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                       ));
                 }
@@ -152,7 +152,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a 'rdfs:subclassOf' relation.", c),
+                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a 'rdfs:subclassOf' relation.", c.TaxonomyObject),
                          String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomyObject)
                      ));
                 }
@@ -164,7 +164,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:EquivalentClass' relation.", c),
+                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:EquivalentClass' relation.", c.TaxonomySubject),
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                       ));
                 }
@@ -172,7 +172,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:EquivalentClass' relation.", c),
+                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:EquivalentClass' relation.", c.TaxonomyObject),
                          String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomyObject)
                      ));
                 }
@@ -184,7 +184,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:DisjointWith' relation.", c),
+                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:DisjointWith' relation.", c.TaxonomySubject),
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                      ));
                 }
@@ -192,7 +192,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:DisjointWith' relation.", c),
+                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:DisjointWith' relation.", c.TaxonomyObject),
                          String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomyObject)
                      ));
                 }
@@ -204,7 +204,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:oneOf' relation.", c),
+                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:oneOf' relation.", c.TaxonomySubject),
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                      ));
                 }
@@ -216,7 +216,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:intersectionOf' relation.", c),
+                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:intersectionOf' relation.", c.TaxonomySubject),
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                      ));
                 }
@@ -224,7 +224,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:intersectionOf' relation.", c),
+                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:intersectionOf' relation.", c.TaxonomyObject),
                          String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomyObject)
                      ));
                 }
@@ -236,7 +236,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:unionOf' relation.", c),
+                          String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:unionOf' relation.", c.TaxonomySubject),
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                      ));
                 }
@@ -244,7 +244,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:unionOf' relation.", c),
+                         String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by an 'owl:unionOf' relation.", c.TaxonomyObject),
                          String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomyObject)
                      ));
                 }
@@ -355,7 +355,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a 'rdfs:subpropertyOf' relation.", p),
+                          String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a 'rdfs:subpropertyOf' relation.", p.TaxonomySubject),
                           String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomySubject)
                      ));
                 }
@@ -363,7 +363,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a 'rdfs:subpropertyOf' relation.", p),
+                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a 'rdfs:subpropertyOf' relation.", p.TaxonomyObject),
                          String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomyObject)
                      ));
                 }
@@ -375,7 +375,7 @@ namespace RDFSharp.Semantics {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
-                          String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:EquivalentProperty' relation.", p),
+                          String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:EquivalentProperty' relation.", p.TaxonomySubject),
                           String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomySubject)
                      ));
                 }
@@ -383,7 +383,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:EquivalentProperty' relation.", p),
+                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:EquivalentProperty' relation.", p.TaxonomyObject),
                          String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomyObject)
                      ));
                 }
@@ -395,7 +395,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:InverseOf' relation.", p),
+                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:InverseOf' relation.", p.TaxonomySubject),
                          String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomySubject)
                      ));
                 }
@@ -403,7 +403,7 @@ namespace RDFSharp.Semantics {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
-                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:InverseOf' relation.", p),
+                         String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:InverseOf' relation.", p.TaxonomyObject),
                          String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomyObject)
                      ));
                 }
@@ -632,8 +632,8 @@ namespace RDFSharp.Semantics {
                 if (((RDFOntologyObjectProperty)invOf.TaxonomySubject).Domain != null  &&
                     ((RDFOntologyObjectProperty)invOf.TaxonomyObject).Range   != null)  {
                       if (!RDFOntologyReasoningHelper.IsRangeClassOf(((RDFOntologyObjectProperty)invOf.TaxonomySubject).Domain, 
-                                                                     (RDFOntologyObjectProperty)invOf.TaxonomyObject, 
-                                                                      ontology.Model.ClassModel)) {
+                                                                      (RDFOntologyObjectProperty)invOf.TaxonomyObject, 
+                                                                       ontology.Model.ClassModel)) {
                            report.AddEvidence(new RDFOntologyValidationEvidence(
                                RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                                "InverseOf",
@@ -648,8 +648,8 @@ namespace RDFSharp.Semantics {
                 if (((RDFOntologyObjectProperty)invOf.TaxonomySubject).Range != null  &&
                     ((RDFOntologyObjectProperty)invOf.TaxonomyObject).Domain != null)  {
                       if (!RDFOntologyReasoningHelper.IsDomainClassOf(((RDFOntologyObjectProperty)invOf.TaxonomySubject).Range, 
-                                                                      (RDFOntologyObjectProperty)invOf.TaxonomyObject, 
-                                                                       ontology.Model.ClassModel)) {
+                                                                       (RDFOntologyObjectProperty)invOf.TaxonomyObject, 
+                                                                        ontology.Model.ClassModel)) {
                            report.AddEvidence(new RDFOntologyValidationEvidence(
                                RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                                "InverseOf",
@@ -803,7 +803,8 @@ namespace RDFSharp.Semantics {
                          }
 
                          //FunctionalProperty cannot be TransitiveProperty (even indirectly)
-                         if (prop.IsTransitiveProperty() || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
+                         if (prop.IsTransitiveProperty() 
+                             || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
                              report.AddEvidence(new RDFOntologyValidationEvidence(
                                  RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                                  "GlobalCardinalityConstraint",
@@ -833,7 +834,8 @@ namespace RDFSharp.Semantics {
                          }
 
                          //InverseFunctionalProperty cannot be TransitiveProperty (even indirectly)
-                         if (prop.IsTransitiveProperty() || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
+                         if (prop.IsTransitiveProperty() 
+                             || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
                                report.AddEvidence(new RDFOntologyValidationEvidence(
                                    RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                                    "GlobalCardinalityConstraint",
