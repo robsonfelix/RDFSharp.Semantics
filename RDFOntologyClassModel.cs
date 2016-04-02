@@ -792,7 +792,7 @@ namespace RDFSharp.Semantics {
                     var enumCollection                  = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
                     enumCollection.ReificationSubject   = new RDFResource("bnode:" + c.PatternMemberID);
                     foreach (var enumMember in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax   => (includeInferences || !tax.IsInference))) {
-                        enumCollection.AddItem(enumMember.TaxonomyObject);
+                        enumCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
                     }
                     result = result.UnionWith(enumCollection.ReifyCollection());
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ONE_OF, enumCollection.ReificationSubject));
@@ -802,7 +802,7 @@ namespace RDFSharp.Semantics {
                     var drangeCollection                = new RDFCollection(RDFModelEnums.RDFItemTypes.Literal);
                     drangeCollection.ReificationSubject = new RDFResource("bnode:" + c.PatternMemberID);
                     foreach (var drangeMember in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax => (includeInferences || !tax.IsInference))) {
-                        drangeCollection.AddItem(drangeMember.TaxonomyObject);
+                        drangeCollection.AddItem((RDFLiteral)drangeMember.TaxonomyObject.Value);
                     }
                     result = result.UnionWith(drangeCollection.ReifyCollection());
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ONE_OF, drangeCollection.ReificationSubject));
@@ -816,7 +816,7 @@ namespace RDFSharp.Semantics {
                         var intersectCollection                = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
                         intersectCollection.ReificationSubject = new RDFResource("bnode:" + c.PatternMemberID);
                         foreach (var intersectMember in this.Relations.IntersectionOf.SelectEntriesBySubject(c).Where(tax => (includeInferences || !tax.IsInference))) {
-                            intersectCollection.AddItem(intersectMember.TaxonomyObject);
+                            intersectCollection.AddItem((RDFResource)intersectMember.TaxonomyObject.Value);
                         }
                         result = result.UnionWith(intersectCollection.ReifyCollection());
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.INTERSECTION_OF, intersectCollection.ReificationSubject));
@@ -825,7 +825,7 @@ namespace RDFSharp.Semantics {
                         var unionCollection                    = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
                         unionCollection.ReificationSubject     = new RDFResource("bnode:" + c.PatternMemberID);
                         foreach (var unionMember in this.Relations.UnionOf.SelectEntriesBySubject(c).Where(tax            => (includeInferences || !tax.IsInference))) {
-                            unionCollection.AddItem(unionMember.TaxonomyObject);
+                            unionCollection.AddItem((RDFResource)unionMember.TaxonomyObject.Value);
                         }
                         result = result.UnionWith(unionCollection.ReifyCollection());
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.UNION_OF, unionCollection.ReificationSubject));
