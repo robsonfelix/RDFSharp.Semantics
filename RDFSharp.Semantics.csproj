@@ -54,7 +54,6 @@
     <Compile Include="RDFOntologyClassModel.cs" />
     <Compile Include="RDFOntologyData.cs" />
     <Compile Include="RDFOntologyFact.cs" />
-    <Compile Include="RDFOntologyInitializer.cs" />
     <Compile Include="RDFOntologyLiteral.cs" />
     <Compile Include="RDFOntologyMetadata.cs" />
     <Compile Include="RDFOntologyModel.cs" />
@@ -63,7 +62,6 @@
     <Compile Include="RDFOntologyResource.cs" />
     <Compile Include="RDFOntologyRestriction.cs" />
     <Compile Include="RDFOntologyTaxonomy.cs" />
-    <Compile Include="RDFOntologyVocabulary.cs" />
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
@@ -80,6 +78,9 @@
     <Compile Include="Extensions\Restrictions\RDFOntologyCardinalityRestriction.cs" />
     <Compile Include="Extensions\Restrictions\RDFOntologyHasValueRestriction.cs" />
     <Compile Include="Extensions\Restrictions\RDFOntologySomeValuesFromRestriction.cs" />
+    <Compile Include="Ontologies\RDFOWLOntology.cs" />
+    <Compile Include="Ontologies\RDFSOntology.cs" />
+    <Compile Include="Ontologies\RDFXSDOntology.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningEvidence.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningHelper.cs" />

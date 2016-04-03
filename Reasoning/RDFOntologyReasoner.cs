@@ -146,13 +146,13 @@ namespace RDFSharp.Semantics {
                     //Step 0.A: Raise warning reasoning concerns
                     var warnCount = vReport.SelectWarnings().Count;
                     if (warnCount > 0) {
-                        RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validation report for ontology '{0}' indicates {1} warning evidences: this MAY generate contraddictions and/or inconsistencies!", ontology, warnCount));
+                        RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validation report for ontology '{0}' indicates {1} warning evidences: this MAY generate inference contraddictions and/or inconsistencies!", ontology, warnCount));
                     }
 
                     //Step 0.B: Raise error reasoning concerns
                     var errCount  = vReport.SelectErrors().Count;
                     if (errCount  > 0) {
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Validation report for ontology '{0}' indicates {1} error evidences: this WILL generate contraddictions and/or inconsistencies!", ontology, errCount));
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Validation report for ontology '{0}' indicates {1} error evidences: this WILL generate inference contraddictions and/or inconsistencies!", ontology, errCount));
                     }
 
                     //Step 1: Inflate ontology class model

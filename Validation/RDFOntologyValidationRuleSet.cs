@@ -38,19 +38,15 @@ namespace RDFSharp.Semantics {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'Vocabulary_Reservation'");
 
             #region Classes
-            foreach (var  c in ontology.Model.ClassModel.Where(cls => cls.ToString().StartsWith(RDFVocabulary.RDF.BASE_URI)  ||
-                                                                      cls.ToString().StartsWith(RDFVocabulary.RDFS.BASE_URI) ||
-                                                                      cls.ToString().StartsWith(RDFVocabulary.OWL.BASE_URI))) {
-                if (!c.Equals(RDFVocabulary.OWL.THING)       && !c.Equals(RDFVocabulary.OWL.NOTHING) &&
-                    !c.Equals(RDFVocabulary.RDFS.LITERAL)    && 
-                    !c.Equals(RDFVocabulary.RDF.XML_LITERAL) && !c.Equals(RDFVocabulary.RDF.HTML)) {
-                     report.AddEvidence(new RDFOntologyValidationEvidence(
-                         RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
-                         "Vocabulary_Reservation",
-                         String.Format("RDF/RDFS/OWL vocabularies are reserved, they cannot be used for class names."),
-                         String.Format("Remove reserved ontology class '{0}' from the class model.", c)
-                     ));
-                }
+            foreach (var  c in ontology.Model.ClassModel.Where(cls => cls.ToString().StartsWith(RDFVocabulary.RDF.BASE_URI)   ||
+                                                                      cls.ToString().StartsWith(RDFVocabulary.RDFS.BASE_URI)  ||
+                                                                      cls.ToString().StartsWith(RDFVocabulary.OWL.BASE_URI)))  {
+                report.AddEvidence(new RDFOntologyValidationEvidence(
+                    RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
+                    "Vocabulary_Reservation",
+                    String.Format("RDF/RDFS/OWL vocabularies are reserved, they cannot be used for class names."),
+                    String.Format("Remove reserved ontology class '{0}' from the class model.", c)
+                ));
             }
             #endregion
 
@@ -137,10 +133,12 @@ namespace RDFSharp.Semantics {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'Vocabulary_Declaration'");
 
             #region Classes
+            var extClsModel   = RDFSemanticsUtilities.ExpandClassModel(ontology.Model.ClassModel);
+            var extPropModel  = RDFSemanticsUtilities.ExpandPropertyModel(ontology.Model.PropertyModel);
 
             //SubClassOf
-            foreach (var   c in ontology.Model.ClassModel.Relations.SubClassOf) {
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
+            foreach (var   c in extClsModel.Relations.SubClassOf) {
+                if  (!extClsModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -148,7 +146,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                       ));
                 }
-                if (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
+                if (!extClsModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -159,8 +157,8 @@ namespace RDFSharp.Semantics {
             }
 
             //EquivalentClass
-            foreach (var   c in ontology.Model.ClassModel.Relations.EquivalentClass) {
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
+            foreach (var   c in extClsModel.Relations.EquivalentClass) {
+                if  (!extClsModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -168,7 +166,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                       ));
                 }
-                if (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
+                if (!extClsModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -179,8 +177,8 @@ namespace RDFSharp.Semantics {
             }
 
             //DisjointWith
-            foreach (var   c in ontology.Model.ClassModel.Relations.DisjointWith) {
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
+            foreach (var   c in extClsModel.Relations.DisjointWith) {
+                if  (!extClsModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -188,7 +186,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                      ));
                 }
-                if (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
+                if (!extClsModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -199,8 +197,8 @@ namespace RDFSharp.Semantics {
             }
 
             //OneOf
-            foreach (var   c in ontology.Model.ClassModel.Relations.OneOf) {
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
+            foreach (var   c in extClsModel.Relations.OneOf) {
+                if  (!extClsModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -211,8 +209,8 @@ namespace RDFSharp.Semantics {
             }
 
             //IntersectionOf
-            foreach (var   c in ontology.Model.ClassModel.Relations.IntersectionOf) {
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
+            foreach (var   c in extClsModel.Relations.IntersectionOf) {
+                if  (!extClsModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -220,7 +218,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                      ));
                 }
-                if (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
+                if (!extClsModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -231,8 +229,8 @@ namespace RDFSharp.Semantics {
             }
 
             //UnionOf
-            foreach (var   c in ontology.Model.ClassModel.Relations.UnionOf) {
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
+            foreach (var   c in extClsModel.Relations.UnionOf) {
+                if  (!extClsModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -240,7 +238,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
                      ));
                 }
-                if (!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
+                if (!extClsModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -251,8 +249,8 @@ namespace RDFSharp.Semantics {
             }
 
             //ComplementOf
-            foreach (var complCls  in ontology.Model.ClassModel.Where(c => c is RDFOntologyComplementClass).OfType<RDFOntologyComplementClass>()) {
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(complCls.ComplementOf.PatternMemberID)) {
+            foreach (var complCls  in extClsModel.Where(c => c is RDFOntologyComplementClass).OfType<RDFOntologyComplementClass>()) {
+                if  (!extClsModel.Classes.ContainsKey(complCls.ComplementOf.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -263,9 +261,9 @@ namespace RDFSharp.Semantics {
             }
 
             //Domain / Range
-            foreach (var p    in ontology.Model.PropertyModel.Where(prop => prop.Domain != null || prop.Range != null)) {
+            foreach (var p    in extPropModel.Where(prop => prop.Domain != null || prop.Range != null)) {
                 if  (p.Domain != null) {
-                     if (!ontology.Model.ClassModel.Classes.ContainsKey(p.Domain.PatternMemberID)) {
+                     if (!extClsModel.Classes.ContainsKey(p.Domain.PatternMemberID)) {
                           report.AddEvidence(new RDFOntologyValidationEvidence(
                               RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                               "Vocabulary_Declaration",
@@ -275,7 +273,7 @@ namespace RDFSharp.Semantics {
                      }
                 }
                 if  (p.Range != null) {
-                     if (!ontology.Model.ClassModel.Classes.ContainsKey(p.Range.PatternMemberID)) {
+                     if (!extClsModel.Classes.ContainsKey(p.Range.PatternMemberID)) {
                           report.AddEvidence(new RDFOntologyValidationEvidence(
                               RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                               "Vocabulary_Declaration",
@@ -290,12 +288,12 @@ namespace RDFSharp.Semantics {
 
             #region Restrictions
 
-            var restrEnum  = ontology.Model.ClassModel.RestrictionsEnumerator;
+            var restrEnum  = extClsModel.RestrictionsEnumerator;
             while(restrEnum.MoveNext()) {
 
                 //OnProperty
                 var onProp = restrEnum.Current.OnProperty;
-                if (!ontology.Model.PropertyModel.Properties.ContainsKey(onProp.Value.PatternMemberID)) {
+                if (!extPropModel.Properties.ContainsKey(onProp.Value.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -307,7 +305,7 @@ namespace RDFSharp.Semantics {
                 // AllValuesFrom
                 if (restrEnum.Current is RDFOntologyAllValuesFromRestriction) {
                     var fromClass = ((RDFOntologyAllValuesFromRestriction)restrEnum.Current).FromClass;
-                    if (!ontology.Model.ClassModel.Classes.ContainsKey(fromClass.Value.PatternMemberID)) {
+                    if (!extClsModel.Classes.ContainsKey(fromClass.Value.PatternMemberID)) {
                          report.AddEvidence(new RDFOntologyValidationEvidence(
                              RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                              "Vocabulary_Declaration",
@@ -320,7 +318,7 @@ namespace RDFSharp.Semantics {
                 // SomeValuesFrom
                 else if (restrEnum.Current is RDFOntologySomeValuesFromRestriction) {
                     var fromClass = ((RDFOntologySomeValuesFromRestriction)restrEnum.Current).FromClass;
-                    if (!ontology.Model.ClassModel.Classes.ContainsKey(fromClass.Value.PatternMemberID)) {
+                    if (!extClsModel.Classes.ContainsKey(fromClass.Value.PatternMemberID)) {
                          report.AddEvidence(new RDFOntologyValidationEvidence(
                              RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                              "Vocabulary_Declaration",
@@ -350,8 +348,8 @@ namespace RDFSharp.Semantics {
             #region Properties
 
             //SubPropertyOf
-            foreach (var   p in ontology.Model.PropertyModel.Relations.SubPropertyOf) {
-                if  (!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomySubject.Value.PatternMemberID)) {
+            foreach (var   p in extPropModel.Relations.SubPropertyOf) {
+                if  (!extPropModel.Properties.ContainsKey(p.TaxonomySubject.Value.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -359,7 +357,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomySubject)
                      ));
                 }
-                if (!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomyObject.Value.PatternMemberID)) {
+                if (!extPropModel.Properties.ContainsKey(p.TaxonomyObject.Value.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -370,8 +368,8 @@ namespace RDFSharp.Semantics {
             }
 
             //EquivalentProperty
-            foreach (var   p in ontology.Model.PropertyModel.Relations.EquivalentProperty) {
-                if  (!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomySubject.Value.PatternMemberID)) {
+            foreach (var   p in extPropModel.Relations.EquivalentProperty) {
+                if  (!extPropModel.Properties.ContainsKey(p.TaxonomySubject.Value.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -379,7 +377,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomySubject)
                      ));
                 }
-                if (!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomyObject.Value.PatternMemberID)) {
+                if (!extPropModel.Properties.ContainsKey(p.TaxonomyObject.Value.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -390,8 +388,8 @@ namespace RDFSharp.Semantics {
             }
 
             //InverseOf
-            foreach (var   p in ontology.Model.PropertyModel.Relations.InverseOf) {
-                if (!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomySubject.Value.PatternMemberID)) {
+            foreach (var   p in extPropModel.Relations.InverseOf) {
+                if (!extPropModel.Properties.ContainsKey(p.TaxonomySubject.Value.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -399,7 +397,7 @@ namespace RDFSharp.Semantics {
                          String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomySubject)
                      ));
                 }
-                if (!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomyObject.Value.PatternMemberID)) {
+                if (!extPropModel.Properties.ContainsKey(p.TaxonomyObject.Value.PatternMemberID)) {
                      report.AddEvidence(new RDFOntologyValidationEvidence(
                          RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                          "Vocabulary_Declaration",
@@ -423,7 +421,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology fact '{0}' to the data.", f.TaxonomySubject)
                       ));
                 }
-                if  (!ontology.Model.ClassModel.Classes.ContainsKey(f.TaxonomyObject.PatternMemberID)) {
+                if  (!extClsModel.Classes.ContainsKey(f.TaxonomyObject.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -491,7 +489,7 @@ namespace RDFSharp.Semantics {
                           String.Format("Add declaration of ontology fact '{0}' to the data.", f.TaxonomySubject)
                       ));
                 }
-                if  (!ontology.Model.PropertyModel.Properties.ContainsKey(f.TaxonomyPredicate.PatternMemberID)) {
+                if  (!extPropModel.Properties.ContainsKey(f.TaxonomyPredicate.PatternMemberID)) {
                       report.AddEvidence(new RDFOntologyValidationEvidence(
                           RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning,
                           "Vocabulary_Declaration",
@@ -626,7 +624,8 @@ namespace RDFSharp.Semantics {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'InverseOf'");
 
             #region InverseOf
-            foreach (var invOf in ontology.Model.PropertyModel.Relations.InverseOf) {
+            var extPropModel    = RDFSemanticsUtilities.ExpandPropertyModel(ontology.Model.PropertyModel);
+            foreach (var invOf in extPropModel.Relations.InverseOf) {
 
                 #region Domain VS Range
                 if (((RDFOntologyObjectProperty)invOf.TaxonomySubject).Domain != null  &&
@@ -675,7 +674,8 @@ namespace RDFSharp.Semantics {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'SymmetricProperty'");
 
             #region SymmetricProperty
-            foreach(var symProp in ontology.Model.PropertyModel.Where(prop => prop.IsSymmetricProperty() && (prop.Domain != null || prop.Range != null))) {
+            var extPropModel  = RDFSemanticsUtilities.ExpandPropertyModel(ontology.Model.PropertyModel);
+            foreach(var symProp in extPropModel.Where(prop => prop.IsSymmetricProperty() && (prop.Domain != null || prop.Range != null))) {
                 foreach(var asn in ontology.Data.Relations.Assertions.Where(asn => asn.TaxonomyPredicate.Equals(symProp))) {
 
                     #region Domain
@@ -718,8 +718,9 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal static void ClassType(RDFOntology ontology, RDFOntologyValidationReport report) {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'ClassType'");
-            
+
             #region Facts
+            var extClsModel         = RDFSemanticsUtilities.ExpandClassModel(ontology.Model.ClassModel);
             var disjWithCache       = new Dictionary<Int64, RDFOntologyClassModel>();
             var litCheckCache       = new Dictionary<Int64, Boolean>();
             foreach (var  fact     in ontology.Data) {
@@ -727,7 +728,7 @@ namespace RDFSharp.Semantics {
                 foreach (var cType in ontology.Data.Relations.ClassType.SelectEntriesBySubject(fact)) {
 
                     //ClassTypes of a fact cannot be compatible with "rdfs:Literal"
-                    var cTypeClass  = ontology.Model.ClassModel.SelectClass(cType.TaxonomyObject.ToString());
+                    var cTypeClass  = extClsModel.SelectClass(cType.TaxonomyObject.ToString());
                     if (cTypeClass != null) {
                         if (!litCheckCache.ContainsKey(cTypeClass.PatternMemberID)) {
                              litCheckCache.Add(cTypeClass.PatternMemberID, RDFOntologyReasoningHelper.IsLiteralCompatibleClass(cTypeClass, ontology.Model.ClassModel));
@@ -777,7 +778,8 @@ namespace RDFSharp.Semantics {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'GlobalCardinalityConstraint'");
 
             #region GlobalCardinalityConstraint
-            foreach (var prop    in ontology.Model.PropertyModel.Where(p => p.Functional || (p.IsObjectProperty() && ((RDFOntologyObjectProperty)p).InverseFunctional))) {
+            var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(ontology.Model.PropertyModel);
+            foreach (var prop    in extPropModel.Where(p => p.Functional || (p.IsObjectProperty() && ((RDFOntologyObjectProperty)p).InverseFunctional))) {
                 var assertions    = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(prop);
                 var subjCache     = new Dictionary<Int64, RDFOntologyResource>();
                 var objCache      = new Dictionary<Int64, RDFOntologyResource>();
@@ -803,8 +805,7 @@ namespace RDFSharp.Semantics {
                          }
 
                          //FunctionalProperty cannot be TransitiveProperty (even indirectly)
-                         if (prop.IsTransitiveProperty() 
-                             || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
+                         if (prop.IsTransitiveProperty() || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
                              report.AddEvidence(new RDFOntologyValidationEvidence(
                                  RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                                  "GlobalCardinalityConstraint",
@@ -834,8 +835,7 @@ namespace RDFSharp.Semantics {
                          }
 
                          //InverseFunctionalProperty cannot be TransitiveProperty (even indirectly)
-                         if (prop.IsTransitiveProperty() 
-                             || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
+                         if (prop.IsTransitiveProperty() || RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(prop, ontology.Model.PropertyModel).Any(p => p.IsTransitiveProperty())) {
                                report.AddEvidence(new RDFOntologyValidationEvidence(
                                    RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                                    "GlobalCardinalityConstraint",
@@ -863,10 +863,13 @@ namespace RDFSharp.Semantics {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'LocalCardinalityConstraint'");
 
             #region LocalCardinalityConstraint
+            var extClsModel         = RDFSemanticsUtilities.ExpandClassModel(ontology.Model.ClassModel);
+            var extPropModel        = RDFSemanticsUtilities.ExpandPropertyModel(ontology.Model.PropertyModel);
+
             //OWL-DL requires that for a transitive property no local cardinality constraints should
             //be declared on the property itself, or its super properties, or its inverse properties.
-            foreach (var cardRestr in ontology.Model.ClassModel.Where(c => c is RDFOntologyCardinalityRestriction).OfType<RDFOntologyCardinalityRestriction>()) {
-                var  restrProp      = ontology.Model.PropertyModel.SelectProperty(cardRestr.OnProperty.ToString());
+            foreach (var cardRestr in extClsModel.Where(c => c is RDFOntologyCardinalityRestriction).OfType<RDFOntologyCardinalityRestriction>()) {
+                var  restrProp      = extPropModel.SelectProperty(cardRestr.OnProperty.ToString());
                 if  (restrProp     != null) {
                     if (restrProp.IsObjectProperty()) {
                         if (((RDFOntologyObjectProperty)restrProp).Transitive) {
@@ -889,7 +892,7 @@ namespace RDFSharp.Semantics {
                                  }
                             }
                         }
-                        foreach (var inverseProps in ontology.Model.PropertyModel.Relations.InverseOf.SelectEntriesBySubject(restrProp)) {
+                        foreach (var inverseProps in extPropModel.Relations.InverseOf.SelectEntriesBySubject(restrProp)) {
                             if  (((RDFOntologyObjectProperty)inverseProps.TaxonomyObject).Transitive) {
                                    report.AddEvidence(new RDFOntologyValidationEvidence(
                                        RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,

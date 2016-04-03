@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using RDFSharp.Model;
 
 namespace RDFSharp.Semantics {
 
@@ -136,7 +137,7 @@ namespace RDFSharp.Semantics {
                     foreach(var sc  in RDFOntologyReasoningHelper.EnlistSuperClassesOf(c, ontology.Model.ClassModel)) {
 
                         //Create the inference as a taxonomy entry
-                        var scInfer  = new RDFOntologyTaxonomyEntry(c, RDFOntologyVocabulary.ObjectProperties.SUB_CLASS_OF, sc).SetInference(true);
+                        var scInfer  = new RDFOntologyTaxonomyEntry(c, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), sc).SetInference(true);
 
                         //Enrich the class model with the inference
                         var taxCnt   = ontology.Model.ClassModel.Relations.SubClassOf.EntriesCount;
@@ -167,7 +168,7 @@ namespace RDFSharp.Semantics {
                         foreach(var sp  in RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(p, ontology.Model.PropertyModel)) {
 
                             //Create the inference as a taxonomy entry
-                            var spInfer  = new RDFOntologyTaxonomyEntry(p, RDFOntologyVocabulary.ObjectProperties.SUB_PROPERTY_OF, sp).SetInference(true);
+                            var spInfer  = new RDFOntologyTaxonomyEntry(p, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), sp).SetInference(true);
 
                             //Enrich the property model with the inference
                             var taxCnt   = ontology.Model.PropertyModel.Relations.SubPropertyOf.EntriesCount;
@@ -199,7 +200,7 @@ namespace RDFSharp.Semantics {
                         foreach(var f  in RDFOntologyReasoningHelper.EnlistMembersOf(c, ontology)) {
 
                             //Create the inference as a taxonomy entry
-                            var ctInfer = new RDFOntologyTaxonomyEntry(f,  RDFOntologyVocabulary.ObjectProperties.TYPE, c).SetInference(true);
+                            var ctInfer = new RDFOntologyTaxonomyEntry(f,  RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), c).SetInference(true);
 
                             //Enrich the data with the inference
                             var taxCnt  = ontology.Data.Relations.ClassType.EntriesCount;
@@ -234,7 +235,7 @@ namespace RDFSharp.Semantics {
 
                         //Enlist the compatible properties of the current property (P1 [SUBPROPERTYOF|EQUIVALENTPROPERTY] P2)
                         foreach(var p2         in RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(p1, ontology.Model.PropertyModel)
-                                                        .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(p1, ontology.Model.PropertyModel))) {
+                                                      .UnionWith(RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(p1, ontology.Model.PropertyModel))) {
 
                             //Iterate the compatible assertions
                             foreach(var p1Asn  in p1Asns) {
@@ -286,7 +287,7 @@ namespace RDFSharp.Semantics {
                             foreach(var pAsn in pAsns) {
 
                                 //Create the inference as a taxonomy entry
-                                var deInfer   = new RDFOntologyTaxonomyEntry(pAsn.TaxonomySubject, RDFOntologyVocabulary.ObjectProperties.TYPE, p.Domain).SetInference(true);
+                                var deInfer   = new RDFOntologyTaxonomyEntry(pAsn.TaxonomySubject, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), p.Domain).SetInference(true);
 
                                 //Enrich the data with the inference
                                 var taxCnt    = ontology.Data.Relations.ClassType.EntriesCount;
@@ -325,7 +326,7 @@ namespace RDFSharp.Semantics {
                             if(pAsn.TaxonomyObject.IsFact()) {
 
                                 //Create the inference as a taxonomy entry
-                                var reInfer = new RDFOntologyTaxonomyEntry(pAsn.TaxonomyObject, RDFOntologyVocabulary.ObjectProperties.TYPE, p.Range).SetInference(true);
+                                var reInfer = new RDFOntologyTaxonomyEntry(pAsn.TaxonomyObject, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), p.Range).SetInference(true);
 
                                 //Enrich the data with the inference
                                 var taxCnt  = ontology.Data.Relations.ClassType.EntriesCount;
@@ -492,8 +493,8 @@ namespace RDFSharp.Semantics {
                     foreach(var ec  in RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(c, ontology.Model.ClassModel)) {
 
                         //Create the inference as a taxonomy entry
-                        var ecInferA = new RDFOntologyTaxonomyEntry(c,  RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_CLASS, ec).SetInference(true);
-                        var ecInferB = new RDFOntologyTaxonomyEntry(ec, RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_CLASS, c).SetInference(true);
+                        var ecInferA = new RDFOntologyTaxonomyEntry(c,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), ec).SetInference(true);
+                        var ecInferB = new RDFOntologyTaxonomyEntry(ec, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), c).SetInference(true);
 
                         //Enrich the class model with the inference
                         var taxCnt   = ontology.Model.ClassModel.Relations.EquivalentClass.EntriesCount;
@@ -528,8 +529,8 @@ namespace RDFSharp.Semantics {
                     foreach(var dwc in RDFOntologyReasoningHelper.EnlistDisjointClassesWith(c, ontology.Model.ClassModel)) {
 
                         //Create the inference as a taxonomy entry
-                        var dcInferA = new RDFOntologyTaxonomyEntry(c,   RDFOntologyVocabulary.ObjectProperties.DISJOINT_WITH, dwc).SetInference(true);
-                        var dcInferB = new RDFOntologyTaxonomyEntry(dwc, RDFOntologyVocabulary.ObjectProperties.DISJOINT_WITH, c).SetInference(true);
+                        var dcInferA = new RDFOntologyTaxonomyEntry(c,   RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), dwc).SetInference(true);
+                        var dcInferB = new RDFOntologyTaxonomyEntry(dwc, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), c).SetInference(true);
 
                         //Enrich the class model with the inference
                         var taxCnt   = ontology.Model.ClassModel.Relations.DisjointWith.EntriesCount;
@@ -565,8 +566,8 @@ namespace RDFSharp.Semantics {
                         foreach(var ep  in RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(p, ontology.Model.PropertyModel)) {
 
                             //Create the inference as a taxonomy entry
-                            var epInferA = new RDFOntologyTaxonomyEntry(p,  RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_PROPERTY, ep).SetInference(true);
-                            var epInferB = new RDFOntologyTaxonomyEntry(ep, RDFOntologyVocabulary.ObjectProperties.EQUIVALENT_PROPERTY, p).SetInference(true);
+                            var epInferA = new RDFOntologyTaxonomyEntry(p,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), ep).SetInference(true);
+                            var epInferB = new RDFOntologyTaxonomyEntry(ep, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), p).SetInference(true);
 
                             //Enrich the property model with the inference
                             var taxCnt   = ontology.Model.PropertyModel.Relations.EquivalentProperty.EntriesCount;
@@ -600,8 +601,8 @@ namespace RDFSharp.Semantics {
                     foreach(var sf  in RDFOntologyReasoningHelper.EnlistSameFactsAs(f, ontology.Data)) {
 
                         //Create the inference as a taxonomy entry
-                        var sfInferA = new RDFOntologyTaxonomyEntry(f,  RDFOntologyVocabulary.ObjectProperties.SAME_AS, sf).SetInference(true);
-                        var sfInferB = new RDFOntologyTaxonomyEntry(sf, RDFOntologyVocabulary.ObjectProperties.SAME_AS, f).SetInference(true);
+                        var sfInferA = new RDFOntologyTaxonomyEntry(f,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), sf).SetInference(true);
+                        var sfInferB = new RDFOntologyTaxonomyEntry(sf, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), f).SetInference(true);
 
                         //Enrich the data with the inference
                         var taxCnt   = ontology.Data.Relations.SameAs.EntriesCount;
@@ -635,8 +636,8 @@ namespace RDFSharp.Semantics {
                     foreach(var df  in RDFOntologyReasoningHelper.EnlistDifferentFactsFrom(f, ontology.Data)) {
 
                         //Create the inference as a taxonomy entry
-                        var dfInferA = new RDFOntologyTaxonomyEntry(f,  RDFOntologyVocabulary.ObjectProperties.DIFFERENT_FROM, df).SetInference(true);
-                        var dfInferB = new RDFOntologyTaxonomyEntry(df, RDFOntologyVocabulary.ObjectProperties.DIFFERENT_FROM, f).SetInference(true);
+                        var dfInferA = new RDFOntologyTaxonomyEntry(f,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), df).SetInference(true);
+                        var dfInferB = new RDFOntologyTaxonomyEntry(df, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), f).SetInference(true);
 
                         //Enrich the data with the inference
                         var taxCnt   = ontology.Data.Relations.DifferentFrom.EntriesCount;
