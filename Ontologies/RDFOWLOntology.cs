@@ -22,7 +22,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOWLOntology represents an OWL-DL ontology implementation of OWL vocabulary
     /// </summary>
-    public static class RDFOWLOntology {
+    internal static class RDFOWLOntology {
 
         #region Properties
         /// <summary>

@@ -22,7 +22,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFXSDOntology represents an OWL-DL ontology implementation of XSD vocabulary
     /// </summary>
-    public static class RDFXSDOntology {
+    internal static class RDFXSDOntology {
 
         #region Properties
         /// <summary>
