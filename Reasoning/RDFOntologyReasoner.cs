@@ -40,11 +40,6 @@ namespace RDFSharp.Semantics {
         public String ReasonerDescription { get; internal set; }
 
         /// <summary>
-        /// Options of the reasoner
-        /// </summary>
-        public RDFOntologyReasonerOptions ReasonerOptions { get; internal set; }
-
-        /// <summary>
         /// List of rules applied by the reasoner
         /// </summary>
         internal List<RDFOntologyReasoningRule> Rules { get; set; }
@@ -52,16 +47,14 @@ namespace RDFSharp.Semantics {
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an empty ontology reasoner with given name, descriptions and options
+        /// Default-ctor to build an empty ontology reasoner with given name and description
         /// </summary>
         public RDFOntologyReasoner(String reasonerName, 
-                                   String reasonerDescription,
-                                   RDFOntologyReasonerOptions reasonerOptions=null) {
+                                   String reasonerDescription) {
             if (reasonerName                != null && reasonerName.Trim()        != String.Empty) {
                 if (reasonerDescription     != null && reasonerDescription.Trim() != String.Empty) {
                     this.ReasonerName        = reasonerName;
                     this.ReasonerDescription = reasonerDescription;
-                    this.ReasonerOptions     = (reasonerOptions ?? new RDFOntologyReasonerOptions());
                     this.Rules               = new List<RDFOntologyReasoningRule>();
                 }
                 else {
@@ -138,100 +131,42 @@ namespace RDFSharp.Semantics {
         /// Applies the reasoner on the given ontology, producing a reasoning report.
         /// The ontology is progressively enriched with discovered inferences.
         /// </summary>
-        public RDFOntologyReasoningReport ApplyToOntology(RDFOntology ontology, RDFOntologyValidationReport vReport) {
-            if (ontology         != null) {
-                if (vReport      != null && vReport.ValidationReportID == ontology.PatternMemberID) {
-                    var rReport   = new RDFOntologyReasoningReport(ontology.Value.PatternMemberID);
+        public RDFOntologyReasoningReport ApplyToOntology(RDFOntology ontology) {
+            if (ontology   != null) {
+                var rReport = new RDFOntologyReasoningReport(ontology.Value.PatternMemberID);
 
-                    //Step 0.A: Raise warning reasoning concerns
-                    var warnCount = vReport.SelectWarnings().Count;
-                    if (warnCount > 0) {
-                        RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validation report for ontology '{0}' indicates {1} warning evidences: this MAY generate inference contraddictions and/or inconsistencies!", ontology, warnCount));
-                    }
+                //Step 1: Apply class-based rules
+                this.TriggerRule("EquivalentClassTransitivity",    ontology, rReport);
+                this.TriggerRule("SubClassTransitivity",           ontology, rReport);
+                this.TriggerRule("DisjointWithEntailment",         ontology, rReport);
 
-                    //Step 0.B: Raise error reasoning concerns
-                    var errCount  = vReport.SelectErrors().Count;
-                    if (errCount  > 0) {
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Validation report for ontology '{0}' indicates {1} error evidences: this WILL generate inference contraddictions and/or inconsistencies!", ontology, errCount));
-                    }
+                //Step 2: Apply property-based rules
+                this.TriggerRule("EquivalentPropertyTransitivity", ontology, rReport);
+                this.TriggerRule("SubPropertyTransitivity",        ontology, rReport);
 
-                    //Step 1: Inflate ontology class model
-                    this.TriggerRule("EquivalentClassTransitivity",    ontology, rReport);
-                    this.TriggerRule("SubClassTransitivity",           ontology, rReport);
-                    this.TriggerRule("DisjointWithEntailment",         ontology, rReport);
+                //Step 3: Apply data-based rules
+                this.TriggerRule("SameAsTransitivity",             ontology, rReport);
+                this.TriggerRule("DifferentFromEntailment",        ontology, rReport);
+                this.TriggerRule("ClassTypeEntailment",            ontology, rReport);
+                this.TriggerRule("DomainEntailment",               ontology, rReport);
+                this.TriggerRule("RangeEntailment",                ontology, rReport);
+                this.TriggerRule("InverseOfEntailment",            ontology, rReport);
+                this.TriggerRule("SymmetricPropertyEntailment",    ontology, rReport);
+                this.TriggerRule("TransitivePropertyEntailment",   ontology, rReport);
+                this.TriggerRule("PropertyEntailment",             ontology, rReport);
+                this.TriggerRule("SameAsEntailment",               ontology, rReport);
 
-                    //Step 2: Inflate ontology property model
-                    this.TriggerRule("EquivalentPropertyTransitivity", ontology, rReport);
-                    this.TriggerRule("SubPropertyTransitivity",        ontology, rReport);
-
-                    //Step 3: Inflate ontology data
-                    this.TriggerRule("SameAsTransitivity",             ontology, rReport);
-                    this.TriggerRule("DifferentFromEntailment",        ontology, rReport);
-                    this.TriggerRule("ClassTypeEntailment",            ontology, rReport);
-                    this.TriggerRule("DomainEntailment",               ontology, rReport);
-                    this.TriggerRule("RangeEntailment",                ontology, rReport);
-
-                    //Step 4: Trigger standard rules
-                    var stepCnt   = 0;
-                    var infCnt    = new List<Boolean>() { false, false, false, false, false };
-                    while (true)  {
-                        infCnt[0] = this.TriggerRule("InverseOfEntailment",          ontology, rReport);
-                        infCnt[1] = this.TriggerRule("SymmetricPropertyEntailment",  ontology, rReport);
-                        infCnt[2] = this.TriggerRule("TransitivePropertyEntailment", ontology, rReport);
-                        infCnt[3] = this.TriggerRule("PropertyEntailment",           ontology, rReport);
-                        infCnt[4] = this.TriggerRule("SameAsEntailment",             ontology, rReport);
-
-                        //Exit Condition A: none of the rules have produced new inferences
-                        if (infCnt.TrueForAll(inf => inf == false)) {
-                            break;
-                        }
-
-                        //Exit Condition B: recursion limit option is enabled and have been reached
-                        if (this.ReasonerOptions.EnableRecursionLimit) {
-                            stepCnt      = stepCnt + 1;
-                            if (stepCnt == 3) {
-                                break;
-                            }
-                        }
-
-                    }
-
-                    //Step 5: Trigger user-defined rules
-                    foreach(var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasoningRuleType.UserDefined)) {
-                        this.TriggerRule(sr.RuleName, ontology, rReport);
-                    }
-
-                    return rReport;
+                //Step 5: Apply custom rules
+                foreach(var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasoningRuleType.UserDefined)) {
+                    this.TriggerRule(sr.RuleName, ontology, rReport);
                 }
-                throw new RDFSemanticsException("Cannot apply RDFOntologyReasoner because given \"vReport\" parameter is null or does not represent a validation report of the given ontology.");
+
+                return rReport;
             }
             throw new RDFSemanticsException("Cannot apply RDFOntologyReasoner because given \"ontology\" parameter is null.");
         }
         #endregion
 
-        #endregion
-
-    }
-
-    /// <summary>
-    /// RDFOntologyReasonerOptions represents a set of options applied to a reasoner
-    /// </summary>
-    public class RDFOntologyReasonerOptions {
-
-        #region Properties
-        /// <summary>
-        /// If enabled, this flag limits the evaluation of recursive reasoning rules to a maximum of 3 iterations
-        /// </summary>
-        public Boolean EnableRecursionLimit { get; set; }
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Default-ctor to build a predefined reasoner options object
-        /// </summary>
-        public RDFOntologyReasonerOptions() {
-            this.EnableRecursionLimit = true;
-        }
         #endregion
 
     }
