@@ -129,6 +129,11 @@ namespace RDFSharp.Semantics {
         /// Dictionary of classes composing the class model
         /// </summary>
         internal Dictionary<Int64, RDFOntologyClass> Classes { get; set; }
+
+        /// <summary>
+        /// Flag indicating that the class model has already been expanded with reference ontologies
+        /// </summary>
+        internal Boolean Expanded { get; set; }
         #endregion
 
         #region Ctors

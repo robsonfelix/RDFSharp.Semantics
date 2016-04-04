@@ -184,6 +184,11 @@ namespace RDFSharp.Semantics {
         /// Dictionary of properties composing the property model
         /// </summary>
         internal Dictionary<Int64, RDFOntologyProperty> Properties { get; set; }
+
+        /// <summary>
+        /// Flag indicating that the property model has already been expanded with reference ontologies
+        /// </summary>
+        internal Boolean Expanded { get; set; }
         #endregion
 
         #region Ctors
