@@ -135,6 +135,10 @@ namespace RDFSharp.Semantics {
             if (ontology   != null) {
                 var rReport = new RDFOntologyReasoningReport(ontology.Value.PatternMemberID);
 
+                //Step 0: Expand the model
+                ontology.Model.ClassModel    = RDFSemanticsUtilities.ExpandClassModel(ontology.Model.ClassModel);
+                ontology.Model.PropertyModel = RDFSemanticsUtilities.ExpandPropertyModel(ontology.Model.PropertyModel);
+                
                 //Step 1: Apply class-based rules
                 this.TriggerRule("EquivalentClassTransitivity",    ontology, rReport);
                 this.TriggerRule("SubClassTransitivity",           ontology, rReport);
@@ -160,6 +164,10 @@ namespace RDFSharp.Semantics {
                 foreach(var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasoningRuleType.UserDefined)) {
                     this.TriggerRule(sr.RuleName, ontology, rReport);
                 }
+
+                //Step 6: Unexpand the model
+                ontology.Model.ClassModel    = RDFSemanticsUtilities.UnexpandClassModel(ontology.Model.ClassModel);
+                ontology.Model.PropertyModel = RDFSemanticsUtilities.UnexpandPropertyModel(ontology.Model.PropertyModel);
 
                 return rReport;
             }

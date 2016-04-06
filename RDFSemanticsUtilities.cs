@@ -193,13 +193,10 @@ namespace RDFSharp.Semantics
         internal static RDFOntologyPropertyModel EnlistSubPropertiesOf(RDFOntologyProperty ontProperty, 
                                                                        RDFOntologyPropertyModel propertyModel) {
             var result            = new RDFOntologyPropertyModel();
-            var extPropModel      = ExpandPropertyModel(propertyModel);
-            extPropModel.Expanded = true;
-
             // Transitivity of "rdfs:subPropertyOf" taxonomy: ((A SUBPROPERTYOF B)  &&  (B SUBPROPERTYOF C))  =>  (A SUBPROPERTYOF C)
-            foreach(var sp       in extPropModel.Relations.SubPropertyOf.SelectEntriesByObject(ontProperty)) {
+            foreach(var sp       in propertyModel.Relations.SubPropertyOf.SelectEntriesByObject(ontProperty)) {
                 result.AddProperty((RDFOntologyProperty)sp.TaxonomySubject);
-                result            = result.UnionWith(EnlistSubPropertiesOf((RDFOntologyProperty)sp.TaxonomySubject, extPropModel));
+                result            = result.UnionWith(EnlistSubPropertiesOf((RDFOntologyProperty)sp.TaxonomySubject, propertyModel));
             }
 
             return result;
@@ -230,13 +227,10 @@ namespace RDFSharp.Semantics
         internal static RDFOntologyPropertyModel EnlistSuperPropertiesOf(RDFOntologyProperty ontProperty, 
                                                                          RDFOntologyPropertyModel propertyModel) {
             var result            = new RDFOntologyPropertyModel();
-            var extPropModel      = ExpandPropertyModel(propertyModel);
-            extPropModel.Expanded = true;
-
             // Transitivity of "rdfs:subPropertyOf" taxonomy: ((A SUPERPROPERTYOF B)  &&  (B SUPERPROPERTYOF C))  =>  (A SUPERPROPERTYOF C)
-            foreach(var sp       in extPropModel.Relations.SubPropertyOf.SelectEntriesBySubject(ontProperty)) {
+            foreach(var sp       in propertyModel.Relations.SubPropertyOf.SelectEntriesBySubject(ontProperty)) {
                 result.AddProperty((RDFOntologyProperty)sp.TaxonomyObject);
-                result            = result.UnionWith(EnlistSuperPropertiesOf((RDFOntologyProperty)sp.TaxonomyObject, extPropModel));
+                result            = result.UnionWith(EnlistSuperPropertiesOf((RDFOntologyProperty)sp.TaxonomyObject, propertyModel));
             }
 
             return result;
@@ -268,9 +262,6 @@ namespace RDFSharp.Semantics
                                                                                    RDFOntologyPropertyModel propertyModel,
                                                                                    Dictionary<Int64, RDFOntologyProperty> visitContext) {
             var result            = new RDFOntologyPropertyModel();
-            var extPropModel      = ExpandPropertyModel(propertyModel);
-            extPropModel.Expanded = true;
-
             #region visitContext
             if (visitContext     == null) {
                 visitContext      = new Dictionary<Int64, RDFOntologyProperty>() { { ontProperty.PatternMemberID, ontProperty } };
@@ -286,9 +277,9 @@ namespace RDFSharp.Semantics
             #endregion
 
             // Transitivity of "owl:equivalentProperty" taxonomy: ((A EQUIVALENTPROPERTY B)  &&  (B EQUIVALENTPROPERTY C))  =>  (A EQUIVALENTPROPERTY C)
-            foreach (var  ep     in extPropModel.Relations.EquivalentProperty.SelectEntriesBySubject(ontProperty)) {
+            foreach (var  ep     in propertyModel.Relations.EquivalentProperty.SelectEntriesBySubject(ontProperty)) {
                 result.AddProperty((RDFOntologyProperty)ep.TaxonomyObject);
-                result            = result.UnionWith(EnlistEquivalentPropertiesOf_Core((RDFOntologyProperty)ep.TaxonomyObject, extPropModel, visitContext));
+                result            = result.UnionWith(EnlistEquivalentPropertiesOf_Core((RDFOntologyProperty)ep.TaxonomyObject, propertyModel, visitContext));
             }
 
             return result;
@@ -2508,12 +2499,30 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyClassModel ExpandClassModel(RDFOntologyClassModel classModel) {
             if (!classModel.Expanded) {
-                 return classModel.UnionWith(RDFXSDOntology.Instance.Model.ClassModel)
-                                  .UnionWith(RDFSOntology.Instance.Model.ClassModel)
-                                  .UnionWith(RDFOWLOntology.Instance.Model.ClassModel);
+                 var clsModel      = classModel.UnionWith(RDFXSDOntology.Instance.Model.ClassModel)
+                                               .UnionWith(RDFSOntology.Instance.Model.ClassModel)
+                                               .UnionWith(RDFOWLOntology.Instance.Model.ClassModel);
+                 clsModel.Expanded = true;
+                 return clsModel;
             }
             else {
-                 return classModel.UnionWith(new RDFOntologyClassModel()); //Invariant expansion
+                 return classModel;
+            }
+        }
+
+        /// <summary>
+        /// Unexpands the given class model from the class models of the reference ontologies
+        /// </summary>
+        internal static RDFOntologyClassModel UnexpandClassModel(RDFOntologyClassModel classModel) {
+            if (classModel.Expanded) {
+                var clsModel       = classModel.DifferenceWith(RDFXSDOntology.Instance.Model.ClassModel)
+                                               .DifferenceWith(RDFSOntology.Instance.Model.ClassModel)
+                                               .DifferenceWith(RDFOWLOntology.Instance.Model.ClassModel);
+                clsModel.Expanded  = false;
+                return clsModel;
+            }
+            else {
+                return classModel;
             }
         }
 
@@ -2522,12 +2531,30 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyPropertyModel ExpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
             if (!propertyModel.Expanded) {
-                 return propertyModel.UnionWith(RDFXSDOntology.Instance.Model.PropertyModel)
-                                     .UnionWith(RDFSOntology.Instance.Model.PropertyModel)
-                                     .UnionWith(RDFOWLOntology.Instance.Model.PropertyModel);
+                 var propModel      = propertyModel.UnionWith(RDFXSDOntology.Instance.Model.PropertyModel)
+                                                   .UnionWith(RDFSOntology.Instance.Model.PropertyModel)
+                                                   .UnionWith(RDFOWLOntology.Instance.Model.PropertyModel);
+                 propModel.Expanded = true;
+                 return propModel;
             }
             else {
-                 return propertyModel.UnionWith(new RDFOntologyPropertyModel()); //Invariant expansion
+                return propertyModel;
+            }
+        }
+
+        /// <summary>
+        /// Unexpands the given property model from the property models of the reference ontologies
+        /// </summary>
+        internal static RDFOntologyPropertyModel UnexpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
+            if (propertyModel.Expanded) {
+                var propModel       = propertyModel.DifferenceWith(RDFXSDOntology.Instance.Model.PropertyModel)
+                                                   .DifferenceWith(RDFSOntology.Instance.Model.PropertyModel)
+                                                   .DifferenceWith(RDFOWLOntology.Instance.Model.PropertyModel);
+                propModel.Expanded  = false;
+                return propModel;
+            }
+            else {
+                return propertyModel;
             }
         }
 

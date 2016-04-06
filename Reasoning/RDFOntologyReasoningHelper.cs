@@ -49,7 +49,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the class model
                 var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-                extClsModel.Expanded = true;
 
                 //Step 1: Reason on the given class
                 result               = RDFSemanticsUtilities.EnlistSubClassesOf_Core(ontClass, extClsModel);
@@ -84,7 +83,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the class model
                 var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-                extClsModel.Expanded = true;
 
                 //Step 1: Reason on the given class
                 result               = RDFSemanticsUtilities.EnlistSuperClassesOf_Core(ontClass, extClsModel);
@@ -119,7 +117,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the class model
                 var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-                extClsModel.Expanded = true;
 
                 //Step 1: Reason on the given class
                 result               = RDFSemanticsUtilities.EnlistEquivalentClassesOf_Core(ontClass, extClsModel, null)
@@ -150,7 +147,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the class model
                 var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-                extClsModel.Expanded = true;
 
                 //Step 1: Reason on the given class
                 result               = RDFSemanticsUtilities.EnlistDisjointClassesWith_Core(ontClass, extClsModel, null)
@@ -182,7 +178,6 @@ namespace RDFSharp.Semantics {
 
                     //Step 0: Expand the class model
                     var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-                    extClsModel.Expanded = true;
 
                     //Step 1: Reason on the given class
                     result               = EnlistSubClassesOf(ontProperty.Domain, extClsModel)
@@ -216,7 +211,6 @@ namespace RDFSharp.Semantics {
 
                     //Step 0: Expand the class model
                     var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-                    extClsModel.Expanded = true;
 
                     //Step 1: Reason on the given class
                     result               = EnlistSubClassesOf(ontProperty.Range, extClsModel)
@@ -270,7 +264,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the property model
                 var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-                extPropModel.Expanded = true;
 
                 //Step 1: Reason on the given property
                 result                = RDFSemanticsUtilities.EnlistSubPropertiesOf_Core(ontProperty, extPropModel);
@@ -305,7 +298,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the property model
                 var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-                extPropModel.Expanded = true;
 
                 //Step 1: Reason on the given property
                 result                = RDFSemanticsUtilities.EnlistSuperPropertiesOf_Core(ontProperty, extPropModel);
@@ -340,7 +332,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the property model
                 var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-                extPropModel.Expanded = true;
 
                 //Step 1: Reason on the given property
                 result                = RDFSemanticsUtilities.EnlistEquivalentPropertiesOf_Core(ontProperty, extPropModel, null)
@@ -371,7 +362,6 @@ namespace RDFSharp.Semantics {
 
                 //Step 0: Expand the property model
                 var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-                extPropModel.Expanded = true;
 
                 //Step 1: Reason on the given property
                 //Subject-side inverseOf relation
