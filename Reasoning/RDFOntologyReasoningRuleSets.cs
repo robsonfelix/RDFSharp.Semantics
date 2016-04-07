@@ -130,11 +130,24 @@ namespace RDFSharp.Semantics {
             /// ((C1 SUBCLASSOF C2)      AND (C2 EQUIVALENTCLASS C3)) => (C1 SUBCLASSOF C3)
             /// ((C1 EQUIVALENTCLASS C2) AND (C2 SUBCLASSOF C3))      => (C1 SUBCLASSOF C3)
             /// </summary>
-            internal static void SubClassTransitivityExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void SubClassTransitivityExec(RDFOntology ontology,
+                                                          RDFOntologyReasonerOptions options,
+                                                          RDFOntologyReasoningReport report) {
                 var clsEnum          = ontology.Model.ClassModel.ClassesEnumerator;
                 while(clsEnum.MoveNext()) {
                     var c            = clsEnum.Current;
+
+                    //Check if the reasoner options permit reasoning on owl:Thing
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                         continue;
+                    }
+
                     foreach(var sc  in RDFOntologyReasoningHelper.EnlistSuperClassesOf(c, ontology.Model.ClassModel)) {
+
+                        //Check if the reasoner options permit reasoning on owl:Thing
+                        if (!options.IsOWLThingEnabled && sc.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                             continue;
+                        }
 
                         //Create the inference as a taxonomy entry
                         var scInfer  = new RDFOntologyTaxonomyEntry(c, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), sc).SetInference(true);
@@ -158,7 +171,9 @@ namespace RDFSharp.Semantics {
             /// ((P1 SUBPROPERTYOF P2)      AND (P2 EQUIVALENTPROPERTY P3)) => (P1 SUBPROPERTYOF P3)
             /// ((P1 EQUIVALENTPROPERTY P2) AND (P2 SUBPROPERTYOF P3))      => (P1 SUBPROPERTYOF P3)
             /// </summary>
-            internal static void SubPropertyTransitivityExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void SubPropertyTransitivityExec(RDFOntology ontology,
+                                                             RDFOntologyReasonerOptions options, 
+                                                             RDFOntologyReasoningReport report) {
                 var propsEnum            = ontology.Model.PropertyModel.PropertiesEnumerator;
                 while(propsEnum.MoveNext()) {
                     var p                = propsEnum.Current;
@@ -190,10 +205,17 @@ namespace RDFSharp.Semantics {
             /// ((F TYPE C1) AND (C1 SUBCLASSOF C2))      => (F TYPE C2)
             /// ((F TYPE C1) AND (C1 EQUIVALENTCLASS C2)) => (F TYPE C2)
             /// </summary>
-            internal static void ClassTypeEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void ClassTypeEntailmentExec(RDFOntology ontology,
+                                                         RDFOntologyReasonerOptions options, 
+                                                         RDFOntologyReasoningReport report) {
                 var clsEnum             = ontology.Model.ClassModel.ClassesEnumerator;
                 while(clsEnum.MoveNext()) {
                     var c               = clsEnum.Current;
+
+                    //Check if the reasoner options permit reasoning on owl:Thing
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                         continue;
+                    }
 
                     //Avoid reasoning on literal-compatible classes, since literals cannot be subject of triples
                     if(!RDFOntologyReasoningHelper.IsLiteralCompatibleClass(c, ontology.Model.ClassModel)) {
@@ -222,7 +244,9 @@ namespace RDFSharp.Semantics {
             /// "((F1 P1 F2) AND (P1 SUBPROPERTYOF P2))      => (F1 P2 F2)"
             /// "((F1 P1 F2) AND (P1 EQUIVALENTPROPERTY P2)) => (F1 P2 F2)"
             /// </summary>
-            internal static void PropertyEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void PropertyEntailmentExec(RDFOntology ontology,
+                                                        RDFOntologyReasonerOptions options, 
+                                                        RDFOntologyReasoningReport report) {
                 var propsEnum                   = ontology.Model.PropertyModel.PropertiesEnumerator;
                 while(propsEnum.MoveNext())     {
                     var p1                      = propsEnum.Current;
@@ -271,7 +295,9 @@ namespace RDFSharp.Semantics {
             /// "DomainEntailment (rdfs2) implements structural entailments based on 'rdfs:domain' taxonomy:"
             /// "((F1 P F2) AND (P RDFS:DOMAIN C)) => (F1 RDF:TYPE C)"
             /// </summary>
-            internal static void DomainEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void DomainEntailmentExec(RDFOntology ontology,
+                                                      RDFOntologyReasonerOptions options,
+                                                      RDFOntologyReasoningReport report) {
                 var propsEnum                 = ontology.Model.PropertyModel.PropertiesEnumerator;
                 while(propsEnum.MoveNext())   {
                     var p                     = propsEnum.Current;
@@ -310,7 +336,9 @@ namespace RDFSharp.Semantics {
             /// "RangeEntailment (rdfs3) implements structural entailments based on 'rdfs:range' taxonomy:"
             /// "((F1 P F2) AND (P RDFS:RANGE C)) => (F2 RDF:TYPE C)"
             /// </summary>
-            internal static void RangeEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void RangeEntailmentExec(RDFOntology ontology,
+                                                     RDFOntologyReasonerOptions options, 
+                                                     RDFOntologyReasoningReport report) {
                 var objProps                = ontology.Model.PropertyModel.ObjectPropertiesEnumerator;
                 while(objProps.MoveNext())  {
                     var p                   = objProps.Current;
@@ -486,11 +514,24 @@ namespace RDFSharp.Semantics {
             /// EquivalentClassTransitivity implements structural entailments based on 'owl:EquivalentClass' taxonomy:
             /// ((C1 EQUIVALENTCLASS C2) AND (C2 EQUIVALENTCLASS C3)) => (C1 EQUIVALENTCLASS C3)
             /// </summary>
-            internal static void EquivalentClassTransitivityExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void EquivalentClassTransitivityExec(RDFOntology ontology,
+                                                                 RDFOntologyReasonerOptions options, 
+                                                                 RDFOntologyReasoningReport report) {
                 var clsEnum          = ontology.Model.ClassModel.ClassesEnumerator;
                 while(clsEnum.MoveNext()){
                     var c            = clsEnum.Current;
+
+                    //Check if the reasoner options permit reasoning on owl:Thing
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                         continue;
+                    }
+
                     foreach(var ec  in RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(c, ontology.Model.ClassModel)) {
+
+                        //Check if the reasoner options permit reasoning on owl:Thing
+                        if (!options.IsOWLThingEnabled && ec.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                             continue;
+                        }
 
                         //Create the inference as a taxonomy entry
                         var ecInferA = new RDFOntologyTaxonomyEntry(c,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), ec).SetInference(true);
@@ -522,11 +563,24 @@ namespace RDFSharp.Semantics {
             /// ((C1 SUBCLASSOF C2)      AND (C2 DISJOINTWITH C3))    => (C1 DISJOINTWITH C3)
             /// ((C1 DISJOINTWITH C2)    AND (C2 EQUIVALENTCLASS C3)) => (C1 DISJOINTWITH C3)
             /// </summary>
-            internal static void DisjointWithEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void DisjointWithEntailmentExec(RDFOntology ontology,
+                                                            RDFOntologyReasonerOptions options, 
+                                                            RDFOntologyReasoningReport report) {
                 var clsEnum          = ontology.Model.ClassModel.ClassesEnumerator;
                 while(clsEnum.MoveNext()) {
                     var c            = clsEnum.Current;
+
+                    //Check if the reasoner options permit reasoning on owl:Thing
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                         continue;
+                    }
+
                     foreach(var dwc in RDFOntologyReasoningHelper.EnlistDisjointClassesWith(c, ontology.Model.ClassModel)) {
+
+                        //Check if the reasoner options permit reasoning on owl:Thing
+                        if (!options.IsOWLThingEnabled && dwc.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                             continue;
+                        }
 
                         //Create the inference as a taxonomy entry
                         var dcInferA = new RDFOntologyTaxonomyEntry(c,   RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), dwc).SetInference(true);
@@ -556,7 +610,9 @@ namespace RDFSharp.Semantics {
             /// EquivalentPropertyTransitivity implements structural entailments based on 'owl:EquivalentProperty' taxonomy:
             /// ((P1 EQUIVALENTPROPERTY P2) AND (P2 EQUIVALENTPROPERTY P3)) => (P1 EQUIVALENTPROPERTY P3)
             /// </summary>
-            internal static void EquivalentPropertyTransitivityExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void EquivalentPropertyTransitivityExec(RDFOntology ontology,
+                                                                    RDFOntologyReasonerOptions options, 
+                                                                    RDFOntologyReasoningReport report) {
                 var propsEnum            = ontology.Model.PropertyModel.PropertiesEnumerator;
                 while(propsEnum.MoveNext()){
                     var p                = propsEnum.Current;
@@ -594,7 +650,9 @@ namespace RDFSharp.Semantics {
             /// SameAsTransitivity implements structural entailments based on 'owl:sameAs' taxonomy:
             /// ((F1 SAMEAS F2) AND (F2 SAMEAS F3)) => (F1 SAMEAS F3)
             /// </summary>
-            internal static void SameAsTransitivityExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void SameAsTransitivityExec(RDFOntology ontology,
+                                                        RDFOntologyReasonerOptions options,
+                                                        RDFOntologyReasoningReport report) {
                 var factsEnum        = ontology.Data.FactsEnumerator;
                 while(factsEnum.MoveNext()) {
                     var f            = factsEnum.Current;
@@ -629,7 +687,9 @@ namespace RDFSharp.Semantics {
             /// ((F1 SAMEAS F2)        AND (F2 DIFFERENTFROM F3)) => (F1 DIFFERENTFROM F3)
             /// ((F1 DIFFERENTFROM F2) AND (F2 SAMEAS F3))        => (F1 DIFFERENTFROM F3)
             /// </summary>
-            internal static void DifferentFromEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void DifferentFromEntailmentExec(RDFOntology ontology,
+                                                             RDFOntologyReasonerOptions options, 
+                                                             RDFOntologyReasoningReport report) {
                 var factsEnum        = ontology.Data.FactsEnumerator;
                 while(factsEnum.MoveNext()) {
                     var f            = factsEnum.Current;
@@ -663,7 +723,9 @@ namespace RDFSharp.Semantics {
             /// InverseOfEntailment implements data entailments based on 'owl:inverseOf' taxonomy:
             /// ((F1 P1 F2) AND (P1 INVERSEOF P2)) => (F2 P2 F1)
             /// </summary>
-            internal static void InverseOfEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void InverseOfEntailmentExec(RDFOntology ontology,
+                                                         RDFOntologyReasonerOptions options, 
+                                                         RDFOntologyReasoningReport report) {
                 var objPropsEnum            = ontology.Model.PropertyModel.ObjectPropertiesEnumerator;
                 while(objPropsEnum.MoveNext()) {
                     var p1                  = objPropsEnum.Current;
@@ -705,7 +767,9 @@ namespace RDFSharp.Semantics {
             /// ((F1 P F2) AND (F1 SAMEAS F3)) => (F3 P F2)
             /// ((F1 P F2) AND (F2 SAMEAS F3)) => (F1 P F3)
             /// </summary>
-            internal static void SameAsEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void SameAsEntailmentExec(RDFOntology ontology,
+                                                      RDFOntologyReasonerOptions options, 
+                                                      RDFOntologyReasoningReport report) {
                 var factsEnum                   = ontology.Data.FactsEnumerator;
                 while(factsEnum.MoveNext())     {
                     var f1                      = factsEnum.Current;
@@ -777,7 +841,9 @@ namespace RDFSharp.Semantics {
             /// SymmetricPropertyEntailment implements data entailments based on 'owl:SymmetricProperty' axiom:
             /// ((F1 P F2) AND (P TYPE SYMMETRICPROPERTY)) => (F2 P F1)
             /// </summary>
-            internal static void SymmetricPropertyEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void SymmetricPropertyEntailmentExec(RDFOntology ontology,
+                                                                 RDFOntologyReasonerOptions options, 
+                                                                 RDFOntologyReasoningReport report) {
                 var symPropsEnum        = ontology.Model.PropertyModel.SymmetricPropertiesEnumerator;
                 while(symPropsEnum.MoveNext()) {
                     var p               = symPropsEnum.Current;
@@ -814,7 +880,9 @@ namespace RDFSharp.Semantics {
             /// TransitivePropertyEntailment implements data entailments based on 'owl:TransitiveProperty' axiom:
             /// ((F1 P F2) AND (F2 P F3) AND (P TYPE TRANSITIVEPROPERTY)) => (F1 P F3)
             /// </summary>
-            internal static void TransitivePropertyEntailmentExec(RDFOntology ontology, RDFOntologyReasoningReport report) {
+            internal static void TransitivePropertyEntailmentExec(RDFOntology ontology,
+                                                                  RDFOntologyReasonerOptions options, 
+                                                                  RDFOntologyReasoningReport report) {
                 var transPropCache      = new Dictionary<Int64, RDFOntologyData>();
                 var transPropEnum       = ontology.Model.PropertyModel.TransitivePropertiesEnumerator;
                 while(transPropEnum.MoveNext()) {
