@@ -704,8 +704,8 @@ namespace RDFSharp.Semantics
             #endregion
 
             #region Pure Literal
-            else if(ontClass.Equals(RDFSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
-                    || RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, RDFSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), ontology.Model.ClassModel)) {
+            else if(ontClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
+                    || RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), ontology.Model.ClassModel)) {
                 foreach(var ontLit in ontology.Data.Literals.Values) {
                     result.AddLiteral(ontLit);
                 }
@@ -716,8 +716,8 @@ namespace RDFSharp.Semantics
             else {
 
                 #region String Literal
-                if (ontClass.Equals(RDFXSDOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString())) 
-                    ||  RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, RDFXSDOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString()), ontology.Model.ClassModel)) {
+                if (ontClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString())) 
+                    ||  RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString()), ontology.Model.ClassModel)) {
                     foreach(var ontLit   in ontology.Data.Literals.Values) {
                         if (ontLit.Value is RDFPlainLiteral) {
                             result.AddLiteral(ontLit);
@@ -738,13 +738,13 @@ namespace RDFSharp.Semantics
 
                         //XSD
                         if(((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.XSD.BASE_URI, StringComparison.Ordinal)) {
-                            dTypeClass  = RDFXSDOntology.Instance.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
+                            dTypeClass  = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
                         }
                         
                         //RDF/RDFS
                         else if(((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.RDF.BASE_URI,  StringComparison.Ordinal)  || 
                                 ((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.RDFS.BASE_URI, StringComparison.Ordinal))  {
-                            dTypeClass  = RDFSOntology.Instance.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
+                            dTypeClass  = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
                         }
 
                         //Other
@@ -1046,7 +1046,7 @@ namespace RDFSharp.Semantics
                         var ontClass  = new RDFOntologyClass((RDFResource)dt.Subject);
                         ontology.Model.ClassModel.AddClass(ontClass);
                         //Datatypes can be modeled as subclasses of rdfs:Literal
-                        ontology.Model.ClassModel.AddSubClassOfRelation(ontClass, RDFSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
+                        ontology.Model.ClassModel.AddSubClassOfRelation(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
                     }
                 }
                 #endregion
@@ -1763,13 +1763,7 @@ namespace RDFSharp.Semantics
 
                 #region Assertion
                 foreach(var p        in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
-
-                    //Check if the property is reserved: in this case it must be skipped
-                    if (RDFXSDOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)  ||
-                        RDFSOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)    ||
-                        RDFOWLOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID))  {
-                        continue;
-                    }
+                    if (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)) { continue; }
 
                     foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value)) {
                         var subjFct   = ontology.Data.SelectFact(t.Subject.ToString());
@@ -1998,16 +1992,16 @@ namespace RDFSharp.Semantics
                 while (annotProps.MoveNext()) {
 
                     //Skip built-in annotation properties
-                    if(annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                       annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                       annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                       annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                       annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
-                       annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                       annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                       annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                       annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                       annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
+                    if(annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
                        continue;
                     }
 
@@ -2139,16 +2133,16 @@ namespace RDFSharp.Semantics
                     while (annotProps.MoveNext()) {
 
                         //Skip built-in annotation properties
-                        if(annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
+                        if(annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
                            continue;
                         }
 
@@ -2281,16 +2275,16 @@ namespace RDFSharp.Semantics
                     while (annotProps.MoveNext()) {
 
                         //Skip built-in annotation properties
-                        if (annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                            annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                            annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                            annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                            annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
-                            annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                            annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                            annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                            annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                            annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
+                        if (annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
                             continue;
                         }
 
@@ -2421,16 +2415,16 @@ namespace RDFSharp.Semantics
                     while (annotProps.MoveNext()) {
 
                         //Skip built-in annotation properties
-                        if(annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                           annotProps.Current.Equals(RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                           annotProps.Current.Equals(RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
+                        if(annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
                            continue;
                         }
 
@@ -2522,9 +2516,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyClassModel ExpandClassModel(RDFOntologyClassModel classModel) {
             if (!classModel.Expanded) {
-                 var clsModel      = classModel.UnionWith(RDFXSDOntology.Instance.Model.ClassModel)
-                                               .UnionWith(RDFSOntology.Instance.Model.ClassModel)
-                                               .UnionWith(RDFOWLOntology.Instance.Model.ClassModel);
+                 var clsModel      = classModel.UnionWith(RDFBASEOntology.Instance.Model.ClassModel);
                  clsModel.Expanded = true;
                  return clsModel;
             }
@@ -2538,9 +2530,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyClassModel UnexpandClassModel(RDFOntologyClassModel classModel) {
             if (classModel.Expanded) {
-                var clsModel       = classModel.DifferenceWith(RDFXSDOntology.Instance.Model.ClassModel)
-                                               .DifferenceWith(RDFSOntology.Instance.Model.ClassModel)
-                                               .DifferenceWith(RDFOWLOntology.Instance.Model.ClassModel);
+                var clsModel       = classModel.DifferenceWith(RDFBASEOntology.Instance.Model.ClassModel);
                 clsModel.Expanded  = false;
                 return clsModel;
             }
@@ -2554,9 +2544,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyPropertyModel ExpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
             if (!propertyModel.Expanded) {
-                 var propModel      = propertyModel.UnionWith(RDFXSDOntology.Instance.Model.PropertyModel)
-                                                   .UnionWith(RDFSOntology.Instance.Model.PropertyModel)
-                                                   .UnionWith(RDFOWLOntology.Instance.Model.PropertyModel);
+                 var propModel      = propertyModel.UnionWith(RDFBASEOntology.Instance.Model.PropertyModel);
                  propModel.Expanded = true;
                  return propModel;
             }
@@ -2570,9 +2558,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyPropertyModel UnexpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
             if (propertyModel.Expanded) {
-                var propModel       = propertyModel.DifferenceWith(RDFXSDOntology.Instance.Model.PropertyModel)
-                                                   .DifferenceWith(RDFSOntology.Instance.Model.PropertyModel)
-                                                   .DifferenceWith(RDFOWLOntology.Instance.Model.PropertyModel);
+                var propModel       = propertyModel.DifferenceWith(RDFBASEOntology.Instance.Model.PropertyModel);
                 propModel.Expanded  = false;
                 return propModel;
             }
@@ -2585,48 +2571,35 @@ namespace RDFSharp.Semantics
         /// Searches the given class into the reference ontologies
         /// </summary>
         internal static RDFOntologyClass SearchReferenceClass(String cls) {
-            var clsID = RDFModelUtilities.CreateHash(cls);
+            var clsID   = RDFModelUtilities.CreateHash(cls);
 
-            //XSD
-            if (RDFXSDOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                return RDFXSDOntology.Instance.Model.ClassModel.Classes[clsID];
+            //BASE
+            if (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                return RDFBASEOntology.Instance.Model.ClassModel.Classes[clsID];
             }
 
-            //RDFS
-            else if(RDFSOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                return RDFSOntology.Instance.Model.ClassModel.Classes[clsID];
-            }
+            //TODO: Cascade supported ontologies here
 
-            //OWL
-            else if(RDFOWLOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                return RDFOWLOntology.Instance.Model.ClassModel.Classes[clsID];
-            }
 
             else {
                 return null;
             }
+
         }
 
         /// <summary>
         /// Searches the given property into the reference ontologies
         /// </summary>
         internal static RDFOntologyProperty SearchReferenceProperty(String prop) {
-            var propID = RDFModelUtilities.CreateHash(prop);
+            var propID  = RDFModelUtilities.CreateHash(prop);
 
-            //XSD
-            if (RDFXSDOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                return RDFXSDOntology.Instance.Model.PropertyModel.Properties[propID];
+            //BASE
+            if (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                return RDFBASEOntology.Instance.Model.PropertyModel.Properties[propID];
             }
 
-            //RDFS
-            else if(RDFSOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                return RDFSOntology.Instance.Model.PropertyModel.Properties[propID];
-            }
+            //TODO: Cascade supported ontologies here
 
-            //OWL
-            else if(RDFOWLOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                return RDFOWLOntology.Instance.Model.PropertyModel.Properties[propID];
-            }
 
             else {
                 return null;

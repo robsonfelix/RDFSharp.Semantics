@@ -138,19 +138,19 @@ namespace RDFSharp.Semantics {
                     var c            = clsEnum.Current;
 
                     //Check if the reasoner options permit reasoning on owl:Thing
-                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                          continue;
                     }
 
                     foreach(var sc  in RDFOntologyReasoningHelper.EnlistSuperClassesOf(c, ontology.Model.ClassModel)) {
 
                         //Check if the reasoner options permit reasoning on owl:Thing
-                        if (!options.IsOWLThingEnabled && sc.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                        if (!options.IsOWLThingEnabled && sc.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                              continue;
                         }
 
                         //Create the inference as a taxonomy entry
-                        var scInfer  = new RDFOntologyTaxonomyEntry(c, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), sc).SetInference(true);
+                        var scInfer  = new RDFOntologyTaxonomyEntry(c, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), sc).SetInference(true);
 
                         //Enrich the class model with the inference
                         var taxCnt   = ontology.Model.ClassModel.Relations.SubClassOf.EntriesCount;
@@ -183,7 +183,7 @@ namespace RDFSharp.Semantics {
                         foreach(var sp  in RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(p, ontology.Model.PropertyModel)) {
 
                             //Create the inference as a taxonomy entry
-                            var spInfer  = new RDFOntologyTaxonomyEntry(p, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), sp).SetInference(true);
+                            var spInfer  = new RDFOntologyTaxonomyEntry(p, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), sp).SetInference(true);
 
                             //Enrich the property model with the inference
                             var taxCnt   = ontology.Model.PropertyModel.Relations.SubPropertyOf.EntriesCount;
@@ -213,7 +213,7 @@ namespace RDFSharp.Semantics {
                     var c               = clsEnum.Current;
 
                     //Check if the reasoner options permit reasoning on owl:Thing
-                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                          continue;
                     }
 
@@ -222,7 +222,7 @@ namespace RDFSharp.Semantics {
                         foreach(var f  in RDFOntologyReasoningHelper.EnlistMembersOfNonLiteralCompatible(c, ontology)) {
 
                             //Create the inference as a taxonomy entry
-                            var ctInfer = new RDFOntologyTaxonomyEntry(f,  RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), c).SetInference(true);
+                            var ctInfer = new RDFOntologyTaxonomyEntry(f,  RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), c).SetInference(true);
 
                             //Enrich the data with the inference
                             var taxCnt  = ontology.Data.Relations.ClassType.EntriesCount;
@@ -313,7 +313,7 @@ namespace RDFSharp.Semantics {
                             foreach(var pAsn in pAsns) {
 
                                 //Create the inference as a taxonomy entry
-                                var deInfer   = new RDFOntologyTaxonomyEntry(pAsn.TaxonomySubject, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), p.Domain).SetInference(true);
+                                var deInfer   = new RDFOntologyTaxonomyEntry(pAsn.TaxonomySubject, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), p.Domain).SetInference(true);
 
                                 //Enrich the data with the inference
                                 var taxCnt    = ontology.Data.Relations.ClassType.EntriesCount;
@@ -354,7 +354,7 @@ namespace RDFSharp.Semantics {
                             if(pAsn.TaxonomyObject.IsFact()) {
 
                                 //Create the inference as a taxonomy entry
-                                var reInfer = new RDFOntologyTaxonomyEntry(pAsn.TaxonomyObject, RDFSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), p.Range).SetInference(true);
+                                var reInfer = new RDFOntologyTaxonomyEntry(pAsn.TaxonomyObject, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), p.Range).SetInference(true);
 
                                 //Enrich the data with the inference
                                 var taxCnt  = ontology.Data.Relations.ClassType.EntriesCount;
@@ -522,20 +522,20 @@ namespace RDFSharp.Semantics {
                     var c            = clsEnum.Current;
 
                     //Check if the reasoner options permit reasoning on owl:Thing
-                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                          continue;
                     }
 
                     foreach(var ec  in RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(c, ontology.Model.ClassModel)) {
 
                         //Check if the reasoner options permit reasoning on owl:Thing
-                        if (!options.IsOWLThingEnabled && ec.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                        if (!options.IsOWLThingEnabled && ec.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                              continue;
                         }
 
                         //Create the inference as a taxonomy entry
-                        var ecInferA = new RDFOntologyTaxonomyEntry(c,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), ec).SetInference(true);
-                        var ecInferB = new RDFOntologyTaxonomyEntry(ec, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), c).SetInference(true);
+                        var ecInferA = new RDFOntologyTaxonomyEntry(c,  RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), ec).SetInference(true);
+                        var ecInferB = new RDFOntologyTaxonomyEntry(ec, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), c).SetInference(true);
 
                         //Enrich the class model with the inference
                         var taxCnt   = ontology.Model.ClassModel.Relations.EquivalentClass.EntriesCount;
@@ -571,20 +571,20 @@ namespace RDFSharp.Semantics {
                     var c            = clsEnum.Current;
 
                     //Check if the reasoner options permit reasoning on owl:Thing
-                    if (!options.IsOWLThingEnabled && c.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                    if (!options.IsOWLThingEnabled && c.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                          continue;
                     }
 
                     foreach(var dwc in RDFOntologyReasoningHelper.EnlistDisjointClassesWith(c, ontology.Model.ClassModel)) {
 
                         //Check if the reasoner options permit reasoning on owl:Thing
-                        if (!options.IsOWLThingEnabled && dwc.Equals(RDFOWLOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                        if (!options.IsOWLThingEnabled && dwc.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                              continue;
                         }
 
                         //Create the inference as a taxonomy entry
-                        var dcInferA = new RDFOntologyTaxonomyEntry(c,   RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), dwc).SetInference(true);
-                        var dcInferB = new RDFOntologyTaxonomyEntry(dwc, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), c).SetInference(true);
+                        var dcInferA = new RDFOntologyTaxonomyEntry(c,   RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), dwc).SetInference(true);
+                        var dcInferB = new RDFOntologyTaxonomyEntry(dwc, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), c).SetInference(true);
 
                         //Enrich the class model with the inference
                         var taxCnt   = ontology.Model.ClassModel.Relations.DisjointWith.EntriesCount;
@@ -622,8 +622,8 @@ namespace RDFSharp.Semantics {
                         foreach(var ep  in RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(p, ontology.Model.PropertyModel)) {
 
                             //Create the inference as a taxonomy entry
-                            var epInferA = new RDFOntologyTaxonomyEntry(p,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), ep).SetInference(true);
-                            var epInferB = new RDFOntologyTaxonomyEntry(ep, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), p).SetInference(true);
+                            var epInferA = new RDFOntologyTaxonomyEntry(p,  RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), ep).SetInference(true);
+                            var epInferB = new RDFOntologyTaxonomyEntry(ep, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), p).SetInference(true);
 
                             //Enrich the property model with the inference
                             var taxCnt   = ontology.Model.PropertyModel.Relations.EquivalentProperty.EntriesCount;
@@ -659,8 +659,8 @@ namespace RDFSharp.Semantics {
                     foreach(var sf  in RDFOntologyReasoningHelper.EnlistSameFactsAs(f, ontology.Data)) {
 
                         //Create the inference as a taxonomy entry
-                        var sfInferA = new RDFOntologyTaxonomyEntry(f,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), sf).SetInference(true);
-                        var sfInferB = new RDFOntologyTaxonomyEntry(sf, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), f).SetInference(true);
+                        var sfInferA = new RDFOntologyTaxonomyEntry(f,  RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), sf).SetInference(true);
+                        var sfInferB = new RDFOntologyTaxonomyEntry(sf, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), f).SetInference(true);
 
                         //Enrich the data with the inference
                         var taxCnt   = ontology.Data.Relations.SameAs.EntriesCount;
@@ -696,8 +696,8 @@ namespace RDFSharp.Semantics {
                     foreach(var df  in RDFOntologyReasoningHelper.EnlistDifferentFactsFrom(f, ontology.Data)) {
 
                         //Create the inference as a taxonomy entry
-                        var dfInferA = new RDFOntologyTaxonomyEntry(f,  RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), df).SetInference(true);
-                        var dfInferB = new RDFOntologyTaxonomyEntry(df, RDFOWLOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), f).SetInference(true);
+                        var dfInferA = new RDFOntologyTaxonomyEntry(f,  RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), df).SetInference(true);
+                        var dfInferB = new RDFOntologyTaxonomyEntry(df, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), f).SetInference(true);
 
                         //Enrich the data with the inference
                         var taxCnt   = ontology.Data.Relations.DifferentFrom.EntriesCount;
