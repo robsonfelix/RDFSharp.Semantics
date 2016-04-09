@@ -814,6 +814,11 @@ namespace RDFSharp.Semantics
             if (ontGraph         != null) {
                 ontology          = new RDFOntology(new RDFResource(ontGraph.Context));
 
+                #region Step 0: Expand model
+                ontology.Model.ClassModel    = ExpandClassModel(ontology.Model.ClassModel);
+                ontology.Model.PropertyModel = ExpandPropertyModel(ontology.Model.PropertyModel);
+                #endregion
+
                 #region Step 1: Prefetch
                 var versionInfo   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
                 var versionIRI    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_IRI);
@@ -1758,6 +1763,14 @@ namespace RDFSharp.Semantics
 
                 #region Assertion
                 foreach(var p        in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+
+                    //Check if the property is reserved: in this case it must be skipped
+                    if (RDFXSDOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)  ||
+                        RDFSOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)    ||
+                        RDFOWLOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID))  {
+                        continue;
+                    }
+
                     foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value)) {
                         var subjFct   = ontology.Data.SelectFact(t.Subject.ToString());
                         if (subjFct  != null) {
@@ -2454,6 +2467,11 @@ namespace RDFSharp.Semantics
 
                 #endregion
 
+                #region Step 7: Unexpand model
+                ontology.Model.ClassModel    = UnexpandClassModel(ontology.Model.ClassModel);
+                ontology.Model.PropertyModel = UnexpandPropertyModel(ontology.Model.PropertyModel);
+                #endregion
+
             }
             return ontology;
         }
@@ -2465,7 +2483,7 @@ namespace RDFSharp.Semantics
             var result    = new RDFGraph();
             if (ontology != null) {
 
-                //Ontology
+                #region Step 1: Export ontology
                 result.AddTriple(new RDFTriple((RDFResource)ontology.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ONTOLOGY));
                 result    = result.UnionWith(ontology.Annotations.VersionInfo.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.VersionIRI.ToRDFGraph(includeInferences))
@@ -2478,15 +2496,20 @@ namespace RDFSharp.Semantics
                                   .UnionWith(ontology.Annotations.PriorVersion.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.Imports.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.CustomAnnotations.ToRDFGraph(includeInferences));
+                #endregion
 
-                //Model
+                #region Step 2: Export model
                 result    = result.UnionWith(ontology.Model.ToRDFGraph(includeInferences));
+                #endregion
 
-                //Data
+                #region Step 3: Export data
                 result    = result.UnionWith(ontology.Data.ToRDFGraph(includeInferences));
+                #endregion
 
-                //Ontology Name
+                #region Step 4: Finalize
                 result.SetContext(((RDFResource)ontology.Value).URI);
+                #endregion
+
             }
 
             return result;
