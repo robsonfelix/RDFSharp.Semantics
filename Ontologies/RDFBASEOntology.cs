@@ -41,6 +41,8 @@ namespace RDFSharp.Semantics {
             Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/default_ontology#"));
 
             //Classes
+            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.RESOURCE));
+            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.CLASS));
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.LITERAL));
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDF.XML_LITERAL));
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.ANY_URI));
@@ -83,6 +85,7 @@ namespace RDFSharp.Semantics {
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.UNSIGNED_SHORT));
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.OWL.THING));
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.OWL.NOTHING));
+            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.OWL.INDIVIDUAL));
 
             //Properties
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.RDF.TYPE));
@@ -119,6 +122,8 @@ namespace RDFSharp.Semantics {
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.PRIOR_VERSION));
 
             //Taxonomies
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.CLASS.ToString()),               Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.RESOURCE.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()),             Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.CLASS.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDF.XML_LITERAL.ToString()),          Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString()),               Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.BOOLEAN.ToString()),              Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));

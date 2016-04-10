@@ -1038,12 +1038,9 @@ namespace RDFSharp.Semantics
 
                 #region Datatype
                 //RDFSharp automatically promotes datatypes to classes when loading ontology from graph
-                //(standard RDF/RDFS/XSD datatypes are not considered because their support is built-in)
-                foreach(var dt       in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
-                    if(!dt.Subject.ToString().StartsWith(RDFVocabulary.RDF.BASE_URI)  &&
-                       !dt.Subject.ToString().StartsWith(RDFVocabulary.RDFS.BASE_URI) &&
-                       !dt.Subject.ToString().StartsWith(RDFVocabulary.XSD.BASE_URI))  {
-                        var ontClass  = new RDFOntologyClass((RDFResource)dt.Subject);
+                foreach(var dt        in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
+                    if(!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(dt.Subject.PatternMemberID)) {
+                        var ontClass   = new RDFOntologyClass((RDFResource)dt.Subject);
                         ontology.Model.ClassModel.AddClass(ontClass);
                         //Datatypes can be modeled as subclasses of rdfs:Literal
                         ontology.Model.ClassModel.AddSubClassOfRelation(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
@@ -1059,8 +1056,13 @@ namespace RDFSharp.Semantics
                     if (op  != null) {
                         var onProp     = ontology.Model.PropertyModel.SelectProperty(op.Object.ToString());
                         if (onProp    != null) {
-                            var restr  = new RDFOntologyRestriction((RDFResource)r.Subject, onProp);
-                            ontology.Model.ClassModel.AddClass(restr);
+
+                            //Safety check for avoiding restriction on reserved properties
+                            if (!RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(onProp.PatternMemberID)) {
+                                 var restr = new RDFOntologyRestriction((RDFResource)r.Subject, onProp);
+                                 ontology.Model.ClassModel.AddClass(restr);
+                            }
+
                         }
                         else {
 
@@ -1244,20 +1246,16 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 5: Init Data
-                foreach (var c         in ontology.Model.ClassModel) {
-
-                    //Discard evaluation of Literal-compatible classes
-                    if (!RDFOntologyReasoningHelper.IsLiteralCompatibleClass(c, ontology.Model.ClassModel)) {
-                         foreach(var t in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
-                            var f    = ontology.Data.SelectFact(t.Subject.ToString());
-                            if (f   == null) {
-                                f    = new RDFOntologyFact((RDFResource)t.Subject);
-                                ontology.Data.AddFact(f);
-                            }
-                            ontology.Data.AddClassTypeRelation(f, c);
-                         }
+                foreach (var c         in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
+                                                                                   && !RDFOntologyReasoningHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
+                    foreach(var t      in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
+                        var f           = ontology.Data.SelectFact(t.Subject.ToString());
+                        if (f          == null) {
+                            f           = new RDFOntologyFact((RDFResource)t.Subject);
+                            ontology.Data.AddFact(f);
+                        }
+                        ontology.Data.AddClassTypeRelation(f, c);
                     }
-
                 }
                 #endregion
 
@@ -1533,7 +1531,10 @@ namespace RDFSharp.Semantics
 
                 #region Domain/Range
                 foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
-                    
+
+                    //Safety check to avid parsing of reserved properties
+                    if  (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)) { continue; }
+
                     #region Domain
                     var d    = domain.SelectTriplesBySubject((RDFResource)p.Value).FirstOrDefault();
                     if (d   != null     && d.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
@@ -1573,6 +1574,9 @@ namespace RDFSharp.Semantics
 
                 #region PropertyModel
                 foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+
+                    //Safety check to avid parsing of reserved properties
+                    if  (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)) { continue; }
 
                     #region SubPropertyOf
                     foreach(var spof in subpropOf.SelectTriplesBySubject((RDFResource)p.Value)) {
@@ -1645,6 +1649,9 @@ namespace RDFSharp.Semantics
 
                 #region ClassModel
                 foreach (var c in ontology.Model.ClassModel) {
+
+                    //Safety check to avid parsing of reserved classes
+                    if  (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(c.PatternMemberID)) { continue; }
 
                     #region SubClassOf
                     foreach (var scof in subclassOf.SelectTriplesBySubject((RDFResource)c.Value)) {
@@ -1762,53 +1769,64 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Assertion
-                foreach(var p        in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
-                    if (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)) { continue; }
-
-                    foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value)) {
+                //Skip annotation properties and base structural properties (RDF/RDFS/OWL/XSD)
+                foreach(var p        in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty()
+                                                                                     && !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+                    //Skip triples related to the ontology itself, the classes and the properties
+                    foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value).Where(triple => !triple.Subject.Equals(ontology)
+                                                                                                                   && !ontology.Model.ClassModel.Classes.ContainsKey(triple.Subject.PatternMemberID)
+                                                                                                                   && !ontology.Model.PropertyModel.Properties.ContainsKey(triple.Subject.PatternMemberID))) {
                         var subjFct   = ontology.Data.SelectFact(t.Subject.ToString());
-                        if (subjFct  != null) {
-                            if (p.IsObjectProperty()) {
-                                if (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPO) {
-                                    var objFct       = ontology.Data.SelectFact(t.Object.ToString());
-                                    if (objFct      != null) {
-                                        ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyObjectProperty)p, objFct);
-                                    }
-                                    else {
-
-                                        //Raise warning event to inform the user: assertion relation cannot be imported
-                                        //from graph, because definition of fact is not found in the data
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
-
-                                    }
+                        if (subjFct  == null) {
+                            subjFct   = new RDFOntologyFact(new RDFResource(t.Subject.ToString()));
+                            ontology.Data.AddFact(subjFct);
+                            ontology.Data.AddClassTypeRelation(subjFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
+                        }
+                        if (p.IsObjectProperty()) {
+                            if (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPO) {
+                                var objFct       = ontology.Data.SelectFact(t.Object.ToString());
+                                if (objFct      == null) {
+                                    objFct       = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
+                                    ontology.Data.AddFact(objFct);
+                                    ontology.Data.AddClassTypeRelation(objFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                                 }
-                                else {
-
-                                    //Raise warning event to inform the user: assertion relation cannot be imported
-                                    //from graph, because object property links to a literal
-                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because object property '{1}' links to a literal.", t.Subject, p));
-
-                                }
+                                ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyObjectProperty)p, objFct);
                             }
-                            else if(p.IsDatatypeProperty()) {
-                                if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                    ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyDatatypeProperty)p, new RDFOntologyLiteral((RDFLiteral)t.Object));
-                                }
-                                else {
+                            else {
 
-                                    //Raise warning event to inform the user: assertion relation cannot be imported
-                                    //from graph, because datatype property links to a fact
-                                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because datatype property '{1}' links to a fact.", t.Subject, p));
+                                //Raise warning event to inform the user: assertion relation cannot be imported
+                                //from graph, because object property links to a literal
+                                RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because object property '{1}' links to a literal.", t.Subject, p));
 
-                                }
                             }
                         }
+                        else if(p.IsDatatypeProperty()) {
+                            if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
+                                ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyDatatypeProperty)p, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                            }
+                            else {
+
+                                //Raise warning event to inform the user: assertion relation cannot be imported
+                                //from graph, because datatype property links to a fact
+                                RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because datatype property '{1}' links to a fact.", t.Subject, p));
+
+                            }
+                        }
+                        //rdf:Property
                         else {
-
-                            //Raise warning event to inform the user: assertion relation cannot be imported
-                            //from graph, because definition of fact is not found in the data
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because definition of the fact is not found in the data. Ensure its classtype relation is specified.", t.Subject));
-
+                            if (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPO) {
+                                var objFct       = ontology.Data.SelectFact(t.Object.ToString());
+                                if(objFct       == null) {
+                                    objFct       = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
+                                    ontology.Data.AddFact(objFct);
+                                    ontology.Data.AddClassTypeRelation(objFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
+                                }
+                                ontology.Data.AddAssertionRelation(subjFct, p, objFct);
+                            }
+                            else {
+                                var objLit       = new RDFOntologyLiteral((RDFLiteral)t.Object);
+                                ontology.Data.AddAssertionRelation(subjFct, p, objLit);
+                            }
                         }
                     }
                 }
@@ -1993,10 +2011,10 @@ namespace RDFSharp.Semantics
 
                     //Skip built-in annotation properties
                     if(annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
+                       annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
                        annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
                        annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
                        annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
@@ -2134,10 +2152,10 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if(annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
@@ -2176,7 +2194,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Properties
-                foreach(var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach(var p in ontology.Model.PropertyModel) {
 
                     #region VersionInfo
                     foreach(var t in versionInfo.SelectTriplesBySubject((RDFResource)p.Value)) {
@@ -2276,10 +2294,10 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if (annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
+                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
                             annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
                             annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
                             annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
@@ -2416,10 +2434,10 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if(annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                  ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                    ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                 ||
-                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))            ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
+                           annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
                            annotProps.Current.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||

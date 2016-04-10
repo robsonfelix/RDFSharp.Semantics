@@ -139,7 +139,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "ontologyFact -> owl:VersionInfo -> ontologyLiteral" annotation to the data
         /// </summary>
-        public RDFOntologyData AddVersionInfoAnnotation(RDFOntologyFact ontologyFact, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyData AddVersionInfoAnnotation(RDFOntologyFact ontologyFact, 
+                                                        RDFOntologyLiteral ontologyLiteral) {
             if (ontologyFact   != null && ontologyLiteral != null) {
                 this.Annotations.VersionInfo.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()), ontologyLiteral));
                 this.AddLiteral(ontologyLiteral);
@@ -150,7 +151,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "ontologyFact -> rdfs:comment -> ontologyLiteral" annotation to the data
         /// </summary>
-        public RDFOntologyData AddCommentAnnotation(RDFOntologyFact ontologyFact, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyData AddCommentAnnotation(RDFOntologyFact ontologyFact, 
+                                                    RDFOntologyLiteral ontologyLiteral) {
             if (ontologyFact   != null && ontologyLiteral != null) {
                 this.Annotations.Comment.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()), ontologyLiteral));
                 this.AddLiteral(ontologyLiteral);
@@ -161,7 +163,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "ontologyFact -> rdfs:label -> ontologyLiteral" annotation to the data
         /// </summary>
-        public RDFOntologyData AddLabelAnnotation(RDFOntologyFact ontologyFact, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyData AddLabelAnnotation(RDFOntologyFact ontologyFact, 
+                                                  RDFOntologyLiteral ontologyLiteral) {
             if (ontologyFact   != null && ontologyLiteral != null) {
                 this.Annotations.Label.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()), ontologyLiteral));
                 this.AddLiteral(ontologyLiteral);
@@ -172,7 +175,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "ontologyFact -> rdfs:seeAlso -> ontologyResource" annotation to the data
         /// </summary>
-        public RDFOntologyData AddSeeAlsoAnnotation(RDFOntologyFact ontologyFact, RDFOntologyResource ontologyResource) {
+        public RDFOntologyData AddSeeAlsoAnnotation(RDFOntologyFact ontologyFact, 
+                                                    RDFOntologyResource ontologyResource) {
             if (ontologyFact   != null && ontologyResource != null) {
                 this.Annotations.SeeAlso.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()), ontologyResource));
                 if (ontologyResource.IsLiteral()) {
@@ -185,7 +189,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "ontologyFact -> rdfs:isDefinedBy -> ontologyResource" annotation to the data
         /// </summary>
-        public RDFOntologyData AddIsDefinedByAnnotation(RDFOntologyFact ontologyFact, RDFOntologyResource ontologyResource) {
+        public RDFOntologyData AddIsDefinedByAnnotation(RDFOntologyFact ontologyFact, 
+                                                        RDFOntologyResource ontologyResource) {
             if (ontologyFact   != null && ontologyResource != null) {
                 this.Annotations.IsDefinedBy.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()), ontologyResource));
                 if (ontologyResource.IsLiteral()) {
@@ -198,7 +203,9 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "ontologyFact -> ontologyAnnotationProperty -> ontologyResource" annotation to the data
         /// </summary>
-        public RDFOntologyData AddCustomAnnotation(RDFOntologyFact ontologyFact, RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
+        public RDFOntologyData AddCustomAnnotation(RDFOntologyFact ontologyFact, 
+                                                   RDFOntologyAnnotationProperty ontologyAnnotationProperty, 
+                                                   RDFOntologyResource ontologyResource) {
             if (ontologyFact   != null && ontologyAnnotationProperty != null && ontologyResource != null) {
 
                 //owl:versionInfo
@@ -260,7 +267,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "ontologyFact -> rdf:type -> ontologyClass" relation to the data.
         /// </summary>
-        public RDFOntologyData AddClassTypeRelation(RDFOntologyFact ontologyFact, RDFOntologyClass ontologyClass) {
+        public RDFOntologyData AddClassTypeRelation(RDFOntologyFact ontologyFact, 
+                                                    RDFOntologyClass ontologyClass) {
             if (ontologyFact != null && ontologyClass != null) {
 
                 //Classtype relations can be explicitly assigned only to plain classes
@@ -287,7 +295,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "aFact -> owl:sameAs -> bFact" relation to the data
         /// </summary>
-        public RDFOntologyData AddSameAsRelation(RDFOntologyFact aFact, RDFOntologyFact bFact) {
+        public RDFOntologyData AddSameAsRelation(RDFOntologyFact aFact, 
+                                                 RDFOntologyFact bFact) {
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
                 if (!RDFOntologyReasoningHelper.IsDifferentFactFrom(aFact, bFact, this)) {
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), bFact));
@@ -307,7 +316,8 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "aFact -> owl:differentFrom -> bFact" relation to the data
         /// </summary>
-        public RDFOntologyData AddDifferentFromRelation(RDFOntologyFact aFact, RDFOntologyFact bFact) {
+        public RDFOntologyData AddDifferentFromRelation(RDFOntologyFact aFact, 
+                                                        RDFOntologyFact bFact) {
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
                 if (!RDFOntologyReasoningHelper.IsSameFactAs(aFact, bFact, this)) {
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), bFact));
@@ -327,7 +337,9 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Adds the "aFact -> objectProperty -> bFact" relation to the data
         /// </summary>
-        public RDFOntologyData AddAssertionRelation(RDFOntologyFact aFact, RDFOntologyObjectProperty objectProperty, RDFOntologyFact bFact) {
+        public RDFOntologyData AddAssertionRelation(RDFOntologyFact aFact, 
+                                                    RDFOntologyObjectProperty objectProperty, 
+                                                    RDFOntologyFact bFact) {
             if (aFact != null && objectProperty != null && bFact != null) {
 
                 //RDFSharp avoids creation of transitive cycles
@@ -347,11 +359,40 @@ namespace RDFSharp.Semantics
         }
 
         /// <summary>
+        /// Adds the "aFact -> property -> bFact" relation to the data
+        /// (this is an internal overload to support untyped ontology property)
+        /// </summary>
+        internal RDFOntologyData AddAssertionRelation(RDFOntologyFact aFact,
+                                                      RDFOntologyProperty property,
+                                                      RDFOntologyFact bFact) {
+            if (aFact != null && property != null && bFact != null) {
+                this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, property, bFact));
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Adds the "ontologyFact -> datatypeProperty -> ontologyLiteral" relation to the data
         /// </summary>
-        public RDFOntologyData AddAssertionRelation(RDFOntologyFact ontologyFact, RDFOntologyDatatypeProperty datatypeProperty, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyData AddAssertionRelation(RDFOntologyFact ontologyFact, 
+                                                    RDFOntologyDatatypeProperty datatypeProperty, 
+                                                    RDFOntologyLiteral ontologyLiteral) {
             if (ontologyFact != null && datatypeProperty != null && ontologyLiteral != null) {
                 this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, datatypeProperty, ontologyLiteral));
+                this.AddLiteral(ontologyLiteral);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the "ontologyFact -> property -> ontologyLiteral" relation to the data
+        /// (this is an internal overload to support untyped ontology property)
+        /// </summary>
+        internal RDFOntologyData AddAssertionRelation(RDFOntologyFact ontologyFact,
+                                                      RDFOntologyProperty property,
+                                                      RDFOntologyLiteral ontologyLiteral) {
+            if(ontologyFact != null && property != null && ontologyLiteral != null) {
+                this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, property, ontologyLiteral));
                 this.AddLiteral(ontologyLiteral);
             }
             return this;
