@@ -400,7 +400,8 @@ namespace RDFSharp.Semantics {
                                                         RDFOntologyData data) {
             var result     = new RDFOntologyData();
             if (ontFact   != null && data != null) {
-                result     = RDFSemanticsUtilities.EnlistSameFactsAs_Core(ontFact, data, null).RemoveFact(ontFact);
+                result     = RDFSemanticsUtilities.EnlistSameFactsAs_Core(ontFact, data, null)
+                                                  .RemoveFact(ontFact); //Safety deletion
             }
             return result;
         }
@@ -423,7 +424,8 @@ namespace RDFSharp.Semantics {
                                                                RDFOntologyData data) {
             var result     = new RDFOntologyData();
             if (ontFact   != null && data != null) {
-                result     = RDFSemanticsUtilities.EnlistDifferentFactsFrom_Core(ontFact, data, null).RemoveFact(ontFact);
+                result     = RDFSemanticsUtilities.EnlistDifferentFactsFrom_Core(ontFact, data, null)
+                                                  .RemoveFact(ontFact); //Safety deletion
             }
             return result;
         }

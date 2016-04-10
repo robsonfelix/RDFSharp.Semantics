@@ -20,8 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics
 {
@@ -401,12 +399,55 @@ namespace RDFSharp.Semantics
 
         #region Remove
         /// <summary>
-        /// Removes the given fact from the data
+        /// Removes the given fact from the data (it also deletes its orphaned taxonomies and annotations)
         /// </summary>
         public RDFOntologyData RemoveFact(RDFOntologyFact ontologyFact) {
             if (ontologyFact != null) {
                 if (this.Facts.ContainsKey(ontologyFact.PatternMemberID)) {
                     this.Facts.Remove(ontologyFact.PatternMemberID);
+
+                    //Delete fact's orphaned taxonomies
+                    foreach(var tEntry in this.Relations.ClassType.SelectEntriesBySubject(ontologyFact)) {
+                        this.Relations.ClassType.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Relations.SameAs.SelectEntriesBySubject(ontologyFact)
+                                              .UnionWith(this.Relations.SameAs.SelectEntriesByObject(ontologyFact))) {
+                        this.Relations.SameAs.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Relations.DifferentFrom.SelectEntriesBySubject(ontologyFact)
+                                              .UnionWith(this.Relations.DifferentFrom.SelectEntriesByObject(ontologyFact))) {
+                        this.Relations.DifferentFrom.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Relations.Assertions.SelectEntriesBySubject(ontologyFact)
+                                              .UnionWith(this.Relations.Assertions.SelectEntriesByObject(ontologyFact))) {
+                        this.Relations.Assertions.RemoveEntry(tEntry);
+                    }
+
+                    //Delete fact's orphaned annotations
+                    foreach(var tEntry in this.Annotations.VersionInfo.SelectEntriesBySubject(ontologyFact)) {
+                        this.Annotations.VersionInfo.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Annotations.VersionIRI.SelectEntriesBySubject(ontologyFact)) {
+                        this.Annotations.VersionIRI.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Annotations.Comment.SelectEntriesBySubject(ontologyFact)) {
+                        this.Annotations.Comment.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Annotations.Label.SelectEntriesBySubject(ontologyFact)) {
+                        this.Annotations.Label.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Annotations.SeeAlso.SelectEntriesBySubject(ontologyFact)
+                                              .UnionWith(this.Annotations.SeeAlso.SelectEntriesByObject(ontologyFact))) {
+                        this.Annotations.SeeAlso.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Annotations.IsDefinedBy.SelectEntriesBySubject(ontologyFact)
+                                              .UnionWith(this.Annotations.IsDefinedBy.SelectEntriesByObject(ontologyFact))) {
+                        this.Annotations.IsDefinedBy.RemoveEntry(tEntry);
+                    }
+                    foreach(var tEntry in this.Annotations.CustomAnnotations.SelectEntriesBySubject(ontologyFact)
+                                              .UnionWith(this.Annotations.CustomAnnotations.SelectEntriesByObject(ontologyFact))) {
+                        this.Annotations.CustomAnnotations.RemoveEntry(tEntry);
+                    }
                 }
             }
             return this;

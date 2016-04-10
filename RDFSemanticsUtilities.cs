@@ -1037,12 +1037,11 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Datatype
-                //RDFSharp automatically promotes datatypes to classes when loading ontology from graph
                 foreach(var dt        in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
                     if(!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(dt.Subject.PatternMemberID)) {
                         var ontClass   = new RDFOntologyClass((RDFResource)dt.Subject);
                         ontology.Model.ClassModel.AddClass(ontClass);
-                        //Datatypes can be modeled as subclasses of rdfs:Literal
+                        //Datatypes are modeled as subclasses of rdfs:Literal
                         ontology.Model.ClassModel.AddSubClassOfRelation(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
                     }
                 }
@@ -1054,15 +1053,19 @@ namespace RDFSharp.Semantics
                     #region OnProperty
                     var op   = onProperty.SelectTriplesBySubject((RDFResource)r.Subject).FirstOrDefault();
                     if (op  != null) {
-                        var onProp     = ontology.Model.PropertyModel.SelectProperty(op.Object.ToString());
-                        if (onProp    != null) {
-
-                            //Safety check for avoiding restriction on reserved properties
-                            if (!RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(onProp.PatternMemberID)) {
+                        var onProp         = ontology.Model.PropertyModel.SelectProperty(op.Object.ToString());
+                        if (onProp        != null) {
+                            if (!onProp.IsAnnotationProperty() && !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(onProp.PatternMemberID)) {
                                  var restr = new RDFOntologyRestriction((RDFResource)r.Subject, onProp);
                                  ontology.Model.ClassModel.AddClass(restr);
                             }
+                            else {
 
+                                 //Raise warning event to inform the user: restriction cannot be imported from 
+                                 //graph, because its applied property is reserved and cannot be restricted
+                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Restriction '{0}' cannot be imported from graph, because its applied property '{1}' is annotation or is reserved.", r.Subject, op.Object));
+
+                            }
                         }
                         else {
 
@@ -1255,6 +1258,8 @@ namespace RDFSharp.Semantics
                             ontology.Data.AddFact(f);
                         }
                         ontology.Data.AddClassTypeRelation(f, c);
+                        //Facts can also be seen as instances of "owl:Individual" class
+						ontology.Data.AddClassTypeRelation(f, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                     }
                 }
                 #endregion
@@ -1332,19 +1337,18 @@ namespace RDFSharp.Semantics
                     var hvRes    = hasvalue.SelectTriplesBySubject((RDFResource)r.Value).FirstOrDefault();
                     if (hvRes   != null) {
                         if (hvRes.TripleFlavor   == RDFModelEnums.RDFTripleFlavors.SPO) {
+
+                            //Facts can also be seen as instances of "owl:Individual" class
                             var hvFct             = ontology.Data.SelectFact(hvRes.Object.ToString());
-                            if (hvFct            != null) {
-                                var hasvalueRestr = new RDFOntologyHasValueRestriction((RDFResource)r.Value, ((RDFOntologyRestriction)r).OnProperty, hvFct);
-                                ontology.Model.ClassModel.Classes[r.PatternMemberID] = hasvalueRestr;
-                                continue;
+                            if (hvFct            == null) {
+                                hvFct             = new RDFOntologyFact(new RDFResource(hvRes.Object.ToString()));
+                                ontology.Data.AddFact(hvFct);
+                                ontology.Data.AddClassTypeRelation(hvFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                             }
-                            else {
 
-                                //Raise warning event to inform the user: hasvalue restriction cannot be imported
-                                //from graph, because definition of its required fact is not found in the data
-                                RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Restriction '{0}' cannot be imported from graph, because definition of its required fact '{1}' is not found in the data.", r.Value, hvRes.Object));
-
-                            }
+                            var hasvalueRestr     = new RDFOntologyHasValueRestriction((RDFResource)r.Value, ((RDFOntologyRestriction)r).OnProperty, hvFct);
+                            ontology.Model.ClassModel.Classes[r.PatternMemberID] = hasvalueRestr;
+                            continue;
                         }
                         else {
                             var hasvalueRestr     = new RDFOntologyHasValueRestriction((RDFResource)r.Value, ((RDFOntologyRestriction)r).OnProperty, new RDFOntologyLiteral((RDFLiteral)hvRes.Object));
@@ -1418,17 +1422,15 @@ namespace RDFSharp.Semantics
                                                      .SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST)
                                                      .FirstOrDefault();
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
+
+                                    //Facts can also be seen as instances of "owl:Individual" class
                                     var enumMember   = ontology.Data.SelectFact(first.Object.ToString());
-                                    if (enumMember  != null) {
-                                        ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyEnumerateClass)ec, enumMember);
+                                    if (enumMember  == null) {
+                                        enumMember   = new RDFOntologyFact(new RDFResource(first.Object.ToString()));
+                                        ontology.Data.AddFact(enumMember);
+                                        ontology.Data.AddClassTypeRelation(enumMember, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                                     }
-									else {
-
-                                        //Raise warning event to inform the user: enumerate class cannot be completely imported
-                                        //from graph, because definition of its fact member is not found in the data
-                                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EnumerateClass '{0}' cannot be completely imported from graph, because definition of its fact member '{1}' is not found in the data.", e.Subject, first.Object));
-
-			                        }
+                                    ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyEnumerateClass)ec, enumMember);
 
                                     #region rdf:rest
                                     var rest         = ontGraph.SelectTriplesBySubject(itemRest)
@@ -1530,10 +1532,8 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Domain/Range
-                foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
-
-                    //Safety check to avid parsing of reserved properties
-                    if  (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)) { continue; }
+                foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty()
+                                                                                && !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
 
                     #region Domain
                     var d    = domain.SelectTriplesBySubject((RDFResource)p.Value).FirstOrDefault();
@@ -1573,10 +1573,8 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region PropertyModel
-                foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
-
-                    //Safety check to avid parsing of reserved properties
-                    if  (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(p.PatternMemberID)) { continue; }
+                foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty()
+                                                                                && !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
 
                     #region SubPropertyOf
                     foreach(var spof in subpropOf.SelectTriplesBySubject((RDFResource)p.Value)) {
@@ -1648,10 +1646,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region ClassModel
-                foreach (var c in ontology.Model.ClassModel) {
-
-                    //Safety check to avid parsing of reserved classes
-                    if  (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(c.PatternMemberID)) { continue; }
+                foreach (var c in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
 
                     #region SubClassOf
                     foreach (var scof in subclassOf.SelectTriplesBySubject((RDFResource)c.Value)) {
@@ -1715,27 +1710,24 @@ namespace RDFSharp.Semantics
                 #region SameAs
                 foreach (var t in sameAs) {
                     if  (t.TripleFlavor   == RDFModelEnums.RDFTripleFlavors.SPO) {
+
+                         //Facts can also be seen as instances of "owl:Individual" class
                          var subjFct       = ontology.Data.SelectFact(t.Subject.ToString());
-                         if (subjFct      != null) {
-                             var objFct    = ontology.Data.SelectFact(t.Object.ToString());
-                             if (objFct   != null) {
-                                 ontology.Data.AddSameAsRelation(subjFct, objFct);
-                             }
-                             else {
-
-                                 //Raise warning event to inform the user: sameas relation cannot be imported
-                                 //from graph, because definition of fact is not found in the data
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SameAs relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
-
-                             }
+                         if (subjFct      == null) {
+                             subjFct       = new RDFOntologyFact(new RDFResource(t.Subject.ToString()));
+                             ontology.Data.AddFact(subjFct);
+                             ontology.Data.AddClassTypeRelation(subjFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                          }
-                         else {
 
-                             //Raise warning event to inform the user: sameas relation cannot be imported
-                             //from graph, because definition of fact is not found in the data
-                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SameAs relation on fact '{0}' cannot be imported from graph, because its definition is not found in the data.", t.Subject));
-
+                         //Facts can also be seen as instances of "owl:Individual" class
+                         var objFct        = ontology.Data.SelectFact(t.Object.ToString());
+                         if (objFct        == null) {
+                             objFct        = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
+                             ontology.Data.AddFact(objFct);
+                             ontology.Data.AddClassTypeRelation(objFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                          }
+
+                         ontology.Data.AddSameAsRelation(subjFct, objFct);
                     }
                 }
                 #endregion
@@ -1743,53 +1735,53 @@ namespace RDFSharp.Semantics
                 #region DifferentFrom
                 foreach (var t in differentFrom) {
                     if  (t.TripleFlavor   == RDFModelEnums.RDFTripleFlavors.SPO) {
-                         var subjFct       = ontology.Data.SelectFact(t.Subject.ToString());
-                         if (subjFct      != null) {
-                             var objFct    = ontology.Data.SelectFact(t.Object.ToString());
-                             if (objFct   != null) {
-                                 ontology.Data.AddDifferentFromRelation(subjFct, objFct);
-                             }
-                             else {
 
-                                 //Raise warning event to inform the user: differentfrom relation cannot be imported
-                                 //from graph, because definition of fact is not found in the data
-                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation on fact '{0}' cannot be imported from graph, because definition of fact '{1}' is not found in the data.", t.Subject, t.Object));
+                        //Facts can also be seen as instances of "owl:Individual" class
+                        var subjFct        = ontology.Data.SelectFact(t.Subject.ToString());
+                        if (subjFct       == null) {
+                            subjFct        = new RDFOntologyFact(new RDFResource(t.Subject.ToString()));
+                            ontology.Data.AddFact(subjFct);
+                            ontology.Data.AddClassTypeRelation(subjFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
+                        }
 
-                             }
-                         }
-                         else {
+                        //Facts can also be seen as instances of "owl:Individual" class
+                        var objFct         = ontology.Data.SelectFact(t.Object.ToString());
+                        if (objFct        == null) {
+                            objFct         = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
+                            ontology.Data.AddFact(objFct);
+                            ontology.Data.AddClassTypeRelation(objFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
+                        }
 
-                             //Raise warning event to inform the user: differentfrom relation cannot be imported
-                             //from graph, because its definition is not found in the data
-                             RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation on fact '{0}' cannot be imported from graph, because its definition is not found in the data.", t.Subject));
-
-                         }
+                        ontology.Data.AddDifferentFromRelation(subjFct, objFct);
                     }
                 }
                 #endregion
 
                 #region Assertion
-                //Skip annotation properties and base structural properties (RDF/RDFS/OWL/XSD)
                 foreach(var p        in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty()
                                                                                      && !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
-                    //Skip triples related to the ontology itself, the classes and the properties
                     foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value).Where(triple => !triple.Subject.Equals(ontology)
                                                                                                                    && !ontology.Model.ClassModel.Classes.ContainsKey(triple.Subject.PatternMemberID)
                                                                                                                    && !ontology.Model.PropertyModel.Properties.ContainsKey(triple.Subject.PatternMemberID))) {
+                        //Facts can also be seen as instances of "owl:Individual" class
                         var subjFct   = ontology.Data.SelectFact(t.Subject.ToString());
                         if (subjFct  == null) {
                             subjFct   = new RDFOntologyFact(new RDFResource(t.Subject.ToString()));
                             ontology.Data.AddFact(subjFct);
                             ontology.Data.AddClassTypeRelation(subjFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                         }
+
                         if (p.IsObjectProperty()) {
                             if (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPO) {
+
+                                //Facts can also be seen as instances of "owl:Individual" class
                                 var objFct       = ontology.Data.SelectFact(t.Object.ToString());
                                 if (objFct      == null) {
                                     objFct       = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
                                     ontology.Data.AddFact(objFct);
                                     ontology.Data.AddClassTypeRelation(objFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                                 }
+
                                 ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyObjectProperty)p, objFct);
                             }
                             else {
@@ -1815,12 +1807,15 @@ namespace RDFSharp.Semantics
                         //rdf:Property
                         else {
                             if (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPO) {
+
+                                //Facts can also be seen as instances of "owl:Individual" class
                                 var objFct       = ontology.Data.SelectFact(t.Object.ToString());
                                 if(objFct       == null) {
                                     objFct       = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
                                     ontology.Data.AddFact(objFct);
                                     ontology.Data.AddClassTypeRelation(objFct, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.INDIVIDUAL.ToString()));
                                 }
+
                                 ontology.Data.AddAssertionRelation(subjFct, p, objFct);
                             }
                             else {
