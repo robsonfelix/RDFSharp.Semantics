@@ -22,7 +22,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFBASEOntology represents a partial ontology implementation of RDF/RDFS/OWL/XSD vocabularies
     /// </summary>
-    internal static class RDFBASEOntology {
+    public static class RDFBASEOntology {
 
         #region Properties
         /// <summary>
@@ -164,6 +164,29 @@ namespace RDFSharp.Semantics {
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.UNSIGNED_SHORT.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.UNSIGNED_INT.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.UNSIGNED_BYTE.ToString()),        Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.UNSIGNED_SHORT.ToString()));
 
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Gets the given class from the BASE ontology
+        /// </summary>
+        public static RDFOntologyClass SelectClass(String ontClass) {
+            return Instance.Model.ClassModel.SelectClass(ontClass);
+        }
+
+        /// <summary>
+        /// Gets the given property from the BASE ontology
+        /// </summary>
+        public static RDFOntologyProperty SelectProperty(String ontProperty) {
+            return Instance.Model.PropertyModel.SelectProperty(ontProperty);
+        }
+
+        /// <summary>
+        /// Gets the given fact from the BASE ontology
+        /// </summary>
+        public static RDFOntologyFact SelectFact(String fact) {
+            return Instance.Data.SelectFact(fact);
         }
         #endregion
 

@@ -40,11 +40,6 @@ namespace RDFSharp.Semantics {
         public String ReasonerDescription { get; internal set; }
 
         /// <summary>
-        /// Options of the reasoner
-        /// </summary>
-        public RDFOntologyReasonerOptions ReasonerOptions { get; internal set; }
-
-        /// <summary>
         /// List of rules applied by the reasoner
         /// </summary>
         internal List<RDFOntologyReasoningRule> Rules { get; set; }
@@ -52,16 +47,14 @@ namespace RDFSharp.Semantics {
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an empty ontology reasoner with given name, description and options
+        /// Default-ctor to build an empty ontology reasoner with given name and description
         /// </summary>
         public RDFOntologyReasoner(String reasonerName, 
-                                   String reasonerDescription,
-                                   RDFOntologyReasonerOptions reasonerOptions) {
+                                   String reasonerDescription) {
             if (reasonerName                != null && reasonerName.Trim()        != String.Empty) {
                 if (reasonerDescription     != null && reasonerDescription.Trim() != String.Empty) {
                     this.ReasonerName        = reasonerName;
                     this.ReasonerDescription = reasonerDescription;
-                    this.ReasonerOptions     = (reasonerOptions ?? new RDFOntologyReasonerOptions());
                     this.Rules               = new List<RDFOntologyReasoningRule>();
                 }
                 else {
@@ -123,7 +116,7 @@ namespace RDFSharp.Semantics {
 
                 //Launch the reasoning rule
                 var oldCnt    = report.EvidencesCount;
-                reasonerRule.ExecuteRule(ontology, this.ReasonerOptions, report);
+                reasonerRule.ExecuteRule(ontology, report);
                 var newCnt    = report.EvidencesCount - oldCnt;
 
                 //Raise termination signal
@@ -182,47 +175,6 @@ namespace RDFSharp.Semantics {
         }
         #endregion
 
-        #endregion
-
-    }
-
-    /// <summary>
-    /// RDFOntologyReasonerOptions represents a collection of options for customizing the behavior of a reasoner
-    /// </summary>
-    public class RDFOntologyReasonerOptions {
-
-        #region Properties
-        /// <summary>
-        /// Flag to instruct the reasoner to consider or discard "owl:Thing" during inference processes (default: FALSE)
-        /// </summary>
-        public Boolean IsOWLThingEnabled { get; internal set; }
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Default-ctor to initialize a predefined instance of reasoner options
-        /// </summary>
-        public RDFOntologyReasonerOptions() {
-            this.IsOWLThingEnabled = false;
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Instructs the reasoner to consider "owl:Thing" during inference processes
-        /// </summary>
-        public RDFOntologyReasonerOptions EnableOWLThing() {
-            this.IsOWLThingEnabled = true;
-            return this;
-        }
-
-        /// <summary>
-        /// Instructs the reasoner to discard "owl:Thing" during inference processes
-        /// </summary>
-        public RDFOntologyReasonerOptions DisableOWLThing() {
-            this.IsOWLThingEnabled = false;
-            return this;
-        }
         #endregion
 
     }

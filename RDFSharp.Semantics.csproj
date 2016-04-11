@@ -78,7 +78,7 @@
     <Compile Include="Architecture\Extensions\Reasoning\RDFOntologyReasoningHelper.cs" />
     <Compile Include="Architecture\Extensions\Reasoning\RDFOntologyReasoningReport.cs" />
     <Compile Include="Architecture\Extensions\Reasoning\RDFOntologyReasoningRule.cs" />
-    <Compile Include="Architecture\Extensions\Reasoning\RDFOntologyReasoningRuleSets.cs" />
+    <Compile Include="Architecture\Extensions\Reasoning\RuleSets\RDFOntologyBASERuleSets.cs" />
     <Compile Include="Architecture\Extensions\Validation\RDFOntologyValidationEvidence.cs" />
     <Compile Include="Architecture\Extensions\Validation\RDFOntologyValidationReport.cs" />
     <Compile Include="Architecture\Extensions\Validation\RDFOntologyValidationRule.cs" />

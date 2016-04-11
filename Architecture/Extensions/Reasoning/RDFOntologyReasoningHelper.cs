@@ -232,9 +232,9 @@ namespace RDFSharp.Semantics {
             var result    = false;
             if (ontClass != null && classModel != null) {
                 result    = (ontClass.IsDataRangeClass() 
-                             || ontClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
-                             || IsSubClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel) 
-                             || IsEquivalentClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
+                             || ontClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
+                             || IsSubClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel) 
+                             || IsEquivalentClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
             }
             return result;
         }
@@ -492,38 +492,6 @@ namespace RDFSharp.Semantics {
                 //DataRange/Literal
                 else if (IsLiteralCompatibleClass(ontClass, ontology.Model.ClassModel)) {
                     result  = RDFSemanticsUtilities.EnlistMembersOfLiteralCompatibleClass(ontClass, ontology);
-                }
-
-                //Class
-                else {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfClass(ontClass, ontology);
-                }
-
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Enlists the facts which are members of the given (non literal-compatible) class within the given ontology
-        /// </summary>
-        internal static RDFOntologyData EnlistMembersOfNonLiteralCompatible(RDFOntologyClass ontClass,
-                                                                            RDFOntology ontology) {
-            var result      = new RDFOntologyData();
-            if(ontClass    != null && ontology != null) {
-
-                //Restriction
-                if(ontClass.IsRestrictionClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfRestriction((RDFOntologyRestriction)ontClass, ontology);
-                }
-
-                //Composite
-                else if(ontClass.IsCompositeClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfComposite(ontClass, ontology);
-                }
-
-                //Enumerate
-                else if(ontClass.IsEnumerateClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfEnumerate((RDFOntologyEnumerateClass)ontClass, ontology);
                 }
 
                 //Class
