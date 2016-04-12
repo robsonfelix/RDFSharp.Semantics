@@ -739,7 +739,7 @@ namespace RDFSharp.Semantics
                         //BASE
                         if(((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.RDF.BASE_URI,  StringComparison.Ordinal)  || 
                            ((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.RDFS.BASE_URI, StringComparison.Ordinal)  ||
-						   ((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.XSD.BASE_URI,  StringComparison.Ordinal))  {
+                           ((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.XSD.BASE_URI,  StringComparison.Ordinal))  {
                             dTypeClass  = RDFBASEOntology.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
                         }
 
@@ -831,17 +831,17 @@ namespace RDFSharp.Semantics
                 var rdfType       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.TYPE);
                 var subclassOf    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_CLASS_OF);
                 var subpropOf     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_PROPERTY_OF);
-                var equivclassOf  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_CLASS);
-                var equivpropOf   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_PROPERTY);
-                var disjclassWith = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DISJOINT_WITH);
                 var domain        = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.DOMAIN);
                 var range         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.RANGE);
+                var equivclassOf  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_CLASS);
+                var disjclassWith = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DISJOINT_WITH);
+                var equivpropOf   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_PROPERTY);
+                var inverseOf     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INVERSE_OF);
                 var onProperty    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ON_PROPERTY);
                 var oneOf         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ONE_OF);
                 var unionOf       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.UNION_OF);
                 var intersectionOf= ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INTERSECTION_OF);
                 var complementOf  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.COMPLEMENT_OF);
-                var inverseOf     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INVERSE_OF);
                 var allvaluesFrom = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ALL_VALUES_FROM);
                 var somevaluesFrom= ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.SOME_VALUES_FROM);
                 var hasvalue      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.HAS_VALUE);
@@ -1389,7 +1389,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 6.2: Finalize OWL:Enumerate
+                #region Step 6.2: Finalize OWL:OneOf (Enumerate)
                 foreach (var e          in  oneOf) {
                     if  (e.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
                          var ec          = ontology.Model.ClassModel.SelectClass(e.Subject.ToString());
@@ -1458,7 +1458,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 6.3: Finalize OWL:DataRange
+                #region Step 6.3: Finalize OWL:OneOf (DataRange)
                 foreach (var d          in oneOf) {
                     if  (d.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
                          var dr          = ontology.Model.ClassModel.SelectClass(d.Subject.ToString());
@@ -1561,7 +1561,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 6.5: Finalize PropertyModel [RDFS:SubPropertyOf|OWL:EquivalentProperty|Owl:InverseOf]
+                #region Step 6.5: Finalize PropertyModel [RDFS:SubPropertyOf|OWL:EquivalentProperty|OWL:InverseOf]
                 foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty()
                                                                                 && !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
 
