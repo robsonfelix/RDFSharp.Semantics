@@ -22,7 +22,7 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyReasoningRuleSets represents a collection of predefined rulesets available to reasoners.
+    /// RDFOntologyBASERuleSets represents a collection of RDFS/OWL-DL rules available to reasoners.
     /// </summary>
     public static class RDFOntologyBASERuleSets {
 
