@@ -1019,14 +1019,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 4.2: Load RDFS:Class
-                foreach(var c    in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS)) {
-                    var ontClass  = new RDFOntologyClass((RDFResource)c.Subject);
-                    ontology.Model.ClassModel.AddClass(ontClass);
-                }
-                #endregion
-
-                #region Step 4.3: Load OWL:DeprecatedClass
+                #region Step 4.2: Load OWL:DeprecatedClass
                 foreach (var dc  in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.DEPRECATED_CLASS)) {
                     var ontClass  = new RDFOntologyClass((RDFResource)dc.Subject);
                     ontClass.SetDeprecated(true);
@@ -1034,7 +1027,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 4.4: Load RDFS:Datatype
+                #region Step 4.3: Load RDFS:Datatype
                 foreach(var dt        in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
                     if(!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(dt.Subject.PatternMemberID)) {
                         var ontClass   = new RDFOntologyClass((RDFResource)dt.Subject);
@@ -1045,7 +1038,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 4.5: Load OWL:Restriction
+                #region Step 4.4: Load OWL:Restriction
                 foreach (var r in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.RESTRICTION)) {
 
                     #region OnProperty
@@ -1078,13 +1071,13 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 4.6: Load OWL:DataRange
+                #region Step 4.5: Load OWL:DataRange
                 foreach (var dr  in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.DATA_RANGE)) {
                     ontology.Model.ClassModel.AddClass(new RDFOntologyDataRangeClass((RDFResource)dr.Subject));
                 }
                 #endregion
 
-                #region Step 4.7: Load OWL:[UnionOf|IntersectionOf|ComplementOf]
+                #region Step 4.6: Load OWL:[UnionOf|IntersectionOf|ComplementOf]
 
                 #region Union
                 foreach (var u            in unionOf) {
