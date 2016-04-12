@@ -1,4 +1,4 @@
-﻿/*
+/*
    Copyright 2012-2016 Marco De Salvo
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -1027,18 +1027,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 4.3: Load RDFS:Datatype
-                foreach(var dt        in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
-                    if(!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(dt.Subject.PatternMemberID)) {
-                        var ontClass   = new RDFOntologyClass((RDFResource)dt.Subject);
-                        ontology.Model.ClassModel.AddClass(ontClass);
-                        //Datatypes are modeled as subclasses of rdfs:Literal
-                        ontology.Model.ClassModel.AddSubClassOfRelation(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-                    }
-                }
-                #endregion
-
-                #region Step 4.4: Load OWL:Restriction
+                #region Step 4.3: Load OWL:Restriction
                 foreach (var r in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.RESTRICTION)) {
 
                     #region OnProperty
@@ -1071,13 +1060,13 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 4.5: Load OWL:DataRange
+                #region Step 4.4: Load OWL:DataRange
                 foreach (var dr  in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.DATA_RANGE)) {
                     ontology.Model.ClassModel.AddClass(new RDFOntologyDataRangeClass((RDFResource)dr.Subject));
                 }
                 #endregion
 
-                #region Step 4.6: Load OWL:[UnionOf|IntersectionOf|ComplementOf]
+                #region Step 4.5: Load OWL:[UnionOf|IntersectionOf|ComplementOf]
 
                 #region Union
                 foreach (var u            in unionOf) {
