@@ -293,14 +293,18 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel AddSubClassOfRelation(RDFOntologyClass childClass, RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
+                //Enforce taxonomy checks on special classes ("owl:Thing" / "owl:Nothing"):
+                //"owl:Nothing" cannot have subclasses, since it is the subclass of everything
+                //"owl:Thing" cannot have superclasses, since it is the superclass of everything
+                if (motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
+                    childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())))    { 
+                    return this;  
+                }
+
                 //Enforce taxonomy checks before adding the subClassOf relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
-                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this) &&
-                    //"owl:Nothing" cannot have subclasses
-                    !motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) &&
-                    //"owl:Thing" cannot have superclasses
-                    !childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this)) {
                      this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
                 }
                 else {
