@@ -348,6 +348,13 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel AddSubPropertyOfRelation(RDFOntologyObjectProperty childProperty, RDFOntologyObjectProperty motherProperty) {
             if (childProperty != null && motherProperty != null && !childProperty.Equals(motherProperty)) {
 
+                //Enforce taxonomy checks on RDF/RDFS/OWL properties:
+                //we do not permit subproperty hijack of reserved properties 
+                if (RDFBASEOntology.SelectProperty(childProperty)  != null ||
+                    RDFBASEOntology.SelectProperty(motherProperty) != null) {
+                    return this;
+                }
+
                 //Enforce taxonomy checks before adding the subPropertyOf relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubPropertyOf(motherProperty,        childProperty, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this)) {
@@ -371,6 +378,13 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel AddSubPropertyOfRelation(RDFOntologyDatatypeProperty childProperty, RDFOntologyDatatypeProperty motherProperty) {
             if (childProperty != null && motherProperty != null && !childProperty.Equals(motherProperty)) {
 
+                //Enforce taxonomy checks on RDF/RDFS/OWL properties:
+                //we do not permit subproperty hijack of reserved properties 
+                if (RDFBASEOntology.SelectProperty(childProperty)  != null ||
+                    RDFBASEOntology.SelectProperty(motherProperty) != null) {
+                    return this;
+                }
+
                 //Enforce taxonomy checks before adding the subPropertyOf relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubPropertyOf(motherProperty,        childProperty, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this)) {
@@ -393,6 +407,13 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyPropertyModel AddEquivalentPropertyRelation(RDFOntologyObjectProperty aProperty, RDFOntologyObjectProperty bProperty) {
             if (aProperty  != null && bProperty != null && !aProperty.Equals(bProperty)) {
+
+                //Enforce taxonomy checks on RDF/RDFS/OWL properties:
+                //we do not permit equivalency hijack of reserved properties 
+                if (RDFBASEOntology.SelectProperty(aProperty) != null ||
+                    RDFBASEOntology.SelectProperty(bProperty) != null) {
+                    return this;
+                }
 
                 //Enforce taxonomy checks before adding the equivalentProperty relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubPropertyOf(aProperty,   bProperty, this) &&
@@ -418,6 +439,13 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel AddEquivalentPropertyRelation(RDFOntologyDatatypeProperty aProperty, RDFOntologyDatatypeProperty bProperty) {
             if (aProperty  != null && bProperty != null && !aProperty.Equals(bProperty)) {
 
+                //Enforce taxonomy checks on RDF/RDFS/OWL properties:
+                //we do not permit equivalency hijack of reserved properties 
+                if (RDFBASEOntology.SelectProperty(aProperty) != null ||
+                    RDFBASEOntology.SelectProperty(bProperty) != null) {
+                    return this;
+                }
+
                 //Enforce taxonomy checks before adding the equivalentProperty relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubPropertyOf(aProperty,   bProperty, this) &&
                     !RDFOntologyReasoningHelper.IsSuperPropertyOf(aProperty, bProperty, this)) {
@@ -441,6 +469,13 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyPropertyModel AddInverseOfRelation(RDFOntologyObjectProperty aProperty, RDFOntologyObjectProperty bProperty) {
             if (aProperty != null && bProperty != null && !aProperty.Equals(bProperty)) {
+
+                //Enforce taxonomy checks on RDF/RDFS/OWL properties:
+                //we do not permit inverse hijack of reserved properties 
+                if (RDFBASEOntology.SelectProperty(aProperty) != null ||
+                    RDFBASEOntology.SelectProperty(bProperty) != null) {
+                    return this;
+                }
 
                 //Enforce taxonomy checks before adding the inverseOf relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubPropertyOf(aProperty,   bProperty, this) &&
