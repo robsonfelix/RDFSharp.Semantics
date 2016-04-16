@@ -2483,7 +2483,8 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyClassModel ExpandClassModel(RDFOntologyClassModel classModel) {
             if (!classModel.Expanded) {
-                 var clsModel      = classModel.UnionWith(RDFBASEOntology.Instance.Model.ClassModel);
+                 var clsModel      = classModel.UnionWith(RDFBASEOntology.Instance.Model.ClassModel)
+                                               .UnionWith(RDFDCOntology.Instance.Model.ClassModel);
                  clsModel.Expanded = true;
                  return clsModel;
             }
@@ -2497,7 +2498,8 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyClassModel UnexpandClassModel(RDFOntologyClassModel classModel) {
             if (classModel.Expanded) {
-                var clsModel       = classModel.DifferenceWith(RDFBASEOntology.Instance.Model.ClassModel);
+                var clsModel       = classModel.DifferenceWith(RDFBASEOntology.Instance.Model.ClassModel)
+                                               .DifferenceWith(RDFDCOntology.Instance.Model.ClassModel);
                 clsModel.Expanded  = false;
                 return clsModel;
             }
@@ -2511,7 +2513,8 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyPropertyModel ExpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
             if (!propertyModel.Expanded) {
-                 var propModel      = propertyModel.UnionWith(RDFBASEOntology.Instance.Model.PropertyModel);
+                 var propModel      = propertyModel.UnionWith(RDFBASEOntology.Instance.Model.PropertyModel)
+                                                   .UnionWith(RDFDCOntology.Instance.Model.PropertyModel);
                  propModel.Expanded = true;
                  return propModel;
             }
@@ -2525,7 +2528,8 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static RDFOntologyPropertyModel UnexpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
             if (propertyModel.Expanded) {
-                var propModel       = propertyModel.DifferenceWith(RDFBASEOntology.Instance.Model.PropertyModel);
+                var propModel       = propertyModel.DifferenceWith(RDFBASEOntology.Instance.Model.PropertyModel)
+                                                   .DifferenceWith(RDFDCOntology.Instance.Model.PropertyModel);
                 propModel.Expanded  = false;
                 return propModel;
             }
@@ -2545,8 +2549,10 @@ namespace RDFSharp.Semantics
                 return RDFBASEOntology.Instance.Model.ClassModel.Classes[clsID];
             }
 
-            //TODO: Cascade supported ontologies here
-
+            //DC
+            else if (RDFDCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                return RDFDCOntology.Instance.Model.ClassModel.Classes[clsID];
+            }
 
             else {
                 return null;
@@ -2565,8 +2571,31 @@ namespace RDFSharp.Semantics
                 return RDFBASEOntology.Instance.Model.PropertyModel.Properties[propID];
             }
 
-            //TODO: Cascade supported ontologies here
+            //DC
+            else if (RDFDCOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                return RDFDCOntology.Instance.Model.PropertyModel.Properties[propID];
+            }
 
+            else {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Searches the given fact into the reference ontologies
+        /// </summary>
+        internal static RDFOntologyFact SearchReferenceFact(String fact) {
+            var factID  = RDFModelUtilities.CreateHash(fact);
+
+            //BASE
+            if (RDFBASEOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                return RDFBASEOntology.Instance.Data.Facts[factID];
+            }
+
+            //DC
+            else if (RDFDCOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                return RDFDCOntology.Instance.Data.Facts[factID];
+            }
 
             else {
                 return null;

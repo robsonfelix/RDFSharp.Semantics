@@ -293,18 +293,14 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel AddSubClassOfRelation(RDFOntologyClass childClass, RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
-                //Enforce taxonomy checks on special classes ("owl:Thing" / "owl:Nothing"):
-                //"owl:Nothing" cannot have subclasses, since it is the subclass of everything
-                //"owl:Thing" cannot have superclasses, since it is the superclass of everything
-                if (motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
-                    childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())))    { 
-                    return this;  
-                }
-
                 //Enforce taxonomy checks before adding the subClassOf relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
-                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this)) {
+                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this) &&
+                    //"owl:Nothing" cannot have subclasses
+                    !motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) &&
+                    //"owl:Thing" cannot have superclasses
+                    !childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                      this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
                 }
                 else {
@@ -324,15 +320,6 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyClassModel AddEquivalentClassRelation(RDFOntologyClass aClass, RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
-
-                //Enforce taxonomy checks on special classes ("owl:Thing" / "owl:Nothing"):
-                //we do not permit equivalency hijacking of top/bottom structural classes
-                if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString()))  ||
-                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString()))  ||
-                    aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))    ||
-                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())))    { 
-                    return this;  
-                }
 
                 //Enforce taxonomy checks before adding the equivalentClass relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
@@ -358,14 +345,6 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyClassModel AddDisjointWithRelation(RDFOntologyClass aClass, RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
-
-                //Enforce taxonomy checks on special classes ("owl:Thing" / "owl:Nothing"):
-                //"owl:Nothing" doesn't need to be checked, since it is surely disjoint with everything
-                //"owl:Thing" cannot be disjoint, since it is the superclass of everything 
-                if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())) ||
-                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))) { 
-                    return this;
-                }
 
                 //Enforce taxonomy checks before adding the disjointWith relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
