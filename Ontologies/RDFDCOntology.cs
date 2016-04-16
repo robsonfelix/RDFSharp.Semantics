@@ -38,10 +38,7 @@ namespace RDFSharp.Semantics {
         static RDFDCOntology() {
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource(RDFVocabulary.DC.BASE_URI));
-            Instance.AddImportsAnnotation(new RDFOntology(new RDFResource(RDFVocabulary.DC.DCAM.BASE_URI)));
-            Instance.AddImportsAnnotation(new RDFOntology(new RDFResource(RDFVocabulary.DC.DCTERMS.BASE_URI)));
-            Instance.AddImportsAnnotation(new RDFOntology(new RDFResource(RDFVocabulary.DC.DCTYPE.BASE_URI)));
+            Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/dc_ontology#"));
             #endregion
 
             #region Classes
@@ -172,8 +169,8 @@ namespace RDFSharp.Semantics {
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS));
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS_HOLDER));
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.DC.DCTERMS.SOURCE));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.DC.DCTERMS.SUBJECT));
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.DC.DCTERMS.SPATIAL));
+            Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.DC.DCTERMS.SUBJECT));
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.DC.DCTERMS.TABLE_OF_CONTENTS));
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.DC.DCTERMS.TEMPORAL));
             Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.DC.DCTERMS.TITLE));
