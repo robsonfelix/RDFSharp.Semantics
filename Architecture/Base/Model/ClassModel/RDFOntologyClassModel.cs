@@ -19,8 +19,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics {
 
@@ -181,7 +179,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyClass -> owl:VersionInfo -> ontologyLiteral" annotation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddVersionInfoAnnotation(RDFOntologyClass ontologyClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel AddVersionInfoAnnotation(RDFOntologyClass ontologyClass, 
+                                                              RDFOntologyLiteral ontologyLiteral) {
             if (ontologyClass != null && ontologyLiteral != null) {
                 this.Annotations.VersionInfo.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()), ontologyLiteral));
             }
@@ -191,7 +190,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyClass -> rdfs:comment -> ontologyLiteral" annotation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddCommentAnnotation(RDFOntologyClass ontologyClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel AddCommentAnnotation(RDFOntologyClass ontologyClass, 
+                                                          RDFOntologyLiteral ontologyLiteral) {
             if (ontologyClass != null && ontologyLiteral != null) {
                 this.Annotations.Comment.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()), ontologyLiteral));
             }
@@ -201,7 +201,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyClass -> rdfs:label -> ontologyLiteral" annotation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddLabelAnnotation(RDFOntologyClass ontologyClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel AddLabelAnnotation(RDFOntologyClass ontologyClass, 
+                                                        RDFOntologyLiteral ontologyLiteral) {
             if (ontologyClass != null && ontologyLiteral != null) {
                 this.Annotations.Label.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()), ontologyLiteral));
             }
@@ -211,7 +212,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyClass -> rdfs:seeAlso -> ontologyResource" annotation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddSeeAlsoAnnotation(RDFOntologyClass ontologyClass, RDFOntologyResource ontologyResource) {
+        public RDFOntologyClassModel AddSeeAlsoAnnotation(RDFOntologyClass ontologyClass, 
+                                                          RDFOntologyResource ontologyResource) {
             if (ontologyClass != null && ontologyResource != null) {
                 this.Annotations.SeeAlso.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()), ontologyResource));
             }
@@ -221,7 +223,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyClass -> rdfs:isDefinedBy -> ontologyResource" annotation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddIsDefinedByAnnotation(RDFOntologyClass ontologyClass, RDFOntologyResource ontologyResource) {
+        public RDFOntologyClassModel AddIsDefinedByAnnotation(RDFOntologyClass ontologyClass, 
+                                                              RDFOntologyResource ontologyResource) {
             if (ontologyClass != null && ontologyResource != null) {
                 this.Annotations.IsDefinedBy.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()), ontologyResource));
             }
@@ -231,7 +234,9 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyClass -> ontologyAnnotationProperty -> ontologyResource" annotation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddCustomAnnotation(RDFOntologyClass ontologyClass, RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
+        public RDFOntologyClassModel AddCustomAnnotation(RDFOntologyClass ontologyClass, 
+                                                         RDFOntologyAnnotationProperty ontologyAnnotationProperty, 
+                                                         RDFOntologyResource ontologyResource) {
             if (ontologyClass != null && ontologyAnnotationProperty != null && ontologyResource != null) {
 
                 //owl:versionInfo
@@ -272,8 +277,7 @@ namespace RDFSharp.Semantics {
                         ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
                         ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))) {
 
-                     //Raise warning event to inform the user: Ontology-specific
-                     //annotation properties cannot be used for classes
+                     //Raise warning event to inform the user: Ontology-specific annotation properties cannot be used for classes
                      RDFSemanticsEvents.RaiseSemanticsWarning("Ontology-specific annotation properties cannot be used for classes.");
 
                 }
@@ -290,23 +294,27 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "childClass -> rdfs:subClassOf -> motherClass" relation to the class model.
         /// </summary>
-        public RDFOntologyClassModel AddSubClassOfRelation(RDFOntologyClass childClass, RDFOntologyClass motherClass) {
+        public RDFOntologyClassModel AddSubClassOfRelation(RDFOntologyClass childClass, 
+                                                           RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
+
+                //Enforce taxonomy checks on special OWL classes, in order to not model inconsistencies
+                //"owl:Nothing" cannot have subclasses, since it IS subclass of everything in OWL
+                //"owl:Thing" cannot have superclasses, since it IS superclass of everything in OWL
+                if (motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
+                    childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())))    {
+                    return this;
+                }
 
                 //Enforce taxonomy checks before adding the subClassOf relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
-                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this) &&
-                    //"owl:Nothing" cannot have subclasses
-                    !motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) &&
-                    //"owl:Thing" cannot have superclasses
-                    !childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this)) {
                      this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
                 }
                 else {
                      
-                     //Raise warning event to inform the user: SubClassOf relation cannot be 
-                     //added to the class model because it violates the taxonomy consistency
+                     //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because it violates the taxonomy consistency
                      RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
 
                 }
@@ -318,8 +326,18 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "aClass -> owl:equivalentClass -> bClass" relation to the class model.
         /// </summary>
-        public RDFOntologyClassModel AddEquivalentClassRelation(RDFOntologyClass aClass, RDFOntologyClass bClass) {
+        public RDFOntologyClassModel AddEquivalentClassRelation(RDFOntologyClass aClass, 
+                                                                RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
+
+                //Enforce taxonomy checks on special OWL classes, in order to not model inconsistencies
+                //We don't permit equivalentClass hijack of top/bottom OWL structural classes!
+                if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))   ||
+                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))   ||
+                    aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
+                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString()))) {
+                    return this;
+                }
 
                 //Enforce taxonomy checks before adding the equivalentClass relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
@@ -330,8 +348,7 @@ namespace RDFSharp.Semantics {
                 }
                 else {
 
-                     //Raise warning event to inform the user: EquivalentClass relation cannot be 
-                     //added to the class model because it violates the taxonomy consistency
+                     //Raise warning event to inform the user: EquivalentClass relation cannot be added to the class model because it violates the taxonomy consistency
                      RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
 
                 }
@@ -343,8 +360,16 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "aClass -> owl:disjointWith -> bClass" relation to the class model.
         /// </summary>
-        public RDFOntologyClassModel AddDisjointWithRelation(RDFOntologyClass aClass, RDFOntologyClass bClass) {
+        public RDFOntologyClassModel AddDisjointWithRelation(RDFOntologyClass aClass, 
+                                                             RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
+
+                //Enforce taxonomy checks on special OWL classes, in order to not model inconsistencies
+                //"owl:Thing" cannot be disjoint, since it IS superclass of everything in OWL
+                if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())) ||
+                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
+                    return this;
+                }
 
                 //Enforce taxonomy checks before adding the disjointWith relation, in order to not model inconsistencies
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
@@ -368,7 +393,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyEnumerateClass -> owl:oneOf -> ontologyFact" relation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddOneOfRelation(RDFOntologyEnumerateClass ontologyEnumerateClass, RDFOntologyFact ontologyFact) {
+        public RDFOntologyClassModel AddOneOfRelation(RDFOntologyEnumerateClass ontologyEnumerateClass, 
+                                                      RDFOntologyFact ontologyFact) {
             if (ontologyEnumerateClass != null && ontologyFact != null) {
                 this.Relations.OneOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyEnumerateClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.ONE_OF.ToString()), ontologyFact));
             }
@@ -378,7 +404,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyDataRangeClass -> owl:oneOf -> ontologyLiteral" relation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddOneOfRelation(RDFOntologyDataRangeClass ontologyDataRangeClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel AddOneOfRelation(RDFOntologyDataRangeClass ontologyDataRangeClass, 
+                                                      RDFOntologyLiteral ontologyLiteral) {
             if (ontologyDataRangeClass != null && ontologyLiteral != null) {
                 this.Relations.OneOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyDataRangeClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.ONE_OF.ToString()), ontologyLiteral));
             }
@@ -388,7 +415,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyIntersectionClass -> owl:intersectionOf -> ontologyClass" relation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddIntersectionOfRelation(RDFOntologyIntersectionClass ontologyIntersectionClass, RDFOntologyClass ontologyClass) {
+        public RDFOntologyClassModel AddIntersectionOfRelation(RDFOntologyIntersectionClass ontologyIntersectionClass, 
+                                                               RDFOntologyClass ontologyClass) {
             if (ontologyIntersectionClass != null && ontologyClass != null && !ontologyIntersectionClass.Equals(ontologyClass)) {
                 this.Relations.IntersectionOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyIntersectionClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INTERSECTION_OF.ToString()), ontologyClass));
             }
@@ -398,9 +426,78 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the "ontologyUnionClass -> owl:unionOf -> ontologyClass" relation to the class model 
         /// </summary>
-        public RDFOntologyClassModel AddUnionOfRelation(RDFOntologyUnionClass ontologyUnionClass, RDFOntologyClass ontologyClass) {
+        public RDFOntologyClassModel AddUnionOfRelation(RDFOntologyUnionClass ontologyUnionClass, 
+                                                        RDFOntologyClass ontologyClass) {
             if (ontologyUnionClass != null && ontologyClass != null && !ontologyUnionClass.Equals(ontologyClass)) {
                 this.Relations.UnionOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyUnionClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.UNION_OF.ToString()), ontologyClass));
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the "ontologyClass -> ontologyProperty -> ontologyResource" relation to the class model
+        /// If the property is an annotation property, it redirects to the "AddCustomAnnotation" method
+        /// </summary>
+        public RDFOntologyClassModel AddCustomRelation(RDFOntologyClass ontologyClass, 
+                                                       RDFOntologyProperty ontologyProperty, 
+                                                       RDFOntologyResource ontologyResource) {
+            if(ontologyClass != null && ontologyProperty != null && ontologyResource != null) {
+
+                //Custom annotations
+                if (ontologyProperty.IsAnnotationProperty()) {
+                    return this.AddCustomAnnotation(ontologyClass, (RDFOntologyAnnotationProperty)ontologyProperty, ontologyResource);
+                }
+
+                //rdfs:subClassOf
+                if (ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()))) {
+                    if (ontologyResource.IsClass()) {
+                        this.AddSubClassOfRelation(ontologyClass, (RDFOntologyClass)ontologyResource);
+                    }
+                }
+
+                //owl:equivalentClass
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()))) {
+                     if(ontologyResource.IsClass()) {
+                        this.AddEquivalentClassRelation(ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //owl:disjointWith
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()))) {
+                     if(ontologyResource.IsClass()) {
+                        this.AddDisjointWithRelation(ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //owl:oneOf
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.ONE_OF.ToString()))) {
+                     if(ontologyClass.IsEnumerateClass() && ontologyResource.IsFact()) {
+                        this.AddOneOfRelation((RDFOntologyEnumerateClass)ontologyClass, (RDFOntologyFact)ontologyResource);
+                     }
+                     else if(ontologyClass.IsDataRangeClass() && ontologyResource.IsLiteral()) {
+                        this.AddOneOfRelation((RDFOntologyDataRangeClass)ontologyClass, (RDFOntologyLiteral)ontologyResource);
+                    }
+                }
+
+                //owl:IntersectionOf
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INTERSECTION_OF.ToString()))) {
+                     if(ontologyClass is RDFOntologyIntersectionClass && ontologyResource.IsClass()) {
+                        this.AddIntersectionOfRelation((RDFOntologyIntersectionClass)ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //owl:UnionOf
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.UNION_OF.ToString()))) {
+                     if(ontologyClass is RDFOntologyUnionClass && ontologyResource.IsClass()) {
+                        this.AddUnionOfRelation((RDFOntologyUnionClass)ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //custom
+                else {
+                    this.Relations.CustomRelations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, ontologyProperty, ontologyResource));
+                }
+
             }
             return this;
         }
@@ -422,7 +519,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyClass -> owl:VersionInfo -> ontologyLiteral" annotation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveVersionInfoAnnotation(RDFOntologyClass ontologyClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel RemoveVersionInfoAnnotation(RDFOntologyClass ontologyClass, 
+                                                                 RDFOntologyLiteral ontologyLiteral) {
             if (ontologyClass != null && ontologyLiteral != null) {
                 this.Annotations.VersionInfo.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()), ontologyLiteral));
             }
@@ -432,7 +530,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyClass -> rdfs:comment -> ontologyLiteral" annotation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveCommentAnnotation(RDFOntologyClass ontologyClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel RemoveCommentAnnotation(RDFOntologyClass ontologyClass, 
+                                                             RDFOntologyLiteral ontologyLiteral) {
             if (ontologyClass != null && ontologyLiteral != null) {
                 this.Annotations.Comment.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()), ontologyLiteral));
             }
@@ -442,7 +541,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyClass -> rdfs:label -> ontologyLiteral" annotation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveLabelAnnotation(RDFOntologyClass ontologyClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel RemoveLabelAnnotation(RDFOntologyClass ontologyClass, 
+                                                           RDFOntologyLiteral ontologyLiteral) {
             if (ontologyClass != null && ontologyLiteral != null) {
                 this.Annotations.Label.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()), ontologyLiteral));
             }
@@ -452,7 +552,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyClass -> rdfs:seeAlso -> ontologyResource" annotation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveSeeAlsoAnnotation(RDFOntologyClass ontologyClass, RDFOntologyResource ontologyResource) {
+        public RDFOntologyClassModel RemoveSeeAlsoAnnotation(RDFOntologyClass ontologyClass, 
+                                                             RDFOntologyResource ontologyResource) {
             if (ontologyClass != null && ontologyResource != null) {
                 this.Annotations.SeeAlso.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()), ontologyResource));
             }
@@ -462,7 +563,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyClass -> rdfs:isDefinedBy -> ontologyResource" annotation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveIsDefinedByAnnotation(RDFOntologyClass ontologyClass, RDFOntologyResource ontologyResource) {
+        public RDFOntologyClassModel RemoveIsDefinedByAnnotation(RDFOntologyClass ontologyClass, 
+                                                                 RDFOntologyResource ontologyResource) {
             if (ontologyClass != null && ontologyResource != null) {
                 this.Annotations.IsDefinedBy.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()), ontologyResource));
             }
@@ -472,7 +574,9 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyClass -> ontologyAnnotationProperty -> ontologyResource" annotation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveCustomAnnotation(RDFOntologyClass ontologyClass, RDFOntologyAnnotationProperty ontologyAnnotationProperty, RDFOntologyResource ontologyResource) {
+        public RDFOntologyClassModel RemoveCustomAnnotation(RDFOntologyClass ontologyClass, 
+                                                            RDFOntologyAnnotationProperty ontologyAnnotationProperty, 
+                                                            RDFOntologyResource ontologyResource) {
             if (ontologyClass != null && ontologyAnnotationProperty != null && ontologyResource != null) {
 
                 //owl:versionInfo
@@ -518,7 +622,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "childClass -> rdfs:subClassOf -> motherClass" relation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveSubClassOfRelation(RDFOntologyClass childClass, RDFOntologyClass motherClass) {
+        public RDFOntologyClassModel RemoveSubClassOfRelation(RDFOntologyClass childClass, 
+                                                              RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null) {
                 this.Relations.SubClassOf.RemoveEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
             }
@@ -528,7 +633,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "aClass -> owl:equivalentClass -> bClass" relation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveEquivalentClassRelation(RDFOntologyClass aClass, RDFOntologyClass bClass) {
+        public RDFOntologyClassModel RemoveEquivalentClassRelation(RDFOntologyClass aClass, 
+                                                                   RDFOntologyClass bClass) {
             if (aClass != null && bClass != null) {
                 this.Relations.EquivalentClass.RemoveEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), bClass));
                 this.Relations.EquivalentClass.RemoveEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), aClass).SetInference(true));
@@ -539,7 +645,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "aClass -> owl:disjointWith -> bClass" relation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveDisjointWithRelation(RDFOntologyClass aClass, RDFOntologyClass bClass) {
+        public RDFOntologyClassModel RemoveDisjointWithRelation(RDFOntologyClass aClass, 
+                                                                RDFOntologyClass bClass) {
             if (aClass != null && bClass != null) {
                 this.Relations.DisjointWith.RemoveEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), bClass));
                 this.Relations.DisjointWith.RemoveEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), aClass).SetInference(true));
@@ -550,7 +657,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyEnumerateClass -> owl:oneOf -> ontologyFact" relation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveOneOfRelation(RDFOntologyEnumerateClass ontologyEnumerateClass, RDFOntologyFact ontologyFact) {
+        public RDFOntologyClassModel RemoveOneOfRelation(RDFOntologyEnumerateClass ontologyEnumerateClass, 
+                                                         RDFOntologyFact ontologyFact) {
             if (ontologyEnumerateClass != null && ontologyFact != null) {
                 this.Relations.OneOf.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyEnumerateClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.ONE_OF.ToString()), ontologyFact));
             }
@@ -560,7 +668,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyDataRangeClass -> owl:oneOf -> ontologyLiteral" relation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveOneOfRelation(RDFOntologyDataRangeClass ontologyDataRangeClass, RDFOntologyLiteral ontologyLiteral) {
+        public RDFOntologyClassModel RemoveOneOfRelation(RDFOntologyDataRangeClass ontologyDataRangeClass, 
+                                                         RDFOntologyLiteral ontologyLiteral) {
             if (ontologyDataRangeClass != null && ontologyLiteral != null) {
                 this.Relations.OneOf.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyDataRangeClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.ONE_OF.ToString()), ontologyLiteral));
             }
@@ -570,7 +679,8 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyIntersectionClass -> owl:intersectionOf -> ontologyClass" relation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveIntersectionOfRelation(RDFOntologyIntersectionClass ontologyIntersectionClass, RDFOntologyClass ontologyClass) {
+        public RDFOntologyClassModel RemoveIntersectionOfRelation(RDFOntologyIntersectionClass ontologyIntersectionClass, 
+                                                                  RDFOntologyClass ontologyClass) {
             if (ontologyIntersectionClass != null && ontologyClass != null) {
                 this.Relations.IntersectionOf.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyIntersectionClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INTERSECTION_OF.ToString()), ontologyClass));
             }
@@ -580,9 +690,78 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the "ontologyUnionClass -> owl:unionOf -> ontologyClass" relation from the class model 
         /// </summary>
-        public RDFOntologyClassModel RemoveUnionOfRelation(RDFOntologyUnionClass ontologyUnionClass, RDFOntologyClass ontologyClass) {
+        public RDFOntologyClassModel RemoveUnionOfRelation(RDFOntologyUnionClass ontologyUnionClass, 
+                                                           RDFOntologyClass ontologyClass) {
             if (ontologyUnionClass != null && ontologyClass != null) {
                 this.Relations.UnionOf.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyUnionClass, RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.UNION_OF.ToString()), ontologyClass));
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the "ontologyClass -> ontologyProperty -> ontologyResource" relation from the class model
+        /// If the property is an annotation property, it redirects to the "RemoveCustomAnnotation" method
+        /// </summary>
+        public RDFOntologyClassModel RemoveCustomRelation(RDFOntologyClass ontologyClass,
+                                                          RDFOntologyProperty ontologyProperty,
+                                                          RDFOntologyResource ontologyResource) {
+            if(ontologyClass != null && ontologyProperty != null && ontologyResource != null) {
+
+                //Custom annotations
+                if (ontologyProperty.IsAnnotationProperty()) {
+                    return this.RemoveCustomAnnotation(ontologyClass, (RDFOntologyAnnotationProperty)ontologyProperty, ontologyResource);
+                }
+
+                //rdfs:subClassOf
+                if (ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()))) {
+                    if (ontologyResource.IsClass()) {
+                        this.RemoveSubClassOfRelation(ontologyClass, (RDFOntologyClass)ontologyResource);
+                    }
+                }
+
+                //owl:equivalentClass
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()))) {
+                     if(ontologyResource.IsClass()) {
+                        this.RemoveEquivalentClassRelation(ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //owl:disjointWith
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()))) {
+                     if(ontologyResource.IsClass()) {
+                        this.RemoveDisjointWithRelation(ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //owl:oneOf
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.ONE_OF.ToString()))) {
+                     if(ontologyClass.IsEnumerateClass() && ontologyResource.IsFact()) {
+                        this.RemoveOneOfRelation((RDFOntologyEnumerateClass)ontologyClass, (RDFOntologyFact)ontologyResource);
+                     }
+                     else if(ontologyClass.IsDataRangeClass() && ontologyResource.IsLiteral()) {
+                        this.RemoveOneOfRelation((RDFOntologyDataRangeClass)ontologyClass, (RDFOntologyLiteral)ontologyResource);
+                     }
+                }
+
+                //owl:IntersectionOf
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INTERSECTION_OF.ToString()))) {
+                     if(ontologyClass is RDFOntologyIntersectionClass && ontologyResource.IsClass()) {
+                        this.RemoveIntersectionOfRelation((RDFOntologyIntersectionClass)ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //owl:UnionOf
+                else if(ontologyProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.UNION_OF.ToString()))) {
+                     if(ontologyClass is RDFOntologyUnionClass && ontologyResource.IsClass()) {
+                        this.RemoveUnionOfRelation((RDFOntologyUnionClass)ontologyClass, (RDFOntologyClass)ontologyResource);
+                     }
+                }
+
+                //custom
+                else {
+                    this.Relations.CustomRelations.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyClass, ontologyProperty, ontologyResource));
+                }
+
             }
             return this;
         }
@@ -631,6 +810,7 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = this.Relations.OneOf.IntersectWith(classModel.Relations.OneOf);
                 result.Relations.IntersectionOf      = this.Relations.IntersectionOf.IntersectWith(classModel.Relations.IntersectionOf);
                 result.Relations.UnionOf             = this.Relations.UnionOf.IntersectWith(classModel.Relations.UnionOf);
+                result.Relations.CustomRelations     = this.Relations.CustomRelations.IntersectWith(classModel.Relations.CustomRelations);
 
                 //Add intersection annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.IntersectWith(classModel.Annotations.VersionInfo);
@@ -662,6 +842,7 @@ namespace RDFSharp.Semantics {
             result.Relations.OneOf               = result.Relations.OneOf.UnionWith(this.Relations.OneOf);
             result.Relations.IntersectionOf      = result.Relations.IntersectionOf.UnionWith(this.Relations.IntersectionOf);
             result.Relations.UnionOf             = result.Relations.UnionOf.UnionWith(this.Relations.UnionOf);
+            result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(this.Relations.CustomRelations);
 
             //Add annotations from this class model
             result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
@@ -686,6 +867,7 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = result.Relations.OneOf.UnionWith(classModel.Relations.OneOf);
                 result.Relations.IntersectionOf      = result.Relations.IntersectionOf.UnionWith(classModel.Relations.IntersectionOf);
                 result.Relations.UnionOf             = result.Relations.UnionOf.UnionWith(classModel.Relations.UnionOf);
+                result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(classModel.Relations.CustomRelations);
 
                 //Add annotations from the given class model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(classModel.Annotations.VersionInfo);
@@ -720,6 +902,7 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = this.Relations.OneOf.DifferenceWith(classModel.Relations.OneOf);
                 result.Relations.IntersectionOf      = this.Relations.IntersectionOf.DifferenceWith(classModel.Relations.IntersectionOf);
                 result.Relations.UnionOf             = this.Relations.UnionOf.DifferenceWith(classModel.Relations.UnionOf);
+                result.Relations.CustomRelations     = this.Relations.CustomRelations.DifferenceWith(classModel.Relations.CustomRelations);
 
                 //Add difference annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.DifferenceWith(classModel.Annotations.VersionInfo);
@@ -744,6 +927,7 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = result.Relations.OneOf.UnionWith(this.Relations.OneOf);
                 result.Relations.IntersectionOf      = result.Relations.IntersectionOf.UnionWith(this.Relations.IntersectionOf);
                 result.Relations.UnionOf             = result.Relations.UnionOf.UnionWith(this.Relations.UnionOf);
+                result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(this.Relations.CustomRelations);
 
                 //Add annotations from this class model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
@@ -763,10 +947,10 @@ namespace RDFSharp.Semantics {
         /// Gets a graph representation of this ontology class model, eventually including inferences
         /// </summary>
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
-            var result     = new RDFGraph();
+            var result        = new RDFGraph();
 
             //Definitions
-            foreach(var   c in this) {
+            foreach(var    c in this) {
                 if (c.IsRestrictionClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.RESTRICTION));
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ON_PROPERTY, (RDFResource)((RDFOntologyRestriction)c).OnProperty.Value));
@@ -853,7 +1037,8 @@ namespace RDFSharp.Semantics {
             //Relations
             result         = result.UnionWith(this.Relations.SubClassOf.ToRDFGraph(includeInferences))
                                    .UnionWith(this.Relations.EquivalentClass.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Relations.DisjointWith.ToRDFGraph(includeInferences));
+                                   .UnionWith(this.Relations.DisjointWith.ToRDFGraph(includeInferences))
+                                   .UnionWith(this.Relations.CustomRelations.ToRDFGraph(includeInferences)); ;
 
             //Annotations
             result         = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(includeInferences))
@@ -906,6 +1091,11 @@ namespace RDFSharp.Semantics {
         /// "owl:unionOf" relations (specific for union classes)
         /// </summary>
         public RDFOntologyTaxonomy UnionOf { get; internal set; }
+
+        /// <summary>
+        /// "Custom" relations (non-structural taxonomies)
+        /// </summary>
+        public RDFOntologyTaxonomy CustomRelations { get; internal set; }
         #endregion
 
         #region Ctors
@@ -919,6 +1109,7 @@ namespace RDFSharp.Semantics {
             this.OneOf           = new RDFOntologyTaxonomy();
             this.IntersectionOf  = new RDFOntologyTaxonomy();
             this.UnionOf         = new RDFOntologyTaxonomy();
+            this.CustomRelations = new RDFOntologyTaxonomy();
         }
         #endregion
 

@@ -44,6 +44,8 @@ namespace RDFSharp.Semantics {
             #region Classes
 
             //RDF+RDFS
+            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.RESOURCE));
+            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.CLASS));
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.LITERAL));
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDF.XML_LITERAL));
 

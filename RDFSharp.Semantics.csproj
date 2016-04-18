@@ -86,6 +86,7 @@
     <Compile Include="Architecture\Extensions\Validation\RDFOntologyValidator.cs" />
     <Compile Include="Ontologies\RDFBASEOntology.cs" />
     <Compile Include="Ontologies\RDFDCOntology.cs" />
+    <Compile Include="Ontologies\RDFFOAFOntology.cs" />
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />

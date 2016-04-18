@@ -1782,7 +1782,61 @@ namespace RDFSharp.Semantics
 
                 #endregion
 
-                #region Step 6.8: Finalize Annotations
+                #region Step 6.8: Finalize Custom Relations (ClassModel)
+                foreach (var c                      in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
+                    foreach (var cRel               in ontGraph.SelectTriplesBySubject((RDFResource)c.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
+                        RDFOntologyProperty cRelPrp  = (ontology.Model.PropertyModel.SelectProperty(cRel.Predicate.ToString()) ?? 
+                                                            new RDFOntologyProperty(new RDFResource(cRel.Predicate.ToString())));
+                        if (cRel.TripleFlavor       == RDFModelEnums.RDFTripleFlavors.SPL) {
+                            ontology.Model.ClassModel.AddCustomRelation(c, cRelPrp, new RDFOntologyLiteral((RDFLiteral)cRel.Object));
+                        }
+                        else {
+                            RDFOntologyResource cRelObj  = ontology.Model.ClassModel.SelectClass(cRel.Object.ToString());
+                            if (cRelObj                 == null) {
+                                cRelObj                  = ontology.Model.PropertyModel.SelectProperty(cRel.Object.ToString());
+                                if (cRelObj             == null) {
+                                    cRelObj              = ontology.Data.SelectFact(cRel.Object.ToString());
+                                    if (cRelObj         == null) {
+                                        cRelObj          = new RDFOntologyResource();
+                                        cRelObj.Value    = cRel.Object;
+                                        cRelObj.PatternMemberID = cRel.Object.PatternMemberID;
+                                    }
+                                }
+                            }
+                            ontology.Model.ClassModel.AddCustomRelation(c, cRelPrp, cRelObj);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Step 6.9: Finalize Custom Relations (PropertyModel)
+                foreach(var p        in ontology.Model.PropertyModel.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+                    foreach(var pRel in ontGraph.SelectTriplesBySubject((RDFResource)p.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
+                        RDFOntologyProperty pRelPrp  = (ontology.Model.PropertyModel.SelectProperty(pRel.Predicate.ToString()) ??
+                                                            new RDFOntologyProperty(new RDFResource(pRel.Predicate.ToString())));
+                        if (pRel.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
+                            ontology.Model.PropertyModel.AddCustomRelation(p, pRelPrp, new RDFOntologyLiteral((RDFLiteral)pRel.Object));
+                        }
+                        else {
+                            RDFOntologyResource pRelObj  = ontology.Model.ClassModel.SelectClass(pRel.Object.ToString());
+                            if (pRelObj                 == null) {
+                                pRelObj                  = ontology.Model.PropertyModel.SelectProperty(pRel.Object.ToString());
+                                if (pRelObj             == null) {
+                                    pRelObj              = ontology.Data.SelectFact(pRel.Object.ToString());
+                                    if (pRelObj         == null) {
+                                        pRelObj          = new RDFOntologyResource();
+                                        pRelObj.Value    = pRel.Object;
+                                        pRelObj.PatternMemberID = pRel.Object.PatternMemberID;
+                                    }
+                                }
+                            }
+                            ontology.Model.PropertyModel.AddCustomRelation(p, pRelPrp, pRelObj);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Step 6.10: Finalize Annotations
 
                 #region Ontology
 
@@ -1853,13 +1907,13 @@ namespace RDFSharp.Semantics
                     }
                     else {
                         RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                        if (resource         == null) {
-                            resource          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                            if (resource     == null) {
-                                resource      = ontology.Data.SelectFact(t.Object.ToString());
-                                if (resource == null) {
-                                    resource  = new RDFOntologyResource();
-                                    resource.Value           = t.Object;
+                        if (resource                == null) {
+                            resource                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                            if (resource            == null) {
+                                resource             = ontology.Data.SelectFact(t.Object.ToString());
+                                if (resource        == null) {
+                                    resource         = new RDFOntologyResource();
+                                    resource.Value   = t.Object;
                                     resource.PatternMemberID = t.Object.PatternMemberID;
                                 }
                             }
@@ -1876,15 +1930,14 @@ namespace RDFSharp.Semantics
                     }
                     else {
                         RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                        if (isDefBy         == null) {
-                            isDefBy          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                            if (isDefBy     == null) {
-                                isDefBy      = ontology.Data.SelectFact(t.Object.ToString());
-                                if (isDefBy == null) {
-                                    isDefBy  = new RDFOntologyResource();
-                                    isDefBy.Value           = t.Object;
+                        if (isDefBy                == null) {
+                            isDefBy                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                            if (isDefBy            == null) {
+                                isDefBy             = ontology.Data.SelectFact(t.Object.ToString());
+                                if (isDefBy        == null) {
+                                    isDefBy         = new RDFOntologyResource();
+                                    isDefBy.Value   = t.Object;
                                     isDefBy.PatternMemberID = t.Object.PatternMemberID;
-
                                 }
                             }
                         }
@@ -1978,22 +2031,21 @@ namespace RDFSharp.Semantics
                         }
                         else {
                             RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                            if (custAnn         == null) {
-                                custAnn          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                if (custAnn     == null) {
-                                    custAnn      = ontology.Data.SelectFact(t.Object.ToString());
-                                    if (custAnn == null) {
-                                        custAnn  = new RDFOntologyResource();
-                                        custAnn.Value           = t.Object;
+                            if (custAnn                == null) {
+                                custAnn                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                if (custAnn            == null) {
+                                    custAnn             = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (custAnn        == null) {
+                                        custAnn         = new RDFOntologyResource();
+                                        custAnn.Value   = t.Object;
                                         custAnn.PatternMemberID = t.Object.PatternMemberID;
-
                                     }
                                 }
                             }
                             ontology.AddCustomAnnotation(annotProps.Current, custAnn);
                         }
-
                     }
+
                 }
                 #endregion
 
@@ -2054,15 +2106,14 @@ namespace RDFSharp.Semantics
                         }
                         else {
                             RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                            if (resource         == null) {
-                                resource          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                if (resource     == null) {
-                                    resource      = ontology.Data.SelectFact(t.Object.ToString());
-                                    if (resource == null) {
-                                        resource  = new RDFOntologyResource();
-                                        resource.Value           = t.Object;
+                            if (resource                == null) {
+                                resource                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                if (resource            == null) {
+                                    resource             = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (resource        == null) {
+                                        resource         = new RDFOntologyResource();
+                                        resource.Value   = t.Object;
                                         resource.PatternMemberID = t.Object.PatternMemberID;
-
                                     }
                                 }
                             }
@@ -2078,13 +2129,13 @@ namespace RDFSharp.Semantics
                         }
                         else {
                             RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                            if (isDefBy         == null) {
-                                isDefBy          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                if (isDefBy     == null) {
-                                    isDefBy      = ontology.Data.SelectFact(t.Object.ToString());
-                                    if (isDefBy == null) {
-                                        isDefBy  = new RDFOntologyResource();
-                                        isDefBy.Value           = t.Object;
+                            if (isDefBy                == null) {
+                                isDefBy                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                if (isDefBy            == null) {
+                                    isDefBy             = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (isDefBy        == null) {
+                                        isDefBy         = new RDFOntologyResource();
+                                        isDefBy.Value   = t.Object;
                                         isDefBy.PatternMemberID = t.Object.PatternMemberID;
                                     }
                                 }
@@ -2119,22 +2170,21 @@ namespace RDFSharp.Semantics
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                                if (custAnn         == null) {
-                                    custAnn          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                    if (custAnn     == null) {
-                                        custAnn      = ontology.Data.SelectFact(t.Object.ToString());
-                                        if (custAnn == null) {
-                                            custAnn  = new RDFOntologyResource();
-                                            custAnn.Value           = t.Object;
+                                if (custAnn                == null) {
+                                    custAnn                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                    if (custAnn            == null) {
+                                        custAnn             = ontology.Data.SelectFact(t.Object.ToString());
+                                        if (custAnn        == null) {
+                                            custAnn         = new RDFOntologyResource();
+                                            custAnn.Value   = t.Object;
                                             custAnn.PatternMemberID = t.Object.PatternMemberID;
-
                                         }
                                     }
                                 }
                                 ontology.Model.ClassModel.AddCustomAnnotation(c, annotProps.Current, custAnn);
                             }
-
                         }
+
                     }
                     #endregion
 
@@ -2196,15 +2246,14 @@ namespace RDFSharp.Semantics
                         }
                         else {
                             RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                            if(resource == null) {
-                                resource = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                if(resource == null) {
-                                    resource = ontology.Data.SelectFact(t.Object.ToString());
-                                    if(resource == null) {
-                                        resource = new RDFOntologyResource();
-                                        resource.Value = t.Object;
+                            if (resource                == null) {
+                                resource                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                if (resource            == null) {
+                                    resource             = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (resource        == null) {
+                                        resource         = new RDFOntologyResource();
+                                        resource.Value   = t.Object;
                                         resource.PatternMemberID = t.Object.PatternMemberID;
-
                                     }
                                 }
                             }
@@ -2220,13 +2269,13 @@ namespace RDFSharp.Semantics
                         }
                         else {
                             RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                            if(isDefBy == null) {
-                                isDefBy = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                if(isDefBy == null) {
-                                    isDefBy = ontology.Data.SelectFact(t.Object.ToString());
-                                    if(isDefBy == null) {
-                                        isDefBy = new RDFOntologyResource();
-                                        isDefBy.Value = t.Object;
+                            if (isDefBy                == null) {
+                                isDefBy                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                if (isDefBy            == null) {
+                                    isDefBy             = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (isDefBy        == null) {
+                                        isDefBy         = new RDFOntologyResource();
+                                        isDefBy.Value   = t.Object;
                                         isDefBy.PatternMemberID = t.Object.PatternMemberID;
                                     }
                                 }
@@ -2261,21 +2310,21 @@ namespace RDFSharp.Semantics
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                                if(custAnn         == null) {
-                                    custAnn         = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                    if(custAnn     == null) {
-                                        custAnn     = ontology.Data.SelectFact(t.Object.ToString());
-                                        if(custAnn == null) {
-                                            custAnn = new RDFOntologyResource();
-                                            custAnn.Value           = t.Object;
+                                if(custAnn                 == null) {
+                                    custAnn                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                    if(custAnn             == null) {
+                                        custAnn             = ontology.Data.SelectFact(t.Object.ToString());
+                                        if(custAnn         == null) {
+                                            custAnn         = new RDFOntologyResource();
+                                            custAnn.Value   = t.Object;
                                             custAnn.PatternMemberID = t.Object.PatternMemberID;
                                         }
                                     }
                                 }
                                 ontology.Model.PropertyModel.AddCustomAnnotation(p, annotProps.Current, custAnn);
                             }
-
                         }
+
                     }
                     #endregion
 
@@ -2337,13 +2386,13 @@ namespace RDFSharp.Semantics
                         }
                         else {
                             RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                            if (resource         == null) {
-                                resource          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                if (resource     == null) {
-                                    resource      = ontology.Data.SelectFact(t.Object.ToString());
-                                    if (resource == null) {
-                                        resource  = new RDFOntologyResource();
-                                        resource.Value           = t.Object;
+                            if (resource                == null) {
+                                resource                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                if (resource            == null) {
+                                    resource             = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (resource        == null) {
+                                        resource         = new RDFOntologyResource();
+                                        resource.Value   = t.Object;
                                         resource.PatternMemberID = t.Object.PatternMemberID;
                                     }
                                 }
@@ -2360,13 +2409,13 @@ namespace RDFSharp.Semantics
                         }
                         else {
                             RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                            if (isDefBy         == null) {
-                                isDefBy          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                if (isDefBy     == null) {
-                                    isDefBy      = ontology.Data.SelectFact(t.Object.ToString());
-                                    if (isDefBy == null) {
-                                        isDefBy  = new RDFOntologyResource();
-                                        isDefBy.Value           = t.Object;
+                            if (isDefBy                == null) {
+                                isDefBy                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                if (isDefBy            == null) {
+                                    isDefBy             = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (isDefBy        == null) {
+                                        isDefBy         = new RDFOntologyResource();
+                                        isDefBy.Value   = t.Object;
                                         isDefBy.PatternMemberID = t.Object.PatternMemberID;
                                     }
                                 }
@@ -2401,20 +2450,19 @@ namespace RDFSharp.Semantics
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
-                                if (custAnn         == null) {
-                                    custAnn          = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
-                                    if (custAnn     == null) {
-                                        custAnn      = ontology.Data.SelectFact(t.Object.ToString());
-                                        if (custAnn == null) {
-                                            custAnn  = new RDFOntologyResource();
-                                            custAnn.Value           = t.Object;
+                                if (custAnn                == null) {
+                                    custAnn                 = ontology.Model.PropertyModel.SelectProperty(t.Object.ToString());
+                                    if (custAnn            == null) {
+                                        custAnn             = ontology.Data.SelectFact(t.Object.ToString());
+                                        if (custAnn        == null) {
+                                            custAnn         = new RDFOntologyResource();
+                                            custAnn.Value   = t.Object;
                                             custAnn.PatternMemberID = t.Object.PatternMemberID;
                                         }
                                     }
                                 }
                                 ontology.Data.AddCustomAnnotation(f, annotProps.Current, custAnn);
                             }
-
                         }
 
                     }
