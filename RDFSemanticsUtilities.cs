@@ -20,7 +20,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using RDFSharp.Model;
 using RDFSharp.Query;
-using RDFSharp.Store;
 
 namespace RDFSharp.Semantics
 {
@@ -1782,12 +1781,39 @@ namespace RDFSharp.Semantics
 
                 #endregion
 
-                #region Step 6.8: Finalize Custom Relations (ClassModel)
-                foreach (var c                      in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
-                    foreach (var cRel               in ontGraph.SelectTriplesBySubject((RDFResource)c.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
-                        RDFOntologyProperty cRelPrp  = (ontology.Model.PropertyModel.SelectProperty(cRel.Predicate.ToString()) ?? 
-                                                            new RDFOntologyProperty(new RDFResource(cRel.Predicate.ToString())));
-                        if (cRel.TripleFlavor       == RDFModelEnums.RDFTripleFlavors.SPL) {
+                #region Step 6.8: Finalize Custom Relations (Ontology)
+                foreach (var c                          in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
+                    foreach(var oRel                    in ontGraph.SelectTriplesBySubject((RDFResource)ontology.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
+                        RDFOntologyProperty oRelPrp      = (ontology.Model.PropertyModel.SelectProperty(oRel.Predicate.ToString()) ??
+                                                                new RDFOntologyProperty(new RDFResource(oRel.Predicate.ToString())));
+                        if (oRel.TripleFlavor           == RDFModelEnums.RDFTripleFlavors.SPL) {
+                            ontology.AddCustomRelation(oRelPrp, new RDFOntologyLiteral((RDFLiteral)oRel.Object));
+                        }
+                        else {
+                            RDFOntologyResource oRelObj  = ontology.Model.ClassModel.SelectClass(oRel.Object.ToString());
+                            if (oRelObj                 == null) {
+                                oRelObj                  = ontology.Model.PropertyModel.SelectProperty(oRel.Object.ToString());
+                                if (oRelObj             == null) {
+                                    oRelObj              = ontology.Data.SelectFact(oRel.Object.ToString());
+                                    if (oRelObj         == null) {
+                                        oRelObj          = new RDFOntologyResource();
+                                        oRelObj.Value    = oRel.Object;
+                                        oRelObj.PatternMemberID = oRel.Object.PatternMemberID;
+                                    }
+                                }
+                            }
+                            ontology.AddCustomRelation(oRelPrp, oRelObj);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Step 6.9: Finalize Custom Relations (ClassModel)
+                foreach (var c                          in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
+                    foreach (var cRel                   in ontGraph.SelectTriplesBySubject((RDFResource)c.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
+                        RDFOntologyProperty cRelPrp      = (ontology.Model.PropertyModel.SelectProperty(cRel.Predicate.ToString()) ?? 
+                                                                new RDFOntologyProperty(new RDFResource(cRel.Predicate.ToString())));
+                        if (cRel.TripleFlavor           == RDFModelEnums.RDFTripleFlavors.SPL) {
                             ontology.Model.ClassModel.AddCustomRelation(c, cRelPrp, new RDFOntologyLiteral((RDFLiteral)cRel.Object));
                         }
                         else {
@@ -1809,12 +1835,12 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 6.9: Finalize Custom Relations (PropertyModel)
-                foreach(var p        in ontology.Model.PropertyModel.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
-                    foreach(var pRel in ontGraph.SelectTriplesBySubject((RDFResource)p.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
-                        RDFOntologyProperty pRelPrp  = (ontology.Model.PropertyModel.SelectProperty(pRel.Predicate.ToString()) ??
-                                                            new RDFOntologyProperty(new RDFResource(pRel.Predicate.ToString())));
-                        if (pRel.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
+                #region Step 6.10: Finalize Custom Relations (PropertyModel)
+                foreach(var p                           in ontology.Model.PropertyModel.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+                    foreach(var pRel                    in ontGraph.SelectTriplesBySubject((RDFResource)p.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
+                        RDFOntologyProperty pRelPrp      = (ontology.Model.PropertyModel.SelectProperty(pRel.Predicate.ToString()) ??
+                                                                new RDFOntologyProperty(new RDFResource(pRel.Predicate.ToString())));
+                        if (pRel.TripleFlavor           == RDFModelEnums.RDFTripleFlavors.SPL) {
                             ontology.Model.PropertyModel.AddCustomRelation(p, pRelPrp, new RDFOntologyLiteral((RDFLiteral)pRel.Object));
                         }
                         else {
@@ -1836,7 +1862,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 6.10: Finalize Annotations
+                #region Step 6.11: Finalize Annotations
 
                 #region Ontology
 
@@ -2504,7 +2530,8 @@ namespace RDFSharp.Semantics
                                   .UnionWith(ontology.Annotations.IncompatibleWith.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.PriorVersion.ToRDFGraph(includeInferences))
                                   .UnionWith(ontology.Annotations.Imports.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.CustomAnnotations.ToRDFGraph(includeInferences));
+                                  .UnionWith(ontology.Annotations.CustomAnnotations.ToRDFGraph(includeInferences))
+                                  .UnionWith(ontology.Relations.CustomRelations.ToRDFGraph(includeInferences));
                 #endregion
 
                 #region Step 2: Export model
