@@ -47,15 +47,12 @@ namespace RDFSharp.Semantics {
             var result               = new RDFOntologyClassModel();
             if (ontClass            != null && classModel != null) {
 
-                //Step 0: Expand the class model
-                var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-
                 //Step 1: Reason on the given class
-                result               = RDFSemanticsUtilities.EnlistSubClassesOf_Core(ontClass, extClsModel);
+                result               = RDFSemanticsUtilities.EnlistSubClassesOf_Core(ontClass, classModel);
 
                 //Step 2: Reason on the equivalent classes
-                foreach(var ec      in EnlistEquivalentClassesOf(ontClass, extClsModel)) {
-                    result           = result.UnionWith(RDFSemanticsUtilities.EnlistSubClassesOf_Core(ec, extClsModel));
+                foreach(var ec      in EnlistEquivalentClassesOf(ontClass, classModel)) {
+                    result           = result.UnionWith(RDFSemanticsUtilities.EnlistSubClassesOf_Core(ec, classModel));
                 }
 
             }
@@ -81,15 +78,12 @@ namespace RDFSharp.Semantics {
             var result               = new RDFOntologyClassModel();
             if (ontClass            != null && classModel != null) {
 
-                //Step 0: Expand the class model
-                var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-
                 //Step 1: Reason on the given class
-                result               = RDFSemanticsUtilities.EnlistSuperClassesOf_Core(ontClass, extClsModel);
+                result               = RDFSemanticsUtilities.EnlistSuperClassesOf_Core(ontClass, classModel);
 
                 //Step 2: Reason on the equivalent classes
-                foreach(var ec      in EnlistEquivalentClassesOf(ontClass, extClsModel)) {
-                    result           = result.UnionWith(RDFSemanticsUtilities.EnlistSuperClassesOf_Core(ec, extClsModel));
+                foreach(var ec      in EnlistEquivalentClassesOf(ontClass, classModel)) {
+                    result           = result.UnionWith(RDFSemanticsUtilities.EnlistSuperClassesOf_Core(ec, classModel));
                 }
 
             }
@@ -114,14 +108,8 @@ namespace RDFSharp.Semantics {
                                                                       RDFOntologyClassModel classModel) {
             var result               = new RDFOntologyClassModel();
             if (ontClass            != null && classModel != null) {
-
-                //Step 0: Expand the class model
-                var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-
-                //Step 1: Reason on the given class
-                result               = RDFSemanticsUtilities.EnlistEquivalentClassesOf_Core(ontClass, extClsModel, null)
+                result               = RDFSemanticsUtilities.EnlistEquivalentClassesOf_Core(ontClass, classModel, null)
                                                             .RemoveClass(ontClass); //Safety deletion
-
             }
             return result;
         }
@@ -144,14 +132,8 @@ namespace RDFSharp.Semantics {
                                                                       RDFOntologyClassModel classModel) {
             var result               = new RDFOntologyClassModel();
             if (ontClass            != null && classModel != null) {
-
-                //Step 0: Expand the class model
-                var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-
-                //Step 1: Reason on the given class
-                result               = RDFSemanticsUtilities.EnlistDisjointClassesWith_Core(ontClass, extClsModel, null)
+                result               = RDFSemanticsUtilities.EnlistDisjointClassesWith_Core(ontClass, classModel, null)
                                                             .RemoveClass(ontClass); //Safety deletion
-
             }
             return result;
         }
@@ -175,15 +157,9 @@ namespace RDFSharp.Semantics {
             var result                   = new RDFOntologyClassModel();
             if (ontProperty             != null  && classModel != null) {
                 if (ontProperty.Domain  != null) {
-
-                    //Step 0: Expand the class model
-                    var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-
-                    //Step 1: Reason on the given class
-                    result               = EnlistSubClassesOf(ontProperty.Domain, extClsModel)
-                                               .UnionWith(EnlistEquivalentClassesOf(ontProperty.Domain, extClsModel))
+                    result               = EnlistSubClassesOf(ontProperty.Domain, classModel)
+                                               .UnionWith(EnlistEquivalentClassesOf(ontProperty.Domain, classModel))
                                                    .AddClass(ontProperty.Domain);
-
                 }
             }
             return result;
@@ -208,15 +184,9 @@ namespace RDFSharp.Semantics {
             var result                   = new RDFOntologyClassModel();
             if (ontProperty             != null && classModel != null) {
                 if (ontProperty.Range   != null) {
-
-                    //Step 0: Expand the class model
-                    var extClsModel      = RDFSemanticsUtilities.ExpandClassModel(classModel);
-
-                    //Step 1: Reason on the given class
-                    result               = EnlistSubClassesOf(ontProperty.Range, extClsModel)
-                                               .UnionWith(EnlistEquivalentClassesOf(ontProperty.Range, extClsModel))
+                    result               = EnlistSubClassesOf(ontProperty.Range, classModel)
+                                               .UnionWith(EnlistEquivalentClassesOf(ontProperty.Range, classModel))
                                                    .AddClass(ontProperty.Range);
-
                 }
             }
             return result;
@@ -262,15 +232,12 @@ namespace RDFSharp.Semantics {
             var result                = new RDFOntologyPropertyModel();
             if(ontProperty           != null && propertyModel != null) {
 
-                //Step 0: Expand the property model
-                var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-
                 //Step 1: Reason on the given property
-                result                = RDFSemanticsUtilities.EnlistSubPropertiesOf_Core(ontProperty, extPropModel);
+                result                = RDFSemanticsUtilities.EnlistSubPropertiesOf_Core(ontProperty, propertyModel);
 
                 //Step 2: Reason on the equivalent properties
-                foreach(var  ep      in EnlistEquivalentPropertiesOf(ontProperty, extPropModel)) {
-                    result            = result.UnionWith(RDFSemanticsUtilities.EnlistSubPropertiesOf_Core(ep, extPropModel));
+                foreach(var  ep      in EnlistEquivalentPropertiesOf(ontProperty, propertyModel)) {
+                    result            = result.UnionWith(RDFSemanticsUtilities.EnlistSubPropertiesOf_Core(ep, propertyModel));
                 }
 
             }
@@ -296,15 +263,12 @@ namespace RDFSharp.Semantics {
             var result                = new RDFOntologyPropertyModel();
             if(ontProperty           != null && propertyModel != null) {
 
-                //Step 0: Expand the property model
-                var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-
                 //Step 1: Reason on the given property
-                result                = RDFSemanticsUtilities.EnlistSuperPropertiesOf_Core(ontProperty, extPropModel);
+                result                = RDFSemanticsUtilities.EnlistSuperPropertiesOf_Core(ontProperty, propertyModel);
 
                 //Step 2: Reason on the equivalent properties
-                foreach(var  ep      in EnlistEquivalentPropertiesOf(ontProperty, extPropModel)) {
-                    result            = result.UnionWith(RDFSemanticsUtilities.EnlistSuperPropertiesOf_Core(ep, extPropModel));
+                foreach(var  ep      in EnlistEquivalentPropertiesOf(ontProperty, propertyModel)) {
+                    result            = result.UnionWith(RDFSemanticsUtilities.EnlistSuperPropertiesOf_Core(ep, propertyModel));
                 }
 
             }
@@ -329,14 +293,8 @@ namespace RDFSharp.Semantics {
                                                                             RDFOntologyPropertyModel propertyModel) {
             var result                = new RDFOntologyPropertyModel();
             if (ontProperty          != null && propertyModel != null) {
-
-                //Step 0: Expand the property model
-                var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-
-                //Step 1: Reason on the given property
-                result                = RDFSemanticsUtilities.EnlistEquivalentPropertiesOf_Core(ontProperty, extPropModel, null)
+                result                = RDFSemanticsUtilities.EnlistEquivalentPropertiesOf_Core(ontProperty, propertyModel, null)
                                                              .RemoveProperty(ontProperty); //Safety deletion
-
             }
             return result;
         }
@@ -360,16 +318,12 @@ namespace RDFSharp.Semantics {
             var result                = new RDFOntologyPropertyModel();
             if (ontProperty          != null && propertyModel != null) {
 
-                //Step 0: Expand the property model
-                var extPropModel      = RDFSemanticsUtilities.ExpandPropertyModel(propertyModel);
-
-                //Step 1: Reason on the given property
                 //Subject-side inverseOf relation
-                foreach(var invOf    in extPropModel.Relations.InverseOf.SelectEntriesBySubject(ontProperty)) {
+                foreach(var invOf    in propertyModel.Relations.InverseOf.SelectEntriesBySubject(ontProperty)) {
                     result.AddProperty((RDFOntologyObjectProperty)invOf.TaxonomyObject);
                 }
                 //Object-side inverseOf relation
-                foreach (var invOf   in extPropModel.Relations.InverseOf.SelectEntriesByObject(ontProperty)) {
+                foreach (var invOf   in propertyModel.Relations.InverseOf.SelectEntriesByObject(ontProperty)) {
                     result.AddProperty((RDFOntologyObjectProperty)invOf.TaxonomySubject);
                 }
                 result.RemoveProperty(ontProperty); //Safety deletion

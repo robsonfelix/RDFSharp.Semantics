@@ -110,19 +110,11 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal RDFOntologyValidationReport AnalyzeOntology(RDFOntology ontology) {
             var report = new RDFOntologyValidationReport(ontology.Value.PatternMemberID);
-
-            //Expand the model
-            ontology.Model.ClassModel    = RDFSemanticsUtilities.ExpandClassModel(ontology.Model.ClassModel);
-            ontology.Model.PropertyModel = RDFSemanticsUtilities.ExpandPropertyModel(ontology.Model.PropertyModel);
             
             //Execute the validation rules
             Parallel.ForEach(this.Rules, rule => {
                 rule.ExecuteRule(ontology, report);
             });
-
-            //Unexpand the model
-            ontology.Model.ClassModel    = RDFSemanticsUtilities.UnexpandClassModel(ontology.Model.ClassModel);
-            ontology.Model.PropertyModel = RDFSemanticsUtilities.UnexpandPropertyModel(ontology.Model.PropertyModel);
             
             return report;
         }

@@ -809,11 +809,6 @@ namespace RDFSharp.Semantics
             if (ontGraph         != null) {
                 ontology          = new RDFOntology(new RDFResource(ontGraph.Context));
 
-                #region Step 0: Expand model
-                ontology.Model.ClassModel    = ExpandClassModel(ontology.Model.ClassModel);
-                ontology.Model.PropertyModel = ExpandPropertyModel(ontology.Model.PropertyModel);
-                #endregion
-
 
                 #region Step 1: Prefetch
                 var versionInfo   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
@@ -1008,13 +1003,27 @@ namespace RDFSharp.Semantics
 
                 #region Step 4: Init ClassModel
 
-                #region Step 4.1: Load OWL:Class
-                foreach(var c    in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
-                    var ontClass  = new RDFOntologyClass((RDFResource)c.Subject);
+                #region Step 4.1: Load [OWL:Class|RDFS:Class|RDFS:Datatype]
+                foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
+                    var ontClass           = new RDFOntologyClass((RDFResource)c.Subject);
                     ontology.Model.ClassModel.AddClass(ontClass);
                     if   (ontGraph.ContainsTriple(new RDFTriple((RDFResource)ontClass.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS))) {
                           ontClass.SetDeprecated(true);
                     }
+                }
+                //rdfs:Class
+                foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS)) {
+                    var ontClass           = new RDFOntologyClass((RDFResource)c.Subject);
+                    ontClass.IsRDFSClass   = true; //Save the information that this is a "rdfs:Class"
+                    ontology.Model.ClassModel.AddClass(ontClass);
+                }
+                //rdfs:Datatype
+                foreach(var dt            in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
+                    var dtClass            = new RDFOntologyClass((RDFResource)dt.Subject);
+                    dtClass.IsRDFSDatatype = true; //Save the information that this is a "rdfs:Datatype"
+                    ontology.Model.ClassModel.AddClass(dtClass);
+                    //Datatypes are modeled as subclasses of "rdfs:Literal"
+                    ontology.Model.ClassModel.AddSubClassOfRelation(dtClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
                 }
                 #endregion
 
@@ -2502,11 +2511,6 @@ namespace RDFSharp.Semantics
                 #endregion
 
 
-                #region Step 7: Unexpand model
-                ontology.Model.ClassModel    = UnexpandClassModel(ontology.Model.ClassModel);
-                ontology.Model.PropertyModel = UnexpandPropertyModel(ontology.Model.PropertyModel);
-                #endregion
-
             }
             return ontology;
         }
@@ -2549,132 +2553,6 @@ namespace RDFSharp.Semantics
             }
 
             return result;
-        }
-        #endregion
-
-        #region Expansion
-        /// <summary>
-        /// Expands the given class model with the class models of the reference ontologies
-        /// </summary>
-        internal static RDFOntologyClassModel ExpandClassModel(RDFOntologyClassModel classModel) {
-            if (!classModel.Expanded) {
-                 var clsModel      = classModel.UnionWith(RDFBASEOntology.Instance.Model.ClassModel)
-                                               .UnionWith(RDFDCOntology.Instance.Model.ClassModel);
-                 clsModel.Expanded = true;
-                 return clsModel;
-            }
-            else {
-                 return classModel;
-            }
-        }
-
-        /// <summary>
-        /// Unexpands the given class model from the class models of the reference ontologies
-        /// </summary>
-        internal static RDFOntologyClassModel UnexpandClassModel(RDFOntologyClassModel classModel) {
-            if (classModel.Expanded) {
-                var clsModel       = classModel.DifferenceWith(RDFBASEOntology.Instance.Model.ClassModel)
-                                               .DifferenceWith(RDFDCOntology.Instance.Model.ClassModel);
-                clsModel.Expanded  = false;
-                return clsModel;
-            }
-            else {
-                return classModel;
-            }
-        }
-
-        /// <summary>
-        /// Expands the given property model with the property models of the reference ontologies
-        /// </summary>
-        internal static RDFOntologyPropertyModel ExpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
-            if (!propertyModel.Expanded) {
-                 var propModel      = propertyModel.UnionWith(RDFBASEOntology.Instance.Model.PropertyModel)
-                                                   .UnionWith(RDFDCOntology.Instance.Model.PropertyModel);
-                 propModel.Expanded = true;
-                 return propModel;
-            }
-            else {
-                return propertyModel;
-            }
-        }
-
-        /// <summary>
-        /// Unexpands the given property model from the property models of the reference ontologies
-        /// </summary>
-        internal static RDFOntologyPropertyModel UnexpandPropertyModel(RDFOntologyPropertyModel propertyModel) {
-            if (propertyModel.Expanded) {
-                var propModel       = propertyModel.DifferenceWith(RDFBASEOntology.Instance.Model.PropertyModel)
-                                                   .DifferenceWith(RDFDCOntology.Instance.Model.PropertyModel);
-                propModel.Expanded  = false;
-                return propModel;
-            }
-            else {
-                return propertyModel;
-            }
-        }
-
-        /// <summary>
-        /// Searches the given class into the reference ontologies
-        /// </summary>
-        internal static RDFOntologyClass SearchReferenceClass(String cls) {
-            var clsID   = RDFModelUtilities.CreateHash(cls);
-
-            //BASE
-            if (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                return RDFBASEOntology.Instance.Model.ClassModel.Classes[clsID];
-            }
-
-            //DC
-            else if (RDFDCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                return RDFDCOntology.Instance.Model.ClassModel.Classes[clsID];
-            }
-
-            else {
-                return null;
-            }
-
-        }
-
-        /// <summary>
-        /// Searches the given property into the reference ontologies
-        /// </summary>
-        internal static RDFOntologyProperty SearchReferenceProperty(String prop) {
-            var propID  = RDFModelUtilities.CreateHash(prop);
-
-            //BASE
-            if (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                return RDFBASEOntology.Instance.Model.PropertyModel.Properties[propID];
-            }
-
-            //DC
-            else if (RDFDCOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                return RDFDCOntology.Instance.Model.PropertyModel.Properties[propID];
-            }
-
-            else {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Searches the given fact into the reference ontologies
-        /// </summary>
-        internal static RDFOntologyFact SearchReferenceFact(String fact) {
-            var factID  = RDFModelUtilities.CreateHash(fact);
-
-            //BASE
-            if (RDFBASEOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                return RDFBASEOntology.Instance.Data.Facts[factID];
-            }
-
-            //DC
-            else if (RDFDCOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                return RDFDCOntology.Instance.Data.Facts[factID];
-            }
-
-            else {
-                return null;
-            }
         }
         #endregion
 

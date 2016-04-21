@@ -34,6 +34,16 @@ namespace RDFSharp.Semantics
         /// Flag indicating that this ontology class is "owl:DeprecatedClass"
         /// </summary>
         public Boolean Deprecated { get; internal set; }
+
+        /// <summary>
+        /// Flag indicating that this ontology class has been imported as "rdfs:Class"
+        /// </summary>
+        internal Boolean IsRDFSClass { get; set; }
+
+        /// <summary>
+        /// Flag indicating that this ontology class has been imported as "rdfs:Datatype"
+        /// </summary>
+        internal Boolean IsRDFSDatatype { get; set; }
         #endregion
 
         #region Ctors

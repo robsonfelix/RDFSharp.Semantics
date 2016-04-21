@@ -127,11 +127,6 @@ namespace RDFSharp.Semantics {
         /// Dictionary of classes composing the class model
         /// </summary>
         internal Dictionary<Int64, RDFOntologyClass> Classes { get; set; }
-
-        /// <summary>
-        /// Flag indicating that the class model has already been expanded with reference ontologies
-        /// </summary>
-        internal Boolean Expanded { get; set; }
         #endregion
 
         #region Ctors
@@ -298,15 +293,15 @@ namespace RDFSharp.Semantics {
                                                            RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
-                //Enforce taxonomy checks on special OWL classes, in order to not model inconsistencies
-                //"owl:Nothing" cannot have subclasses, since it IS subclass of everything in OWL
-                //"owl:Thing" cannot have superclasses, since it IS superclass of everything in OWL
+                //Enforce taxonomy checks on special OWL classes
+                //"owl:Nothing" cannot have subclasses (since it IS subclass of everything in OWL)
+                //"owl:Thing" cannot have superclasses (since it IS superclass of everything in OWL)
                 if (motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
                     childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())))    {
                     return this;
                 }
 
-                //Enforce taxonomy checks before adding the subClassOf relation, in order to not model inconsistencies
+                //Enforce taxonomy checks before adding the subClassOf relation
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
                     !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this)) {
@@ -330,8 +325,8 @@ namespace RDFSharp.Semantics {
                                                                 RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
-                //Enforce taxonomy checks on special OWL classes, in order to not model inconsistencies
-                //We don't permit equivalentClass hijack of top/bottom OWL structural classes!
+                //Enforce taxonomy checks on special OWL classes
+                //Even if legal, we don't permit equivalentClass hijack of top/bottom OWL structural classes!
                 if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))   ||
                     bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))   ||
                     aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
@@ -339,7 +334,7 @@ namespace RDFSharp.Semantics {
                     return this;
                 }
 
-                //Enforce taxonomy checks before adding the equivalentClass relation, in order to not model inconsistencies
+                //Enforce taxonomy checks before adding the equivalentClass relation
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
                     !RDFOntologyReasoningHelper.IsSuperClassOf(aClass,      bClass, this) &&
                     !RDFOntologyReasoningHelper.IsDisjointClassWith(aClass, bClass, this)) {
@@ -364,14 +359,14 @@ namespace RDFSharp.Semantics {
                                                              RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
-                //Enforce taxonomy checks on special OWL classes, in order to not model inconsistencies
-                //"owl:Thing" cannot be disjoint, since it IS superclass of everything in OWL
+                //Enforce taxonomy checks on special OWL classes
+                //"owl:Thing" cannot be disjoint (since it IS superclass of everything in OWL)
                 if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())) ||
                     bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
                     return this;
                 }
 
-                //Enforce taxonomy checks before adding the disjointWith relation, in order to not model inconsistencies
+                //Enforce taxonomy checks before adding the disjointWith relation
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
                     !RDFOntologyReasoningHelper.IsSuperClassOf(aClass,      bClass, this) &&
                     !RDFOntologyReasoningHelper.IsEquivalentClassOf(aClass, bClass, this)) {
@@ -380,8 +375,7 @@ namespace RDFSharp.Semantics {
                 }
                 else {
 
-                     //Raise warning event to inform the user: DisjointWith relation cannot be 
-                     //added to the class model because it violates the taxonomy consistency
+                     //Raise warning event to inform the user: DisjointWith relation cannot be added to the class model because it violates the taxonomy consistency
                      RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
 
                 }
@@ -777,12 +771,6 @@ namespace RDFSharp.Semantics {
                 if (this.Classes.ContainsKey(classID)) {
                     return this.Classes[classID];
                 }
-                else {
-
-                    //Fallback the search to the reference ontologies
-                    return RDFSemanticsUtilities.SearchReferenceClass(ontClass);
-
-                }
             }
             return null;
         }
@@ -1027,7 +1015,8 @@ namespace RDFSharp.Semantics {
                     }
                 }
                 else {
-                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
+                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, (c.IsRDFSClass ? RDFVocabulary.RDFS.CLASS : 
+                                                                                                     (c.IsRDFSDatatype ? RDFVocabulary.RDFS.DATATYPE : RDFVocabulary.OWL.CLASS))));
                     if (c.IsDeprecatedClass()) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS));
                     }

@@ -37,34 +37,38 @@ namespace RDFSharp.Semantics {
         /// </summary>
         static RDFFOAFOntology() {
 
+            #region Declarations
+
             #region Ontology
             Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/foaf_ontology#"));
             #endregion
 
             #region Classes
-            
+
             #endregion
 
             #region Properties
-            
+
             #endregion
 
             #region Facts
-            
+
+            #endregion
+
             #endregion
 
             #region Taxonomies
 
             #region ClassModel
-            
+
             #endregion
 
             #region PropertyModel
-            
+
             #endregion
 
             #region Data
-            
+
             #endregion
 
             #endregion
@@ -77,43 +81,25 @@ namespace RDFSharp.Semantics {
         /// Gets the given class from the FOAF ontology
         /// </summary>
         public static RDFOntologyClass SelectClass(String ontClass) {
-            if (ontClass     != null) {
-                Int64 classID = RDFModelUtilities.CreateHash(ontClass);
-                if (Instance.Model.ClassModel.Classes.ContainsKey(classID)) {
-                    return Instance.Model.ClassModel.Classes[classID];
-                }
-            }
-            return null;
+            return Instance.Model.ClassModel.SelectClass(ontClass);
         }
 
         /// <summary>
         /// Gets the given property from the FOAF ontology
         /// </summary>
         public static RDFOntologyProperty SelectProperty(String ontProperty) {
-            if (ontProperty  != null) {
-                Int64 propID  = RDFModelUtilities.CreateHash(ontProperty);
-                if (Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                    return Instance.Model.PropertyModel.Properties[propID];
-                }
-            }
-            return null;
+            return Instance.Model.PropertyModel.SelectProperty(ontProperty);
         }
 
         /// <summary>
         /// Gets the given fact from the FOAF ontology
         /// </summary>
         public static RDFOntologyFact SelectFact(String ontFact) {
-            if (ontFact     != null) {
-                Int64 factID = RDFModelUtilities.CreateHash(ontFact);
-                if (Instance.Data.Facts.ContainsKey(factID)) {
-                    return Instance.Data.Facts[factID];
-                }
-            }
-            return null;
+            return Instance.Data.SelectFact(ontFact);
         }
 
         /// <summary>
-        /// Exports the FOAF ontology to a RDF graph
+        /// Gets a graph representation of the FOAF ontology
         /// </summary>
         public static RDFGraph ToRDFGraph(Boolean includeInferences) {
             return Instance.ToRDFGraph(includeInferences);
