@@ -2556,6 +2556,86 @@ namespace RDFSharp.Semantics
         }
         #endregion
 
+        #region Reference
+        /// <summary>
+        /// Searches the given class into the reference ontologies
+        /// </summary>
+        internal static RDFOntologyClass SearchReferenceClass(String cls) {
+            var clsID   = RDFModelUtilities.CreateHash(cls);
+
+            //BASE
+            if (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                return RDFBASEOntology.Instance.Model.ClassModel.Classes[clsID];
+            }
+
+            //DC
+            else if (RDFDCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                return RDFDCOntology.Instance.Model.ClassModel.Classes[clsID];
+            }
+
+            //FOAF
+            else if (RDFFOAFOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                return RDFFOAFOntology.Instance.Model.ClassModel.Classes[clsID];
+            }
+
+            else {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Searches the given property into the reference ontologies
+        /// </summary>
+        internal static RDFOntologyProperty SearchReferenceProperty(String prop) {
+            var propID  = RDFModelUtilities.CreateHash(prop);
+
+            //BASE
+            if (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                return RDFBASEOntology.Instance.Model.PropertyModel.Properties[propID];
+            }
+
+            //DC
+            else if (RDFDCOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                return RDFDCOntology.Instance.Model.PropertyModel.Properties[propID];
+            }
+
+            //FOAF
+            else if (RDFFOAFOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                return RDFFOAFOntology.Instance.Model.PropertyModel.Properties[propID];
+            }
+
+            else {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Searches the given fact into the reference ontologies
+        /// </summary>
+        internal static RDFOntologyFact SearchReferenceFact(String fact) {
+            var factID  = RDFModelUtilities.CreateHash(fact);
+
+            //BASE
+            if (RDFBASEOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                return RDFBASEOntology.Instance.Data.Facts[factID];
+            }
+
+            //DC
+            else if (RDFDCOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                return RDFDCOntology.Instance.Data.Facts[factID];
+            }
+
+            //FOAF
+            else if (RDFFOAFOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                return RDFFOAFOntology.Instance.Data.Facts[factID];
+            }
+
+            else {
+                return null;
+            }
+        }
+        #endregion
+
     }
 
 }
