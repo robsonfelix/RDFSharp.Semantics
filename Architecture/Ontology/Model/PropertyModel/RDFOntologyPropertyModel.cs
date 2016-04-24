@@ -964,22 +964,22 @@ namespace RDFSharp.Semantics {
                 if  (p.Range  != null) {
                      result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDFS.RANGE,  (RDFResource)p.Range.Value));
                 }
+            }
 
-                //Relations
-                result   = result.UnionWith(this.Relations.SubPropertyOf.ToRDFGraph(includeInferences))
+            //Relations
+            result       = result.UnionWith(this.Relations.SubPropertyOf.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Relations.EquivalentProperty.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Relations.InverseOf.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Relations.CustomRelations.ToRDFGraph(includeInferences));
 
-                //Annotations
-                result   = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(includeInferences))
+            //Annotations
+            result       = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.Comment.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.Label.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.SeeAlso.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.IsDefinedBy.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.CustomAnnotations.ToRDFGraph(includeInferences));
 
-            }
             return result;
         }
         #endregion
