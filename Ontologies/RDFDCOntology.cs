@@ -20,7 +20,7 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFDCOntology represents an ontology implementation of DC vocabulary
+    /// RDFDCOntology represents an OWL-DL ontology implementation of DC vocabulary
     /// </summary>
     public static class RDFDCOntology {
 
@@ -40,7 +40,7 @@ namespace RDFSharp.Semantics {
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/dc_ontology#"));
+            Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/dc_ontology#"), true);
             #endregion
 
             #region Classes

@@ -59,14 +59,38 @@ namespace RDFSharp.Semantics
                 this.Data            = new RDFOntologyData();
                 this.Relations       = new RDFOntologyMetadata();
                 this.Annotations     = new RDFOntologyAnnotationsMetadata();
+
+                //Initialize the ontology with BASE model support
+                this.InitializeWithBASE();
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntology because given \"ontologyName\" parameter is null.");
             }
         }
+
+        /// <summary>
+        /// Default-ctor to build an empty reference ontology with the given name
+        /// </summary>
+        internal RDFOntology(RDFResource ontologyName, Boolean isReferenceOntology) {
+            this.Value               = ontologyName;
+            this.PatternMemberID     = ontologyName.PatternMemberID;
+            this.Model               = new RDFOntologyModel();
+            this.Data                = new RDFOntologyData();
+            this.Relations           = new RDFOntologyMetadata();
+            this.Annotations         = new RDFOntologyAnnotationsMetadata();
+        }
         #endregion
 
         #region Methods
+
+        #region Initialize
+        /// <summary>
+        /// Initializes this ontology by injecting the BASE ontology model (RDF/RDFS/XSD/OWL)
+        /// </summary>
+        internal void InitializeWithBASE() {
+            this.Model = this.Model.UnionWith(RDFBASEOntology.Instance.Model);
+        }
+        #endregion
 
         #region Add
         /// <summary>

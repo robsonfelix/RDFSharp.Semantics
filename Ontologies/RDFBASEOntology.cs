@@ -20,7 +20,7 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFBASEOntology represents a partial ontology implementation of structural vocabularies (RDF/RDFS/OWL/XSD)
+    /// RDFBASEOntology represents a partial OWL-DL ontology implementation of structural vocabularies (RDF/RDFS/OWL/XSD)
     /// </summary>
     public static class RDFBASEOntology {
 
@@ -40,7 +40,7 @@ namespace RDFSharp.Semantics {
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/base_ontology#"));
+            Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/base_ontology#"), true);
             #endregion
 
             #region Classes

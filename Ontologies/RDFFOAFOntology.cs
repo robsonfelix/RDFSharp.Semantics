@@ -20,7 +20,7 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFFOAFOntology represents an ontology implementation of FOAF vocabulary
+    /// RDFFOAFOntology represents an OWL-DL ontology implementation of FOAF vocabulary
     /// </summary>
     public static class RDFFOAFOntology {
 
@@ -40,7 +40,7 @@ namespace RDFSharp.Semantics {
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/foaf_ontology#"));
+            Instance = new RDFOntology(new RDFResource("http://rdfsharp.codeplex.com/foaf_ontology#"), true);
             #endregion
 
             #region Classes

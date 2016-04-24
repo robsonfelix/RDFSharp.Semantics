@@ -238,7 +238,11 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result    = new RDFGraph();
-            foreach (var te in this) {
+
+            //Taxonomy entries (discard BASE)
+            foreach (var te in this.Where(tEntry => RDFBASEOntology.SelectClass(tEntry.TaxonomySubject.ToString())    == null  &&
+                                                    RDFBASEOntology.SelectProperty(tEntry.TaxonomySubject.ToString()) == null  &&
+                                                    RDFBASEOntology.SelectFact(tEntry.TaxonomySubject.ToString())     == null)) {
                 if (includeInferences) {
                     result.AddTriple(te.ToRDFTriple());
                 }
