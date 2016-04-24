@@ -242,8 +242,7 @@ namespace RDFSharp.Semantics
                         ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
                         ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))) {
 
-                     //Raise warning event to inform the user: Ontology-specific
-                     //annotation properties cannot be used for facts
+                     //Raise warning event to inform the user: Ontology-specific annotation properties cannot be used for facts
                      RDFSemanticsEvents.RaiseSemanticsWarning("Ontology-specific annotation properties cannot be used for facts.");
 
                 }
@@ -273,7 +272,7 @@ namespace RDFSharp.Semantics
                     !ontologyClass.IsCompositeClass()   &&
                     !ontologyClass.IsEnumerateClass()   && 
                     !ontologyClass.IsDataRangeClass()   &&
-                    //owl:Nothing is by definition the empty OWL class
+                    //owl:Nothing cannot be assigned as classtype of facts
                     !ontologyClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString()))) {
                      this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), ontologyClass));
                 }

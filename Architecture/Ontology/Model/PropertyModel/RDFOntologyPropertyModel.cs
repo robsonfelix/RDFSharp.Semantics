@@ -933,7 +933,9 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result   = new RDFGraph();
-            foreach (var p in this) {
+
+            //Definitions (discard BASE)
+            foreach (var p in this.Where(prop => RDFBASEOntology.SelectProperty(prop.ToString()) == null)) {
                 if  (p.IsAnnotationProperty()) {
                      result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ANNOTATION_PROPERTY));
                 }
@@ -979,7 +981,7 @@ namespace RDFSharp.Semantics {
                                  .UnionWith(this.Annotations.SeeAlso.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.IsDefinedBy.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.CustomAnnotations.ToRDFGraph(includeInferences));
-
+            
             return result;
         }
         #endregion

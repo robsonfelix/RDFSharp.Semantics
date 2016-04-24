@@ -937,8 +937,8 @@ namespace RDFSharp.Semantics {
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result        = new RDFGraph();
 
-            //Definitions
-            foreach(var    c in this) {
+            //Definitions (discard BASE)
+            foreach(var    c in this.Where(cls => RDFBASEOntology.SelectClass(cls.ToString()) == null)) {
                 if (c.IsRestrictionClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.RESTRICTION));
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ON_PROPERTY, (RDFResource)((RDFOntologyRestriction)c).OnProperty.Value));
@@ -1007,7 +1007,7 @@ namespace RDFSharp.Semantics {
                     else if (c is RDFOntologyUnionClass) {
                         var unionCollection                    = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
                         unionCollection.ReificationSubject     = new RDFResource("bnode:" + c.PatternMemberID);
-                        foreach (var unionMember in this.Relations.UnionOf.SelectEntriesBySubject(c).Where(tax            => (includeInferences || !tax.IsInference))) {
+                        foreach (var unionMember in this.Relations.UnionOf.SelectEntriesBySubject(c).Where(tax => (includeInferences || !tax.IsInference))) {
                             unionCollection.AddItem((RDFResource)unionMember.TaxonomyObject.Value);
                         }
                         result = result.UnionWith(unionCollection.ReifyCollection());
@@ -1027,7 +1027,7 @@ namespace RDFSharp.Semantics {
             result         = result.UnionWith(this.Relations.SubClassOf.ToRDFGraph(includeInferences))
                                    .UnionWith(this.Relations.EquivalentClass.ToRDFGraph(includeInferences))
                                    .UnionWith(this.Relations.DisjointWith.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Relations.CustomRelations.ToRDFGraph(includeInferences)); ;
+                                   .UnionWith(this.Relations.CustomRelations.ToRDFGraph(includeInferences));
 
             //Annotations
             result         = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(includeInferences))
