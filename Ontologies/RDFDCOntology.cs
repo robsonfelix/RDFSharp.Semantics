@@ -184,7 +184,7 @@ namespace RDFSharp.Semantics {
             #region Facts
 
             //DC.DCTERMS
-            Instance.Data.AddFact(new RDFOntologyFact(RDFVocabulary.DC.DCTERMS.DCMI_TYPE));
+            Instance.Data.AddFact(new RDFOntologyFact(RDFVocabulary.DC.DCTERMS.DCMITYPE));
             Instance.Data.AddFact(new RDFOntologyFact(RDFVocabulary.DC.DCTERMS.DDC));
             Instance.Data.AddFact(new RDFOntologyFact(RDFVocabulary.DC.DCTERMS.IMT));
             Instance.Data.AddFact(new RDFOntologyFact(RDFVocabulary.DC.DCTERMS.LCC));
@@ -309,15 +309,15 @@ namespace RDFSharp.Semantics {
             #region Data
 
             //ClassType
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.DCMI_TYPE.ToString()), SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.DDC.ToString()),       SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.IMT.ToString()),       SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.LCC.ToString()),       SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.LCSH.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.MESH.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.NLM.ToString()),       SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.TGN.ToString()),       SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.UDC.ToString()),       SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.DCMITYPE.ToString()), SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.DDC.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.IMT.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.LCC.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.LCSH.ToString()),     SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.MESH.ToString()),     SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.NLM.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.TGN.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.UDC.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
 
             #endregion
 
