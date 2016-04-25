@@ -932,10 +932,10 @@ namespace RDFSharp.Semantics {
         /// Gets a graph representation of this ontology property model, eventually including inferences
         /// </summary>
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
-            var result   = new RDFGraph();
+            var result     = new RDFGraph();
 
-            //Definitions (discard BASE)
-            foreach (var p in this.Where(prop => RDFBASEOntology.SelectProperty(prop.ToString()) == null)) {
+            //Definitions (discard reference ontology definitions)
+            foreach(var p in this.Where(prop => RDFOntologyReasoningHelper.SearchReferenceProperty(prop.ToString()) == null)) {
                 if  (p.IsAnnotationProperty()) {
                      result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ANNOTATION_PROPERTY));
                 }

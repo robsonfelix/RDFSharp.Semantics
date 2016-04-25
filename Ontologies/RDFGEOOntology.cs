@@ -20,27 +20,27 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFFOAFOntology represents an OWL-DL ontology implementation of FOAF vocabulary
+    /// RDFFOAFOntology represents an OWL-DL ontology implementation of GEO vocabulary
     /// </summary>
-    public static class RDFFOAFOntology {
+    public static class RDFGEOOntology {
 
         #region Properties
         /// <summary>
-        /// Singleton instance of the FOAF ontology
+        /// Singleton instance of the GEO ontology
         /// </summary>
         internal static RDFOntology Instance { get; set; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to initialize the FOAF ontology
+        /// Default-ctor to initialize the GEO ontology
         /// </summary>
-        static RDFFOAFOntology() {
+        static RDFGEOOntology() {
 
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("http://rdfsharpsemantics.codeplex.com/foaf_ontology#"), true);
+            Instance = new RDFOntology(new RDFResource("http://rdfsharpsemantics.codeplex.com/geo_ontology#"), true);
             #endregion
 
             #region Classes
@@ -78,28 +78,28 @@ namespace RDFSharp.Semantics {
 
         #region Methods
         /// <summary>
-        /// Gets the given class from the FOAF ontology
+        /// Gets the given class from the GEO ontology
         /// </summary>
         public static RDFOntologyClass SelectClass(String ontClass) {
             return Instance.Model.ClassModel.SelectClass(ontClass);
         }
 
         /// <summary>
-        /// Gets the given property from the FOAF ontology
+        /// Gets the given property from the GEO ontology
         /// </summary>
         public static RDFOntologyProperty SelectProperty(String ontProperty) {
             return Instance.Model.PropertyModel.SelectProperty(ontProperty);
         }
 
         /// <summary>
-        /// Gets the given fact from the FOAF ontology
+        /// Gets the given fact from the GEO ontology
         /// </summary>
         public static RDFOntologyFact SelectFact(String ontFact) {
             return Instance.Data.SelectFact(ontFact);
         }
 
         /// <summary>
-        /// Gets a graph representation of the FOAF ontology
+        /// Gets a graph representation of the GEO ontology
         /// </summary>
         public static RDFGraph ToRDFGraph(Boolean includeInferences) {
             return Instance.ToRDFGraph(includeInferences);

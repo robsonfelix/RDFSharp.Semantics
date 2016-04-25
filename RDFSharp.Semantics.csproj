@@ -77,6 +77,9 @@
     <Compile Include="Ontologies\RDFBASEOntology.cs" />
     <Compile Include="Ontologies\RDFDCOntology.cs" />
     <Compile Include="Ontologies\RDFFOAFOntology.cs" />
+    <Compile Include="Ontologies\RDFGEOOntology.cs" />
+    <Compile Include="Ontologies\RDFSIOCOntology.cs" />
+    <Compile Include="Ontologies\RDFSKOSOntology.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningEvidence.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningHelper.cs" />
@@ -91,6 +94,7 @@
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
+    <Compile Include="RDFSemanticsOptions.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
   </ItemGroup>
   <ItemGroup>

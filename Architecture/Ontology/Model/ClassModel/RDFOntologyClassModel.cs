@@ -937,8 +937,8 @@ namespace RDFSharp.Semantics {
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result        = new RDFGraph();
 
-            //Definitions (discard BASE)
-            foreach(var    c in this.Where(cls => RDFBASEOntology.SelectClass(cls.ToString()) == null)) {
+            //Definitions (discard reference ontology definitions)
+            foreach(var    c in this.Where(cls => RDFOntologyReasoningHelper.SearchReferenceClass(cls.ToString()) == null)) {
                 if (c.IsRestrictionClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.RESTRICTION));
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ON_PROPERTY, (RDFResource)((RDFOntologyRestriction)c).OnProperty.Value));

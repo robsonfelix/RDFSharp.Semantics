@@ -239,10 +239,10 @@ namespace RDFSharp.Semantics {
         internal RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result    = new RDFGraph();
 
-            //Taxonomy entries (discard BASE)
-            foreach (var te in this.Where(tEntry => RDFBASEOntology.SelectClass(tEntry.TaxonomySubject.ToString())    == null  &&
-                                                    RDFBASEOntology.SelectProperty(tEntry.TaxonomySubject.ToString()) == null  &&
-                                                    RDFBASEOntology.SelectFact(tEntry.TaxonomySubject.ToString())     == null)) {
+            //Taxonomy entries (discard reference ontology definitions)
+            foreach (var te in this.Where(tEntry => RDFOntologyReasoningHelper.SearchReferenceClass(tEntry.TaxonomySubject.ToString())    == null  &&
+                                                    RDFOntologyReasoningHelper.SearchReferenceProperty(tEntry.TaxonomySubject.ToString()) == null  &&
+                                                    RDFOntologyReasoningHelper.SearchReferenceFact(tEntry.TaxonomySubject.ToString())     == null)) {
                 if (includeInferences) {
                     result.AddTriple(te.ToRDFTriple());
                 }
