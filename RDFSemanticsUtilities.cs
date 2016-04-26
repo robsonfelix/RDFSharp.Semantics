@@ -864,13 +864,13 @@ namespace RDFSharp.Semantics
 
                 #region Step 3.1: Load OWL:AnnotationProperty
                 foreach (var ap in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.ANNOTATION_PROPERTY)) {
-                    ontology.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty((RDFResource)ap.Subject));
+                    ontology.Model.PropertyModel.AddProperty(((RDFResource)ap.Subject).ToRDFOntologyAnnotationProperty());
                 }
                 #endregion
 
                 #region Step 3.2: Load OWL:DatatypeProperty
                 foreach(var dp in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.DATATYPE_PROPERTY)) {
-                    var dtp     = new RDFOntologyDatatypeProperty((RDFResource)dp.Subject);
+                    var dtp     = ((RDFResource)dp.Subject).ToRDFOntologyDatatypeProperty();
                     ontology.Model.PropertyModel.AddProperty(dtp);
 
                     #region DeprecatedProperty
@@ -890,7 +890,7 @@ namespace RDFSharp.Semantics
 
                 #region Step 3.3: Load OWL:ObjectProperty
                 foreach(var op in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.OBJECT_PROPERTY)) {
-                    var obp     = new RDFOntologyObjectProperty((RDFResource)op.Subject);
+                    var obp     = ((RDFResource)op.Subject).ToRDFOntologyObjectProperty();
                     ontology.Model.PropertyModel.AddProperty(obp);
 
                     #region DeprecatedProperty
@@ -929,7 +929,7 @@ namespace RDFSharp.Semantics
                 foreach (var sp in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.SYMMETRIC_PROPERTY)) {
                     var syp  = ontology.Model.PropertyModel.SelectProperty(sp.Subject.ToString());
                     if (syp == null) {
-                        syp  = new RDFOntologyObjectProperty((RDFResource)sp.Subject);
+                        syp  = ((RDFResource)sp.Subject).ToRDFOntologyObjectProperty();
                         ontology.Model.PropertyModel.AddProperty(syp);
 
                         #region DeprecatedProperty
@@ -953,7 +953,7 @@ namespace RDFSharp.Semantics
                 foreach (var tp in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.TRANSITIVE_PROPERTY)) {
                     var trp  = ontology.Model.PropertyModel.SelectProperty(tp.Subject.ToString());
                     if (trp == null) {
-                        trp  = new RDFOntologyObjectProperty((RDFResource)tp.Subject);
+                        trp  = ((RDFResource)tp.Subject).ToRDFOntologyObjectProperty();
                         ontology.Model.PropertyModel.AddProperty(trp);
 
                         #region DeprecatedProperty
@@ -977,7 +977,7 @@ namespace RDFSharp.Semantics
                 foreach (var ip in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.INVERSE_FUNCTIONAL_PROPERTY)) {
                     var ifp  = ontology.Model.PropertyModel.SelectProperty(ip.Subject.ToString());
                     if (ifp == null) {
-                        ifp  = new RDFOntologyObjectProperty((RDFResource)ip.Subject);
+                        ifp  = ((RDFResource)ip.Subject).ToRDFOntologyObjectProperty();
                         ontology.Model.PropertyModel.AddProperty(ifp);
 
                         #region DeprecatedProperty
@@ -1005,7 +1005,7 @@ namespace RDFSharp.Semantics
 
                 #region Step 4.1: Load [OWL:Class|RDFS:Class|RDFS:Datatype]
                 foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
-                    var ontClass           = new RDFOntologyClass((RDFResource)c.Subject);
+                    var ontClass           = ((RDFResource)c.Subject).ToRDFOntologyClass();
                     ontology.Model.ClassModel.AddClass(ontClass);
                     if   (ontGraph.ContainsTriple(new RDFTriple((RDFResource)ontClass.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS))) {
                           ontClass.SetDeprecated(true);
@@ -1013,13 +1013,13 @@ namespace RDFSharp.Semantics
                 }
                 //rdfs:Class
                 foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS)) {
-                    var ontClass           = new RDFOntologyClass((RDFResource)c.Subject);
+                    var ontClass           = ((RDFResource)c.Subject).ToRDFOntologyClass();
                     ontClass.IsRDFSClass   = true; //Save the information that this is a "rdfs:Class"
                     ontology.Model.ClassModel.AddClass(ontClass);
                 }
                 //rdfs:Datatype
                 foreach(var dt            in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
-                    var dtClass            = new RDFOntologyClass((RDFResource)dt.Subject);
+                    var dtClass            = ((RDFResource)dt.Subject).ToRDFOntologyClass();
                     dtClass.IsRDFSDatatype = true; //Save the information that this is a "rdfs:Datatype"
                     ontology.Model.ClassModel.AddClass(dtClass);
                     //Datatypes are modeled as subclasses of "rdfs:Literal"
@@ -1029,7 +1029,7 @@ namespace RDFSharp.Semantics
 
                 #region Step 4.2: Load OWL:DeprecatedClass
                 foreach (var dc  in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.DEPRECATED_CLASS)) {
-                    var ontClass  = new RDFOntologyClass((RDFResource)dc.Subject);
+                    var ontClass  = ((RDFResource)dc.Subject).ToRDFOntologyClass();
                     ontClass.SetDeprecated(true);
                     ontology.Model.ClassModel.AddClass(ontClass);
                 }
@@ -1243,7 +1243,7 @@ namespace RDFSharp.Semantics
                     foreach(var t  in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
                         var f       = ontology.Data.SelectFact(t.Subject.ToString());
                         if (f      == null) {
-                            f       = new RDFOntologyFact((RDFResource)t.Subject);
+                            f       = ((RDFResource)t.Subject).ToRDFOntologyFact();
                             ontology.Data.AddFact(f);
                         }
                         ontology.Data.AddClassTypeRelation(f, c);
@@ -1329,7 +1329,7 @@ namespace RDFSharp.Semantics
                             //Create the fact even if not explicitly classtyped
                             var hvFct             = ontology.Data.SelectFact(hvRes.Object.ToString());
                             if (hvFct            == null) {
-                                hvFct             = new RDFOntologyFact(new RDFResource(hvRes.Object.ToString()));
+                                hvFct             = (new RDFResource(hvRes.Object.ToString())).ToRDFOntologyFact();
                                 ontology.Data.AddFact(hvFct);
                             }
 
@@ -1338,7 +1338,7 @@ namespace RDFSharp.Semantics
                             continue;
                         }
                         else {
-                            var hasvalueRestr     = new RDFOntologyHasValueRestriction((RDFResource)r.Value, ((RDFOntologyRestriction)r).OnProperty, new RDFOntologyLiteral((RDFLiteral)hvRes.Object));
+                            var hasvalueRestr     = new RDFOntologyHasValueRestriction((RDFResource)r.Value, ((RDFOntologyRestriction)r).OnProperty, ((RDFLiteral)hvRes.Object).ToRDFOntologyLiteral());
                             ontology.Model.ClassModel.Classes[r.PatternMemberID] = hasvalueRestr;
                             continue;
                         }
@@ -1413,7 +1413,7 @@ namespace RDFSharp.Semantics
                                     //Create the fact even if not explicitly classtyped
                                     var enumMember   = ontology.Data.SelectFact(first.Object.ToString());
                                     if (enumMember  == null) {
-                                        enumMember   = new RDFOntologyFact(new RDFResource(first.Object.ToString()));
+                                        enumMember   = (new RDFResource(first.Object.ToString())).ToRDFOntologyFact();
                                         ontology.Data.AddFact(enumMember);
                                     }
                                     ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyEnumerateClass)ec, enumMember);
@@ -1478,7 +1478,7 @@ namespace RDFSharp.Semantics
                                                      .SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST)
                                                      .FirstOrDefault();
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                    ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)dr, new RDFOntologyLiteral((RDFLiteral)first.Object));
+                                    ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)dr, ((RDFLiteral)first.Object).ToRDFOntologyLiteral());
 
                                     #region rdf:rest
                                     var rest         = ontGraph.SelectTriplesBySubject(itemRest)
@@ -1700,14 +1700,14 @@ namespace RDFSharp.Semantics
                          //Create the fact even if not explicitly classtyped
                          var subjFct       = ontology.Data.SelectFact(t.Subject.ToString());
                          if (subjFct      == null) {
-                             subjFct       = new RDFOntologyFact(new RDFResource(t.Subject.ToString()));
+                             subjFct       = (new RDFResource(t.Subject.ToString())).ToRDFOntologyFact();
                              ontology.Data.AddFact(subjFct);
                          }
 
                          //Create the fact even if not explicitly classtyped
                          var objFct        = ontology.Data.SelectFact(t.Object.ToString());
                          if (objFct       == null) {
-                             objFct        = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
+                             objFct        = (new RDFResource(t.Object.ToString())).ToRDFOntologyFact();
                              ontology.Data.AddFact(objFct);
                          }
 
@@ -1723,14 +1723,14 @@ namespace RDFSharp.Semantics
                          //Create the fact even if not explicitly classtyped
                          var subjFct       = ontology.Data.SelectFact(t.Subject.ToString());
                          if (subjFct      == null) {
-                             subjFct       = new RDFOntologyFact(new RDFResource(t.Subject.ToString()));
+                             subjFct       = (new RDFResource(t.Subject.ToString())).ToRDFOntologyFact();
                              ontology.Data.AddFact(subjFct);
                          }
 
                          //Create the fact even if not explicitly classtyped
                          var objFct        = ontology.Data.SelectFact(t.Object.ToString());
                          if (objFct       == null) {
-                             objFct        = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
+                             objFct        = (new RDFResource(t.Object.ToString())).ToRDFOntologyFact();
                              ontology.Data.AddFact(objFct);
                          }
 
@@ -1748,7 +1748,7 @@ namespace RDFSharp.Semantics
                         //Create the fact even if not explicitly classtyped
                         var subjFct   = ontology.Data.SelectFact(t.Subject.ToString());
                         if (subjFct  == null) {
-                            subjFct   = new RDFOntologyFact(new RDFResource(t.Subject.ToString()));
+                            subjFct   = (new RDFResource(t.Subject.ToString())).ToRDFOntologyFact();
                             ontology.Data.AddFact(subjFct);
                         }
 
@@ -1758,7 +1758,7 @@ namespace RDFSharp.Semantics
                                 //Create the fact even if not explicitly classtyped
                                 var objFct       = ontology.Data.SelectFact(t.Object.ToString());
                                 if (objFct      == null) {
-                                    objFct       = new RDFOntologyFact(new RDFResource(t.Object.ToString()));
+                                    objFct       = (new RDFResource(t.Object.ToString())).ToRDFOntologyFact();
                                     ontology.Data.AddFact(objFct);
                                 }
 
@@ -1774,7 +1774,7 @@ namespace RDFSharp.Semantics
                         }
                         else if(p.IsDatatypeProperty()) {
                             if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyDatatypeProperty)p, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                                ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyDatatypeProperty)p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                             else {
 
@@ -1796,7 +1796,7 @@ namespace RDFSharp.Semantics
                         RDFOntologyProperty oRelPrp      = (ontology.Model.PropertyModel.SelectProperty(oRel.Predicate.ToString()) ??
                                                                 new RDFOntologyProperty(new RDFResource(oRel.Predicate.ToString())));
                         if (oRel.TripleFlavor           == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.AddCustomRelation(oRelPrp, new RDFOntologyLiteral((RDFLiteral)oRel.Object));
+                            ontology.AddCustomRelation(oRelPrp, ((RDFLiteral)oRel.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource oRelObj  = ontology.Model.ClassModel.SelectClass(oRel.Object.ToString());
@@ -1820,10 +1820,9 @@ namespace RDFSharp.Semantics
                 #region Step 6.9: Finalize Custom Relations (ClassModel)
                 foreach (var c                          in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
                     foreach (var cRel                   in ontGraph.SelectTriplesBySubject((RDFResource)c.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
-                        RDFOntologyProperty cRelPrp      = (ontology.Model.PropertyModel.SelectProperty(cRel.Predicate.ToString()) ?? 
-                                                                new RDFOntologyProperty(new RDFResource(cRel.Predicate.ToString())));
+                        RDFOntologyProperty cRelPrp      = (ontology.Model.PropertyModel.SelectProperty(cRel.Predicate.ToString()) ?? (new RDFResource(cRel.Predicate.ToString())).ToRDFOntologyProperty());
                         if (cRel.TripleFlavor           == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.ClassModel.AddCustomRelation(c, cRelPrp, new RDFOntologyLiteral((RDFLiteral)cRel.Object));
+                            ontology.Model.ClassModel.AddCustomRelation(c, cRelPrp, ((RDFLiteral)cRel.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource cRelObj  = ontology.Model.ClassModel.SelectClass(cRel.Object.ToString());
@@ -1847,10 +1846,9 @@ namespace RDFSharp.Semantics
                 #region Step 6.10: Finalize Custom Relations (PropertyModel)
                 foreach(var p                           in ontology.Model.PropertyModel.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
                     foreach(var pRel                    in ontGraph.SelectTriplesBySubject((RDFResource)p.Value).Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.Predicate.PatternMemberID))) {
-                        RDFOntologyProperty pRelPrp      = (ontology.Model.PropertyModel.SelectProperty(pRel.Predicate.ToString()) ??
-                                                                new RDFOntologyProperty(new RDFResource(pRel.Predicate.ToString())));
+                        RDFOntologyProperty pRelPrp      = (ontology.Model.PropertyModel.SelectProperty(pRel.Predicate.ToString()) ?? (new RDFResource(pRel.Predicate.ToString())).ToRDFOntologyProperty());
                         if (pRel.TripleFlavor           == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddCustomRelation(p, pRelPrp, new RDFOntologyLiteral((RDFLiteral)pRel.Object));
+                            ontology.Model.PropertyModel.AddCustomRelation(p, pRelPrp, ((RDFLiteral)pRel.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource pRelObj  = ontology.Model.ClassModel.SelectClass(pRel.Object.ToString());
@@ -1878,7 +1876,7 @@ namespace RDFSharp.Semantics
                 #region VersionInfo
                 foreach (var t in versionInfo.SelectTriplesBySubject((RDFResource)ontology.Value)) {
                     if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                         ontology.AddVersionInfoAnnotation(new RDFOntologyLiteral((RDFLiteral)t.Object));
+                         ontology.AddVersionInfoAnnotation(((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                     }
                     else {
 
@@ -1908,7 +1906,7 @@ namespace RDFSharp.Semantics
                 #region Comment
                 foreach (var t in comment.SelectTriplesBySubject((RDFResource)ontology.Value)) {
                     if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                         ontology.AddCommentAnnotation(new RDFOntologyLiteral((RDFLiteral)t.Object));
+                         ontology.AddCommentAnnotation(((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                     }
                     else {
 
@@ -1923,7 +1921,7 @@ namespace RDFSharp.Semantics
                 #region Label
                 foreach (var t in label.SelectTriplesBySubject((RDFResource)ontology.Value)) {
                     if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                         ontology.AddLabelAnnotation(new RDFOntologyLiteral((RDFLiteral)t.Object));
+                         ontology.AddLabelAnnotation(((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                     }
                     else {
 
@@ -1938,7 +1936,7 @@ namespace RDFSharp.Semantics
                 #region SeeAlso
                 foreach (var t in seeAlso.SelectTriplesBySubject((RDFResource)ontology.Value)) {
                     if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                         ontology.AddSeeAlsoAnnotation(new RDFOntologyLiteral((RDFLiteral)t.Object));
+                         ontology.AddSeeAlsoAnnotation(((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                     }
                     else {
                         RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -1961,7 +1959,7 @@ namespace RDFSharp.Semantics
                 #region IsDefinedBy
                 foreach (var t in isDefinedBy.SelectTriplesBySubject((RDFResource)ontology.Value)) {
                     if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                         ontology.AddIsDefinedByAnnotation(new RDFOntologyLiteral((RDFLiteral)t.Object));
+                         ontology.AddIsDefinedByAnnotation(((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                     }
                     else {
                         RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2062,7 +2060,7 @@ namespace RDFSharp.Semantics
                     foreach (var t in ontGraph.SelectTriplesBySubject((RDFResource)ontology.Value)
                                               .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
                         if  (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.AddCustomAnnotation(annotProps.Current, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.AddCustomAnnotation(annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2092,7 +2090,7 @@ namespace RDFSharp.Semantics
                     #region VersionInfo
                     foreach (var t in versionInfo.SelectTriplesBySubject((RDFResource)c.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Model.ClassModel.AddVersionInfoAnnotation(c, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Model.ClassModel.AddVersionInfoAnnotation(c, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2107,7 +2105,7 @@ namespace RDFSharp.Semantics
                     #region Comment
                     foreach (var t in comment.SelectTriplesBySubject((RDFResource)c.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Model.ClassModel.AddCommentAnnotation(c, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Model.ClassModel.AddCommentAnnotation(c, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2122,7 +2120,7 @@ namespace RDFSharp.Semantics
                     #region Label
                     foreach (var t in label.SelectTriplesBySubject((RDFResource)c.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Model.ClassModel.AddLabelAnnotation(c, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Model.ClassModel.AddLabelAnnotation(c, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2137,7 +2135,7 @@ namespace RDFSharp.Semantics
                     #region SeeAlso
                     foreach (var t in seeAlso.SelectTriplesBySubject((RDFResource)c.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Model.ClassModel.AddSeeAlsoAnnotation(c, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Model.ClassModel.AddSeeAlsoAnnotation(c, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2160,7 +2158,7 @@ namespace RDFSharp.Semantics
                     #region IsDefinedBy
                     foreach (var t in isDefinedBy.SelectTriplesBySubject((RDFResource)c.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Model.ClassModel.AddIsDefinedByAnnotation(c, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Model.ClassModel.AddIsDefinedByAnnotation(c, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2201,7 +2199,7 @@ namespace RDFSharp.Semantics
                         foreach (var t in ontGraph.SelectTriplesBySubject((RDFResource)c.Value)
                                                   .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
                             if  (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                 ontology.Model.ClassModel.AddCustomAnnotation(c, annotProps.Current, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                                 ontology.Model.ClassModel.AddCustomAnnotation(c, annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2232,7 +2230,7 @@ namespace RDFSharp.Semantics
                     #region VersionInfo
                     foreach(var t in versionInfo.SelectTriplesBySubject((RDFResource)p.Value)) {
                         if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddVersionInfoAnnotation(p, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                            ontology.Model.PropertyModel.AddVersionInfoAnnotation(p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2247,7 +2245,7 @@ namespace RDFSharp.Semantics
                     #region Comment
                     foreach(var t in comment.SelectTriplesBySubject((RDFResource)p.Value)) {
                         if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddCommentAnnotation(p, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                            ontology.Model.PropertyModel.AddCommentAnnotation(p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2262,7 +2260,7 @@ namespace RDFSharp.Semantics
                     #region Label
                     foreach(var t in label.SelectTriplesBySubject((RDFResource)p.Value)) {
                         if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddLabelAnnotation(p, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                            ontology.Model.PropertyModel.AddLabelAnnotation(p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2277,7 +2275,7 @@ namespace RDFSharp.Semantics
                     #region SeeAlso
                     foreach(var t in seeAlso.SelectTriplesBySubject((RDFResource)p.Value)) {
                         if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddSeeAlsoAnnotation(p, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                            ontology.Model.PropertyModel.AddSeeAlsoAnnotation(p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2300,7 +2298,7 @@ namespace RDFSharp.Semantics
                     #region IsDefinedBy
                     foreach(var t in isDefinedBy.SelectTriplesBySubject((RDFResource)p.Value)) {
                         if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddIsDefinedByAnnotation(p, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                            ontology.Model.PropertyModel.AddIsDefinedByAnnotation(p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2341,7 +2339,7 @@ namespace RDFSharp.Semantics
                         foreach(var t in ontGraph.SelectTriplesBySubject((RDFResource)p.Value)
                                                  .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
                             if (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                ontology.Model.PropertyModel.AddCustomAnnotation(p, annotProps.Current, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                                ontology.Model.PropertyModel.AddCustomAnnotation(p, annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2372,7 +2370,7 @@ namespace RDFSharp.Semantics
                     #region VersionInfo
                     foreach (var t in versionInfo.SelectTriplesBySubject((RDFResource)f.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Data.AddVersionInfoAnnotation(f, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Data.AddVersionInfoAnnotation(f, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2387,7 +2385,7 @@ namespace RDFSharp.Semantics
                     #region Comment
                     foreach (var t in comment.SelectTriplesBySubject((RDFResource)f.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Data.AddCommentAnnotation(f, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Data.AddCommentAnnotation(f, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2402,7 +2400,7 @@ namespace RDFSharp.Semantics
                     #region Label
                     foreach (var t in label.SelectTriplesBySubject((RDFResource)f.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Data.AddLabelAnnotation(f, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Data.AddLabelAnnotation(f, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
@@ -2417,7 +2415,7 @@ namespace RDFSharp.Semantics
                     #region SeeAlso
                     foreach (var t in seeAlso.SelectTriplesBySubject((RDFResource)f.Value)) {
                         if  (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Data.AddSeeAlsoAnnotation(f, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Data.AddSeeAlsoAnnotation(f, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource resource = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2440,7 +2438,7 @@ namespace RDFSharp.Semantics
                     #region IsDefinedBy
                     foreach (var t in isDefinedBy.SelectTriplesBySubject((RDFResource)f.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.Data.AddIsDefinedByAnnotation(f, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                             ontology.Data.AddIsDefinedByAnnotation(f, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource isDefBy = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2481,7 +2479,7 @@ namespace RDFSharp.Semantics
                         foreach (var t in ontGraph.SelectTriplesBySubject((RDFResource)f.Value)
                                                   .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
                             if  (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                 ontology.Data.AddCustomAnnotation(f, annotProps.Current, new RDFOntologyLiteral((RDFLiteral)t.Object));
+                                 ontology.Data.AddCustomAnnotation(f, annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());

@@ -44,16 +44,16 @@ namespace RDFSharp.Semantics {
             #endregion
 
             #region Classes
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.GEO.SPATIAL_THING));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.GEO.POINT));
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.GEO.SPATIAL_THING.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.GEO.POINT.ToRDFOntologyClass());
             #endregion
 
             #region Properties
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.ALT));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.LAT));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.LONG));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.LAT_LONG));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.GEO.LOCATION));
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.GEO.ALT.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.GEO.LAT.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.GEO.LONG.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.GEO.LAT_LONG.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.GEO.LOCATION.ToRDFOntologyObjectProperty());
             #endregion
 
             #endregion

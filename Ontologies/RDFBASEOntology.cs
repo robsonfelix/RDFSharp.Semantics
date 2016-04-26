@@ -46,94 +46,94 @@ namespace RDFSharp.Semantics {
             #region Classes
 
             //RDF+RDFS
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.RESOURCE));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.CLASS));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDFS.LITERAL));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.RDF.XML_LITERAL));
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.RDFS.RESOURCE.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.RDFS.CLASS.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.RDFS.LITERAL.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.RDF.XML_LITERAL.ToRDFOntologyClass());
 
             //XSD
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.ANY_URI));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.BASE64_BINARY));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.BOOLEAN));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.BYTE));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.DATE));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.DATETIME));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.DECIMAL));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.DOUBLE));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.DURATION));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.FLOAT));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.G_DAY));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.G_MONTH));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.G_MONTH_DAY));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.G_YEAR));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.G_YEAR_MONTH));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.HEX_BINARY));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.INT));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.INTEGER));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.LANGUAGE));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.LONG));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NAME));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NCNAME));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NEGATIVE_INTEGER));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NMTOKEN));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NON_POSITIVE_INTEGER));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NORMALIZED_STRING));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.NOTATION));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.POSITIVE_INTEGER));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.QNAME));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.SHORT));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.STRING));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.TIME));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.TOKEN));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.UNSIGNED_BYTE));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.UNSIGNED_INT));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.UNSIGNED_LONG));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.XSD.UNSIGNED_SHORT));
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.ANY_URI.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.BASE64_BINARY.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.BOOLEAN.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.BYTE.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.DATE.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.DATETIME.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.DECIMAL.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.DOUBLE.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.DURATION.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.FLOAT.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.G_DAY.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.G_MONTH.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.G_MONTH_DAY.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.G_YEAR.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.G_YEAR_MONTH.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.HEX_BINARY.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.INT.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.INTEGER.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.LANGUAGE.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.LONG.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NAME.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NCNAME.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NEGATIVE_INTEGER.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NMTOKEN.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NON_POSITIVE_INTEGER.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NORMALIZED_STRING.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.NOTATION.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.POSITIVE_INTEGER.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.QNAME.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.SHORT.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.STRING.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.TIME.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.TOKEN.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.UNSIGNED_BYTE.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.UNSIGNED_INT.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.UNSIGNED_LONG.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.UNSIGNED_SHORT.ToRDFOntologyClass());
 
             //OWL
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.OWL.THING));
-            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.OWL.NOTHING));
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.OWL.THING.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.OWL.NOTHING.ToRDFOntologyClass());
 
             #endregion
 
             #region Properties
 
             //RDF+RDFS
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.RDF.TYPE));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.RDFS.SUB_CLASS_OF));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.RDFS.DOMAIN));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.RDFS.RANGE));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.COMMENT));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.LABEL));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.SEE_ALSO));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.RDFS.IS_DEFINED_BY));
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.DOMAIN.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.RANGE.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.COMMENT.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.LABEL.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.SEE_ALSO.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToRDFOntologyAnnotationProperty());
 
             //OWL
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.DISJOINT_WITH));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.INVERSE_OF));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.ON_PROPERTY));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.ONE_OF));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.UNION_OF));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.INTERSECTION_OF));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.COMPLEMENT_OF));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.ALL_VALUES_FROM));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.SOME_VALUES_FROM));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.HAS_VALUE));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.SAME_AS));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.DIFFERENT_FROM));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.CARDINALITY));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.MIN_CARDINALITY));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyProperty(RDFVocabulary.OWL.MAX_CARDINALITY));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.VERSION_INFO));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.VERSION_IRI));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.IMPORTS));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH));
-            Instance.Model.PropertyModel.AddProperty(new RDFOntologyAnnotationProperty(RDFVocabulary.OWL.PRIOR_VERSION));
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.INVERSE_OF.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.ON_PROPERTY.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.ONE_OF.ToRDFOntologyProperty()); //plain property
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.UNION_OF.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.INTERSECTION_OF.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.COMPLEMENT_OF.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.ALL_VALUES_FROM.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.SOME_VALUES_FROM.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.HAS_VALUE.ToRDFOntologyProperty()); //plain property
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.CARDINALITY.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.MIN_CARDINALITY.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.MAX_CARDINALITY.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.VERSION_INFO.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.VERSION_IRI.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.IMPORTS.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToRDFOntologyAnnotationProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToRDFOntologyAnnotationProperty());
 
             #endregion
 
