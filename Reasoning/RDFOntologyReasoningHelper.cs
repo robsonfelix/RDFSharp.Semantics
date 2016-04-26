@@ -479,6 +479,11 @@ namespace RDFSharp.Semantics {
                 return RDFDCOntology.Instance.Model.ClassModel.Classes[clsID];
             }
 
+            //SKOS
+            else if (RDFSKOSOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                return RDFSKOSOntology.Instance.Model.ClassModel.Classes[clsID];
+            }
+
             //FOAF
             else if(RDFFOAFOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
                 return RDFFOAFOntology.Instance.Model.ClassModel.Classes[clsID];
@@ -487,12 +492,7 @@ namespace RDFSharp.Semantics {
             //GEO
             else if(RDFGEOOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
                 return RDFGEOOntology.Instance.Model.ClassModel.Classes[clsID];
-            }
-
-            //SKOS
-            else if(RDFSKOSOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                return RDFSKOSOntology.Instance.Model.ClassModel.Classes[clsID];
-            }
+            }            
 
             //SIOC
             else if(RDFSIOCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
@@ -521,6 +521,11 @@ namespace RDFSharp.Semantics {
                 return RDFDCOntology.Instance.Model.PropertyModel.Properties[propID];
             }
 
+            //SKOS
+            else if (RDFSKOSOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                return RDFSKOSOntology.Instance.Model.PropertyModel.Properties[propID];
+            }
+
             //FOAF
             else if(RDFFOAFOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
                 return RDFFOAFOntology.Instance.Model.PropertyModel.Properties[propID];
@@ -529,11 +534,6 @@ namespace RDFSharp.Semantics {
             //GEO
             else if(RDFGEOOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
                 return RDFGEOOntology.Instance.Model.PropertyModel.Properties[propID];
-            }
-
-            //SKOS
-            else if(RDFSKOSOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                return RDFSKOSOntology.Instance.Model.PropertyModel.Properties[propID];
             }
 
             //SIOC
@@ -563,6 +563,11 @@ namespace RDFSharp.Semantics {
                 return RDFDCOntology.Instance.Data.Facts[factID];
             }
 
+            //SKOS
+            else if (RDFSKOSOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                return RDFSKOSOntology.Instance.Data.Facts[factID];
+            }
+
             //FOAF
             else if(RDFFOAFOntology.Instance.Data.Facts.ContainsKey(factID)) {
                 return RDFFOAFOntology.Instance.Data.Facts[factID];
@@ -571,11 +576,6 @@ namespace RDFSharp.Semantics {
             //GEO
             else if(RDFGEOOntology.Instance.Data.Facts.ContainsKey(factID)) {
                 return RDFGEOOntology.Instance.Data.Facts[factID];
-            }
-
-            //SKOS
-            else if(RDFSKOSOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                return RDFSKOSOntology.Instance.Data.Facts[factID];
             }
 
             //SIOC

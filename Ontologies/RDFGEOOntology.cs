@@ -44,15 +44,16 @@ namespace RDFSharp.Semantics {
             #endregion
 
             #region Classes
-
+            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.GEO.SPATIAL_THING));
+            Instance.Model.ClassModel.AddClass(new RDFOntologyClass(RDFVocabulary.GEO.POINT));
             #endregion
 
             #region Properties
-
-            #endregion
-
-            #region Facts
-
+            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.ALT));
+            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.LAT));
+            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.LONG));
+            Instance.Model.PropertyModel.AddProperty(new RDFOntologyDatatypeProperty(RDFVocabulary.GEO.LAT_LONG));
+            Instance.Model.PropertyModel.AddProperty(new RDFOntologyObjectProperty(RDFVocabulary.GEO.LOCATION));
             #endregion
 
             #endregion
@@ -61,13 +62,26 @@ namespace RDFSharp.Semantics {
 
             #region ClassModel
 
+            //SubClassOf
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.GEO.POINT.ToString()), SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+
             #endregion
 
             #region PropertyModel
 
-            #endregion
+            //SubPropertyOf
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.GEO.LOCATION.ToString()), (RDFOntologyObjectProperty)RDFFOAFOntology.SelectProperty(RDFVocabulary.FOAF.BASED_NEAR.ToString()));
 
-            #region Data
+            //Domain/Range
+            SelectProperty(RDFVocabulary.GEO.ALT.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            SelectProperty(RDFVocabulary.GEO.ALT.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
+            SelectProperty(RDFVocabulary.GEO.LAT.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            SelectProperty(RDFVocabulary.GEO.LAT.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
+            SelectProperty(RDFVocabulary.GEO.LONG.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            SelectProperty(RDFVocabulary.GEO.LONG.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
+            SelectProperty(RDFVocabulary.GEO.LAT_LONG.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            SelectProperty(RDFVocabulary.GEO.LAT_LONG.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.STRING.ToString()));
+            SelectProperty(RDFVocabulary.GEO.LOCATION.ToString()).SetRange(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
 
             #endregion
 
@@ -96,13 +110,6 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public static RDFOntologyFact SelectFact(String ontFact) {
             return Instance.Data.SelectFact(ontFact);
-        }
-
-        /// <summary>
-        /// Gets a graph representation of the GEO ontology
-        /// </summary>
-        public static RDFGraph ToRDFGraph(Boolean includeInferences) {
-            return Instance.ToRDFGraph(includeInferences);
         }
         #endregion
 

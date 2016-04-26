@@ -97,13 +97,6 @@ namespace RDFSharp.Semantics {
         public static RDFOntologyFact SelectFact(String ontFact) {
             return Instance.Data.SelectFact(ontFact);
         }
-
-        /// <summary>
-        /// Gets a graph representation of the SIOC ontology
-        /// </summary>
-        public static RDFGraph ToRDFGraph(Boolean includeInferences) {
-            return Instance.ToRDFGraph(includeInferences);
-        }
         #endregion
 
     }
