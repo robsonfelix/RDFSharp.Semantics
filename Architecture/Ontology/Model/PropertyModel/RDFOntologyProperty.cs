@@ -49,6 +49,11 @@ namespace RDFSharp.Semantics
         /// Range class of the ontology property
         /// </summary>
         public RDFOntologyClass Range { get; internal set; }
+
+        /// <summary>
+        /// Flag indicating that this ontology property has been imported as "rdf:Property"
+        /// </summary>
+        internal Boolean IsRDFProperty { get; set; }
         #endregion
 
         #region Ctors

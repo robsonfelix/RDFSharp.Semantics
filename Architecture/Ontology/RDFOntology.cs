@@ -59,9 +59,7 @@ namespace RDFSharp.Semantics
                 this.Data            = new RDFOntologyData();
                 this.Relations       = new RDFOntologyMetadata();
                 this.Annotations     = new RDFOntologyAnnotationsMetadata();
-
-                //Initialize the ontology
-                this.Initialize();
+                this.Init();
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntology because given \"ontologyName\" parameter is null.");
@@ -83,12 +81,12 @@ namespace RDFSharp.Semantics
 
         #region Methods
 
-        #region Initialize
+        #region Init
         /// <summary>
         /// Initializes this ontology with support for built-in  BASE ontology
         /// and, eventually, other built-in ontologies (DC/FOAF/GEO/SKOS/SIOC)
         /// </summary>
-        internal void Initialize() {
+        internal void Init() {
 
             //BASE integration
             this.Model     = this.Model.UnionWith(RDFBASEOntology.Instance.Model);

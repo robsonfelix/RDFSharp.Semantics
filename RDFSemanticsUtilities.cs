@@ -998,6 +998,14 @@ namespace RDFSharp.Semantics
                 #endregion
                 #endregion
 
+                #region Step 3.4: Load RDF:Property
+                foreach(var p  in rdfType.SelectTriplesByObject(RDFVocabulary.RDF.PROPERTY)) {
+                    var ontProperty           = ((RDFResource)p.Subject).ToRDFOntologyProperty();
+                    ontProperty.IsRDFProperty = true; //Save the information that this is a "rdf:Property"
+                    ontology.Model.PropertyModel.AddProperty(ontProperty);
+                }
+                #endregion
+
                 #endregion
 
 

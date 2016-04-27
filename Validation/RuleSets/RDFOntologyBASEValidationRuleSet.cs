@@ -44,7 +44,7 @@ namespace RDFSharp.Semantics {
                         RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                         "Vocabulary_Disjointness",
                         String.Format("Disjointess of class model and property model is violated because the name '{0}' refers both to a class and a property.", c),
-                        String.Format("Remove, or rename, one of the two entities.")
+                        String.Format("Remove, or rename, one of the two entities: at the moment, the given ontology is OWL Full!")
                     ));
                 }
                 if (ontology.Data.Facts.ContainsKey(c.PatternMemberID)) {
@@ -52,7 +52,7 @@ namespace RDFSharp.Semantics {
                         RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                         "Vocabulary_Disjointness",
                         String.Format("Disjointess of class model and data is violated because the name '{0}' refers both to a class and a fact.", c),
-                        String.Format("Remove, or rename, one of the two entities.")
+                        String.Format("Remove, or rename, one of the two entities: at the moment, the given ontology is OWL Full!")
                     ));
                 }
             }
@@ -65,7 +65,7 @@ namespace RDFSharp.Semantics {
                         RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error,
                         "Vocabulary_Disjointness",
                         String.Format("Disjointess of property model and data is violated because the name '{0}' refers both to a property and a fact.", p),
-                        String.Format("Remove, or rename, one of the two entities.")
+                        String.Format("Remove, or rename, one of the two entities: at the moment, the given ontology is OWL Full!")
                     ));
                 }
             }
