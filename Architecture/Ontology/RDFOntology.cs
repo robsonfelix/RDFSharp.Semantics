@@ -83,44 +83,25 @@ namespace RDFSharp.Semantics
 
         #region Init
         /// <summary>
-        /// Initializes this ontology with support for built-in  BASE ontology
-        /// and, eventually, other built-in ontologies (DC/FOAF/GEO/SKOS/SIOC)
+        /// Initializes this ontology with support for built-in reference ontologies
         /// </summary>
         internal void Init() {
 
-            //BASE integration
-            this.Model     = this.Model.UnionWith(RDFBASEOntology.Instance.Model);
-            this.Data      = this.Data.UnionWith(RDFBASEOntology.Instance.Data);
+            //Model expansion
+            this.Model = this.Model.UnionWith(RDFBASEOntology.Instance.Model)
+                                   .UnionWith(RDFDCOntology.Instance.Model)
+                                   .UnionWith(RDFSKOSOntology.Instance.Model)
+                                   .UnionWith(RDFFOAFOntology.Instance.Model)
+                                   .UnionWith(RDFGEOOntology.Instance.Model)
+                                   .UnionWith(RDFSIOCOntology.Instance.Model);
 
-            //DC integration
-            if (RDFSemanticsOptions.EnableDCOntologyIntegration) {
-                this.Model = this.Model.UnionWith(RDFDCOntology.Instance.Model);
-                this.Data  = this.Data.UnionWith(RDFDCOntology.Instance.Data);
-            }
-
-            //SKOS integration
-            if (RDFSemanticsOptions.EnableSKOSOntologyIntegration) {
-                this.Model = this.Model.UnionWith(RDFSKOSOntology.Instance.Model);
-                this.Data  = this.Data.UnionWith(RDFSKOSOntology.Instance.Data);
-            }
-
-            //FOAF integration
-            if (RDFSemanticsOptions.EnableFOAFOntologyIntegration) {
-                this.Model = this.Model.UnionWith(RDFFOAFOntology.Instance.Model);
-                this.Data  = this.Data.UnionWith(RDFFOAFOntology.Instance.Data);
-            }
-
-            //GEO integration
-            if (RDFSemanticsOptions.EnableGEOOntologyIntegration) {
-                this.Model = this.Model.UnionWith(RDFGEOOntology.Instance.Model);
-                this.Data  = this.Data.UnionWith(RDFGEOOntology.Instance.Data);
-            }            
-
-            //SIOC integration
-            if (RDFSemanticsOptions.EnableSIOCOntologyIntegration) {
-                this.Model = this.Model.UnionWith(RDFSIOCOntology.Instance.Model);
-                this.Data  = this.Data.UnionWith(RDFSIOCOntology.Instance.Data);
-            }
+            //Data expansion
+            this.Data  = this.Data.UnionWith(RDFBASEOntology.Instance.Data)
+                                  .UnionWith(RDFDCOntology.Instance.Data)
+                                  .UnionWith(RDFSKOSOntology.Instance.Data)
+                                  .UnionWith(RDFFOAFOntology.Instance.Data)
+                                  .UnionWith(RDFGEOOntology.Instance.Data)
+                                  .UnionWith(RDFSIOCOntology.Instance.Data);
 
         }
         #endregion

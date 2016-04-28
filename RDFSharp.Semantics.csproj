@@ -95,7 +95,6 @@
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
-    <Compile Include="RDFSemanticsOptions.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
