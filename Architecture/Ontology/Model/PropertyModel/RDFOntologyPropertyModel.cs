@@ -245,7 +245,15 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel AddTermStatusAnnotation(RDFOntologyProperty ontologyProperty,
                                                                 RDFModelEnums.RDFTermStatus termStatus) {
             if (ontologyProperty != null) {
-                this.Annotations.TermStatus.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+                if (this.Annotations.TermStatus.SelectEntriesBySubject(ontologyProperty).EntriesCount == 0) {
+                    this.Annotations.TermStatus.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+                }
+                else {
+
+                    //Raise warning event to inform user: only one vs:term_status annotation is allowed per ontology property.
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Only one 'vs:term_status' annotation is allowed per ontology property: please, check ontology property '{0}'.", ontologyProperty));
+
+                }
             }
             return this;
         }

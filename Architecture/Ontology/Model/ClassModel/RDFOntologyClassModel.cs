@@ -188,7 +188,15 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel AddTermStatusAnnotation(RDFOntologyClass ontologyClass,
                                                              RDFModelEnums.RDFTermStatus termStatus) {
             if (ontologyClass != null) {
-                this.Annotations.TermStatus.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+                if (this.Annotations.TermStatus.SelectEntriesBySubject(ontologyClass).EntriesCount == 0) {
+                    this.Annotations.TermStatus.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+                }
+                else {
+
+                    //Raise warning event to inform user: only one vs:term_status annotation is allowed per ontology class.
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Only one 'vs:term_status' annotation is allowed per ontology class: please, check ontology class '{0}'.", ontologyClass));
+
+                }
             }
             return this;
         }
