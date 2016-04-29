@@ -246,7 +246,7 @@ namespace RDFSharp.Semantics {
                                                                 RDFModelEnums.RDFTermStatus termStatus) {
             if (ontologyProperty != null) {
                 if (this.Annotations.TermStatus.SelectEntriesBySubject(ontologyProperty).EntriesCount == 0) {
-                    this.Annotations.TermStatus.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+                    this.Annotations.TermStatus.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
                 }
                 else {
 
@@ -318,7 +318,7 @@ namespace RDFSharp.Semantics {
                 }
 
                 //vs:term_status
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))) {
+                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))) {
                      if(ontologyResource.IsLiteral()) {
                         String termStatus   = ontologyResource.ToString().Trim().ToUpperInvariant();
                         if (termStatus     == "STABLE") {
@@ -616,7 +616,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel RemoveTermStatusAnnotation(RDFOntologyProperty ontologyProperty,
                                                                    RDFModelEnums.RDFTermStatus termStatus) {
             if (ontologyProperty != null) {
-                this.Annotations.TermStatus.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+                this.Annotations.TermStatus.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
             }
             return this;
         }
@@ -681,7 +681,7 @@ namespace RDFSharp.Semantics {
                 }
 
                 //vs:term_status
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))) {
+                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))) {
                      if(ontologyResource.IsLiteral()) {
                         String termStatus   = ontologyResource.ToString().Trim().ToUpperInvariant();
                         if(termStatus      == "STABLE") {

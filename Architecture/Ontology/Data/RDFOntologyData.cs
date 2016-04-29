@@ -212,7 +212,7 @@ namespace RDFSharp.Semantics
                 }
 
                 //vs:term_status
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))) {
+                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))) {
 
                     //Raise warning event to inform the user: vs:term_status annotation property cannot be used for facts
                     RDFSemanticsEvents.RaiseSemanticsWarning("vs:term_status annotation property cannot be used for facts.");

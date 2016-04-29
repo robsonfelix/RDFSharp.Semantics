@@ -135,8 +135,8 @@ namespace RDFSharp.Semantics {
             Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToRDFOntologyAnnotationProperty());
             Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToRDFOntologyAnnotationProperty());
 
-            //VOCAB_STATUS
-            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToRDFOntologyAnnotationProperty());
+            //VS
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.VS.TERM_STATUS.ToRDFOntologyAnnotationProperty());
 
             #endregion
 

@@ -813,7 +813,7 @@ namespace RDFSharp.Semantics
                 #region Step 1: Prefetch
                 var versionInfo   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
                 var versionIRI    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_IRI);
-                var termStatus    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.VOCAB_STATUS.TERM_STATUS);
+                var termStatus    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.VS.TERM_STATUS);
                 var comment       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.COMMENT);
                 var label         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.LABEL);
                 var seeAlso       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SEE_ALSO);
@@ -2046,7 +2046,7 @@ namespace RDFSharp.Semantics
 
                     //Skip built-in annotation properties
                     if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
+                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
                        annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                        annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                        annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
@@ -2106,7 +2106,7 @@ namespace RDFSharp.Semantics
                     #region TermStatus
                     foreach(var t in termStatus.SelectTriplesBySubject((RDFResource)c.Value)) {
                          if(t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.ClassModel.AddCustomAnnotation(c, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                            ontology.Model.ClassModel.AddCustomAnnotation(c, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                          }
                          else {
 
@@ -2197,7 +2197,7 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
+                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
@@ -2258,7 +2258,7 @@ namespace RDFSharp.Semantics
                     #region TermStatus
                     foreach(var t in termStatus.SelectTriplesBySubject((RDFResource)p.Value)) {
                          if(t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddCustomAnnotation(p, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                            ontology.Model.PropertyModel.AddCustomAnnotation(p, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                          }
                          else {
 
@@ -2349,7 +2349,7 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if (annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
+                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
                             annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                             annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                             annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
@@ -2487,7 +2487,7 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
+                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
