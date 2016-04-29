@@ -813,6 +813,7 @@ namespace RDFSharp.Semantics
                 #region Step 1: Prefetch
                 var versionInfo   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
                 var versionIRI    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_IRI);
+                var termStatus    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.VOCAB_STATUS.TERM_STATUS);
                 var comment       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.COMMENT);
                 var label         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.LABEL);
                 var seeAlso       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SEE_ALSO);
@@ -1888,9 +1889,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: versioninfo annotation on ontology 
-                        //cannot be imported from graph, because it does not link a literal
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: versioninfo annotation on ontology cannot be imported from graph, because it does not link a literal
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value));
 
                     }
                 }
@@ -1903,9 +1903,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: versioniri annotation on ontology 
-                        //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionIRI annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: versioniri annotation on ontology cannot be imported from graph, because it does not link a resource
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionIRI annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value));
 
                     }
                 }
@@ -1918,9 +1917,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: comment annotation on ontology 
-                        //cannot be imported from graph, because it does not link a literal
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: comment annotation on ontology cannot be imported from graph, because it does not link a literal
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value));
 
                     }
                 }
@@ -1933,9 +1931,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: label annotation on ontology 
-                        //cannot be imported from graph, because it does not link a literal
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: label annotation on ontology cannot be imported from graph, because it does not link a literal
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on ontology '{0}' cannot be imported from graph, because it does not link a literal.", ontology.Value));
 
                     }
                 }
@@ -1994,9 +1991,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: backwardcompatiblewith annotation on ontology 
-                        //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("BackwardCompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: backwardcompatiblewith annotation on ontology cannot be imported from graph, because it does not link a resource
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("BackwardCompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value));
 
                     }
                 }
@@ -2009,9 +2005,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: incompatiblewith annotation on ontology 
-                        //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IncompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: incompatiblewith annotation on ontology cannot be imported from graph, because it does not link a resource
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("IncompatibleWith annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value));
 
                     }
                 }
@@ -2024,9 +2019,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: priorversion annotation on ontology 
-                        //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("PriorVersion annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: priorversion annotation on ontology cannot be imported from graph, because it does not link a resource
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("PriorVersion annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value));
 
                     }
                 }
@@ -2039,9 +2033,8 @@ namespace RDFSharp.Semantics
                     }
                     else {
 
-                        //Raise warning event to inform the user: imports annotation on ontology 
-                        //cannot be imported from graph, because it does not link a resource
-                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Imports annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value, t.Object));
+                        //Raise warning event to inform the user: imports annotation on ontology cannot be imported from graph, because it does not link a resource
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Imports annotation on ontology '{0}' cannot be imported from graph, because it does not link a resource.", ontology.Value));
 
                     }
                 }
@@ -2053,6 +2046,7 @@ namespace RDFSharp.Semantics
 
                     //Skip built-in annotation properties
                     if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
                        annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                        annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                        annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
@@ -2102,24 +2096,36 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: versioninfo annotation on class 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
+                            //Raise warning event to inform the user: versioninfo annotation on class cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value));
 
                         }
                     }
                     #endregion
 
+                    #region TermStatus
+                    foreach(var t in termStatus.SelectTriplesBySubject((RDFResource)c.Value)) {
+                         if(t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
+                            ontology.Model.ClassModel.AddCustomAnnotation(c, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                         }
+                         else {
+
+                            //Raise warning event to inform the user: vs:term_status annotation on class cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("vs:term_status annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value));
+
+                         }
+                    }
+                    #endregion
+
                     #region Comment
-                    foreach (var t in comment.SelectTriplesBySubject((RDFResource)c.Value)) {
+                    foreach(var t in comment.SelectTriplesBySubject((RDFResource)c.Value)) {
                         if  (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
                              ontology.Model.ClassModel.AddCommentAnnotation(c, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
 
-                            //Raise warning event to inform the user: comment annotation on class 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
+                            //Raise warning event to inform the user: comment annotation on class cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value));
 
                         }
                     }
@@ -2132,9 +2138,8 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: label annotation on class 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value, t.Object));
+                            //Raise warning event to inform the user: label annotation on class cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on class '{0}' cannot be imported from graph, because it does not link a literal.", c.Value));
 
                         }
                     }
@@ -2192,6 +2197,7 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
@@ -2242,11 +2248,24 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: versioninfo annotation on property 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
+                            //Raise warning event to inform the user: versioninfo annotation on property cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value));
 
                         }
+                    }
+                    #endregion
+
+                    #region TermStatus
+                    foreach(var t in termStatus.SelectTriplesBySubject((RDFResource)p.Value)) {
+                         if(t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
+                            ontology.Model.PropertyModel.AddCustomAnnotation(p, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                         }
+                         else {
+
+                            //Raise warning event to inform the user: vs:term_status annotation on property cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("vs:term_status annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value));
+
+                         }
                     }
                     #endregion
 
@@ -2257,9 +2276,8 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: comment annotation on property 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
+                            //Raise warning event to inform the user: comment annotation on property cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value));
 
                         }
                     }
@@ -2272,9 +2290,8 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: label annotation on property 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value, t.Object));
+                            //Raise warning event to inform the user: label annotation on property cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on property '{0}' cannot be imported from graph, because it does not link a literal.", p.Value));
 
                         }
                     }
@@ -2332,6 +2349,7 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if (annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
                             annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                             annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                             annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
@@ -2382,9 +2400,8 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: versioninfo annotation on fact 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
+                            //Raise warning event to inform the user: versioninfo annotation on fact cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("VersionInfo annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value));
 
                         }
                     }
@@ -2397,9 +2414,8 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: comment annotation on fact 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
+                            //Raise warning event to inform the user: comment annotation on fact cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Comment annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value));
 
                         }
                     }
@@ -2412,9 +2428,8 @@ namespace RDFSharp.Semantics
                         }
                         else {
 
-                            //Raise warning event to inform the user: label annotation on fact 
-                            //cannot be imported from graph, because it does not link a literal
-                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value, t.Object));
+                            //Raise warning event to inform the user: label annotation on fact cannot be imported from graph, because it does not link a literal
+                            RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Label annotation on fact '{0}' cannot be imported from graph, because it does not link a literal.", f.Value));
 
                         }
                     }
@@ -2472,6 +2487,7 @@ namespace RDFSharp.Semantics
 
                         //Skip built-in annotation properties
                         if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
+                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))     ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||

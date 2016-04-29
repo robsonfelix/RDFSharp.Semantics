@@ -228,6 +228,14 @@ namespace RDFSharp.Semantics
                      }
                 }
 
+                //vs:term_status
+                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))) {
+
+                     //Raise warning event to inform the user: vs:term_status annotation property cannot be used for ontologies
+                     RDFSemanticsEvents.RaiseSemanticsWarning("vs:term_status annotation property cannot be used for ontologies.");
+
+                }
+
                 //rdfs:comment
                 else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))) {
                      if(ontologyResource.IsLiteral()) {

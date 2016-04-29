@@ -37,6 +37,11 @@ namespace RDFSharp.Semantics
         public RDFOntologyTaxonomy VersionIRI { get; internal set; }
 
         /// <summary>
+        /// "vs:term_status" annotations
+        /// </summary>
+        public RDFOntologyTaxonomy TermStatus { get; internal set; }
+
+        /// <summary>
         /// "rdfs:comment" annotations
         /// </summary>
         public RDFOntologyTaxonomy Comment { get; internal set; }
@@ -89,6 +94,7 @@ namespace RDFSharp.Semantics
         internal RDFOntologyAnnotationsMetadata() {
             this.VersionInfo            = new RDFOntologyTaxonomy();
             this.VersionIRI             = new RDFOntologyTaxonomy();
+            this.TermStatus             = new RDFOntologyTaxonomy();
             this.Comment                = new RDFOntologyTaxonomy();
             this.Label                  = new RDFOntologyTaxonomy();
             this.SeeAlso                = new RDFOntologyTaxonomy();

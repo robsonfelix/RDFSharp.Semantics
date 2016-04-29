@@ -240,6 +240,17 @@ namespace RDFSharp.Semantics {
         }
 
         /// <summary>
+        /// Adds the "ontologyProperty -> vs:term_status -> termStatus" annotation to the property model 
+        /// </summary>
+        public RDFOntologyPropertyModel AddTermStatusAnnotation(RDFOntologyProperty ontologyProperty,
+                                                                RDFModelEnums.RDFTermStatus termStatus) {
+            if (ontologyProperty != null) {
+                this.Annotations.TermStatus.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Adds the "ontologyProperty -> rdfs:comment -> ontologyLiteral" annotation to the property model 
         /// </summary>
         public RDFOntologyPropertyModel AddCommentAnnotation(RDFOntologyProperty ontologyProperty, 
@@ -298,28 +309,47 @@ namespace RDFSharp.Semantics {
                     }
                 }
 
+                //vs:term_status
+                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))) {
+                     if(ontologyResource.IsLiteral()) {
+                        String termStatus   = ontologyResource.ToString().Trim().ToUpperInvariant();
+                        if (termStatus     == "STABLE") {
+                            this.AddTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Stable);
+                        }
+                        else if(termStatus == "UNSTABLE") {
+                            this.AddTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Unstable);
+                        }
+                        else if(termStatus == "TESTING") {
+                            this.AddTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Testing);
+                        }
+                        else if(termStatus == "ARCHAIC") {
+                            this.AddTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Archaic);
+                        }
+                     }
+                }
+
                 //rdfs:comment
                 else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))) {
-                        if(ontologyResource.IsLiteral()) {
+                     if(ontologyResource.IsLiteral()) {
                         this.AddCommentAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
-                        }
+                     }
                 }
 
                 //rdfs:label
                 else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))) {
-                        if(ontologyResource.IsLiteral()) {
+                     if(ontologyResource.IsLiteral()) {
                         this.AddLabelAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
-                        }
+                     }
                 }
 
                 //rdfs:seeAlso
                 else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))) {
-                        this.AddSeeAlsoAnnotation(ontologyProperty, ontologyResource);
+                    this.AddSeeAlsoAnnotation(ontologyProperty, ontologyResource);
                 }
 
                 //rdfs:isDefinedBy
                 else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))) {
-                        this.AddIsDefinedByAnnotation(ontologyProperty, ontologyResource);
+                    this.AddIsDefinedByAnnotation(ontologyProperty, ontologyResource);
                 }
 
                 //ontology-specific
@@ -573,6 +603,17 @@ namespace RDFSharp.Semantics {
         }
 
         /// <summary>
+        /// Removes the "ontologyClass -> vs:term_status -> termStatus" annotation from the property model 
+        /// </summary>
+        public RDFOntologyPropertyModel RemoveTermStatusAnnotation(RDFOntologyProperty ontologyProperty,
+                                                                   RDFModelEnums.RDFTermStatus termStatus) {
+            if (ontologyProperty != null) {
+                this.Annotations.TermStatus.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()), new RDFOntologyLiteral(new RDFPlainLiteral(RDFModelUtilities.GetTermStatus(termStatus)))));
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Removes the "ontologyProperty -> rdfs:comment -> ontologyLiteral" annotation from the property model 
         /// </summary>
         public RDFOntologyPropertyModel RemoveCommentAnnotation(RDFOntologyProperty ontologyProperty, 
@@ -629,6 +670,25 @@ namespace RDFSharp.Semantics {
                     if (ontologyResource.IsLiteral()) {
                         this.RemoveVersionInfoAnnotation(ontologyProperty, (RDFOntologyLiteral)ontologyResource);
                     }
+                }
+
+                //vs:term_status
+                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VOCAB_STATUS.TERM_STATUS.ToString()))) {
+                     if(ontologyResource.IsLiteral()) {
+                        String termStatus   = ontologyResource.ToString().Trim().ToUpperInvariant();
+                        if(termStatus      == "STABLE") {
+                            this.RemoveTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Stable);
+                        }
+                        else if(termStatus == "UNSTABLE") {
+                            this.RemoveTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Unstable);
+                        }
+                        else if(termStatus == "TESTING") {
+                            this.RemoveTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Testing);
+                        }
+                        else if(termStatus == "ARCHAIC") {
+                            this.RemoveTermStatusAnnotation(ontologyProperty, RDFModelEnums.RDFTermStatus.Archaic);
+                        }
+                     }
                 }
 
                 //rdfs:comment
@@ -811,6 +871,7 @@ namespace RDFSharp.Semantics {
 
                 //Add intersection annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.IntersectWith(propertyModel.Annotations.VersionInfo);
+                result.Annotations.TermStatus        = this.Annotations.TermStatus.IntersectWith(propertyModel.Annotations.TermStatus);
                 result.Annotations.Comment           = this.Annotations.Comment.IntersectWith(propertyModel.Annotations.Comment);
                 result.Annotations.Label             = this.Annotations.Label.IntersectWith(propertyModel.Annotations.Label);
                 result.Annotations.SeeAlso           = this.Annotations.SeeAlso.IntersectWith(propertyModel.Annotations.SeeAlso);
@@ -840,6 +901,7 @@ namespace RDFSharp.Semantics {
 
             //Add annotations from this property model
             result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
+            result.Annotations.TermStatus        = result.Annotations.TermStatus.UnionWith(this.Annotations.TermStatus);
             result.Annotations.Comment           = result.Annotations.Comment.UnionWith(this.Annotations.Comment);
             result.Annotations.Label             = result.Annotations.Label.UnionWith(this.Annotations.Label);
             result.Annotations.SeeAlso           = result.Annotations.SeeAlso.UnionWith(this.Annotations.SeeAlso);
@@ -862,6 +924,7 @@ namespace RDFSharp.Semantics {
 
                 //Add annotations from the given property model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(propertyModel.Annotations.VersionInfo);
+                result.Annotations.TermStatus        = result.Annotations.TermStatus.UnionWith(propertyModel.Annotations.TermStatus);
                 result.Annotations.Comment           = result.Annotations.Comment.UnionWith(propertyModel.Annotations.Comment);
                 result.Annotations.Label             = result.Annotations.Label.UnionWith(propertyModel.Annotations.Label);
                 result.Annotations.SeeAlso           = result.Annotations.SeeAlso.UnionWith(propertyModel.Annotations.SeeAlso);
@@ -894,6 +957,7 @@ namespace RDFSharp.Semantics {
 
                 //Add difference annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.DifferenceWith(propertyModel.Annotations.VersionInfo);
+                result.Annotations.TermStatus        = this.Annotations.TermStatus.DifferenceWith(propertyModel.Annotations.TermStatus);
                 result.Annotations.Comment           = this.Annotations.Comment.DifferenceWith(propertyModel.Annotations.Comment);
                 result.Annotations.Label             = this.Annotations.Label.DifferenceWith(propertyModel.Annotations.Label);
                 result.Annotations.SeeAlso           = this.Annotations.SeeAlso.DifferenceWith(propertyModel.Annotations.SeeAlso);
@@ -916,6 +980,7 @@ namespace RDFSharp.Semantics {
 
                 //Add annotations from this property model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
+                result.Annotations.TermStatus        = result.Annotations.TermStatus.UnionWith(this.Annotations.TermStatus);
                 result.Annotations.Comment           = result.Annotations.Comment.UnionWith(this.Annotations.Comment);
                 result.Annotations.Label             = result.Annotations.Label.UnionWith(this.Annotations.Label);
                 result.Annotations.SeeAlso           = result.Annotations.SeeAlso.UnionWith(this.Annotations.SeeAlso);
@@ -979,6 +1044,7 @@ namespace RDFSharp.Semantics {
 
             //Annotations
             result       = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(includeInferences))
+                                 .UnionWith(this.Annotations.TermStatus.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.Comment.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.Label.ToRDFGraph(includeInferences))
                                  .UnionWith(this.Annotations.SeeAlso.ToRDFGraph(includeInferences))
