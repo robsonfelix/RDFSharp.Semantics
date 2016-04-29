@@ -22,9 +22,9 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyBASEReasoningRuleSet represents a collection of RDFS/OWL-DL rules available to reasoners.
+    /// RDFBASEOntologyReasoningRuleSet represents a collection of RDFS/OWL-DL rules available to reasoners.
     /// </summary>
-    public static class RDFOntologyBASEReasoningRuleSet {
+    public static class RDFBASEOntologyReasoningRuleSet {
 
         #region RDFS
         /// <summary>

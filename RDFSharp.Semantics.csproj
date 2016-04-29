@@ -86,12 +86,12 @@
     <Compile Include="Reasoning\RDFOntologyReasoningHelper.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningReport.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningRule.cs" />
-    <Compile Include="Reasoning\RuleSets\RDFOntologyBASEReasoningRuleSet.cs" />
+    <Compile Include="Reasoning\RuleSets\RDFBASEOntologyReasoningRuleSet.cs" />
     <Compile Include="Validation\RDFOntologyValidationEvidence.cs" />
     <Compile Include="Validation\RDFOntologyValidationReport.cs" />
     <Compile Include="Validation\RDFOntologyValidationRule.cs" />
     <Compile Include="Validation\RDFOntologyValidator.cs" />
-    <Compile Include="Validation\RuleSets\RDFOntologyBASEValidationRuleSet.cs" />
+    <Compile Include="Validation\RuleSets\RDFBASEOntologyValidationRuleSet.cs" />
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />

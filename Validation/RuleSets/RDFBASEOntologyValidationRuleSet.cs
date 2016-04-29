@@ -25,10 +25,10 @@ using RDFSharp.Query;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyBASEValidationRuleSet represents a predefined set of RDFS/OWL-DL rules which are applied by a validator 
+    /// RDFBASEOntologyValidationRuleSet represents a predefined set of RDFS/OWL-DL rules which are applied by a validator 
     /// on a given ontology in order to find error and inconsistency evidences affecting its model and data.
     /// </summary>
-    internal static class RDFOntologyBASEValidationRuleSet {
+    internal static class RDFBASEOntologyValidationRuleSet {
 
         #region Rule:Vocabulary_Disjointness
         /// <summary>
