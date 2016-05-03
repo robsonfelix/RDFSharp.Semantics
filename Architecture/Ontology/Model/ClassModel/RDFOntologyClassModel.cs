@@ -331,24 +331,28 @@ namespace RDFSharp.Semantics {
                                                            RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
-                //Enforce taxonomy checks on special OWL classes
-                //"owl:Nothing" cannot have subclasses (since it IS subclass of everything in OWL)
-                //"owl:Thing" cannot have superclasses (since it IS superclass of everything in OWL)
+                //Enforce boundary checks on top/bottom OWL classes
                 if (motherClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
                     childClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())))    {
-                    return this;
-                }
 
-                //Enforce taxonomy checks before adding the subClassOf relation
-                if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this) &&
-                    !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this) &&
-                    !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this)) {
-                     this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
+                    //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because it violates the taxonomy consistency
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
+
                 }
                 else {
-                     
-                     //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
+
+                    //Enforce taxonomy checks before adding the subClassOf relation
+                    if (!RDFOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this)   &&
+                        !RDFOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this)   &&
+                        !RDFOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this))   {
+                         this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
+                    }
+                    else {
+
+                         //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because it violates the taxonomy consistency
+                         RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
+
+                    }
 
                 }
 
@@ -362,17 +366,6 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel AddEquivalentClassRelation(RDFOntologyClass aClass, 
                                                                 RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
-
-                //Enforce taxonomy checks on special OWL classes
-                //Even if legal, we don't permit equivalentClass hijack of top/bottom RDFS/OWL structural classes!
-                if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.CLASS.ToString()))  ||
-                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.CLASS.ToString()))  ||
-                    aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))   ||
-                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))   ||
-                    aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
-                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.NOTHING.ToString()))) {
-                    return this;
-                }
 
                 //Enforce taxonomy checks before adding the equivalentClass relation
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
@@ -398,13 +391,6 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel AddDisjointWithRelation(RDFOntologyClass aClass, 
                                                              RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
-
-                //Enforce taxonomy checks on special OWL classes
-                //"owl:Thing" cannot be disjoint (since it IS superclass of everything in OWL)
-                if (aClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString())) ||
-                    bClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.OWL.THING.ToString()))) {
-                    return this;
-                }
 
                 //Enforce taxonomy checks before adding the disjointWith relation
                 if (!RDFOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
