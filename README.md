@@ -9,8 +9,7 @@ There are many ways that you can contribute to the RDFSharp.Semantics project:
     <li>Submit a code fix for a bug</li>  
     <li>Submit a feature request</li>
     <li>Submit code for a feature request</li>
-    <li>Tell others about the RDFSharp.Semantics project :)</li>  
-    <li><i>Kindly donate to non-profit italian charity organization <b><a href="http://www.soleterre.org/en/">Soleterre</a></b> :)</i></li> 
+    <li>Tell others about the RDFSharp.Semantics project :)</li>
 </ul>
 <hr>
 RDFSharp.Semantics is also available on <b><a href="http://www.nuget.org/packages?q=rdfsharp.semantics">NuGet</a></b> and <b><a href="https://rdfsharpsemantics.codeplex.com/">Codeplex</a></b>!
