@@ -632,6 +632,7 @@ namespace RDFSharp.Semantics {
             #region Domain_Range
             var classCache    = new Dictionary<Int64, RDFOntologyData>();
             var litCheckCache = new Dictionary<Int64, Boolean>();
+
             foreach (var assertion  in ontology.Data.Relations.Assertions.Where(asn =>
                                                         ((RDFOntologyProperty)asn.TaxonomyPredicate).Domain != null  ||
                                                         ((RDFOntologyProperty)asn.TaxonomyPredicate).Range  != null)) {
@@ -640,7 +641,7 @@ namespace RDFSharp.Semantics {
                 var domain    = ((RDFOntologyProperty)assertion.TaxonomyPredicate).Domain;
                 if (domain   != null) {
 
-                    //Domain class cannot be a datarange or compatible with rdfs:Literal
+                    //Domain class cannot be a datarange or literal-compatible class
                     if (!litCheckCache.ContainsKey(domain.PatternMemberID)) {
                          litCheckCache.Add(domain.PatternMemberID, RDFOntologyReasoningHelper.IsLiteralCompatibleClass(domain, ontology.Model.ClassModel));
                     }
@@ -656,7 +657,8 @@ namespace RDFSharp.Semantics {
 
                         //Cache-Miss
                         if (!classCache.ContainsKey(domain.PatternMemberID)) {
-                             classCache.Add(domain.PatternMemberID, RDFOntologyReasoningHelper.EnlistMembersOf(domain, ontology));
+                             //It's a non literal-compatible class, so we can speed up things by calling the internal method
+                             classCache.Add(domain.PatternMemberID, RDFOntologyReasoningHelper.EnlistMembersOfNonLiteralCompatibleClass(domain, ontology));
                         }
 
                         //Cache-Check
@@ -827,6 +829,7 @@ namespace RDFSharp.Semantics {
             #region Facts
             var disjWithCache       = new Dictionary<Int64, RDFOntologyClassModel>();
             var litCheckCache       = new Dictionary<Int64, Boolean>();
+
             foreach (var  fact     in ontology.Data) {
                 var classTypes      = new RDFOntologyClassModel();
                 foreach (var cType in ontology.Data.Relations.ClassType.SelectEntriesBySubject(fact)) {

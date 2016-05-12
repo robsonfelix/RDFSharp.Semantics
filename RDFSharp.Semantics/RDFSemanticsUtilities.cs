@@ -684,6 +684,8 @@ namespace RDFSharp.Semantics
         internal static RDFOntologyData EnlistMembersOfLiteralCompatibleClass(RDFOntologyClass ontClass, 
                                                                               RDFOntology ontology) {
             var result              = new RDFOntologyData();
+            var rdfsLiteral         = RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
+            var xsdString           = RDFBASEOntology.SelectClass(RDFVocabulary.XSD.STRING.ToString());
 
             #region DataRange
             if (ontClass.IsDataRangeClass()) {
@@ -703,8 +705,8 @@ namespace RDFSharp.Semantics
             #endregion
 
             #region Pure Literal
-            else if(ontClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
-                    || RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), ontology.Model.ClassModel)) {
+            else if(ontClass.Equals(rdfsLiteral) 
+                    || RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, rdfsLiteral, ontology.Model.ClassModel)) {
                 foreach(var ontLit in ontology.Data.Literals.Values) {
                     result.AddLiteral(ontLit);
                 }
@@ -715,8 +717,8 @@ namespace RDFSharp.Semantics
             else {
 
                 #region String Literal
-                if (ontClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.STRING.ToString())) 
-                    ||  RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.XSD.STRING.ToString()), ontology.Model.ClassModel)) {
+                if (ontClass.Equals(xsdString) 
+                    || RDFOntologyReasoningHelper.IsEquivalentClassOf(ontClass, xsdString, ontology.Model.ClassModel)) {
                     foreach(var ontLit   in ontology.Data.Literals.Values) {
                         if (ontLit.Value is RDFPlainLiteral) {
                             result.AddLiteral(ontLit);
@@ -811,40 +813,53 @@ namespace RDFSharp.Semantics
 
 
                 #region Step 1: Prefetch
-                var versionInfo   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
-                var versionIRI    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_IRI);
-                var termStatus    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.VS.TERM_STATUS);
-                var comment       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.COMMENT);
-                var label         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.LABEL);
-                var seeAlso       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SEE_ALSO);
-                var isDefinedBy   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.IS_DEFINED_BY);
-                var imports       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.IMPORTS);
-                var bcwcompWith   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH);
-                var incompWith    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INCOMPATIBLE_WITH);
-                var priorVersion  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.PRIOR_VERSION);
+                var versionInfo     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
+                var versionIRI      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_IRI);
+                var termStatus      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.VS.TERM_STATUS);
+                var comment         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.COMMENT);
+                var label           = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.LABEL);
+                var seeAlso         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SEE_ALSO);
+                var isDefinedBy     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.IS_DEFINED_BY);
+                var imports         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.IMPORTS);
+                var bcwcompWith     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH);
+                var incompWith      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INCOMPATIBLE_WITH);
+                var priorVersion    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.PRIOR_VERSION);
 
-                var rdfType       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.TYPE);
-                var subclassOf    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_CLASS_OF);
-                var subpropOf     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_PROPERTY_OF);
-                var domain        = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.DOMAIN);
-                var range         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.RANGE);
-                var equivclassOf  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_CLASS);
-                var disjclassWith = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DISJOINT_WITH);
-                var equivpropOf   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_PROPERTY);
-                var inverseOf     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INVERSE_OF);
-                var onProperty    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ON_PROPERTY);
-                var oneOf         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ONE_OF);
-                var unionOf       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.UNION_OF);
-                var intersectionOf= ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INTERSECTION_OF);
-                var complementOf  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.COMPLEMENT_OF);
-                var allvaluesFrom = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ALL_VALUES_FROM);
-                var somevaluesFrom= ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.SOME_VALUES_FROM);
-                var hasvalue      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.HAS_VALUE);
-                var cardinality   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.CARDINALITY);
-                var mincardinality= ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.MIN_CARDINALITY);
-                var maxcardinality= ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.MAX_CARDINALITY);
-                var sameAs        = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.SAME_AS);
-                var differentFrom = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DIFFERENT_FROM);
+                var rdfType         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.TYPE);
+                var subclassOf      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_CLASS_OF);
+                var subpropOf       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_PROPERTY_OF);
+                var domain          = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.DOMAIN);
+                var range           = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.RANGE);
+                var equivclassOf    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_CLASS);
+                var disjclassWith   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DISJOINT_WITH);
+                var equivpropOf     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.EQUIVALENT_PROPERTY);
+                var inverseOf       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INVERSE_OF);
+                var onProperty      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ON_PROPERTY);
+                var oneOf           = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ONE_OF);
+                var unionOf         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.UNION_OF);
+                var intersectionOf  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.INTERSECTION_OF);
+                var complementOf    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.COMPLEMENT_OF);
+                var allvaluesFrom   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.ALL_VALUES_FROM);
+                var somevaluesFrom  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.SOME_VALUES_FROM);
+                var hasvalue        = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.HAS_VALUE);
+                var cardinality     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.CARDINALITY);
+                var mincardinality  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.MIN_CARDINALITY);
+                var maxcardinality  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.MAX_CARDINALITY);
+                var sameAs          = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.SAME_AS);
+                var differentFrom   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DIFFERENT_FROM);
+
+                var versionInfoAnn  = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString());
+                var termStatusAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString());
+                var commentAnn      = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString());
+                var labelAnn        = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString());
+                var seeAlsoAnn      = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString());
+                var isDefinedByAnn  = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString());
+                var versionIRIAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString());
+                var priorVersionAnn = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString());
+                var backwardCWAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString());
+                var incompWithAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString());
+                var importsAnn      = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString());
+                var rdfsLiteral     = RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
                 #endregion
 
 
@@ -1032,7 +1047,7 @@ namespace RDFSharp.Semantics
                     dtClass.IsRDFSDatatype = true; //Save the information that this is a "rdfs:Datatype"
                     ontology.Model.ClassModel.AddClass(dtClass);
                     //Datatypes are modeled as subclasses of "rdfs:Literal"
-                    ontology.Model.ClassModel.AddSubClassOfRelation(dtClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
+                    ontology.Model.ClassModel.AddSubClassOfRelation(dtClass, rdfsLiteral);
                 }
                 #endregion
 
@@ -2041,28 +2056,20 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region CustomAnnotations
-                var annotProps   = ontology.Model.PropertyModel.AnnotationPropertiesEnumerator;
-                while (annotProps.MoveNext()) {
+                foreach(var p in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
 
                     //Skip built-in annotation properties
-                    if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                       annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
-                       continue;
+                    if (p.Equals(versionInfoAnn)  || p.Equals(termStatusAnn)   || p.Equals(commentAnn)      || 
+                        p.Equals(labelAnn)        || p.Equals(seeAlsoAnn)      || p.Equals(isDefinedByAnn)  ||
+                        p.Equals(versionIRIAnn)   || p.Equals(priorVersionAnn) || p.Equals(backwardCWAnn)   || 
+                        p.Equals(incompWithAnn)   || p.Equals(importsAnn)) {
+                        continue;
                     }
 
                     foreach (var t in ontGraph.SelectTriplesBySubject((RDFResource)ontology.Value)
-                                              .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
+                                              .SelectTriplesByPredicate((RDFResource)p.Value)) {
                         if  (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                             ontology.AddCustomAnnotation(annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                             ontology.AddCustomAnnotation((RDFOntologyAnnotationProperty)p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                         }
                         else {
                             RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2077,7 +2084,7 @@ namespace RDFSharp.Semantics
                                     }
                                 }
                             }
-                            ontology.AddCustomAnnotation(annotProps.Current, custAnn);
+                            ontology.AddCustomAnnotation((RDFOntologyAnnotationProperty)p, custAnn);
                         }
                     }
 
@@ -2106,7 +2113,7 @@ namespace RDFSharp.Semantics
                     #region TermStatus
                     foreach(var t in termStatus.SelectTriplesBySubject((RDFResource)c.Value)) {
                          if(t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.ClassModel.AddCustomAnnotation(c, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                            ontology.Model.ClassModel.AddCustomAnnotation(c, (RDFOntologyAnnotationProperty)termStatusAnn, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                          }
                          else {
 
@@ -2192,28 +2199,20 @@ namespace RDFSharp.Semantics
                     #endregion
 
                     #region CustomAnnotations
-                    annotProps       = ontology.Model.PropertyModel.AnnotationPropertiesEnumerator;
-                    while (annotProps.MoveNext()) {
+                    foreach(var p in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
 
                         //Skip built-in annotation properties
-                        if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
-                           continue;
+                        if (p.Equals(versionInfoAnn) || p.Equals(termStatusAnn)   || p.Equals(commentAnn)     ||
+                            p.Equals(labelAnn)       || p.Equals(seeAlsoAnn)      || p.Equals(isDefinedByAnn) ||
+                            p.Equals(versionIRIAnn)  || p.Equals(priorVersionAnn) || p.Equals(backwardCWAnn)  ||
+                            p.Equals(incompWithAnn)  || p.Equals(importsAnn)) {
+                            continue;
                         }
 
                         foreach (var t in ontGraph.SelectTriplesBySubject((RDFResource)c.Value)
-                                                  .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
+                                                  .SelectTriplesByPredicate((RDFResource)p.Value)) {
                             if  (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                 ontology.Model.ClassModel.AddCustomAnnotation(c, annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                                 ontology.Model.ClassModel.AddCustomAnnotation(c, (RDFOntologyAnnotationProperty)p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2228,7 +2227,7 @@ namespace RDFSharp.Semantics
                                         }
                                     }
                                 }
-                                ontology.Model.ClassModel.AddCustomAnnotation(c, annotProps.Current, custAnn);
+                                ontology.Model.ClassModel.AddCustomAnnotation(c, (RDFOntologyAnnotationProperty)p, custAnn);
                             }
                         }
 
@@ -2258,7 +2257,7 @@ namespace RDFSharp.Semantics
                     #region TermStatus
                     foreach(var t in termStatus.SelectTriplesBySubject((RDFResource)p.Value)) {
                          if(t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                            ontology.Model.PropertyModel.AddCustomAnnotation(p, (RDFOntologyAnnotationProperty)RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                            ontology.Model.PropertyModel.AddCustomAnnotation(p, (RDFOntologyAnnotationProperty)termStatusAnn, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                          }
                          else {
 
@@ -2344,28 +2343,20 @@ namespace RDFSharp.Semantics
                     #endregion
 
                     #region CustomAnnotations
-                    annotProps = ontology.Model.PropertyModel.AnnotationPropertiesEnumerator;
-                    while (annotProps.MoveNext()) {
+                    foreach(var ap in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
 
                         //Skip built-in annotation properties
-                        if (annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                            annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
+                        if (ap.Equals(versionInfoAnn) || ap.Equals(termStatusAnn)   || ap.Equals(commentAnn)     ||
+                            ap.Equals(labelAnn)       || ap.Equals(seeAlsoAnn)      || ap.Equals(isDefinedByAnn) ||
+                            ap.Equals(versionIRIAnn)  || ap.Equals(priorVersionAnn) || ap.Equals(backwardCWAnn)  ||
+                            ap.Equals(incompWithAnn)  || ap.Equals(importsAnn)) {
                             continue;
                         }
 
                         foreach(var t in ontGraph.SelectTriplesBySubject((RDFResource)p.Value)
-                                                 .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
+                                                 .SelectTriplesByPredicate((RDFResource)ap.Value)) {
                             if (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                ontology.Model.PropertyModel.AddCustomAnnotation(p, annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                                ontology.Model.PropertyModel.AddCustomAnnotation(p, (RDFOntologyAnnotationProperty)ap, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());
@@ -2380,7 +2371,7 @@ namespace RDFSharp.Semantics
                                         }
                                     }
                                 }
-                                ontology.Model.PropertyModel.AddCustomAnnotation(p, annotProps.Current, custAnn);
+                                ontology.Model.PropertyModel.AddCustomAnnotation(p, (RDFOntologyAnnotationProperty)ap, custAnn);
                             }
                         }
 
@@ -2482,28 +2473,20 @@ namespace RDFSharp.Semantics
                     #endregion
 
                     #region CustomAnnotations
-                    annotProps       = ontology.Model.PropertyModel.AnnotationPropertiesEnumerator;
-                    while (annotProps.MoveNext()) {
+                    foreach(var p in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
 
                         //Skip built-in annotation properties
-                        if(annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))             ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString()))               ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))                 ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))                   ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))                ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))           ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))            ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                           annotProps.Current.Equals(RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))) {
-                           continue;
+                        if (p.Equals(versionInfoAnn) || p.Equals(termStatusAnn)   || p.Equals(commentAnn)     ||
+                            p.Equals(labelAnn)       || p.Equals(seeAlsoAnn)      || p.Equals(isDefinedByAnn) ||
+                            p.Equals(versionIRIAnn)  || p.Equals(priorVersionAnn) || p.Equals(backwardCWAnn)  ||
+                            p.Equals(incompWithAnn)  || p.Equals(importsAnn)) {
+                            continue;
                         }
 
                         foreach (var t in ontGraph.SelectTriplesBySubject((RDFResource)f.Value)
-                                                  .SelectTriplesByPredicate((RDFResource)annotProps.Current.Value)) {
+                                                  .SelectTriplesByPredicate((RDFResource)p.Value)) {
                             if  (t.TripleFlavor  == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                 ontology.Data.AddCustomAnnotation(f, annotProps.Current, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
+                                 ontology.Data.AddCustomAnnotation(f, (RDFOntologyAnnotationProperty)p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                             else {
                                 RDFOntologyResource custAnn = ontology.Model.ClassModel.SelectClass(t.Object.ToString());

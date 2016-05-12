@@ -457,6 +457,39 @@ namespace RDFSharp.Semantics {
             }
             return result;
         }
+
+        /// <summary>
+        /// Enlists the facts which are members of the given non literal-compatible class within the given ontology
+        /// (internal-only method for performance purposes, used during validation and reasoning logics)
+        /// </summary>
+        internal static RDFOntologyData EnlistMembersOfNonLiteralCompatibleClass(RDFOntologyClass ontClass,
+                                                                                 RDFOntology ontology) {
+            var result      = new RDFOntologyData();
+            if(ontClass    != null && ontology != null) {
+
+                //Restriction
+                if(ontClass.IsRestrictionClass()) {
+                    result  = RDFSemanticsUtilities.EnlistMembersOfRestriction((RDFOntologyRestriction)ontClass, ontology);
+                }
+
+                //Composite
+                else if(ontClass.IsCompositeClass()) {
+                    result  = RDFSemanticsUtilities.EnlistMembersOfComposite(ontClass, ontology);
+                }
+
+                //Enumerate
+                else if(ontClass.IsEnumerateClass()) {
+                    result  = RDFSemanticsUtilities.EnlistMembersOfEnumerate((RDFOntologyEnumerateClass)ontClass, ontology);
+                }
+
+                //Class
+                else {
+                    result  = RDFSemanticsUtilities.EnlistMembersOfClass(ontClass, ontology);
+                }
+
+            }
+            return result;
+        }
         #endregion
 
         #endregion
