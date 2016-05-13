@@ -672,7 +672,7 @@ namespace RDFSharp.Semantics
 
             //Complement
             else if (ontCompClass is RDFOntologyComplementClass) {
-                result             = ontology.Data.DifferenceWith(RDFOntologyReasoningHelper.EnlistMembersOf(ontCompClass, ontology));
+                result             = ontology.Data.DifferenceWith(RDFOntologyReasoningHelper.EnlistMembersOf(((RDFOntologyComplementClass)ontCompClass).ComplementOf, ontology));
             }
 
             return result;
@@ -2501,7 +2501,7 @@ namespace RDFSharp.Semantics
                                         }
                                     }
                                 }
-                                ontology.Data.AddCustomAnnotation(f, annotProps.Current, custAnn);
+                                ontology.Data.AddCustomAnnotation(f, (RDFOntologyAnnotationProperty)p, custAnn);
                             }
                         }
 

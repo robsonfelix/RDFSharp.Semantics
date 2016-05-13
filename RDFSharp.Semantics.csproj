@@ -48,7 +48,6 @@
     <!-- Assembly -->
     <Compile Include="Properties\AssemblyInfo.cs" />
     <!-- Semantics -->
-    <Compile Include="RDFSharp.Semantics\Ontology\RDFOntologyRegister.cs" />
     <Compile Include="RDFSharp.Semantics\Ontology\RDFOntologyResource.cs" />
     <Compile Include="RDFSharp.Semantics\Ontology\Architecture\RDFOntology.cs" />
     <Compile Include="RDFSharp.Semantics\Ontology\Architecture\RDFOntologyMetadata.cs" />

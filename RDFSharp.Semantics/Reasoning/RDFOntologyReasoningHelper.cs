@@ -499,14 +499,12 @@ namespace RDFSharp.Semantics {
         /// Searches the given class into the reference ontologies
         /// </summary>
         public static RDFOntologyClass SearchReferenceClass(String ontClass) {
-            if (ontClass    == null) { return null; }
-            var clsID        = RDFModelUtilities.CreateHash(ontClass);
+            if (ontClass  == null) { return null; }
+            var clsID      = RDFModelUtilities.CreateHash(ontClass);
 
-            //Iterate the ontology register: search into reference ontologies
-            foreach(var ont in RDFOntologyRegister.Instance) {
-                if (ont.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                    return ont.Model.ClassModel.Classes[clsID];
-                }
+            //BASE
+            if (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                return RDFBASEOntology.Instance.Model.ClassModel.Classes[clsID];
             }
 
             return null;
@@ -516,14 +514,12 @@ namespace RDFSharp.Semantics {
         /// Searches the given property into the reference ontologies
         /// </summary>
         public static RDFOntologyProperty SearchReferenceProperty(String ontProp) {
-            if (ontProp     == null) { return null; }
-            var propID       = RDFModelUtilities.CreateHash(ontProp);
+            if (ontProp   == null) { return null; }
+            var propID     = RDFModelUtilities.CreateHash(ontProp);
 
-            //Iterate the ontology register: search into reference ontologies
-            foreach(var ont in RDFOntologyRegister.Instance) {
-                if (ont.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                    return ont.Model.PropertyModel.Properties[propID];
-                }
+            //BASE
+            if (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                return RDFBASEOntology.Instance.Model.PropertyModel.Properties[propID];
             }
 
             return null;
@@ -533,14 +529,12 @@ namespace RDFSharp.Semantics {
         /// Searches the given fact into the reference ontologies
         /// </summary>
         public static RDFOntologyFact SearchReferenceFact(String ontFact) {
-            if (ontFact     == null) { return null; }
-            var factID       = RDFModelUtilities.CreateHash(ontFact);
+            if (ontFact   == null) { return null; }
+            var factID     = RDFModelUtilities.CreateHash(ontFact);
 
-            //Iterate the ontology register: search into reference ontologies
-            foreach(var ont in RDFOntologyRegister.Instance) {
-                if (ont.Data.Facts.ContainsKey(factID)) {
-                    return ont.Data.Facts[factID];
-                }
+            //BASE
+            if (RDFBASEOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                return RDFBASEOntology.Instance.Data.Facts[factID];
             }
 
             return null;

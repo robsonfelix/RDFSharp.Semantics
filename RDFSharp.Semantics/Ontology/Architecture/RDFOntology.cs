@@ -88,15 +88,11 @@ namespace RDFSharp.Semantics
         internal void Init() {
 
             //Model expansion
-            foreach(var ont in RDFOntologyRegister.Instance) {
-                this.Model   = this.Model.UnionWith(ont.Model);
-            }
-
+            this.Model = this.Model.UnionWith(RDFBASEOntology.Instance.Model);
+            
             //Data expansion
-            foreach(var ont in RDFOntologyRegister.Instance) {
-                this.Data    = this.Data.UnionWith(ont.Data);
-            }
-
+            this.Data  = this.Data.UnionWith(RDFBASEOntology.Instance.Data);
+            
         }
         #endregion
 
