@@ -14,16 +14,18 @@
    limitations under the License.
 */
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-[assembly: AssemblyTitle("RDFSharp.Semantics")]
-[assembly: AssemblyDescription("Ontology modeling with RDFSharp")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Marco De Salvo")]
-[assembly: AssemblyProduct("RDFSharp.Semantics")]
-[assembly: AssemblyCopyright("Marco De Salvo")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.8.5")]
-[assembly: ComVisible(false)]
-[assembly: Guid("2BE71F3A-943B-464A-8FE8-7D7BCBF23100")]
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using RDFSharp.Model;
+
+namespace RDFSharp.Semantics {
+
+    /// <summary>
+    /// RDFDCOntologyReasoningRuleSet represents a collection of Dublin Core rules available to reasoners.
+    /// </summary>
+    public static class RDFDCOntologyReasoningRuleSet {
+
+    }
+
+}

@@ -88,11 +88,21 @@ namespace RDFSharp.Semantics
         internal void Init() {
 
             //Model expansion
-            this.Model = this.Model.UnionWith(RDFBASEOntology.Instance.Model);
-            
+            this.Model = this.Model.UnionWith(RDFBASEOntology.Instance.Model)
+                                   .UnionWith(RDFDCOntology.Instance.Model)
+                                   .UnionWith(RDFSKOSOntology.Instance.Model)
+                                   .UnionWith(RDFFOAFOntology.Instance.Model)
+                                   .UnionWith(RDFGEOOntology.Instance.Model)
+                                   .UnionWith(RDFSIOCOntology.Instance.Model);
+
             //Data expansion
-            this.Data  = this.Data.UnionWith(RDFBASEOntology.Instance.Data);
-            
+            this.Data  = this.Data.UnionWith(RDFBASEOntology.Instance.Data)
+                                  .UnionWith(RDFDCOntology.Instance.Data)
+                                  .UnionWith(RDFSKOSOntology.Instance.Data)
+                                  .UnionWith(RDFFOAFOntology.Instance.Data)
+                                  .UnionWith(RDFGEOOntology.Instance.Data)
+                                  .UnionWith(RDFSIOCOntology.Instance.Data);
+
         }
         #endregion
 
