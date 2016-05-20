@@ -59,23 +59,15 @@ namespace RDFSharp.Semantics
                 this.Data            = new RDFOntologyData();
                 this.Relations       = new RDFOntologyMetadata();
                 this.Annotations     = new RDFOntologyAnnotationsMetadata();
-                this.Init();
+
+                //Non-reference ontologies must be initialized with support for BASE/DC/FOAF/GEO/SKOS/SIOC
+                if (!ontologyName.ToString().StartsWith("http://rdfsharpsemantics.codeplex.com/")) {
+                     this.Init();
+                }                
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntology because given \"ontologyName\" parameter is null.");
             }
-        }
-
-        /// <summary>
-        /// Default-ctor to build an empty reference ontology with the given name
-        /// </summary>
-        internal RDFOntology(RDFResource ontologyName, Boolean isReferenceOntology) {
-            this.Value               = ontologyName;
-            this.PatternMemberID     = ontologyName.PatternMemberID;
-            this.Model               = new RDFOntologyModel();
-            this.Data                = new RDFOntologyData();
-            this.Relations           = new RDFOntologyMetadata();
-            this.Annotations         = new RDFOntologyAnnotationsMetadata();
         }
         #endregion
 
