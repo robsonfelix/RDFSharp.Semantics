@@ -20,7 +20,7 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFFOAFOntology represents an OWL-DL ontology implementation of GEO vocabulary
+    /// RDFGEOOntology represents an OWL-DL ontology implementation of W3C GEO vocabulary
     /// </summary>
     public static class RDFGEOOntology {
 
