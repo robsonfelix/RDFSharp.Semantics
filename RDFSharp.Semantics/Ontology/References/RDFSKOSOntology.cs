@@ -20,7 +20,7 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFFOAFOntology represents an OWL-DL ontology implementation of SKOS vocabulary
+    /// RDFSKOSOntology represents an OWL-DL ontology implementation of SKOS vocabulary
     /// </summary>
     public static class RDFSKOSOntology {
 
