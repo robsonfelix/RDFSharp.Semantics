@@ -20,7 +20,7 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFFOAFOntology represents an OWL-DL ontology implementation of SIOC vocabulary
+    /// RDFSIOCOntology represents an OWL-DL ontology implementation of SIOC vocabulary
     /// </summary>
     public static class RDFSIOCOntology {
 
