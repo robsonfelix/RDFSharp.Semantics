@@ -32,7 +32,7 @@ namespace RDFSharp.Semantics.FOAF {
         /// <summary>
         /// Singleton instance of the FOAF ontology
         /// </summary>
-        internal static RDFOntology Instance { get; set; }
+        public static RDFOntology Instance { get; internal set; }
         #endregion
 
         #region Ctors
@@ -138,153 +138,130 @@ namespace RDFSharp.Semantics.FOAF {
             #region ClassModel
 
             //SubClassOf
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()),                     SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.GROUP.ToString()),                     SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.ONLINE_CHAT_ACCOUNT.ToString()),       SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.ONLINE_ECOMMERCE_ACCOUNT.ToString()),  SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.ONLINE_GAMING_ACCOUNT.ToString()),     SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.ORGANIZATION.ToString()),              SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),                    SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),                    RDFGEOOntology.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.FOAF.PERSONAL_PROFILE_DOCUMENT.ToString()), SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()),                     Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.GROUP.ToString()),                     Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_CHAT_ACCOUNT.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ECOMMERCE_ACCOUNT.ToString()),  Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_GAMING_ACCOUNT.ToString()),     Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ORGANIZATION.ToString()),              Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),                    Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),                    RDFGEOOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSONAL_PROFILE_DOCUMENT.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
 
             //EquivalentClass
-            Instance.Model.ClassModel.AddEquivalentClassRelation(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()),                RDFDCOntology.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
-            Instance.Model.ClassModel.AddEquivalentClassRelation(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()),             SelectClass("http://schema.org/CreativeWork"));
-            Instance.Model.ClassModel.AddEquivalentClassRelation(SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()),                SelectClass("http://schema.org/ImageObject"));
-            Instance.Model.ClassModel.AddEquivalentClassRelation(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),               SelectClass("http://schema.org/Person"));
-            Instance.Model.ClassModel.AddEquivalentClassRelation(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),               SelectClass("http://www.w3.org/2000/10/swap/pim/contact#Person"));
+            Instance.Model.ClassModel.AddEquivalentClassRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()),                RDFDCOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
+            Instance.Model.ClassModel.AddEquivalentClassRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()),             Instance.Model.ClassModel.SelectClass("http://schema.org/CreativeWork"));
+            Instance.Model.ClassModel.AddEquivalentClassRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()),                Instance.Model.ClassModel.SelectClass("http://schema.org/ImageObject"));
+            Instance.Model.ClassModel.AddEquivalentClassRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),               Instance.Model.ClassModel.SelectClass("http://schema.org/Person"));
+            Instance.Model.ClassModel.AddEquivalentClassRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()),               Instance.Model.ClassModel.SelectClass("http://www.w3.org/2000/10/swap/pim/contact#Person"));
 
             //DisjointWith
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.FOAF.ORGANIZATION.ToString()),            SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.FOAF.ORGANIZATION.ToString()),            SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.FOAF.PROJECT.ToString()),                 SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.FOAF.PROJECT.ToString()),                 SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ORGANIZATION.ToString()),            Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ORGANIZATION.ToString()),            Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PROJECT.ToString()),                 Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PROJECT.ToString()),                 Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
 
             //OneOf
-            Instance.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)SelectClass("bnode:Genders"),                   new RDFOntologyLiteral(new RDFTypedLiteral("female", RDFDatatypeRegister.GetByPrefixAndDatatype("xsd", "string"))));
-            Instance.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)SelectClass("bnode:Genders"),                   new RDFOntologyLiteral(new RDFTypedLiteral("male",   RDFDatatypeRegister.GetByPrefixAndDatatype("xsd", "string"))));
+            Instance.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)Instance.Model.ClassModel.SelectClass("bnode:Genders"),                   new RDFOntologyLiteral(new RDFTypedLiteral("female", RDFDatatypeRegister.GetByPrefixAndDatatype("xsd", "string"))));
+            Instance.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)Instance.Model.ClassModel.SelectClass("bnode:Genders"),                   new RDFOntologyLiteral(new RDFTypedLiteral("male",   RDFDatatypeRegister.GetByPrefixAndDatatype("xsd", "string"))));
 
             #endregion
 
             #region PropertyModel
 
             //SubPropertyOf
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.AIM_CHAT_ID.ToString()),       (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.HOMEPAGE.ToString()),            (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.HOMEPAGE.ToString()),            (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.ICQ_CHAT_ID.ToString()),       (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.IMG.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()), (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.MSN_CHAT_ID.ToString()),       (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.OPEN_ID.ToString()),             (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.TIPJAR.ToString()),              (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.WEBLOG.ToString()),              (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.YAHOO_CHAT_ID.ToString()),     (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.AIM_CHAT_ID.ToString()),       (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.HOMEPAGE.ToString()),            (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.HOMEPAGE.ToString()),            (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ICQ_CHAT_ID.ToString()),       (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IMG.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()), (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MSN_CHAT_ID.ToString()),       (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.OPEN_ID.ToString()),             (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.TIPJAR.ToString()),              (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.WEBLOG.ToString()),              (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.YAHOO_CHAT_ID.ToString()),     (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.NICK.ToString()));
 
             //InverseOf
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()),               (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.DEPICTS.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.PRIMARY_TOPIC.ToString()),           (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.MADE.ToString()),                    (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.MAKER.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()),                    (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.FOAF.TOPIC.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()),               (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.DEPICTS.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PRIMARY_TOPIC.ToString()),           (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MADE.ToString()),                    (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MAKER.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()),                    (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.TOPIC.ToString()));
 
             //Domain/Range
-            SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.ACCOUNT_NAME.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.AGE.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.AGE.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.ACCOUNT_SERVICE_HOMEPAGE.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.ACCOUNT_SERVICE_HOMEPAGE.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.AIM_CHAT_ID.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.BASED_NEAR.ToString()).SetDomain(RDFGEOOntology.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.BASED_NEAR.ToString()).SetRange(RDFGEOOntology.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.BIRTHDAY.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.BIRTHDAY.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.DATE.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.CURRENT_PROJECT.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.DEPICTS.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.FAMILY_NAME.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.FIRSTNAME.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.FOCUS.ToString()).SetDomain(RDFSKOSOntology.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.GEEK_CODE.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.GENDER.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.GENDER.ToString()).SetRange(SelectClass("bnode:Genders"));
-            SelectProperty(RDFVocabulary.FOAF.HOLDS_ACCOUNT.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.HOLDS_ACCOUNT.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.HOMEPAGE.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.ICQ_CHAT_ID.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.IMG.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.IMG.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.INTEREST.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.INTEREST.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.JABBER_ID.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.KNOWS.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.KNOWS.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MBOX.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MBOX_SHA1SUM.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MADE.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MAKER.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MEMBER.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.GROUP.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MEMBER.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MSN_CHAT_ID.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.MYERS_BRIGGS.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.OPEN_ID.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.OPEN_ID.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.PAST_PROJECT.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.PLAN.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.PRIMARY_TOPIC.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.PUBLICATIONS.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.PUBLICATIONS.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.SCHOOL_HOMEPAGE.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.SCHOOL_HOMEPAGE.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.SKYPE_ID.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.SHA1.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.STATUS.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.SURNAME.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.THUMBNAIL.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.THUMBNAIL.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.TIPJAR.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.TIPJAR.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.TOPIC.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.TOPIC_INTEREST.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.WEBLOG.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.WEBLOG.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.WORKINFO_HOMEPAGE.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.WORKINFO_HOMEPAGE.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.WORKPLACE_HOMEPAGE.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.WORKPLACE_HOMEPAGE.ToString()).SetRange(SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.FOAF.YAHOO_CHAT_ID.ToString()).SetDomain(SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT_NAME.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.AGE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.AGE.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT_SERVICE_HOMEPAGE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT_SERVICE_HOMEPAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.AIM_CHAT_ID.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.BASED_NEAR.ToString()).SetDomain(RDFGEOOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.BASED_NEAR.ToString()).SetRange(RDFGEOOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.BIRTHDAY.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.BIRTHDAY.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.DATE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.CURRENT_PROJECT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.DEPICTS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.FAMILY_NAME.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.FIRSTNAME.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.FOCUS.ToString()).SetDomain(RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.GEEK_CODE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.GENDER.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.GENDER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass("bnode:Genders"));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.HOLDS_ACCOUNT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.HOLDS_ACCOUNT.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.HOMEPAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ICQ_CHAT_ID.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IMG.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IMG.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.INTEREST.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.INTEREST.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.IS_PRIMARY_TOPIC_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.JABBER_ID.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.KNOWS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.KNOWS.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MBOX.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MBOX_SHA1SUM.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MADE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MAKER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MEMBER.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.GROUP.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MEMBER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MSN_CHAT_ID.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.MYERS_BRIGGS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.OPEN_ID.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.OPEN_ID.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PAST_PROJECT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PLAN.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PRIMARY_TOPIC.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PUBLICATIONS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.PUBLICATIONS.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.SCHOOL_HOMEPAGE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.SCHOOL_HOMEPAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.SKYPE_ID.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.SHA1.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.STATUS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.SURNAME.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.THUMBNAIL.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.THUMBNAIL.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.TIPJAR.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.TIPJAR.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.TOPIC.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.TOPIC_INTEREST.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.WEBLOG.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.WEBLOG.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.WORKINFO_HOMEPAGE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.WORKINFO_HOMEPAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.WORKPLACE_HOMEPAGE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.WORKPLACE_HOMEPAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.YAHOO_CHAT_ID.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
 
             #endregion
 
             #endregion
 
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Gets the given class from the FOAF ontology
-        /// </summary>
-        public static RDFOntologyClass SelectClass(String ontClass) {
-            return Instance.Model.ClassModel.SelectClass(ontClass);
-        }
-
-        /// <summary>
-        /// Gets the given property from the FOAF ontology
-        /// </summary>
-        public static RDFOntologyProperty SelectProperty(String ontProperty) {
-            return Instance.Model.PropertyModel.SelectProperty(ontProperty);
-        }
-
-        /// <summary>
-        /// Gets the given fact from the FOAF ontology
-        /// </summary>
-        public static RDFOntologyFact SelectFact(String ontFact) {
-            return Instance.Data.SelectFact(ontFact);
         }
         #endregion
 

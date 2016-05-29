@@ -29,7 +29,7 @@ namespace RDFSharp.Semantics.DC {
         /// <summary>
         /// Singleton instance of the DC ontology
         /// </summary>
-        internal static RDFOntology Instance { get; set; }
+        public static RDFOntology Instance { get; internal set; }
         #endregion
 
         #region Ctors
@@ -204,150 +204,127 @@ namespace RDFSharp.Semantics.DC {
             #region ClassModel
 
             //SubClassOf
-            var rdfsLiteral = RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()),            SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.BOX.ToString()),              rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.FILE_FORMAT.ToString()),      SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.ISO3166.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.ISO639_2.ToString()),         rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.ISO639_3.ToString()),         rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.JURISDICTION.ToString()),     SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.LICENSE_DOCUMENT.ToString()), SelectClass(RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION.ToString()),         SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()),       SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD.ToString()),           rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD_OF_TIME.ToString()),   SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.PHYSICAL_MEDIUM.ToString()),  SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.POINT.ToString()),            rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.RFC1766.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.RFC3066.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.RFC4646.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.RFC5646.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.SIZE_OR_DURATION.ToString()), SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.URI.ToString()),              rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTERMS.W3CDTF.ToString()),           rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTYPE.MOVING_IMAGE.ToString()),      SelectClass(RDFVocabulary.DC.DCTYPE.IMAGE.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.DC.DCTYPE.STILL_IMAGE.ToString()),       SelectClass(RDFVocabulary.DC.DCTYPE.IMAGE.ToString()));
+            var rdfsLiteral = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()),            Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.BOX.ToString()),              rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.FILE_FORMAT.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.ISO3166.ToString()),          rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.ISO639_2.ToString()),         rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.ISO639_3.ToString()),         rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.JURISDICTION.ToString()),     Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LICENSE_DOCUMENT.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD.ToString()),           rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD_OF_TIME.ToString()),   Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PHYSICAL_MEDIUM.ToString()),  Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.POINT.ToString()),            rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC1766.ToString()),          rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC3066.ToString()),          rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC4646.ToString()),          rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC5646.ToString()),          rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.SIZE_OR_DURATION.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.URI.ToString()),              rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.W3CDTF.ToString()),           rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.MOVING_IMAGE.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.IMAGE.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.STILL_IMAGE.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.IMAGE.ToString()));
 
             #endregion
 
             #region PropertyModel
 
             //SubPropertyOf
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.ACCESS_RIGHTS.ToString()),            (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.AVAILABLE.ToString()),              (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.BIBLIOGRAPHIC_CITATION.ToString()), (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IDENTIFIER.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.CONFORMS_TO.ToString()),              (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.CREATED.ToString()),                (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.CREATOR.ToString()),                  (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.CONTRIBUTOR.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE_ACCEPTED.ToString()),          (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE_COPYRIGHTED.ToString()),       (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE_SUBMITTED.ToString()),         (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.EDUCATION_LEVEL.ToString()),          (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.AUDIENCE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.EXTENT.ToString()),                   (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.FORMAT.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_FORMAT.ToString()),               (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_PART.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_VERSION.ToString()),              (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.ISSUED.ToString()),                 (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_FORMAT_OF.ToString()),             (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_PART_OF.ToString()),               (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REFERENCED_BY.ToString()),         (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REPLACED_BY.ToString()),           (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REQUIRED_BY.ToString()),           (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_VERSION_OF.ToString()),            (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.LICENSE.ToString()),                  (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIATOR.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.AUDIENCE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIUM.ToString()),                   (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.FORMAT.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.MODIFIED.ToString()),               (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.REFERENCES.ToString()),               (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.REPLACES.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.REQUIRES.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.SOURCE.ToString()),                   (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.SPATIAL.ToString()),                  (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.COVERAGE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.TEMPORAL.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.COVERAGE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.VALID.ToString()),                  (RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCESS_RIGHTS.ToString()),            (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.AVAILABLE.ToString()),              (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.BIBLIOGRAPHIC_CITATION.ToString()), (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IDENTIFIER.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.CONFORMS_TO.ToString()),              (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.CREATED.ToString()),                (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.CREATOR.ToString()),                  (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.CONTRIBUTOR.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE_ACCEPTED.ToString()),          (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE_COPYRIGHTED.ToString()),       (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE_SUBMITTED.ToString()),         (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.EDUCATION_LEVEL.ToString()),          (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.AUDIENCE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.EXTENT.ToString()),                   (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.FORMAT.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_FORMAT.ToString()),               (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_PART.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_VERSION.ToString()),              (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ISSUED.ToString()),                 (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_FORMAT_OF.ToString()),             (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_PART_OF.ToString()),               (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REFERENCED_BY.ToString()),         (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REPLACED_BY.ToString()),           (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REQUIRED_BY.ToString()),           (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_VERSION_OF.ToString()),            (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.LICENSE.ToString()),                  (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIATOR.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.AUDIENCE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIUM.ToString()),                   (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.FORMAT.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.MODIFIED.ToString()),               (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.REFERENCES.ToString()),               (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.REPLACES.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.REQUIRES.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.SOURCE.ToString()),                   (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RELATION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.SPATIAL.ToString()),                  (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.COVERAGE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.TEMPORAL.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.COVERAGE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.VALID.ToString()),                  (RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
 
             //InverseOf
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_FORMAT.ToString()),                   (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_FORMAT_OF.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_PART.ToString()),                     (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_PART_OF.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_VERSION.ToString()),                  (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_VERSION_OF.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.REFERENCES.ToString()),                   (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REFERENCED_BY.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.REPLACES.ToString()),                     (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REPLACED_BY.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.REQUIRES.ToString()),                     (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REQUIRED_BY.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_FORMAT.ToString()),                   (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_FORMAT_OF.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_PART.ToString()),                     (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_PART_OF.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.HAS_VERSION.ToString()),                  (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_VERSION_OF.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.REFERENCES.ToString()),                   (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REFERENCED_BY.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.REPLACES.ToString()),                     (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REPLACED_BY.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.REQUIRES.ToString()),                     (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.IS_REQUIRED_BY.ToString()));
 
             //Domain/Range
-            SelectProperty(RDFVocabulary.DC.DCAM.MEMBER_OF.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.ACCESS_RIGHTS.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_METHOD.ToString()).SetDomain(SelectClass(RDFVocabulary.DC.DCTYPE.COLLECTION.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_METHOD.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.METHOD_OF_ACCRUAL.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_PERIODICITY.ToString()).SetDomain(SelectClass(RDFVocabulary.DC.DCTYPE.COLLECTION.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_PERIODICITY.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.FREQUENCY.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_POLICY.ToString()).SetDomain(SelectClass(RDFVocabulary.DC.DCTYPE.COLLECTION.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_POLICY.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.POLICY.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.AUDIENCE.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.BIBLIOGRAPHIC_CITATION.ToString()).SetDomain(SelectClass(RDFVocabulary.DC.DCTERMS.BIBLIOGRAPHIC_RESOURCE.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.CONFORMS_TO.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.STANDARD.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.CONTRIBUTOR.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.COVERAGE.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.CREATOR.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.EDUCATION_LEVEL.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.EXTENT.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.SIZE_OR_DURATION.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.FORMAT.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.INSTRUCTIONAL_METHOD.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.METHOD_OF_INSTRUCTION.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.LANGUAGE.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.LINGUISTIC_SYSTEM.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.LICENSE.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.LICENSE_DOCUMENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIATOR.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIUM.ToString()).SetDomain(SelectClass(RDFVocabulary.DC.DCTERMS.PHYSICAL_RESOURCE.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIUM.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.PHYSICAL_MEDIUM.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.PUBLISHER.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.PROVENANCE.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.PROVENANCE_STATEMENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS_HOLDER.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.SPATIAL.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION.ToString()));
-            SelectProperty(RDFVocabulary.DC.DCTERMS.TEMPORAL.ToString()).SetRange(SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD_OF_TIME.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCAM.MEMBER_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCESS_RIGHTS.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_METHOD.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.COLLECTION.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_METHOD.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.METHOD_OF_ACCRUAL.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_PERIODICITY.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.COLLECTION.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_PERIODICITY.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.FREQUENCY.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_POLICY.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.COLLECTION.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.ACCRUAL_POLICY.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.POLICY.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.AUDIENCE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.BIBLIOGRAPHIC_CITATION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.BIBLIOGRAPHIC_RESOURCE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.CONFORMS_TO.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.STANDARD.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.CONTRIBUTOR.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.COVERAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.CREATOR.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.EDUCATION_LEVEL.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.EXTENT.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.SIZE_OR_DURATION.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.FORMAT.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.INSTRUCTIONAL_METHOD.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.METHOD_OF_INSTRUCTION.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.LANGUAGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LINGUISTIC_SYSTEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.LICENSE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LICENSE_DOCUMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIATOR.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIUM.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PHYSICAL_RESOURCE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.MEDIUM.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PHYSICAL_MEDIUM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.PUBLISHER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.PROVENANCE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PROVENANCE_STATEMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.RIGHTS_HOLDER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.SPATIAL.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.TEMPORAL.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD_OF_TIME.ToString()));
 
             #endregion
 
             #region Data
 
             //ClassType
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.DCMITYPE.ToString()), SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.DDC.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.IMT.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.LCC.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.LCSH.ToString()),     SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.MESH.ToString()),     SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.NLM.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.TGN.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
-            Instance.Data.AddClassTypeRelation(SelectFact(RDFVocabulary.DC.DCTERMS.UDC.ToString()),      SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.DCMITYPE.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.DDC.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.IMT.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.LCC.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.LCSH.ToString()),     Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.MESH.ToString()),     Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.NLM.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.TGN.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
+            Instance.Data.AddClassTypeRelation(Instance.Data.SelectFact(RDFVocabulary.DC.DCTERMS.UDC.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCAM.VOCABULARY_ENCODING_SCHEME.ToString()));
 
             #endregion
 
             #endregion
 
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Gets the given class from the DC ontology
-        /// </summary>
-        public static RDFOntologyClass SelectClass(String ontClass) {
-            return Instance.Model.ClassModel.SelectClass(ontClass);
-        }
-
-        /// <summary>
-        /// Gets the given property from the DC ontology
-        /// </summary>
-        public static RDFOntologyProperty SelectProperty(String ontProperty) {
-            return Instance.Model.PropertyModel.SelectProperty(ontProperty);
-        }
-
-        /// <summary>
-        /// Gets the given fact from the DC ontology
-        /// </summary>
-        public static RDFOntologyFact SelectFact(String ontFact) {
-            return Instance.Data.SelectFact(ontFact);
         }
         #endregion
 

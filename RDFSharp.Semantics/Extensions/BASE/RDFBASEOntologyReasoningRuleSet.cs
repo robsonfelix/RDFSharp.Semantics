@@ -133,7 +133,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void SubClassTransitivityExec(RDFOntology ontology,
                                                           RDFOntologyReasoningReport report) {
-                var subClassOf       = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString());
+                var subClassOf       = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString());
                 foreach(var c       in ontology.Model.ClassModel) {
                     foreach(var sc  in RDFOntologyReasoningHelper.EnlistSuperClassesOf(c, ontology.Model.ClassModel)) {
 
@@ -161,7 +161,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void SubPropertyTransitivityExec(RDFOntology ontology,
                                                              RDFOntologyReasoningReport report) {
-                var subPropertyOf    = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString());
+                var subPropertyOf    = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString());
                 foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
                     foreach(var sp  in RDFOntologyReasoningHelper.EnlistSuperPropertiesOf(p, ontology.Model.PropertyModel)) {
 
@@ -188,7 +188,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void ClassTypeEntailmentExec(RDFOntology ontology,
                                                          RDFOntologyReasoningReport report) {
-                var type            = RDFBASEOntology.SelectProperty(RDFVocabulary.RDF.TYPE.ToString());
+                var type            = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString());
                 foreach(var c      in ontology.Model.ClassModel.Where(cls => !RDFOntologyReasoningHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
                     foreach(var f  in RDFOntologyReasoningHelper.EnlistMembersOfNonLiteralCompatibleClass(c, ontology)) {
 
@@ -259,7 +259,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void DomainEntailmentExec(RDFOntology ontology,
                                                       RDFOntologyReasoningReport report) {
-                var type                  = RDFBASEOntology.SelectProperty(RDFVocabulary.RDF.TYPE.ToString());
+                var type                  = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString());
                 foreach(var p            in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
                     if (p.Domain         != null) {
 
@@ -293,7 +293,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void RangeEntailmentExec(RDFOntology ontology,
                                                      RDFOntologyReasoningReport report) {
-                var type                    = RDFBASEOntology.SelectProperty(RDFVocabulary.RDF.TYPE.ToString());
+                var type                    = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString());
                 foreach(var p              in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
                     if (p.Range            != null) {
 
@@ -469,7 +469,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void EquivalentClassTransitivityExec(RDFOntology ontology,
                                                                  RDFOntologyReasoningReport report) {
-                var equivalentClass  = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString());
+                var equivalentClass  = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString());
                 foreach(var c       in ontology.Model.ClassModel) {
                     foreach(var ec  in RDFOntologyReasoningHelper.EnlistEquivalentClassesOf(c, ontology.Model.ClassModel)) {
 
@@ -505,7 +505,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void DisjointWithEntailmentExec(RDFOntology ontology,
                                                             RDFOntologyReasoningReport report) {
-                var disjointWith     = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString());
+                var disjointWith     = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString());
                 foreach(var c       in ontology.Model.ClassModel) {
                     foreach(var dwc in RDFOntologyReasoningHelper.EnlistDisjointClassesWith(c, ontology.Model.ClassModel)) {
 
@@ -539,7 +539,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void EquivalentPropertyTransitivityExec(RDFOntology ontology,
                                                                     RDFOntologyReasoningReport report) {
-                var equivProperty    = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString());
+                var equivProperty    = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString());
                 foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
                     foreach(var ep  in RDFOntologyReasoningHelper.EnlistEquivalentPropertiesOf(p, ontology.Model.PropertyModel)) {
 
@@ -573,7 +573,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void SameAsTransitivityExec(RDFOntology ontology,
                                                         RDFOntologyReasoningReport report) {
-                var sameAs           = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString());
+                var sameAs           = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString());
                 foreach(var f       in ontology.Data) {
                     foreach(var sf  in RDFOntologyReasoningHelper.EnlistSameFactsAs(f, ontology.Data)) {
 
@@ -608,7 +608,7 @@ namespace RDFSharp.Semantics.BASE {
             /// </summary>
             internal static void DifferentFromEntailmentExec(RDFOntology ontology,
                                                              RDFOntologyReasoningReport report) {
-                var differentFrom    = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString());
+                var differentFrom    = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString());
                 foreach(var f       in ontology.Data) {
                     foreach(var df  in RDFOntologyReasoningHelper.EnlistDifferentFactsFrom(f, ontology.Data)) {
 

@@ -31,7 +31,7 @@ namespace RDFSharp.Semantics.SIOC {
         /// <summary>
         /// Singleton instance of the SIOC ontology
         /// </summary>
-        internal static RDFOntology Instance { get; set; }
+        public static RDFOntology Instance { get; internal set; }
         #endregion
 
         #region Ctors
@@ -153,201 +153,178 @@ namespace RDFSharp.Semantics.SIOC {
             #region ClassModel
 
             //SubClassOf
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.SIOC.FORUM.ToString()),          SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.SIOC.POST.ToString()),           SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.SIOC.POST.ToString()),           RDFFOAFOntology.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.SIOC.SITE.ToString()),           SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.SIOC.THREAD.ToString()),         SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()),   RDFFOAFOntology.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.FORUM.ToString()),          Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()),           Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()),           RDFFOAFOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SITE.ToString()),           Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.THREAD.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()),   RDFFOAFOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
 
             //EquivalentClass
-            Instance.Model.ClassModel.AddEquivalentClassRelation(SelectClass(RDFVocabulary.SIOC.USER.ToString()),      SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddEquivalentClassRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
 
             //DisjointWith
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.COMMUNITY.ToString()),    SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.COMMUNITY.ToString()),    SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.COMMUNITY.ToString()),    SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.ROLE.ToString()),         SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.ROLE.ToString()),         SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.ROLE.ToString()),         SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.SPACE.ToString()),        SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.SPACE.ToString()),        SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            Instance.Model.ClassModel.AddDisjointWithRelation(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()), SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.COMMUNITY.ToString()),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.COMMUNITY.ToString()),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.COMMUNITY.ToString()),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()),        Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()),        Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
 
             #endregion
 
             #region PropertyModel
 
             //SubPropertyOf
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.AVATAR.ToString()),               (RDFOntologyObjectProperty)RDFFOAFOntology.SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()),            (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.RELATED_TO.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.SIOC.LAST_ACTIVITY_DATE.ToString()), (RDFOntologyDatatypeProperty)RDFDCOntology.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.SIOC.LAST_ITEM_DATE.ToString()),     (RDFOntologyDatatypeProperty)RDFDCOntology.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)SelectProperty(RDFVocabulary.SIOC.LAST_REPLY_DATE.ToString()),    (RDFOntologyDatatypeProperty)RDFDCOntology.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.LINKS_TO.ToString()),             (RDFOntologyObjectProperty)RDFDCOntology.SelectProperty(RDFVocabulary.DC.DCTERMS.REFERENCES.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()),         (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()),     (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()),             (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.RELATED_TO.ToString()));
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.TOPIC.ToString()),                (RDFOntologyObjectProperty)RDFDCOntology.SelectProperty(RDFVocabulary.DC.DCTERMS.SUBJECT.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.AVATAR.ToString()),               (RDFOntologyObjectProperty)RDFFOAFOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()),            (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.RELATED_TO.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LAST_ACTIVITY_DATE.ToString()), (RDFOntologyDatatypeProperty)RDFDCOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LAST_ITEM_DATE.ToString()),     (RDFOntologyDatatypeProperty)RDFDCOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyDatatypeProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LAST_REPLY_DATE.ToString()),    (RDFOntologyDatatypeProperty)RDFDCOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.DATE.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LINKS_TO.ToString()),             (RDFOntologyObjectProperty)RDFDCOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.REFERENCES.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()),         (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()),     (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()),             (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.RELATED_TO.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.TOPIC.ToString()),                (RDFOntologyObjectProperty)RDFDCOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.DC.DCTERMS.SUBJECT.ToString()));
 
             //InverseOf
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()),               (RDFOntologyObjectProperty)RDFFOAFOntology.SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.ADMINISTRATOR_OF.ToString()),         (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_ADMINISTRATOR.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.CONTAINER_OF.ToString()),             (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_CONTAINER.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.CREATOR_OF.ToString()),               (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_CREATOR.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.FUNCTION_OF.ToString()),              (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_FUNCTION.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.GROUP_OF.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_GROUP.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HOST_OF.ToString()),                  (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_HOST.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.MEMBER_OF.ToString()),                (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_MEMBER.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.MODERATOR_OF.ToString()),             (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_MODERATOR.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.MODIFIER_OF.ToString()),              (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_MODIFIER.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.OWNER_OF.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_OWNER.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.PARENT_OF.ToString()),                (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_PARENT.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.PART_OF.ToString()),                  (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_PART.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.SCOPE_OF.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_SCOPE.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.SPACE_OF.ToString()),                 (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_SPACE.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.SUBSCRIBER_OF.ToString()),            (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_SUBSCRIBER.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.USERGROUP_OF.ToString()),             (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.HAS_USERGROUP.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()),          (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()),         (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()));
-            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.PREVIOUS_BY_DATE.ToString()),         (RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.SIOC.NEXT_BY_DATE.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()),               (RDFOntologyObjectProperty)RDFFOAFOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ADMINISTRATOR_OF.ToString()),         (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_ADMINISTRATOR.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CONTAINER_OF.ToString()),             (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_CONTAINER.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CREATOR_OF.ToString()),               (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_CREATOR.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.FUNCTION_OF.ToString()),              (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_FUNCTION.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.GROUP_OF.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_GROUP.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HOST_OF.ToString()),                  (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_HOST.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MEMBER_OF.ToString()),                (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MEMBER.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MODERATOR_OF.ToString()),             (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MODERATOR.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MODIFIER_OF.ToString()),              (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MODIFIER.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.OWNER_OF.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_OWNER.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PARENT_OF.ToString()),                (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_PARENT.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PART_OF.ToString()),                  (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_PART.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SCOPE_OF.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_SCOPE.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SPACE_OF.ToString()),                 (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_SPACE.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SUBSCRIBER_OF.ToString()),            (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_SUBSCRIBER.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.USERGROUP_OF.ToString()),             (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_USERGROUP.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()),          (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()),         (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()));
+            Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_BY_DATE.ToString()),         (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_BY_DATE.ToString()));
 
             //Domain/Range
-            SelectProperty(RDFVocabulary.SIOC.ABOUT.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()).SetRange(RDFFOAFOntology.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.ADDRESSED_TO.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.ADMINISTRATOR_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.ADMINISTRATOR_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.ATTACHMENT.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.AVATAR.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.CONTAINER_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.CONTAINER_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.CONTENT.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.CONTENT_ENCODED.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.POST.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.CREATED_AT.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.POST.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.CREATOR_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.DESCRIPTION.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.POST.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.EMAIL.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.EMAIL_SHA1.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.EMBEDS_KNOWLEDGE.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.EMBEDS_KNOWLEDGE.ToString()).SetRange(SelectClass("http://www.w3.org/2004/03/trix/rdfg-1/Graph"));
-            SelectProperty(RDFVocabulary.SIOC.FIRST_NAME.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.FOLLOWS.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.FOLLOWS.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.FUNCTION_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_ADMINISTRATOR.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_ADMINISTRATOR.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_CONTAINER.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_CONTAINER.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_CREATOR.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_DISCUSSION.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_FUNCTION.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_HOST.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_HOST.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_MEMBER.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_MEMBER.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_MODERATOR.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_MODERATOR.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_MODIFIER.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_MODIFIER.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_OWNER.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_PARENT.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_PARENT.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_SCOPE.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_SPACE.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_SUBSCRIBER.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_SUBSCRIBER.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_USERGROUP.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HAS_USERGROUP.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HOST_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.HOST_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.IP_ADDRESS.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.LAST_ITEM_DATE.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.LAST_NAME.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.LATEST_VERSION.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.LATEST_VERSION.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.MEMBER_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.MEMBER_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.MODIFIED_AT.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.POST.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.MODERATOR_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.MODERATOR_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.MODIFIER_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.MODIFIER_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NEXT_BY_DATE.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NEXT_BY_DATE.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NUM_AUTHORS.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NUM_ITEMS.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NUM_ITEMS.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NUM_REPLIES.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NUM_THREADS.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NUM_THREADS.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.NUM_VIEWS.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.OWNER_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.PARENT_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.PARENT_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.PREVIOUS_BY_DATE.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.PREVIOUS_BY_DATE.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.REFERENCE.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.POST.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.SCOPE_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.SIBLING.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.SIBLING.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.SPACE_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.SUBJECT.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.POST.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.SUBSCRIBER_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.SUBSCRIBER_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.TITLE.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.POST.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.USERGROUP_OF.ToString()).SetDomain(SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
-            SelectProperty(RDFVocabulary.SIOC.USERGROUP_OF.ToString()).SetRange(SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ABOUT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()).SetRange(RDFFOAFOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ADDRESSED_TO.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ADMINISTRATOR_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ADMINISTRATOR_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ATTACHMENT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.AVATAR.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CONTAINER_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CONTAINER_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CONTENT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CONTENT_ENCODED.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CREATED_AT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.CREATOR_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.DESCRIPTION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EARLIER_VERSION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EMAIL.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EMAIL_SHA1.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EMBEDS_KNOWLEDGE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.EMBEDS_KNOWLEDGE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass("http://www.w3.org/2004/03/trix/rdfg-1/Graph"));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.FIRST_NAME.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.FOLLOWS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.FOLLOWS.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.FUNCTION_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_ADMINISTRATOR.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_ADMINISTRATOR.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_CONTAINER.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_CONTAINER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_CREATOR.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_DISCUSSION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_FUNCTION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_HOST.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_HOST.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MEMBER.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MEMBER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MODERATOR.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MODERATOR.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MODIFIER.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_MODIFIER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_OWNER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_PARENT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_PARENT.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_REPLY.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_SCOPE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_SPACE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_SUBSCRIBER.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_SUBSCRIBER.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_USERGROUP.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HAS_USERGROUP.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HOST_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SITE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.HOST_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.IP_ADDRESS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LAST_ITEM_DATE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LAST_NAME.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LATER_VERSION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LATEST_VERSION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.LATEST_VERSION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MEMBER_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MEMBER_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MODIFIED_AT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MODERATOR_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MODERATOR_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MODIFIER_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.MODIFIER_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_BY_DATE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_BY_DATE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_VERSION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NUM_AUTHORS.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NUM_ITEMS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NUM_ITEMS.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NUM_REPLIES.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NUM_THREADS.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.FORUM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NUM_THREADS.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NUM_VIEWS.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.NON_NEGATIVE_INTEGER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.OWNER_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PARENT_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PARENT_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_BY_DATE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_BY_DATE.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_VERSION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.REFERENCE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.REPLY_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SCOPE_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ROLE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SIBLING.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SIBLING.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SPACE_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SUBJECT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SUBSCRIBER_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.SUBSCRIBER_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.TITLE.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.USERGROUP_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_GROUP.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.USERGROUP_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.SPACE.ToString()));
 
             #endregion
 
             #endregion
 
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Gets the given class from the SIOC ontology
-        /// </summary>
-        public static RDFOntologyClass SelectClass(String ontClass) {
-            return Instance.Model.ClassModel.SelectClass(ontClass);
-        }
-
-        /// <summary>
-        /// Gets the given property from the SIOC ontology
-        /// </summary>
-        public static RDFOntologyProperty SelectProperty(String ontProperty) {
-            return Instance.Model.PropertyModel.SelectProperty(ontProperty);
-        }
-
-        /// <summary>
-        /// Gets the given fact from the SIOC ontology
-        /// </summary>
-        public static RDFOntologyFact SelectFact(String ontFact) {
-            return Instance.Data.SelectFact(ontFact);
         }
         #endregion
 

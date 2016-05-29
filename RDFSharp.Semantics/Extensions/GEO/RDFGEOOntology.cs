@@ -30,7 +30,7 @@ namespace RDFSharp.Semantics.GEO {
         /// <summary>
         /// Singleton instance of the GEO ontology
         /// </summary>
-        internal static RDFOntology Instance { get; set; }
+        public static RDFOntology Instance { get; internal set; }
         #endregion
 
         #region Ctors
@@ -65,53 +65,30 @@ namespace RDFSharp.Semantics.GEO {
             #region ClassModel
 
             //SubClassOf
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.GEO.POINT.ToString()), SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.POINT.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
 
             #endregion
 
             #region PropertyModel
 
             //SubPropertyOf
-            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)SelectProperty(RDFVocabulary.GEO.LOCATION.ToString()), (RDFOntologyObjectProperty)RDFFOAFOntology.SelectProperty(RDFVocabulary.FOAF.BASED_NEAR.ToString()));
+            Instance.Model.PropertyModel.AddSubPropertyOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LOCATION.ToString()), (RDFOntologyObjectProperty)RDFFOAFOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.BASED_NEAR.ToString()));
 
             //Domain/Range
-            SelectProperty(RDFVocabulary.GEO.ALT.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
-            SelectProperty(RDFVocabulary.GEO.ALT.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
-            SelectProperty(RDFVocabulary.GEO.LAT.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
-            SelectProperty(RDFVocabulary.GEO.LAT.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
-            SelectProperty(RDFVocabulary.GEO.LONG.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
-            SelectProperty(RDFVocabulary.GEO.LONG.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
-            SelectProperty(RDFVocabulary.GEO.LAT_LONG.ToString()).SetDomain(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
-            SelectProperty(RDFVocabulary.GEO.LAT_LONG.ToString()).SetRange(RDFBASEOntology.SelectClass(RDFVocabulary.XSD.STRING.ToString()));
-            SelectProperty(RDFVocabulary.GEO.LOCATION.ToString()).SetRange(SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.ALT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.ALT.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LAT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LAT.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LONG.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LONG.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.FLOAT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LAT_LONG.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LAT_LONG.ToString()).SetRange(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.GEO.LOCATION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.GEO.SPATIAL_THING.ToString()));
 
             #endregion
 
             #endregion
 
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Gets the given class from the GEO ontology
-        /// </summary>
-        public static RDFOntologyClass SelectClass(String ontClass) {
-            return Instance.Model.ClassModel.SelectClass(ontClass);
-        }
-
-        /// <summary>
-        /// Gets the given property from the GEO ontology
-        /// </summary>
-        public static RDFOntologyProperty SelectProperty(String ontProperty) {
-            return Instance.Model.PropertyModel.SelectProperty(ontProperty);
-        }
-
-        /// <summary>
-        /// Gets the given fact from the GEO ontology
-        /// </summary>
-        public static RDFOntologyFact SelectFact(String ontFact) {
-            return Instance.Data.SelectFact(ontFact);
         }
         #endregion
 

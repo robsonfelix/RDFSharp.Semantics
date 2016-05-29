@@ -685,8 +685,8 @@ namespace RDFSharp.Semantics
         internal static RDFOntologyData EnlistMembersOfLiteralCompatibleClass(RDFOntologyClass ontClass, 
                                                                               RDFOntology ontology) {
             var result              = new RDFOntologyData();
-            var rdfsLiteral         = RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
-            var xsdString           = RDFBASEOntology.SelectClass(RDFVocabulary.XSD.STRING.ToString());
+            var rdfsLiteral         = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
+            var xsdString           = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString());
 
             #region DataRange
             if (ontClass.IsDataRangeClass()) {
@@ -742,7 +742,7 @@ namespace RDFSharp.Semantics
                         if(((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.RDF.BASE_URI,  StringComparison.Ordinal)  || 
                            ((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.RDFS.BASE_URI, StringComparison.Ordinal)  ||
                            ((RDFTypedLiteral)ontLit.Value).Datatype.Namespace.ToString().Equals(RDFVocabulary.XSD.BASE_URI,  StringComparison.Ordinal))  {
-                            dTypeClass  = RDFBASEOntology.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
+                            dTypeClass  = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(((RDFTypedLiteral)ontLit.Value).Datatype.ToString());
                         }
 
                         //Other
@@ -849,18 +849,18 @@ namespace RDFSharp.Semantics
                 var sameAs          = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.SAME_AS);
                 var differentFrom   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DIFFERENT_FROM);
 
-                var versionInfoAnn  = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString());
-                var termStatusAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString());
-                var commentAnn      = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString());
-                var labelAnn        = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString());
-                var seeAlsoAnn      = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString());
-                var isDefinedByAnn  = RDFBASEOntology.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString());
-                var versionIRIAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString());
-                var priorVersionAnn = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString());
-                var backwardCWAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString());
-                var incompWithAnn   = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString());
-                var importsAnn      = RDFBASEOntology.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString());
-                var rdfsLiteral     = RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
+                var versionInfoAnn  = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString());
+                var termStatusAnn   = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.VS.TERM_STATUS.ToString());
+                var commentAnn      = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString());
+                var labelAnn        = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString());
+                var seeAlsoAnn      = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString());
+                var isDefinedByAnn  = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString());
+                var versionIRIAnn   = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString());
+                var priorVersionAnn = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString());
+                var backwardCWAnn   = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString());
+                var incompWithAnn   = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString());
+                var importsAnn      = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString());
+                var rdfsLiteral     = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
                 #endregion
 
 

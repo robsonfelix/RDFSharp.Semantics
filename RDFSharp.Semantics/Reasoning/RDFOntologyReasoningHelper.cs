@@ -205,9 +205,9 @@ namespace RDFSharp.Semantics {
             var result    = false;
             if (ontClass != null && classModel != null) {
                 result    = (ontClass.IsDataRangeClass() 
-                             || ontClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
-                             || IsSubClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel) 
-                             || IsEquivalentClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
+                             || ontClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
+                             || IsSubClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel) 
+                             || IsEquivalentClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
             }
             return result;
         }
