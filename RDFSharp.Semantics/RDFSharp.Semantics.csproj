@@ -63,6 +63,7 @@
     <Compile Include="Extensions\FOAF\RDFFOAFOntology.cs" />
     <Compile Include="Extensions\GEO\RDFGEOOntology.cs" />
     <Compile Include="Extensions\SIOC\RDFSIOCOntology.cs" />
+    <Compile Include="Extensions\SKOS\RDFSKOSExtensions.cs" />
     <Compile Include="Extensions\SKOS\RDFSKOSOntology.cs" />
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyMetadata.cs" />
