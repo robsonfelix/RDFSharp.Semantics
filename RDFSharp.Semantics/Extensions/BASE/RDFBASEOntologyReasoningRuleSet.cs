@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.BASE {
 
     /// <summary>
     /// RDFBASEOntologyReasoningRuleSet represents a collection of RDFS/OWL-DL rules available to reasoners.

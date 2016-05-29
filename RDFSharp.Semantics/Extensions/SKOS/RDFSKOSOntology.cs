@@ -17,7 +17,7 @@
 using System;
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.SKOS {
 
     /// <summary>
     /// RDFSKOSOntology represents an OWL-DL ontology implementation of SKOS vocabulary

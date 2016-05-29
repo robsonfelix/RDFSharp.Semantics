@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using RDFSharp.Model;
 using RDFSharp.Query;
+using RDFSharp.Semantics.BASE;
 
 namespace RDFSharp.Semantics
 {

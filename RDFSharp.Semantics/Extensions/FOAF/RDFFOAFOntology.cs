@@ -16,8 +16,12 @@
 
 using System;
 using RDFSharp.Model;
+using RDFSharp.Semantics.BASE;
+using RDFSharp.Semantics.DC;
+using RDFSharp.Semantics.GEO;
+using RDFSharp.Semantics.SKOS;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.FOAF {
 
     /// <summary>
     /// RDFFOAFOntology represents an OWL-DL ontology implementation of FOAF vocabulary

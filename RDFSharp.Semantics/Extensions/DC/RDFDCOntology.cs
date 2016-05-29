@@ -16,8 +16,9 @@
 
 using System;
 using RDFSharp.Model;
+using RDFSharp.Semantics.BASE;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.DC {
 
     /// <summary>
     /// RDFDCOntology represents an OWL-DL ontology implementation of Dublin Core vocabulary

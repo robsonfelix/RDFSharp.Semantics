@@ -16,8 +16,11 @@
 
 using System;
 using RDFSharp.Model;
+using RDFSharp.Semantics.BASE;
+using RDFSharp.Semantics.DC;
+using RDFSharp.Semantics.FOAF;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.SIOC {
 
     /// <summary>
     /// RDFSIOCOntology represents an OWL-DL ontology implementation of SIOC vocabulary

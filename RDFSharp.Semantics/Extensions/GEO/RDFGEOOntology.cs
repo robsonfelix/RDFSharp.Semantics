@@ -16,8 +16,10 @@
 
 using System;
 using RDFSharp.Model;
+using RDFSharp.Semantics.BASE;
+using RDFSharp.Semantics.FOAF;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.GEO {
 
     /// <summary>
     /// RDFGEOOntology represents an OWL-DL ontology implementation of W3C GEO vocabulary

@@ -30,12 +30,12 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// RDFOntologyReasoningEvidenceCategory represents an enumeration for possible categories of ontology reasoning evidence
         /// </summary>
-        public enum RDFOntologyReasoningEvidenceCategory  { ClassModel = 1, PropertyModel = 2, Data = 3 };
+        public enum RDFOntologyReasoningEvidenceCategory { ClassModel = 1, PropertyModel = 2, Data = 3 };
 
         /// <summary>
         /// RDFOntologyReasoningRuleType represents an enumeration for possible types of a reasoning rule.
         /// </summary>
-        public enum RDFOntologyReasoningRuleType          { Standard = 1, UserDefined = 2 };
+        public enum RDFOntologyReasoningRuleType { Standard = 1, UserDefined = 2 };
 
     }
 

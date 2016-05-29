@@ -15,10 +15,13 @@
 */
 
 using System;
-using System.Collections.Generic;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
+using RDFSharp.Semantics.BASE;
+using RDFSharp.Semantics.DC;
+using RDFSharp.Semantics.FOAF;
+using RDFSharp.Semantics.GEO;
+using RDFSharp.Semantics.SIOC;
+using RDFSharp.Semantics.SKOS;
 
 namespace RDFSharp.Semantics {
 
