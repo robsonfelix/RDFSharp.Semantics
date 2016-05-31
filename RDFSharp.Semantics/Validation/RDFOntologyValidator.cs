@@ -15,9 +15,14 @@
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using RDFSharp.Semantics.BASE;
+using RDFSharp.Model;
+using RDFSharp.Store;
+using RDFSharp.Query;
 
 namespace RDFSharp.Semantics {
 

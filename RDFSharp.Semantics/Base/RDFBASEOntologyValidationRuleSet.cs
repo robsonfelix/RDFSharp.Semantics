@@ -15,10 +15,14 @@
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using RDFSharp.Model;
+using RDFSharp.Store;
+using RDFSharp.Query;
 
-namespace RDFSharp.Semantics.BASE {
+namespace RDFSharp.Semantics {
 
     /// <summary>
     /// RDFBASEOntologyValidationRuleSet represents a predefined set of RDFS/OWL-DL rules which are applied by a validator 
