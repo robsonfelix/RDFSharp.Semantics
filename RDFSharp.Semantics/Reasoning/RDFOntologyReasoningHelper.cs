@@ -507,6 +507,41 @@ namespace RDFSharp.Semantics {
                 return RDFBASEOntology.Instance.Model.ClassModel.Classes[clsID];
             }
 
+            //DC
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
+                if (RDFDCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                    return RDFDCOntology.Instance.Model.ClassModel.Classes[clsID];
+                }
+            }
+
+            //FOAF
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
+                if (RDFFOAFOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                    return RDFFOAFOntology.Instance.Model.ClassModel.Classes[clsID];
+                }
+            }
+
+            //GEO
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
+                if (RDFGEOOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                    return RDFGEOOntology.Instance.Model.ClassModel.Classes[clsID];
+                }
+            }
+
+            //SKOS
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
+                if (RDFSKOSOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                    return RDFSKOSOntology.Instance.Model.ClassModel.Classes[clsID];
+                }
+            }
+
+            //SIOC
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
+                if (RDFSIOCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
+                    return RDFSIOCOntology.Instance.Model.ClassModel.Classes[clsID];
+                }
+            }
+
             return null;
         }
 
@@ -522,6 +557,41 @@ namespace RDFSharp.Semantics {
                 return RDFBASEOntology.Instance.Model.PropertyModel.Properties[propID];
             }
 
+            //DC
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
+                if (RDFDCOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                    return RDFDCOntology.Instance.Model.PropertyModel.Properties[propID];
+                }
+            }
+
+            //FOAF
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
+                if (RDFFOAFOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                    return RDFFOAFOntology.Instance.Model.PropertyModel.Properties[propID];
+                }
+            }
+
+            //GEO
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
+                if (RDFGEOOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                    return RDFGEOOntology.Instance.Model.PropertyModel.Properties[propID];
+                }
+            }
+
+            //SKOS
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
+                if (RDFSKOSOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                    return RDFSKOSOntology.Instance.Model.PropertyModel.Properties[propID];
+                }
+            }
+
+            //SIOC
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
+                if (RDFSIOCOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
+                    return RDFSIOCOntology.Instance.Model.PropertyModel.Properties[propID];
+                }
+            }
+
             return null;
         }
 
@@ -535,6 +605,41 @@ namespace RDFSharp.Semantics {
             //BASE
             if (RDFBASEOntology.Instance.Data.Facts.ContainsKey(factID)) {
                 return RDFBASEOntology.Instance.Data.Facts[factID];
+            }
+
+            //DC
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
+                if (RDFDCOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                    return RDFDCOntology.Instance.Data.Facts[factID];
+                }
+            }
+
+            //FOAF
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
+                if (RDFFOAFOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                    return RDFFOAFOntology.Instance.Data.Facts[factID];
+                }
+            }
+
+            //GEO
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
+                if (RDFGEOOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                    return RDFGEOOntology.Instance.Data.Facts[factID];
+                }
+            }
+
+            //SKOS
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
+                if (RDFSKOSOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                    return RDFSKOSOntology.Instance.Data.Facts[factID];
+                }
+            }
+
+            //SIOC
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
+                if (RDFSIOCOntology.Instance.Data.Facts.ContainsKey(factID)) {
+                    return RDFSIOCOntology.Instance.Data.Facts[factID];
+                }
             }
 
             return null;

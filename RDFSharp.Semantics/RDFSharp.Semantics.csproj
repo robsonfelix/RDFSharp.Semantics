@@ -55,6 +55,11 @@
     <Compile Include="Base\RDFBASEOntology.cs" />
     <Compile Include="Base\RDFBASEOntologyReasoningRuleSet.cs" />
     <Compile Include="Base\RDFBASEOntologyValidationRuleSet.cs" />
+    <Compile Include="Extensions\RDFDCOntology.cs" />
+    <Compile Include="Extensions\RDFFOAFOntology.cs" />
+    <Compile Include="Extensions\RDFGEOOntology.cs" />
+    <Compile Include="Extensions\RDFSIOCOntology.cs" />
+    <Compile Include="Extensions\RDFSKOSOntology.cs" />
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyMetadata.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
@@ -92,6 +97,7 @@
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
+    <Compile Include="RDFSemanticsOptions.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
   </ItemGroup>
   <ItemGroup>

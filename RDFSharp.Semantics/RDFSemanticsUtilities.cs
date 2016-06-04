@@ -2048,7 +2048,8 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region CustomAnnotations
-                foreach(var p in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
+                var annotProps = ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty());
+                foreach(var p in annotProps) {
 
                     //Skip built-in annotation properties
                     if (p.Equals(versionInfoAnn)  || p.Equals(termStatusAnn)   || p.Equals(commentAnn)      || 
@@ -2191,7 +2192,7 @@ namespace RDFSharp.Semantics
                     #endregion
 
                     #region CustomAnnotations
-                    foreach(var p in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
+                    foreach(var p in annotProps) {
 
                         //Skip built-in annotation properties
                         if (p.Equals(versionInfoAnn) || p.Equals(termStatusAnn)   || p.Equals(commentAnn)     ||
@@ -2335,7 +2336,7 @@ namespace RDFSharp.Semantics
                     #endregion
 
                     #region CustomAnnotations
-                    foreach(var ap in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
+                    foreach(var ap in annotProps) {
 
                         //Skip built-in annotation properties
                         if (ap.Equals(versionInfoAnn) || ap.Equals(termStatusAnn)   || ap.Equals(commentAnn)     ||
@@ -2465,7 +2466,7 @@ namespace RDFSharp.Semantics
                     #endregion
 
                     #region CustomAnnotations
-                    foreach(var p in ontology.Model.PropertyModel.Where(prop => prop.IsAnnotationProperty())) {
+                    foreach(var p in annotProps) {
 
                         //Skip built-in annotation properties
                         if (p.Equals(versionInfoAnn) || p.Equals(termStatusAnn)   || p.Equals(commentAnn)     ||

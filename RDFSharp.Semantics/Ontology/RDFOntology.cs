@@ -88,11 +88,41 @@ namespace RDFSharp.Semantics
         internal void Init() {
 
             //Model expansion
-            this.Model = this.Model.UnionWith(RDFBASEOntology.Instance.Model);
-            
+            this.Model     = this.Model.UnionWith(RDFBASEOntology.Instance.Model);
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
+                this.Model = this.Model.UnionWith(RDFDCOntology.Instance.Model);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
+                this.Model = this.Model.UnionWith(RDFFOAFOntology.Instance.Model);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
+                this.Model = this.Model.UnionWith(RDFGEOOntology.Instance.Model);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
+                this.Model = this.Model.UnionWith(RDFSKOSOntology.Instance.Model);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
+                this.Model = this.Model.UnionWith(RDFSIOCOntology.Instance.Model);
+            }
+
             //Data expansion
-            this.Data  = this.Data.UnionWith(RDFBASEOntology.Instance.Data);
-            
+            this.Data      = this.Data.UnionWith(RDFBASEOntology.Instance.Data);
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
+                this.Data  = this.Data.UnionWith(RDFDCOntology.Instance.Data);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
+                this.Data = this.Data.UnionWith(RDFFOAFOntology.Instance.Data);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
+                this.Data = this.Data.UnionWith(RDFGEOOntology.Instance.Data);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
+                this.Data = this.Data.UnionWith(RDFSKOSOntology.Instance.Data);
+            }
+            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
+                this.Data = this.Data.UnionWith(RDFSIOCOntology.Instance.Data);
+            }
+
         }
         #endregion
 
