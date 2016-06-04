@@ -1041,14 +1041,6 @@ namespace RDFSharp.Semantics
                     ontClass.IsRDFSClass   = true; //Save the information that this is a "rdfs:Class"
                     ontology.Model.ClassModel.AddClass(ontClass);
                 }
-                //rdfs:Datatype
-                foreach(var dt            in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.DATATYPE)) {
-                    var dtClass            = ((RDFResource)dt.Subject).ToRDFOntologyClass();
-                    dtClass.IsRDFSDatatype = true; //Save the information that this is a "rdfs:Datatype"
-                    ontology.Model.ClassModel.AddClass(dtClass);
-                    //Datatypes are modeled as subclasses of "rdfs:Literal"
-                    ontology.Model.ClassModel.AddSubClassOfRelation(dtClass, rdfsLiteral);
-                }
                 #endregion
 
                 #region Step 4.2: Load OWL:DeprecatedClass

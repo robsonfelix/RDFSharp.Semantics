@@ -74,9 +74,9 @@ namespace RDFSharp.Semantics {
         /// Adds the given rule to the reasoner
         /// </summary>
         public RDFOntologyReasoner AddRule(RDFOntologyReasoningRule rule) {
-            if(rule   != null) {
-                if(this.SelectRule(rule.RuleName) == null) {
-                   this.Rules.Add(rule);
+            if (rule   != null) {
+                if (this.SelectRule(rule.RuleName) == null) {
+                    this.Rules.Add(rule);
                 }
             }
             return this;
@@ -86,9 +86,9 @@ namespace RDFSharp.Semantics {
         /// Removes the given rule from the reasoner
         /// </summary>
         public RDFOntologyReasoner RemoveRule(RDFOntologyReasoningRule rule) {
-            if(rule   != null) {
-                if(this.SelectRule(rule.RuleName) != null) {
-                   this.Rules.RemoveAll(rs => rs.RuleName.ToUpperInvariant().Equals(rule.RuleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
+            if (rule   != null) {
+                if (this.SelectRule(rule.RuleName) != null) {
+                    this.Rules.RemoveAll(rs => rs.RuleName.ToUpperInvariant().Equals(rule.RuleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
                 }
             }
             return this;
@@ -134,7 +134,10 @@ namespace RDFSharp.Semantics {
         public RDFOntologyReasoningReport ApplyToOntology(RDFOntology ontology) {
             if (ontology   != null) {
                 var rReport = new RDFOntologyReasoningReport(ontology.Value.PatternMemberID);
-                
+
+                //Step 0: Cleanup ontology from inferences
+                ontology.ClearInferences();
+
                 //Step 1: Apply class-based rules
                 this.TriggerRule("EquivalentClassTransitivity",    ontology, rReport);
                 this.TriggerRule("SubClassTransitivity",           ontology, rReport);

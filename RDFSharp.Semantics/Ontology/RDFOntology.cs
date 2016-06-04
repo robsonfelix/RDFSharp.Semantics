@@ -682,7 +682,7 @@ namespace RDFSharp.Semantics
 
         #region Reasoner
         /// <summary>
-        /// Clears all the taxonomy entries marked as true semantic inferences (RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner)
+        /// Clears all the taxonomy entries marked as true semantic inferences (=RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner)
         /// </summary>
         public RDFOntology ClearInferences() {
             this.Model.ClearInferences();

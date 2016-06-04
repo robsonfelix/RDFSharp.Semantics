@@ -110,7 +110,7 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal RDFOntologyValidationReport AnalyzeOntology(RDFOntology ontology) {
             var report = new RDFOntologyValidationReport(ontology.Value.PatternMemberID);
-            
+
             //Execute the validation rules
             Parallel.ForEach(this.Rules, rule => {
                 rule.ExecuteRule(ontology, report);

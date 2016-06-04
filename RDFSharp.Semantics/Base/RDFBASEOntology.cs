@@ -147,19 +147,20 @@ namespace RDFSharp.Semantics {
             #region ClassModel
 
             //SubClassOf
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.RDF.XML_LITERAL.ToString()),          SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.STRING.ToString()),               SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.BOOLEAN.ToString()),              SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.BASE64_BINARY.ToString()),        SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.HEX_BINARY.ToString()),           SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.FLOAT.ToString()),                SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DECIMAL.ToString()),              SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DOUBLE.ToString()),               SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.ANY_URI.ToString()),              SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.QNAME.ToString()),                SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.NOTATION.ToString()),             SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DURATION.ToString()),             SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DATETIME.ToString()),             SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()));
+            var rdfsLiteral = SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.RDF.XML_LITERAL.ToString()),          rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.STRING.ToString()),               rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.BOOLEAN.ToString()),              rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.BASE64_BINARY.ToString()),        rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.HEX_BINARY.ToString()),           rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.FLOAT.ToString()),                rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DECIMAL.ToString()),              rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DOUBLE.ToString()),               rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.ANY_URI.ToString()),              rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.QNAME.ToString()),                rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.NOTATION.ToString()),             rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DURATION.ToString()),             rdfsLiteral);
+            Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DATETIME.ToString()),             rdfsLiteral);
             Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.TIME.ToString()),                 SelectClass(RDFVocabulary.XSD.DATETIME.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.DATE.ToString()),                 SelectClass(RDFVocabulary.XSD.DATETIME.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(SelectClass(RDFVocabulary.XSD.G_YEAR_MONTH.ToString()),         SelectClass(RDFVocabulary.XSD.DATE.ToString()));

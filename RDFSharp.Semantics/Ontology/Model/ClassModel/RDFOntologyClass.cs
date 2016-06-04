@@ -15,11 +15,7 @@
 */
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics
 {
@@ -39,11 +35,6 @@ namespace RDFSharp.Semantics
         /// Flag indicating that this ontology class has been imported as "rdfs:Class"
         /// </summary>
         internal Boolean IsRDFSClass { get; set; }
-
-        /// <summary>
-        /// Flag indicating that this ontology class has been imported as "rdfs:Datatype"
-        /// </summary>
-        internal Boolean IsRDFSDatatype { get; set; }
         #endregion
 
         #region Ctors
