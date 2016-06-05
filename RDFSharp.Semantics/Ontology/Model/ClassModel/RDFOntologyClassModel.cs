@@ -998,7 +998,7 @@ namespace RDFSharp.Semantics {
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result        = new RDFGraph();
 
-            //Definitions (discard reference ontology definitions)
+            //Definitions (do not export reference ontology definitions)
             foreach(var    c in this.Where(cls => RDFOntologyReasoningHelper.SearchReferenceClass(cls.ToString()) == null)) {
                 if (c.IsRestrictionClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.RESTRICTION));
@@ -1076,7 +1076,7 @@ namespace RDFSharp.Semantics {
                     }
                 }
                 else {
-                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, (c.IsRDFSClass ? RDFVocabulary.RDFS.CLASS : RDFVocabulary.OWL.CLASS)));
+                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, (c.Type == RDFSemanticsEnums.RDFOntologyClassType.RDFS ? RDFVocabulary.RDFS.CLASS : RDFVocabulary.OWL.CLASS)));
                     if (c.IsDeprecatedClass()) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS));
                     }

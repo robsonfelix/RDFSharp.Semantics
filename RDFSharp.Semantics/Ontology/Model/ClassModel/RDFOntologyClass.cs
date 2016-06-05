@@ -32,23 +32,31 @@ namespace RDFSharp.Semantics
         public Boolean Deprecated { get; internal set; }
 
         /// <summary>
-        /// Flag indicating that this ontology class has been imported as "rdfs:Class"
+        /// Type of ontology class (OWL/RDFS)
         /// </summary>
-        internal Boolean IsRDFSClass { get; set; }
+        public RDFSemanticsEnums.RDFOntologyClassType Type { get; internal set; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an ontology class with the given name
+        /// Default-ctor to build an ontology class with the given name and type=OWL
         /// </summary>
         public RDFOntologyClass(RDFResource className) {
             if (className != null) {
                 this.Value           = className;
+                this.Type            = RDFSemanticsEnums.RDFOntologyClassType.OWL;
                 this.PatternMemberID = className.PatternMemberID;
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntologyClass because given \"className\" parameter is null.");
             }
+        }
+
+        /// <summary>
+        /// Default-ctor to build an ontology class with the given name and type
+        /// </summary>
+        public RDFOntologyClass(RDFResource className, RDFSemanticsEnums.RDFOntologyClassType type): this(className) {
+            this.Type = type;
         }
         #endregion
 
@@ -57,8 +65,7 @@ namespace RDFSharp.Semantics
         /// Sets or unsets this ontology class as "owl:DeprecatedClass"
         /// </summary>
         public RDFOntologyClass SetDeprecated(Boolean deprecated) {
-            if (!this.IsRestrictionClass() && !this.IsCompositeClass() &&
-                !this.IsDataRangeClass()   && !this.IsEnumerateClass()) {
+            if (!this.IsRestrictionClass() && !this.IsCompositeClass() && !this.IsDataRangeClass() && !this.IsEnumerateClass()) {
                  this.Deprecated = deprecated;
             }
             return this;

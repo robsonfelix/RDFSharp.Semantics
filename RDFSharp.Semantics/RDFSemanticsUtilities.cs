@@ -1027,7 +1027,7 @@ namespace RDFSharp.Semantics
 
                 #region Step 4: Init ClassModel
 
-                #region Step 4.1: Load [OWL:Class|RDFS:Class|RDFS:Datatype]
+                #region Step 4.1: Load [OWL:Class|RDFS:Class]
                 foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
                     var ontClass           = ((RDFResource)c.Subject).ToRDFOntologyClass();
                     ontology.Model.ClassModel.AddClass(ontClass);
@@ -1038,7 +1038,7 @@ namespace RDFSharp.Semantics
                 //rdfs:Class
                 foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS)) {
                     var ontClass           = ((RDFResource)c.Subject).ToRDFOntologyClass();
-                    ontClass.IsRDFSClass   = true; //Save the information that this is a "rdfs:Class"
+                    ontClass.Type          = RDFSemanticsEnums.RDFOntologyClassType.RDFS;
                     ontology.Model.ClassModel.AddClass(ontClass);
                 }
                 #endregion

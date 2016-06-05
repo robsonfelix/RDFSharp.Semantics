@@ -972,7 +972,7 @@ namespace RDFSharp.Semantics {
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result     = new RDFGraph();
 
-            //Definitions (discard reference ontology definitions)
+            //Definitions (do not export reference ontology definitions)
             foreach(var p in this.Where(prop => RDFOntologyReasoningHelper.SearchReferenceProperty(prop.ToString()) == null)) {
                 if  (p.IsAnnotationProperty()) {
                      result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ANNOTATION_PROPERTY));
