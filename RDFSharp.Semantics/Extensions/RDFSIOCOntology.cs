@@ -60,6 +60,7 @@ namespace RDFSharp.Semantics {
             //OWL-DL Completeness
             Instance.Model.ClassModel.AddClass(RDFVocabulary.FOAF.AGENT.ToRDFOntologyClass());
             Instance.Model.ClassModel.AddClass(RDFVocabulary.FOAF.DOCUMENT.ToRDFOntologyClass());
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.FOAF.IMAGE.ToRDFOntologyClass());
             Instance.Model.ClassModel.AddClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToRDFOntologyClass());
             Instance.Model.ClassModel.AddClass(new RDFOntologyClass(new RDFResource("http://www.w3.org/2004/03/trix/rdfg-1/Graph")));
             #endregion
@@ -160,6 +161,7 @@ namespace RDFSharp.Semantics {
             #region ClassModel
 
             //SubClassOf
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()),          Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.FORUM.ToString()),          Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.CONTAINER.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()),           Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.POST.ToString()),           Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.DOCUMENT.ToString()));
@@ -229,6 +231,9 @@ namespace RDFSharp.Semantics {
             Instance.Model.PropertyModel.AddInverseOfRelation((RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.PREVIOUS_BY_DATE.ToString()),         (RDFOntologyObjectProperty)Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.NEXT_BY_DATE.ToString()));
 
             //Domain/Range
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.ACCOUNT.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.ONLINE_ACCOUNT.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.FOAF.DEPICTION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.IMAGE.ToString()));
             Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ABOUT.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.ITEM.ToString()));
             Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SIOC.USER_ACCOUNT.ToString()));
             Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SIOC.ACCOUNT_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.AGENT.ToString()));
