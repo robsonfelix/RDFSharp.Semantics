@@ -1076,7 +1076,7 @@ namespace RDFSharp.Semantics {
                     }
                 }
                 else {
-                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, (c.Type == RDFSemanticsEnums.RDFOntologyClassType.RDFS ? RDFVocabulary.RDFS.CLASS : RDFVocabulary.OWL.CLASS)));
+                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
                     if (c.IsDeprecatedClass()) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS));
                     }

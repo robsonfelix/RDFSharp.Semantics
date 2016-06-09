@@ -47,11 +47,6 @@ namespace RDFSharp.Semantics
         /// </summary>
         public enum RDFOntologyExtensions { DC = 1, FOAF = 2, GEO = 3, SKOS = 4, SIOC = 5 };
 
-        /// <summary>
-        /// RDFOntologyClassType represents an enumeration for supported types of ontology class (OWL/RDFS)
-        /// </summary>
-        public enum RDFOntologyClassType { OWL = 1, RDFS = 2 };
-
     }
 
 }

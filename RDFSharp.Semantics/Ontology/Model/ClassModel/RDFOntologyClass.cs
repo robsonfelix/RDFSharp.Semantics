@@ -30,11 +30,6 @@ namespace RDFSharp.Semantics
         /// Flag indicating that this ontology class is "owl:DeprecatedClass"
         /// </summary>
         public Boolean Deprecated { get; internal set; }
-
-        /// <summary>
-        /// Type of ontology class (OWL/RDFS)
-        /// </summary>
-        public RDFSemanticsEnums.RDFOntologyClassType Type { get; internal set; }
         #endregion
 
         #region Ctors
@@ -44,19 +39,11 @@ namespace RDFSharp.Semantics
         public RDFOntologyClass(RDFResource className) {
             if (className != null) {
                 this.Value           = className;
-                this.Type            = RDFSemanticsEnums.RDFOntologyClassType.OWL;
                 this.PatternMemberID = className.PatternMemberID;
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntologyClass because given \"className\" parameter is null.");
             }
-        }
-
-        /// <summary>
-        /// Default-ctor to build an ontology class with the given name and type
-        /// </summary>
-        public RDFOntologyClass(RDFResource className, RDFSemanticsEnums.RDFOntologyClassType type): this(className) {
-            this.Type = type;
         }
         #endregion
 

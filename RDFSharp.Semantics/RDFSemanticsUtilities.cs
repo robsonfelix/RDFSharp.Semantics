@@ -1027,19 +1027,13 @@ namespace RDFSharp.Semantics
 
                 #region Step 4: Init ClassModel
 
-                #region Step 4.1: Load [OWL:Class|RDFS:Class]
+                #region Step 4.1: Load OWL:Class
                 foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.OWL.CLASS)) {
                     var ontClass           = ((RDFResource)c.Subject).ToRDFOntologyClass();
                     ontology.Model.ClassModel.AddClass(ontClass);
                     if   (ontGraph.ContainsTriple(new RDFTriple((RDFResource)ontClass.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS))) {
                           ontClass.SetDeprecated(true);
                     }
-                }
-                //rdfs:Class
-                foreach(var c             in rdfType.SelectTriplesByObject(RDFVocabulary.RDFS.CLASS)) {
-                    var ontClass           = ((RDFResource)c.Subject).ToRDFOntologyClass();
-                    ontClass.Type          = RDFSemanticsEnums.RDFOntologyClassType.RDFS;
-                    ontology.Model.ClassModel.AddClass(ontClass);
                 }
                 #endregion
 
