@@ -42,11 +42,6 @@ namespace RDFSharp.Semantics
         /// </summary>
         public enum RDFOntologyInferenceType { None = 0, API = 1, Reasoner = 2 };
 
-        /// <summary>
-        /// RDFOntologyExtensions represents an enumeration for built-in ontology extensions
-        /// </summary>
-        public enum RDFOntologyExtensions { DC = 1, FOAF = 2, GEO = 3, SKOS = 4, SIOC = 5 };
-
     }
 
 }

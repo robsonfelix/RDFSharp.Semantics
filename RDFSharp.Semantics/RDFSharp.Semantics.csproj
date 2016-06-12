@@ -51,15 +51,28 @@
   <ItemGroup>
     <!-- Assembly -->
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <!-- Semantics -->
-    <Compile Include="Base\RDFBASEOntology.cs" />
-    <Compile Include="Base\RDFBASEOntologyReasoningRuleSet.cs" />
-    <Compile Include="Base\RDFBASEOntologyValidationRuleSet.cs" />
-    <Compile Include="Extensions\RDFDCOntology.cs" />
-    <Compile Include="Extensions\RDFFOAFOntology.cs" />
-    <Compile Include="Extensions\RDFGEOOntology.cs" />
-    <Compile Include="Extensions\RDFSIOCOntology.cs" />
-    <Compile Include="Extensions\RDFSKOSOntology.cs" />
+    <Compile Include="RDFSemanticsEnums.cs" />
+    <Compile Include="RDFSemanticsEvents.cs" />
+    <Compile Include="RDFSemanticsException.cs" />
+    <Compile Include="RDFSemanticsUtilities.cs" />
+
+    <!-- Library (Base) -->
+    <Compile Include="Library\Base\RDFBASEOntology.cs" />
+    <Compile Include="Library\Base\RDFBASEOntologyReasoningHelper.cs" />
+    <Compile Include="Library\Base\RDFBASEOntologyReasoningRuleSet.cs" />
+    <Compile Include="Library\Base\RDFBASEOntologyValidationRuleSet.cs" />
+
+    <!-- Library (Extensions) -->
+    <Compile Include="Library\Extensions\DC\RDFDCOntology.cs" />
+    <Compile Include="Library\Extensions\FOAF\RDFFOAFOntology.cs" />
+    <Compile Include="Library\Extensions\GEO\RDFGEOOntology.cs" />
+    <Compile Include="Library\Extensions\SKOS\RDFSKOSExtensions.cs" />
+    <Compile Include="Library\Extensions\SKOS\RDFSKOSOntology.cs" />
+    <Compile Include="Library\Extensions\SKOS\RDFSKOSOntologyReasoningHelper.cs" />
+    <Compile Include="Library\Extensions\SKOS\RDFSKOSOntologyReasoningRuleSet.cs" />
+    <Compile Include="Library\Extensions\SKOS\RDFSKOSOntologyValidationRuleSet.cs" />
+
+    <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyMetadata.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
@@ -85,20 +98,18 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
+
+    <!-- Reasoning -->
     <Compile Include="Reasoning\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningEvidence.cs" />
-    <Compile Include="Reasoning\RDFOntologyReasoningHelper.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningReport.cs" />
     <Compile Include="Reasoning\RDFOntologyReasoningRule.cs" />
+
+    <!-- Validation -->
     <Compile Include="Validation\RDFOntologyValidationEvidence.cs" />
     <Compile Include="Validation\RDFOntologyValidationReport.cs" />
     <Compile Include="Validation\RDFOntologyValidationRule.cs" />
     <Compile Include="Validation\RDFOntologyValidator.cs" />
-    <Compile Include="RDFSemanticsEnums.cs" />
-    <Compile Include="RDFSemanticsEvents.cs" />
-    <Compile Include="RDFSemanticsException.cs" />
-    <Compile Include="RDFSemanticsOptions.cs" />
-    <Compile Include="RDFSemanticsUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

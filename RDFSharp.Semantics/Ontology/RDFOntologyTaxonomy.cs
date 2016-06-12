@@ -240,9 +240,7 @@ namespace RDFSharp.Semantics {
             var result    = new RDFGraph();
 
             //Taxonomy entries (discard reference ontology definitions)
-            foreach (var te in this.Where(tEntry => RDFOntologyReasoningHelper.SearchReferenceClass(tEntry.TaxonomySubject.ToString())    == null  &&
-                                                    RDFOntologyReasoningHelper.SearchReferenceProperty(tEntry.TaxonomySubject.ToString()) == null  &&
-                                                    RDFOntologyReasoningHelper.SearchReferenceFact(tEntry.TaxonomySubject.ToString())     == null)) {
+            foreach (var te in this) {
                 if (includeInferences) {
                     result.AddTriple(te.ToRDFTriple());
                 }

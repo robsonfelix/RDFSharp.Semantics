@@ -15,17 +15,14 @@
 */
 
 using System;
-using System.Collections.Generic;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyReasoningHelper represents an helper for lite RDFS/OWL-DL reasoning tasks.
+    /// RDFBASEOntologyReasoningHelper represents an helper for BASE (RDF/RDFS/OWL/XSD) reasoning tasks.
     /// </summary>
-    public static class RDFOntologyReasoningHelper {
+    public static class RDFBASEOntologyReasoningHelper {
 
         #region ClassModel
 
@@ -202,9 +199,9 @@ namespace RDFSharp.Semantics {
             var result    = false;
             if (ontClass != null && classModel != null) {
                 result    = (ontClass.IsDataRangeClass() 
-                             || ontClass.Equals(RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
-                             || IsSubClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel) 
-                             || IsEquivalentClassOf(ontClass, RDFBASEOntology.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
+                             || ontClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
+                             || IsSubClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel) 
+                             || IsEquivalentClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
             }
             return result;
         }
@@ -492,158 +489,6 @@ namespace RDFSharp.Semantics {
         }
         #endregion
 
-        #endregion
-
-        #region Reference
-        /// <summary>
-        /// Searches the given class into the reference ontologies
-        /// </summary>
-        public static RDFOntologyClass SearchReferenceClass(String ontClass) {
-            if (ontClass  == null) { return null; }
-            var clsID      = RDFModelUtilities.CreateHash(ontClass);
-
-            //BASE
-            if (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                return RDFBASEOntology.Instance.Model.ClassModel.Classes[clsID];
-            }
-
-            //DC
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
-                if (RDFDCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                    return RDFDCOntology.Instance.Model.ClassModel.Classes[clsID];
-                }
-            }
-
-            //FOAF
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
-                if (RDFFOAFOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                    return RDFFOAFOntology.Instance.Model.ClassModel.Classes[clsID];
-                }
-            }
-
-            //GEO
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
-                if (RDFGEOOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                    return RDFGEOOntology.Instance.Model.ClassModel.Classes[clsID];
-                }
-            }
-
-            //SKOS
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
-                if (RDFSKOSOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                    return RDFSKOSOntology.Instance.Model.ClassModel.Classes[clsID];
-                }
-            }
-
-            //SIOC
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
-                if (RDFSIOCOntology.Instance.Model.ClassModel.Classes.ContainsKey(clsID)) {
-                    return RDFSIOCOntology.Instance.Model.ClassModel.Classes[clsID];
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Searches the given property into the reference ontologies
-        /// </summary>
-        public static RDFOntologyProperty SearchReferenceProperty(String ontProp) {
-            if (ontProp   == null) { return null; }
-            var propID     = RDFModelUtilities.CreateHash(ontProp);
-
-            //BASE
-            if (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                return RDFBASEOntology.Instance.Model.PropertyModel.Properties[propID];
-            }
-
-            //DC
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
-                if (RDFDCOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                    return RDFDCOntology.Instance.Model.PropertyModel.Properties[propID];
-                }
-            }
-
-            //FOAF
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
-                if (RDFFOAFOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                    return RDFFOAFOntology.Instance.Model.PropertyModel.Properties[propID];
-                }
-            }
-
-            //GEO
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
-                if (RDFGEOOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                    return RDFGEOOntology.Instance.Model.PropertyModel.Properties[propID];
-                }
-            }
-
-            //SKOS
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
-                if (RDFSKOSOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                    return RDFSKOSOntology.Instance.Model.PropertyModel.Properties[propID];
-                }
-            }
-
-            //SIOC
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
-                if (RDFSIOCOntology.Instance.Model.PropertyModel.Properties.ContainsKey(propID)) {
-                    return RDFSIOCOntology.Instance.Model.PropertyModel.Properties[propID];
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Searches the given fact into the reference ontologies
-        /// </summary>
-        public static RDFOntologyFact SearchReferenceFact(String ontFact) {
-            if (ontFact   == null) { return null; }
-            var factID     = RDFModelUtilities.CreateHash(ontFact);
-
-            //BASE
-            if (RDFBASEOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                return RDFBASEOntology.Instance.Data.Facts[factID];
-            }
-
-            //DC
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.DC)) {
-                if (RDFDCOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                    return RDFDCOntology.Instance.Data.Facts[factID];
-                }
-            }
-
-            //FOAF
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.FOAF)) {
-                if (RDFFOAFOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                    return RDFFOAFOntology.Instance.Data.Facts[factID];
-                }
-            }
-
-            //GEO
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.GEO)) {
-                if (RDFGEOOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                    return RDFGEOOntology.Instance.Data.Facts[factID];
-                }
-            }
-
-            //SKOS
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SKOS)) {
-                if (RDFSKOSOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                    return RDFSKOSOntology.Instance.Data.Facts[factID];
-                }
-            }
-
-            //SIOC
-            if (RDFSemanticsOptions.IsExtensionLoadingEnabled(RDFSemanticsEnums.RDFOntologyExtensions.SIOC)) {
-                if (RDFSIOCOntology.Instance.Data.Facts.ContainsKey(factID)) {
-                    return RDFSIOCOntology.Instance.Data.Facts[factID];
-                }
-            }
-
-            return null;
-        }
         #endregion
 
     }
