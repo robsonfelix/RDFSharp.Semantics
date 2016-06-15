@@ -66,11 +66,7 @@
     <Compile Include="Library\Extensions\DC\RDFDCOntology.cs" />
     <Compile Include="Library\Extensions\FOAF\RDFFOAFOntology.cs" />
     <Compile Include="Library\Extensions\GEO\RDFGEOOntology.cs" />
-    <Compile Include="Library\Extensions\SKOS\RDFSKOSExtensions.cs" />
     <Compile Include="Library\Extensions\SKOS\RDFSKOSOntology.cs" />
-    <Compile Include="Library\Extensions\SKOS\RDFSKOSOntologyReasoningHelper.cs" />
-    <Compile Include="Library\Extensions\SKOS\RDFSKOSOntologyReasoningRuleSet.cs" />
-    <Compile Include="Library\Extensions\SKOS\RDFSKOSOntologyValidationRuleSet.cs" />
 
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />

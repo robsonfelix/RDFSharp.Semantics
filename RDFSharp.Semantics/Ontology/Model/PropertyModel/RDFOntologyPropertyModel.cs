@@ -972,8 +972,8 @@ namespace RDFSharp.Semantics {
         public RDFGraph ToRDFGraph(Boolean includeInferences) {
             var result     = new RDFGraph();
 
-            //Definitions
-            foreach(var p in this) {
+            //Definitions (do not export BASE ontology properties)
+            foreach(var p in this.Where(prop => RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(prop.ToString()) == null)) {
                 if  (p.IsAnnotationProperty()) {
                      result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ANNOTATION_PROPERTY));
                 }
