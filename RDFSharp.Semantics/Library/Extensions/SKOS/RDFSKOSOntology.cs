@@ -49,6 +49,9 @@ namespace RDFSharp.Semantics.SKOS {
             Instance.Model.ClassModel.AddClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToRDFOntologyClass());
             Instance.Model.ClassModel.AddClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToRDFOntologyClass());
             Instance.Model.ClassModel.AddClass(new RDFOntologyUnionClass(new RDFResource("bnode:ConceptCollection")));
+
+            //SKOS.SKOSXL
+            Instance.Model.ClassModel.AddClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToRDFOntologyClass());
             #endregion
 
             #region Properties
@@ -80,6 +83,13 @@ namespace RDFSharp.Semantics.SKOS {
             Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.SCOPE_NOTE.ToRDFOntologyAnnotationProperty());
             Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.SEMANTIC_RELATION.ToRDFOntologyObjectProperty());
             Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.TOP_CONCEPT_OF.ToRDFOntologyObjectProperty());
+
+            //SKOS.SKOSXL
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToRDFOntologyDatatypeProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.SKOSXL.HIDDEN_LABEL.ToRDFOntologyObjectProperty());
+            Instance.Model.PropertyModel.AddProperty(RDFVocabulary.SKOS.SKOSXL.LABEL_RELATION.ToRDFOntologyObjectProperty().SetSymmetric(true));
             #endregion
 
             #endregion
@@ -88,13 +98,20 @@ namespace RDFSharp.Semantics.SKOS {
 
             #region ClassModel
 
+            //Restrictions
+            Instance.Model.ClassModel.AddClass(new RDFOntologyCardinalityRestriction(new RDFResource("bnode:ExactlyOneLiteralForm"),                 Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString()), 1, 1));
+
             //SubClassOf
             Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString()));
+            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()),       Instance.Model.ClassModel.SelectClass("bnode:ExactlyOneLiteralForm"));
 
             //DisjointWith
             Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()));
             Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
             Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()),          Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()),          Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
+            Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString()),   Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
 
             //UnionOf
             Instance.Model.ClassModel.AddUnionOfRelation((RDFOntologyUnionClass)Instance.Model.ClassModel.SelectClass("bnode:ConceptCollection"),    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()));
@@ -138,6 +155,12 @@ namespace RDFSharp.Semantics.SKOS {
             Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SEMANTIC_RELATION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()));
             Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.TOP_CONCEPT_OF.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()));
             Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.TOP_CONCEPT_OF.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.HIDDEN_LABEL.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LABEL_RELATION.ToString()).SetDomain(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
+            Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LABEL_RELATION.ToString()).SetRange(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
 
             #endregion
 
