@@ -1061,13 +1061,13 @@ namespace RDFSharp.Semantics {
                     drangeCollection.ReificationSubject = new RDFResource("bnode:" + c.PatternMemberID);
                     if (infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.None     ||
                         infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyData) {
-                        foreach (var enumMember        in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax => tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None)) {
-                            drangeCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
+                        foreach (var drangeMember      in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax => tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None)) {
+                            drangeCollection.AddItem((RDFResource)drangeMember.TaxonomyObject.Value);
                         }
                     }
                     else {
-                        foreach (var enumMember        in this.Relations.OneOf.SelectEntriesBySubject(c)) {
-                            drangeCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
+                        foreach (var drangeMember      in this.Relations.OneOf.SelectEntriesBySubject(c)) {
+                            drangeCollection.AddItem((RDFResource)drangeMember.TaxonomyObject.Value);
                         }
                     }
                     result                              = result.UnionWith(drangeCollection.ReifyCollection());

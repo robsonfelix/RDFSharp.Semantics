@@ -29,7 +29,7 @@ namespace RDFSharp.Semantics {
 
         #region Properties
         /// <summary>
-        /// Category of the ontology taxonomy (Model/Data)
+        /// Category of the ontology taxonomy
         /// </summary>
         public RDFSemanticsEnums.RDFOntologyTaxonomyCategory Category { get; internal set; }
 
