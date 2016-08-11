@@ -409,7 +409,7 @@ namespace RDFSharp.Semantics
                                  .AddProperty(ontRestriction.OnProperty);
             
             //Filter assertions made with enlisted compatible properties
-            var fTaxonomy  = new RDFOntologyTaxonomy();
+            var fTaxonomy  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
             foreach (var   p in compProps) {
                 fTaxonomy  = fTaxonomy.UnionWith(ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p));
             }
@@ -780,7 +780,7 @@ namespace RDFSharp.Semantics
                                     .AddClass(ontClass);
 
             //Filter "classType" relations made with compatible classes
-            var fTaxonomy  = new RDFOntologyTaxonomy();
+            var fTaxonomy  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
             foreach (var   c in compCls) {
                 fTaxonomy  = fTaxonomy.UnionWith(ontology.Data.Relations.ClassType.SelectEntriesByObject(c));
             }
@@ -2508,34 +2508,34 @@ namespace RDFSharp.Semantics
         }
 
         /// <summary>
-        /// Gets a graph representation of the given ontology, eventually including inferences
+        /// Gets a graph representation of the given ontology, exporting inferences according to the selected behavior
         /// </summary>
-        internal static RDFGraph ToRDFGraph(RDFOntology ontology, Boolean includeInferences) {
+        internal static RDFGraph ToRDFGraph(RDFOntology ontology, RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
             var result    = new RDFGraph();
             if (ontology != null) {
 
                 #region Step 1: Export ontology
                 result.AddTriple(new RDFTriple((RDFResource)ontology.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ONTOLOGY));
-                result    = result.UnionWith(ontology.Annotations.VersionInfo.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.VersionIRI.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.Comment.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.Label.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.SeeAlso.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.IsDefinedBy.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.BackwardCompatibleWith.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.IncompatibleWith.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.PriorVersion.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.Imports.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Annotations.CustomAnnotations.ToRDFGraph(includeInferences))
-                                  .UnionWith(ontology.Relations.CustomRelations.ToRDFGraph(includeInferences));
+                result    = result.UnionWith(ontology.Annotations.VersionInfo.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.VersionIRI.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.Comment.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.Label.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.SeeAlso.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.IsDefinedBy.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.BackwardCompatibleWith.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.IncompatibleWith.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.PriorVersion.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.Imports.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Annotations.CustomAnnotations.ToRDFGraph(infexpBehavior))
+                                  .UnionWith(ontology.Relations.CustomRelations.ToRDFGraph(infexpBehavior));
                 #endregion
 
                 #region Step 2: Export model
-                result    = result.UnionWith(ontology.Model.ToRDFGraph(includeInferences));
+                result    = result.UnionWith(ontology.Model.ToRDFGraph(infexpBehavior));
                 #endregion
 
                 #region Step 3: Export data
-                result    = result.UnionWith(ontology.Data.ToRDFGraph(includeInferences));
+                result    = result.UnionWith(ontology.Data.ToRDFGraph(infexpBehavior));
                 #endregion
 
                 #region Step 4: Finalize

@@ -17,9 +17,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics {
 

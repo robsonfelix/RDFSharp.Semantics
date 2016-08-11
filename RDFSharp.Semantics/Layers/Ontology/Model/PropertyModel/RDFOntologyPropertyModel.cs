@@ -19,9 +19,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
-
 
 namespace RDFSharp.Semantics {
 
@@ -967,9 +964,9 @@ namespace RDFSharp.Semantics {
 
         #region Convert
         /// <summary>
-        /// Gets a graph representation of this ontology property model, eventually including inferences
+        /// Gets a graph representation of this ontology property model, exporting inferences according to the selected behavior
         /// </summary>
-        public RDFGraph ToRDFGraph(Boolean includeInferences) {
+        public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
             var result     = new RDFGraph();
 
             //Definitions (do not export BASE ontology properties)
@@ -1010,19 +1007,19 @@ namespace RDFSharp.Semantics {
             }
 
             //Relations
-            result       = result.UnionWith(this.Relations.SubPropertyOf.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Relations.EquivalentProperty.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Relations.InverseOf.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Relations.CustomRelations.ToRDFGraph(includeInferences));
+            result       = result.UnionWith(this.Relations.SubPropertyOf.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Relations.EquivalentProperty.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Relations.InverseOf.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Relations.CustomRelations.ToRDFGraph(infexpBehavior));
 
             //Annotations
-            result       = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Annotations.TermStatus.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Annotations.Comment.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Annotations.Label.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Annotations.SeeAlso.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Annotations.IsDefinedBy.ToRDFGraph(includeInferences))
-                                 .UnionWith(this.Annotations.CustomAnnotations.ToRDFGraph(includeInferences));
+            result       = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Annotations.TermStatus.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Annotations.Comment.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Annotations.Label.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Annotations.SeeAlso.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Annotations.IsDefinedBy.ToRDFGraph(infexpBehavior))
+                                 .UnionWith(this.Annotations.CustomAnnotations.ToRDFGraph(infexpBehavior));
             
             return result;
         }

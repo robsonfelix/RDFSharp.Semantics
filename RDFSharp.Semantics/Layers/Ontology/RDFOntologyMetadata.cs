@@ -15,7 +15,6 @@
 */
 
 using System;
-using RDFSharp.Model;
 
 namespace RDFSharp.Semantics 
 {
@@ -92,18 +91,18 @@ namespace RDFSharp.Semantics
         /// Default-ctor to build an empty ontology annotations metadata
         /// </summary>
         internal RDFOntologyAnnotationsMetadata() {
-            this.VersionInfo            = new RDFOntologyTaxonomy();
-            this.VersionIRI             = new RDFOntologyTaxonomy();
-            this.TermStatus             = new RDFOntologyTaxonomy();
-            this.Comment                = new RDFOntologyTaxonomy();
-            this.Label                  = new RDFOntologyTaxonomy();
-            this.SeeAlso                = new RDFOntologyTaxonomy();
-            this.IsDefinedBy            = new RDFOntologyTaxonomy();
-            this.PriorVersion           = new RDFOntologyTaxonomy();
-            this.BackwardCompatibleWith = new RDFOntologyTaxonomy();
-            this.IncompatibleWith       = new RDFOntologyTaxonomy();
-            this.Imports                = new RDFOntologyTaxonomy();
-            this.CustomAnnotations      = new RDFOntologyTaxonomy();
+            this.VersionInfo            = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.VersionIRI             = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.TermStatus             = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.Comment                = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.Label                  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.SeeAlso                = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.IsDefinedBy            = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.PriorVersion           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.BackwardCompatibleWith = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.IncompatibleWith       = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.Imports                = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
+            this.CustomAnnotations      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
         }
         #endregion
 
@@ -126,7 +125,7 @@ namespace RDFSharp.Semantics
         /// Default-ctor to build an empty ontology metadata
         /// </summary>
         internal RDFOntologyMetadata() {
-            this.CustomRelations = new RDFOntologyTaxonomy();
+            this.CustomRelations = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
         }
         #endregion
 
@@ -179,13 +178,13 @@ namespace RDFSharp.Semantics
         /// Default-ctor to build an empty ontology class model metadata
         /// </summary>
         internal RDFOntologyClassModelMetadata() {
-            this.SubClassOf      = new RDFOntologyTaxonomy();
-            this.EquivalentClass = new RDFOntologyTaxonomy();
-            this.DisjointWith    = new RDFOntologyTaxonomy();
-            this.OneOf           = new RDFOntologyTaxonomy();
-            this.IntersectionOf  = new RDFOntologyTaxonomy();
-            this.UnionOf         = new RDFOntologyTaxonomy();
-            this.CustomRelations = new RDFOntologyTaxonomy();
+            this.SubClassOf      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.EquivalentClass = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.DisjointWith    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.OneOf           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.IntersectionOf  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.UnionOf         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.CustomRelations = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
         }
         #endregion
 
@@ -223,10 +222,10 @@ namespace RDFSharp.Semantics
         /// Default-ctor to build an empty ontology property model metadata
         /// </summary>
         internal RDFOntologyPropertyModelMetadata() {
-            this.SubPropertyOf      = new RDFOntologyTaxonomy();
-            this.EquivalentProperty = new RDFOntologyTaxonomy();
-            this.InverseOf          = new RDFOntologyTaxonomy();
-            this.CustomRelations    = new RDFOntologyTaxonomy();
+            this.SubPropertyOf      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.EquivalentProperty = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.InverseOf          = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.CustomRelations    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
         }
         #endregion
 
@@ -264,10 +263,10 @@ namespace RDFSharp.Semantics
         /// Default-ctor to build an empty ontology data metadata
         /// </summary>
         internal RDFOntologyDataMetadata() {
-            this.ClassType     = new RDFOntologyTaxonomy();
-            this.SameAs        = new RDFOntologyTaxonomy();
-            this.DifferentFrom = new RDFOntologyTaxonomy();
-            this.Assertions    = new RDFOntologyTaxonomy();
+            this.ClassType     = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.SameAs        = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.DifferentFrom = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.Assertions    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
         }
         #endregion
 

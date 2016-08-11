@@ -993,13 +993,15 @@ namespace RDFSharp.Semantics {
 
         #region Convert
         /// <summary>
-        /// Gets a graph representation of this ontology class model, eventually including inferences
+        /// Gets a graph representation of this ontology class model, exporting inferences according to the selected behavior
         /// </summary>
-        public RDFGraph ToRDFGraph(Boolean includeInferences) {
+        public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
             var result        = new RDFGraph();
 
             //Definitions (do not export BASE ontology classes)
             foreach(var    c in this.Where(cls => RDFBASEOntology.Instance.Model.ClassModel.SelectClass(cls.ToString()) == null)) {
+
+                //Restriction
                 if (c.IsRestrictionClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.RESTRICTION));
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ON_PROPERTY, (RDFResource)((RDFOntologyRestriction)c).OnProperty.Value));
@@ -1031,26 +1033,48 @@ namespace RDFSharp.Semantics {
                         }
                      }
                 }
+
+                //Enumerate
                 else if (c.IsEnumerateClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
-                    var enumCollection                  = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
+                    RDFCollection enumCollection        = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
                     enumCollection.ReificationSubject   = new RDFResource("bnode:" + c.PatternMemberID);
-                    foreach (var enumMember in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax   => (includeInferences || tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None))) {
-                        enumCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
+                    if (infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.None     ||
+                        infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyData) {
+                        foreach (var enumMember        in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax => tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None)) {
+                            enumCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
+                        }
+                    }
+                    else {
+                        foreach (var enumMember        in this.Relations.OneOf.SelectEntriesBySubject(c)) {
+                            enumCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
+                        }
                     }
                     result                              = result.UnionWith(enumCollection.ReifyCollection());
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ONE_OF, enumCollection.ReificationSubject));
                 }
+
+                //DataRange
                 else if (c.IsDataRangeClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DATA_RANGE));
-                    var drangeCollection                = new RDFCollection(RDFModelEnums.RDFItemTypes.Literal);
+                    RDFCollection drangeCollection      = new RDFCollection(RDFModelEnums.RDFItemTypes.Literal);
                     drangeCollection.ReificationSubject = new RDFResource("bnode:" + c.PatternMemberID);
-                    foreach (var drangeMember in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax => (includeInferences || tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None))) {
-                        drangeCollection.AddItem((RDFLiteral)drangeMember.TaxonomyObject.Value);
+                    if (infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.None     ||
+                        infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyData) {
+                        foreach (var enumMember        in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax => tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None)) {
+                            drangeCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
+                        }
+                    }
+                    else {
+                        foreach (var enumMember        in this.Relations.OneOf.SelectEntriesBySubject(c)) {
+                            drangeCollection.AddItem((RDFResource)enumMember.TaxonomyObject.Value);
+                        }
                     }
                     result                              = result.UnionWith(drangeCollection.ReifyCollection());
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ONE_OF, drangeCollection.ReificationSubject));
                 }
+
+                //Composite
                 else if (c.IsCompositeClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
                     if  (c is RDFOntologyComplementClass) {
@@ -1059,8 +1083,16 @@ namespace RDFSharp.Semantics {
                     else if (c is RDFOntologyIntersectionClass) {
                         var intersectCollection                = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
                         intersectCollection.ReificationSubject = new RDFResource("bnode:" + c.PatternMemberID);
-                        foreach (var intersectMember in this.Relations.IntersectionOf.SelectEntriesBySubject(c).Where(tax => (includeInferences || tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None))) {
-                            intersectCollection.AddItem((RDFResource)intersectMember.TaxonomyObject.Value);
+                        if (infexpBehavior                    == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.None     ||
+                            infexpBehavior                    == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyData) {
+                            foreach (var intersectMember      in this.Relations.IntersectionOf.SelectEntriesBySubject(c).Where(tax => tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None)) {
+                                intersectCollection.AddItem((RDFResource)intersectMember.TaxonomyObject.Value);
+                            }
+                        }
+                        else {
+                            foreach (var intersectMember      in this.Relations.IntersectionOf.SelectEntriesBySubject(c)) {
+                                intersectCollection.AddItem((RDFResource)intersectMember.TaxonomyObject.Value);
+                            }
                         }
                         result                                 = result.UnionWith(intersectCollection.ReifyCollection());
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.INTERSECTION_OF, intersectCollection.ReificationSubject));
@@ -1068,35 +1100,46 @@ namespace RDFSharp.Semantics {
                     else if (c is RDFOntologyUnionClass) {
                         var unionCollection                    = new RDFCollection(RDFModelEnums.RDFItemTypes.Resource);
                         unionCollection.ReificationSubject     = new RDFResource("bnode:" + c.PatternMemberID);
-                        foreach (var unionMember in this.Relations.UnionOf.SelectEntriesBySubject(c).Where(tax => (includeInferences || tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None))) {
-                            unionCollection.AddItem((RDFResource)unionMember.TaxonomyObject.Value);
+                        if (infexpBehavior                    == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.None     ||
+                            infexpBehavior                    == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyData) {
+                            foreach (var unionMember          in this.Relations.UnionOf.SelectEntriesBySubject(c).Where(tax => tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None)) {
+                                unionCollection.AddItem((RDFResource)unionMember.TaxonomyObject.Value);
+                            }
+                        }
+                        else {
+                            foreach (var unionMember          in this.Relations.UnionOf.SelectEntriesBySubject(c)) {
+                                unionCollection.AddItem((RDFResource)unionMember.TaxonomyObject.Value);
+                            }
                         }
                         result                                 = result.UnionWith(unionCollection.ReifyCollection());
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.UNION_OF, unionCollection.ReificationSubject));
                     }
                 }
+
+                //Class
                 else {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
                     if (c.IsDeprecatedClass()) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS));
                     }
                 }
+
             }
 
             //Relations
-            result         = result.UnionWith(this.Relations.SubClassOf.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Relations.EquivalentClass.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Relations.DisjointWith.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Relations.CustomRelations.ToRDFGraph(includeInferences));
+            result         = result.UnionWith(this.Relations.SubClassOf.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Relations.EquivalentClass.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Relations.DisjointWith.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Relations.CustomRelations.ToRDFGraph(infexpBehavior));
 
             //Annotations
-            result         = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Annotations.TermStatus.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Annotations.Comment.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Annotations.Label.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Annotations.SeeAlso.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Annotations.IsDefinedBy.ToRDFGraph(includeInferences))
-                                   .UnionWith(this.Annotations.CustomAnnotations.ToRDFGraph(includeInferences));
+            result         = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Annotations.TermStatus.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Annotations.Comment.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Annotations.Label.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Annotations.SeeAlso.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Annotations.IsDefinedBy.ToRDFGraph(infexpBehavior))
+                                   .UnionWith(this.Annotations.CustomAnnotations.ToRDFGraph(infexpBehavior));
 
             return result;
         }

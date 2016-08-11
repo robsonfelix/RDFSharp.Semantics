@@ -15,12 +15,7 @@
 */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics
 {
@@ -125,11 +120,11 @@ namespace RDFSharp.Semantics
 
         #region Convert
         /// <summary>
-        /// Gets a graph representation of this ontology model, eventually including inferences
+        /// Gets a graph representation of this ontology model, exporting inferences according to the selected behavior
         /// </summary>
-        public RDFGraph ToRDFGraph(Boolean includeInferences) {
-            return this.ClassModel.ToRDFGraph(includeInferences)
-                                  .UnionWith(this.PropertyModel.ToRDFGraph(includeInferences));
+        public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
+            return this.ClassModel.ToRDFGraph(infexpBehavior)
+                                  .UnionWith(this.PropertyModel.ToRDFGraph(infexpBehavior));
         }
         #endregion
 

@@ -16,10 +16,6 @@
 
 using System;
 using RDFSharp.Model;
-using RDFSharp.Semantics.DC;
-using RDFSharp.Semantics.FOAF;
-using RDFSharp.Semantics.GEO;
-using RDFSharp.Semantics.SKOS;
 
 namespace RDFSharp.Semantics
 {
@@ -668,10 +664,52 @@ namespace RDFSharp.Semantics
         }
 
         /// <summary>
-        /// Gets a graph representation of this ontology, eventually including inferences
+        /// Gets a graph representation of this ontology, exporting inferences according to the selected behavior
         /// </summary>
-        public RDFGraph ToRDFGraph(Boolean includeInferences) {
-            return RDFSemanticsUtilities.ToRDFGraph(this, includeInferences);
+        public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
+            return RDFSemanticsUtilities.ToRDFGraph(this, infexpBehavior);
+        }
+        #endregion
+
+        #region Extension
+        /// <summary>
+        /// Integrates the Dublin-Core ontology into this ontology
+        /// </summary>
+        public RDFOntology IntegrateDCOntology() {
+            this.Model = this.Model.UnionWith(DC.RDFDCOntology.Instance.Model);
+            this.Data  = this.Data.UnionWith(DC.RDFDCOntology.Instance.Data);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Integrates the Friend-of-a-Friend ontology into this ontology
+        /// </summary>
+        public RDFOntology IntegrateFOAFOntology() {
+            this.Model = this.Model.UnionWith(FOAF.RDFFOAFOntology.Instance.Model);
+            this.Data  = this.Data.UnionWith(FOAF.RDFFOAFOntology.Instance.Data);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Integrates the W3C Geo ontology into this ontology
+        /// </summary>
+        public RDFOntology IntegrateGEOOntology() {
+            this.Model = this.Model.UnionWith(GEO.RDFGEOOntology.Instance.Model);
+            this.Data  = this.Data.UnionWith(GEO.RDFGEOOntology.Instance.Data);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Integrates the Simple-Knowledge-Organization-System (with label extensions) ontology into this ontology
+        /// </summary>
+        public RDFOntology IntegrateSKOSOntology() {
+            this.Model = this.Model.UnionWith(SKOS.RDFSKOSOntology.Instance.Model);
+            this.Data  = this.Data.UnionWith(SKOS.RDFSKOSOntology.Instance.Data);
+
+            return this;
         }
         #endregion
 

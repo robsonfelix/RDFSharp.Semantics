@@ -19,8 +19,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics {
 
@@ -30,6 +28,11 @@ namespace RDFSharp.Semantics {
     public class RDFOntologyTaxonomy: IEnumerable<RDFOntologyTaxonomyEntry> {
 
         #region Properties
+        /// <summary>
+        /// Category of the ontology taxonomy (Model/Data)
+        /// </summary>
+        public RDFSemanticsEnums.RDFOntologyTaxonomyCategory Category { get; internal set; }
+
         /// <summary>
         /// Count of the taxonomy entries
         /// </summary>
@@ -57,9 +60,10 @@ namespace RDFSharp.Semantics {
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an empty ontology taxonomy
+        /// Default-ctor to build an empty ontology taxonomy of the given category
         /// </summary>
-        internal RDFOntologyTaxonomy() {
+        internal RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory category) {
+            this.Category = category;
             this.Entries  = new Dictionary<Int64, RDFOntologyTaxonomyEntry>();
             this.SyncLock = new Object();
         }
@@ -127,7 +131,7 @@ namespace RDFSharp.Semantics {
         /// Gets a taxonomy with the entries having the specified ontology resource as subject 
         /// </summary>
         public RDFOntologyTaxonomy SelectEntriesBySubject(RDFOntologyResource subjectResource) {
-            var resultTaxonomy     = new RDFOntologyTaxonomy();
+            var resultTaxonomy     = new RDFOntologyTaxonomy(this.Category);
             if (subjectResource   != null) {                
                 foreach (var te   in this.Where(tEntry => tEntry.TaxonomySubject.Equals(subjectResource))) {
                     resultTaxonomy.AddEntry(te);
@@ -140,7 +144,7 @@ namespace RDFSharp.Semantics {
         /// Gets a taxonomy with the entries having the specified ontology resource as predicate 
         /// </summary>
         public RDFOntologyTaxonomy SelectEntriesByPredicate(RDFOntologyResource predicateResource) {
-            var resultTaxonomy     = new RDFOntologyTaxonomy();
+            var resultTaxonomy     = new RDFOntologyTaxonomy(this.Category);
             if (predicateResource != null) {
                 foreach (var te   in this.Where(tEntry => tEntry.TaxonomyPredicate.Equals(predicateResource))) {
                     resultTaxonomy.AddEntry(te);
@@ -153,7 +157,7 @@ namespace RDFSharp.Semantics {
         /// Gets a taxonomy with the entries having the specified ontology resource as object 
         /// </summary>
         public RDFOntologyTaxonomy SelectEntriesByObject(RDFOntologyResource objectResource) {
-            var resultTaxonomy     = new RDFOntologyTaxonomy();
+            var resultTaxonomy     = new RDFOntologyTaxonomy(this.Category);
             if (objectResource    != null) {
                 foreach (var te   in this.Where(tEntry => tEntry.TaxonomyObject.Equals(objectResource))) {
                     resultTaxonomy.AddEntry(te);
@@ -168,7 +172,7 @@ namespace RDFSharp.Semantics {
         /// Builds a new intersection taxonomy from this taxonomy and a given one
         /// </summary>
         internal RDFOntologyTaxonomy IntersectWith(RDFOntologyTaxonomy taxonomy) {
-            var result    = new RDFOntologyTaxonomy();
+            var result    = new RDFOntologyTaxonomy(this.Category);
             if (taxonomy != null) {
 
                 //Add intersection triples
@@ -186,7 +190,7 @@ namespace RDFSharp.Semantics {
         /// Builds a new union taxonomy from this taxonomy and a given one
         /// </summary>
         internal RDFOntologyTaxonomy UnionWith(RDFOntologyTaxonomy taxonomy) {
-            var result    = new RDFOntologyTaxonomy();
+            var result    = new RDFOntologyTaxonomy(this.Category);
 
             //Add entries from this taxonomy
             foreach (var te in this) {
@@ -209,7 +213,7 @@ namespace RDFSharp.Semantics {
         /// Builds a new difference taxonomy from this taxonomy and a given one
         /// </summary>
         internal RDFOntologyTaxonomy DifferenceWith(RDFOntologyTaxonomy taxonomy) {
-            var result    = new RDFOntologyTaxonomy();
+            var result    = new RDFOntologyTaxonomy(this.Category);
             if (taxonomy != null) {
 
                 //Add difference entries
@@ -234,24 +238,52 @@ namespace RDFSharp.Semantics {
 
         #region Convert
         /// <summary>
-        /// Gets a graph representation of this taxonomy, eventually including semantic inferences
+        /// Gets a graph representation of this taxonomy, exporting inferences according to the selected behavior
         /// </summary>
-        internal RDFGraph ToRDFGraph(Boolean includeInferences) {
+        internal RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
             var result    = new RDFGraph();
 
-            //Taxonomy entries (discard reference ontology definitions)
+            //Taxonomy entries
             foreach (var te in this) {
-                if (includeInferences) {
-                    result.AddTriple(te.ToRDFTriple());
-                }
-                else {
-
-                    //Consider only explicit knowledge
-                    if (te.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None) {
+                
+                //Do not export semantic inferences
+                if (infexpBehavior           == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.None) {
+                    if (te.InferenceType     == RDFSemanticsEnums.RDFOntologyInferenceType.None) {
                         result.AddTriple(te.ToRDFTriple());
                     }
-
                 }
+
+                //Export semantic inferences related only to ontology model
+                else if(infexpBehavior       == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyModel) {
+                    if (this.Category        == RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model   || 
+                        this.Category        == RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic) {
+                        result.AddTriple(te.ToRDFTriple());
+                    }
+                    else {
+                        if (te.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None) {
+                            result.AddTriple(te.ToRDFTriple());
+                        }
+                    }
+                }
+
+                //Export semantic inferences related only to ontology data
+                else if(infexpBehavior       == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyData) {
+                    if (this.Category        == RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data    ||
+                        this.Category        == RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic) {
+                        result.AddTriple(te.ToRDFTriple());
+                    }
+                    else {
+                        if (te.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None) {
+                            result.AddTriple(te.ToRDFTriple());
+                        }
+                    }
+                }
+
+                //Export semantic inferences related both to ontology model and data
+                else {
+                    result.AddTriple(te.ToRDFTriple());
+                }
+
             }
             return result;
         }

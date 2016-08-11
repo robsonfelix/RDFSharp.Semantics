@@ -42,6 +42,16 @@ namespace RDFSharp.Semantics
         /// </summary>
         public enum RDFOntologyInferenceType { None = 0, API = 1, Reasoner = 2 };
 
+        /// <summary>
+        /// RDFOntologyInferenceExportBehavior represents an enumeration for supported inference export behaviors
+        /// </summary>
+        public enum RDFOntologyInferenceExportBehavior { None = 0, OnlyModel = 1, OnlyData = 2, ModelAndData = 3 };
+
+        /// <summary>
+        /// RDFOntologyTaxonomyCategory represents an enumeration for supported types of taxonomy
+        /// </summary>
+        public enum RDFOntologyTaxonomyCategory { Generic = 0, Model = 1, Data = 2};
+
     }
 
 }

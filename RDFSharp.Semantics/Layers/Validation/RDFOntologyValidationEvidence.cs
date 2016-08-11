@@ -15,9 +15,6 @@
 */
 
 using System;
-using RDFSharp.Model;
-using RDFSharp.Store;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics {
 
