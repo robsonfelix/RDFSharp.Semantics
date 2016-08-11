@@ -25,32 +25,106 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// RDFOntologyValidationEvidenceCategory represents an enumeration for possible categories of ontology validation evidence
         /// </summary>
-        public enum RDFOntologyValidationEvidenceCategory { Warning = 1, Error = 2 };
+        public enum RDFOntologyValidationEvidenceCategory {
+            /// <summary>
+            /// Specifications have not been violated: ontology may contain semantic inconsistencies
+            /// </summary>
+            Warning = 1,
+            /// <summary>
+            /// Specifications have been violated: ontology will contain semantic inconsistencies
+            /// </summary>
+            Error = 2
+        };
 
         /// <summary>
         /// RDFOntologyReasoningEvidenceCategory represents an enumeration for possible categories of ontology reasoning evidence
         /// </summary>
-        public enum RDFOntologyReasoningEvidenceCategory { ClassModel = 1, PropertyModel = 2, Data = 3 };
+        public enum RDFOntologyReasoningEvidenceCategory {
+            /// <summary>
+            /// Semantic inference has been generated within the ontology class model
+            /// </summary>
+            ClassModel = 1,
+            /// <summary>
+            /// Semantic inference has been generated within the ontology property model
+            /// </summary>
+            PropertyModel = 2,
+            /// <summary>
+            /// Semantic inference has been generated within the ontology data
+            /// </summary>
+            Data = 3
+        };
 
         /// <summary>
         /// RDFOntologyReasoningRuleType represents an enumeration for possible types of a reasoning rule
         /// </summary>
-        public enum RDFOntologyReasoningRuleType { Standard = 1, UserDefined = 2 };
+        public enum RDFOntologyReasoningRuleType {
+            /// <summary>
+            /// RDFSharp-builtin reasoning rule
+            /// </summary>
+            Standard = 1,
+            /// <summary>
+            /// User-defined reasoning rule
+            /// </summary>
+            UserDefined = 2
+        };
 
         /// <summary>
         /// RDFOntologyInferenceType represents an enumeration for possible types of a semantic inference
         /// </summary>
-        public enum RDFOntologyInferenceType { None = 0, API = 1, Reasoner = 2 };
+        public enum RDFOntologyInferenceType {
+            /// <summary>
+            /// Not a semantic inference
+            /// </summary>
+            None = 0,
+            /// <summary>
+            /// Semantic inference generated during ontology modeling
+            /// </summary>
+            API = 1,
+            /// <summary>
+            /// Semantic inference generated during ontology reasoning
+            /// </summary>
+            Reasoner = 2
+        };
 
         /// <summary>
         /// RDFOntologyInferenceExportBehavior represents an enumeration for supported inference export behaviors
         /// </summary>
-        public enum RDFOntologyInferenceExportBehavior { None = 0, OnlyModel = 1, OnlyData = 2, ModelAndData = 3 };
+        public enum RDFOntologyInferenceExportBehavior {
+            /// <summary>
+            /// Does not export any semantic inference
+            /// </summary>
+            None = 0,
+            /// <summary>
+            /// Exports only semantic inferences of ontology model
+            /// </summary>
+            OnlyModel = 1,
+            /// <summary>
+            /// Exports only semantic inferences of ontology data
+            /// </summary>
+            OnlyData = 2,
+            /// <summary>
+            /// Exports both semantic inferences of ontology model and ontology data 
+            /// </summary>
+            ModelAndData = 3
+        };
 
         /// <summary>
         /// RDFOntologyTaxonomyCategory represents an enumeration for supported types of taxonomy
         /// </summary>
-        public enum RDFOntologyTaxonomyCategory { Generic = 0, Model = 1, Data = 2};
+        public enum RDFOntologyTaxonomyCategory {
+            /// <summary>
+            /// Taxonomy is not related to ontology model or ontology data
+            /// </summary>
+            Generic = 0,
+            /// <summary>
+            /// Taxonomy is related to ontology model
+            /// </summary>
+            Model = 1,
+            /// <summary>
+            /// Taxonomy is related to ontology data
+            /// </summary>
+            Data = 2
+        };
 
     }
 
