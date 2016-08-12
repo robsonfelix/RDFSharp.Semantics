@@ -89,9 +89,19 @@ namespace RDFSharp.Semantics
 
             //Model expansion
             this.Model = this.Model.UnionWith(RDFBASEOntology.Instance.Model);
+            if (RDFSemanticsOptions.EnableDCOntologyIntegration)   { this.Model = this.Model.UnionWith(DC.RDFDCOntology.Instance.Model); }
+            if (RDFSemanticsOptions.EnableFOAFOntologyIntegration) { this.Model = this.Model.UnionWith(FOAF.RDFFOAFOntology.Instance.Model); }
+            if (RDFSemanticsOptions.EnableGEOOntologyIntegration)  { this.Model = this.Model.UnionWith(GEO.RDFGEOOntology.Instance.Model); }
+            if (RDFSemanticsOptions.EnableSKOSOntologyIntegration) { this.Model = this.Model.UnionWith(SKOS.RDFSKOSOntology.Instance.Model); }
+            if (RDFSemanticsOptions.EnableSIOCOntologyIntegration) { this.Model = this.Model.UnionWith(SIOC.RDFSIOCOntology.Instance.Model); }
 
             //Data expansion
             this.Data  = this.Data.UnionWith(RDFBASEOntology.Instance.Data);
+            if (RDFSemanticsOptions.EnableDCOntologyIntegration)   { this.Data  = this.Data.UnionWith(DC.RDFDCOntology.Instance.Data); }
+            if (RDFSemanticsOptions.EnableFOAFOntologyIntegration) { this.Data  = this.Data.UnionWith(FOAF.RDFFOAFOntology.Instance.Data); }
+            if (RDFSemanticsOptions.EnableGEOOntologyIntegration)  { this.Data  = this.Data.UnionWith(GEO.RDFGEOOntology.Instance.Data); }
+            if (RDFSemanticsOptions.EnableSKOSOntologyIntegration) { this.Data  = this.Data.UnionWith(SKOS.RDFSKOSOntology.Instance.Data); }
+            if (RDFSemanticsOptions.EnableSIOCOntologyIntegration) { this.Data  = this.Data.UnionWith(SIOC.RDFSIOCOntology.Instance.Data); }
 
         }
         #endregion
@@ -668,48 +678,6 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
             return RDFSemanticsUtilities.ToRDFGraph(this, infexpBehavior);
-        }
-        #endregion
-
-        #region Extension
-        /// <summary>
-        /// Integrates the Dublin-Core ontology into this ontology
-        /// </summary>
-        public RDFOntology IntegrateDCOntology() {
-            this.Model = this.Model.UnionWith(DC.RDFDCOntology.Instance.Model);
-            this.Data  = this.Data.UnionWith(DC.RDFDCOntology.Instance.Data);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Integrates the Friend-of-a-Friend ontology into this ontology
-        /// </summary>
-        public RDFOntology IntegrateFOAFOntology() {
-            this.Model = this.Model.UnionWith(FOAF.RDFFOAFOntology.Instance.Model);
-            this.Data  = this.Data.UnionWith(FOAF.RDFFOAFOntology.Instance.Data);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Integrates the W3C Geo ontology into this ontology
-        /// </summary>
-        public RDFOntology IntegrateGEOOntology() {
-            this.Model = this.Model.UnionWith(GEO.RDFGEOOntology.Instance.Model);
-            this.Data  = this.Data.UnionWith(GEO.RDFGEOOntology.Instance.Data);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Integrates the Simple-Knowledge-Organization-System (with label extensions) ontology into this ontology
-        /// </summary>
-        public RDFOntology IntegrateSKOSOntology() {
-            this.Model = this.Model.UnionWith(SKOS.RDFSKOSOntology.Instance.Model);
-            this.Data  = this.Data.UnionWith(SKOS.RDFSKOSOntology.Instance.Data);
-
-            return this;
         }
         #endregion
 
