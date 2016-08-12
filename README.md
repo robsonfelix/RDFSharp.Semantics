@@ -1,7 +1,7 @@
 # RDFSharp.Semantics
-RDFSharp.Semantics is the <b><a href="https://github.com/mdesalvo/RDFSharp">RDFSharp</a></b> extension for creating, validating and reasoning with <b>OWL-DL ontologies</b> 
+RDFSharp.Semantics is the <b><a href="https://github.com/mdesalvo/RDFSharp">RDFSharp</a></b> extension for creating, validating, reasoning with <b>OWL-DL ontologies</b> 
 
-It also implements built-in support for most common Linked Data ontologies (DC, FOAF, GEO, SKOS)
+It also implements built-in support for most common Linked Data ontologies (DC, FOAF, GEO, SKOS, SIOC)
 
 <hr>
 There are many ways that you can contribute to the RDFSharp.Semantics project: 
