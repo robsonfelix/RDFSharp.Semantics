@@ -28,7 +28,7 @@ namespace RDFSharp.Semantics.SIOC {
         /// <summary>
         /// Singleton instance of the SIOC ontology
         /// </summary>
-        internal static RDFOntology Instance { get; set; }
+        public static RDFOntology Instance { get; internal set; }
         #endregion
 
         #region Ctors
