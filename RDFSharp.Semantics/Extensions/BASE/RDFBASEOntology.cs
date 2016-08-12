@@ -40,7 +40,7 @@ namespace RDFSharp.Semantics {
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("http://rdfsharpsemantics.codeplex.com/base_ontology#"), true);
+            Instance = new RDFOntology(new RDFResource("https://rdfsharpsemantics.codeplex.com/base_ontology#"), true);
             #endregion
 
             #region Classes

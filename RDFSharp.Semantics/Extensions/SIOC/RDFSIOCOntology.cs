@@ -40,7 +40,7 @@ namespace RDFSharp.Semantics.SIOC {
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("http://rdfsharpsemantics.codeplex.com/sioc_ontology#"), true);
+            Instance = new RDFOntology(new RDFResource("https://rdfsharpsemantics.codeplex.com/sioc_ontology#"), true);
             #endregion
 
             #region Classes
