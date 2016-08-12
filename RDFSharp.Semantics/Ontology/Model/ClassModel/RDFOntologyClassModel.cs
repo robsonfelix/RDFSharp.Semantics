@@ -1062,12 +1062,12 @@ namespace RDFSharp.Semantics {
                     if (infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.None     ||
                         infexpBehavior                 == RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.OnlyData) {
                         foreach (var drangeMember      in this.Relations.OneOf.SelectEntriesBySubject(c).Where(tax => tax.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.None)) {
-                            drangeCollection.AddItem((RDFResource)drangeMember.TaxonomyObject.Value);
+                            drangeCollection.AddItem((RDFLiteral)drangeMember.TaxonomyObject.Value);
                         }
                     }
                     else {
                         foreach (var drangeMember      in this.Relations.OneOf.SelectEntriesBySubject(c)) {
-                            drangeCollection.AddItem((RDFResource)drangeMember.TaxonomyObject.Value);
+                            drangeCollection.AddItem((RDFLiteral)drangeMember.TaxonomyObject.Value);
                         }
                     }
                     result                              = result.UnionWith(drangeCollection.ReifyCollection());
