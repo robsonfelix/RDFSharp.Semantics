@@ -45,7 +45,6 @@
   </ItemGroup>
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
-    <Compile Include="Extensions\SIOC\RDFSIOCOntology.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <!-- Extensions -->
     <Compile Include="Extensions\BASE\RDFBASEOntology.cs" />
@@ -55,6 +54,7 @@
     <Compile Include="Extensions\DC\RDFDCOntology.cs" />
     <Compile Include="Extensions\FOAF\RDFFOAFOntology.cs" />
     <Compile Include="Extensions\GEO\RDFGEOOntology.cs" />
+    <Compile Include="Extensions\SIOC\RDFSIOCOntology.cs" />
     <Compile Include="Extensions\SKOS\RDFSKOSOntology.cs" />
     <!-- Ontology -->
     <Compile Include="RDFSemanticsEnums.cs" />
