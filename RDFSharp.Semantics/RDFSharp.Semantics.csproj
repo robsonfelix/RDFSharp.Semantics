@@ -46,6 +46,11 @@
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDFOntologyResource.cs" />
+    <Compile Include="RDFOntologyTaxonomy.cs" />
+    <Compile Include="RDFOntologyTaxonomyEntry.cs" />
+    <Compile Include="RDFSemanticsEnums.cs" />
+    <Compile Include="RDFSemanticsException.cs" />
   </ItemGroup>
   <!-- Nuget and MSBuild stuff -->
   <ItemGroup>
