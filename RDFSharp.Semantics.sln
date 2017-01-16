@@ -1,11 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics", "RDFSharp.Semantics\RDFSharp.Semantics.csproj", "{2BE71F3A-943B-464A-8FE8-7D7BCBF23100}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.Reasoner", "RDFSharp.Semantics.Reasoner\RDFSharp.Semantics.Reasoner.csproj", "{3B7436D3-4408-4226-B468-C86988858729}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.Validator", "RDFSharp.Semantics.Validator\RDFSharp.Semantics.Validator.csproj", "{EAAAB99E-AFDA-4829-894F-F9570A899776}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +15,6 @@ Global
 		{2BE71F3A-943B-464A-8FE8-7D7BCBF23100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BE71F3A-943B-464A-8FE8-7D7BCBF23100}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BE71F3A-943B-464A-8FE8-7D7BCBF23100}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B7436D3-4408-4226-B468-C86988858729}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B7436D3-4408-4226-B468-C86988858729}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B7436D3-4408-4226-B468-C86988858729}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B7436D3-4408-4226-B468-C86988858729}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EAAAB99E-AFDA-4829-894F-F9570A899776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAAAB99E-AFDA-4829-894F-F9570A899776}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAAAB99E-AFDA-4829-894F-F9570A899776}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAAAB99E-AFDA-4829-894F-F9570A899776}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,14 +14,13 @@
    limitations under the License.
 */
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-[assembly: AssemblyTitle("RDFSharp.Semantics.Reasoner")]
-[assembly: AssemblyDescription("OWL-DL ontology reasoning with RDFSharp")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Marco De Salvo")]
-[assembly: AssemblyProduct("RDFSharp.Semantics")]
-[assembly: AssemblyCopyright("Marco De Salvo")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: ComVisible(false)]
-[assembly: Guid("3B7436D3-4408-4226-B468-C86988858729")]
+namespace RDFSharp.Semantics
+{
+
+    /// <summary>
+    /// RDFOntologyModel represents the taxonomical component (T-BOX) of an ontology.
+    /// </summary>
+    public class RDFOntologyModel {
+    }
+
+}

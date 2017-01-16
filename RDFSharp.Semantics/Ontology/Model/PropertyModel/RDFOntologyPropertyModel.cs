@@ -14,14 +14,12 @@
    limitations under the License.
 */
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-[assembly: AssemblyTitle("RDFSharp.Semantics.Validator")]
-[assembly: AssemblyDescription("OWL-DL ontology validation with RDFSharp")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Marco De Salvo")]
-[assembly: AssemblyProduct("RDFSharp.Semantics")]
-[assembly: AssemblyCopyright("Marco De Salvo")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: ComVisible(false)]
-[assembly: Guid("EAAAB99E-AFDA-4829-894F-F9570A899776")]
+namespace RDFSharp.Semantics {
+
+    /// <summary>
+    /// RDFOntologyPropertyModel represents the property-oriented taxonomical component (T-BOX) of an ontology.
+    /// </summary>
+    public class RDFOntologyPropertyModel:IEnumerable<RDFOntologyProperty> {
+    }
+
+}
