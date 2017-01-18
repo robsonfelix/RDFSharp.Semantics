@@ -46,18 +46,23 @@
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ontology\RDFOntologyResource.cs" />
     <Compile Include="Ontology\Data\RDFOntologyData.cs" />
+    <Compile Include="Ontology\Data\RDFOntologyFact.cs" />
+    <Compile Include="Ontology\Data\RDFOntologyLiteral.cs" />
+    <Compile Include="Ontology\Model\ClassModel\RDFOntologyClass.cs" />
     <Compile Include="Ontology\Model\ClassModel\RDFOntologyClassModel.cs" />
+    <Compile Include="Ontology\Model\PropertyModel\RDFOntologyProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\RDFOntologyPropertyModel.cs" />
     <Compile Include="Ontology\Model\RDFOntologyModel.cs" />
-    <Compile Include="Taxonomies\Annotations\RDFOntologyCommonAnnotations.cs" />
-    <Compile Include="Taxonomies\Annotations\RDFOntologyExtendedAnnotations.cs" />
-    <Compile Include="Taxonomies\Relations\RDFOntologyExtendedRelations.cs" />
-    <Compile Include="Taxonomies\Relations\RDFOntologyCommonRelations.cs" />
-    <Compile Include="Taxonomies\RDFOntologyTaxonomy.cs" />
+    <Compile Include="Ontology\RDFOntology.cs" />
+    <Compile Include="Ontology\RDFOntologyResource.cs" />
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsException.cs" />
+    <Compile Include="Taxonomies\Annotations\RDFOntologyCommonAnnotations.cs" />
+    <Compile Include="Taxonomies\Annotations\RDFOntologyExtendedAnnotations.cs" />
+    <Compile Include="Taxonomies\RDFOntologyTaxonomy.cs" />
+    <Compile Include="Taxonomies\Relations\RDFOntologyCommonRelations.cs" />
+    <Compile Include="Taxonomies\Relations\RDFOntologyExtendedRelations.cs" />
   </ItemGroup>
   <!-- Nuget and MSBuild stuff -->
   <ItemGroup>
