@@ -36,14 +36,14 @@ namespace RDFSharp.Semantics {
         public RDFOntologyData Data { get; internal set; }
 
         /// <summary>
-        /// Relations describing the ontology
-        /// </summary>
-        public RDFOntologyCommonRelations Relations { get; internal set; }
-
-        /// <summary>
         /// Annotations describing the ontology
         /// </summary>
         public RDFOntologyExtendedAnnotations Annotations { get; internal set; }
+
+        /// <summary>
+        /// Relations describing the ontology
+        /// </summary>
+        public RDFOntologyCommonRelations Relations { get; internal set; }
         #endregion
 
         #region Ctors
@@ -630,6 +630,25 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
             return RDFSemanticsUtilities.ToRDFGraph(this, infexpBehavior);
+        }
+        #endregion
+
+        #region Validate
+        /// <summary>
+        /// Validate this ontology against a set of RDFS/OWL-DL rules, detecting errors and inconsistencies affecting its model and data
+        /// </summary>
+        public RDFOntologyValidationReport Validate() {
+            return (new RDFOntologyValidator()).AnalyzeOntology(this);
+        }
+        #endregion
+
+        #region Reasoner
+        /// <summary>
+        /// Clears all the taxonomy entries marked as semantic inferences (RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner)
+        /// </summary>
+        public void ClearInferences() {
+            this.Model.ClearInferences();
+            this.Data.ClearInferences();
         }
         #endregion
 
