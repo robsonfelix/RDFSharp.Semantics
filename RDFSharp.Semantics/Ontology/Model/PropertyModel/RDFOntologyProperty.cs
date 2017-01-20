@@ -17,7 +17,8 @@
 using System;
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics
+{
 
     /// <summary>
     /// RDFOntologyProperty represents a property definition within an ontology model.
@@ -58,7 +59,8 @@ namespace RDFSharp.Semantics {
         internal RDFOntologyProperty(RDFResource propertyName) {
             if (propertyName != null) {
                 if (!propertyName.IsBlank) {
-                     this.Value = propertyName;
+                     this.Value           = propertyName;
+                     this.PatternMemberID = propertyName.PatternMemberID;
                 }
                 else {
                     throw new RDFSemanticsException("Cannot create RDFOntologyProperty because given \"propertyName\" parameter is a blank resource.");
@@ -74,37 +76,41 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Sets the domain of this ontology property to the given ontology class
         /// </summary>
-        public void SetDomain(RDFOntologyClass domainClass) {
+        public RDFOntologyProperty SetDomain(RDFOntologyClass domainClass) {
             if (!this.IsAnnotationProperty()) {
                  this.Domain = domainClass;
-            }
+            }            
+            return this;
         }
 
         /// <summary>
         /// Sets the range of this ontology property to the given ontology class
         /// </summary>
-        public void SetRange(RDFOntologyClass rangeClass) {
+        public RDFOntologyProperty SetRange(RDFOntologyClass rangeClass) {
             if (!this.IsAnnotationProperty()) {
                  this.Range = rangeClass;
             }
+            return this;
         }
 
         /// <summary>
         /// Sets or unsets this ontology property as "owl:FunctionalProperty"
         /// </summary>
-        public void SetFunctional(Boolean functional) {
+        public RDFOntologyProperty SetFunctional(Boolean functional) {
             if (!this.IsAnnotationProperty()) {
                  this.Functional = functional;
             }
+            return this;
         }
 
         /// <summary>
         /// Sets or unsets this ontology property as "owl:DeprecatedProperty"
         /// </summary>
-        public void SetDeprecated(Boolean deprecated) {
+        public RDFOntologyProperty SetDeprecated(Boolean deprecated) {
             if (!this.IsAnnotationProperty()) {
                  this.Deprecated = deprecated;
             }
+            return this;
         }
         #endregion
 

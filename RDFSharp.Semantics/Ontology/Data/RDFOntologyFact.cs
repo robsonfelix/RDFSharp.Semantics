@@ -14,9 +14,11 @@
    limitations under the License.
 */
 
+using System;
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics
+{
 
     /// <summary>
     /// RDFOntologyFact represents an instance of an ontology class within an ontology data.
@@ -29,7 +31,8 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyFact(RDFResource factName) {
             if (factName  != null) {
-                this.Value = factName;
+                this.Value           = factName;
+                this.PatternMemberID = factName.PatternMemberID;
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntologyFact because given \"factName\" parameter is null.");

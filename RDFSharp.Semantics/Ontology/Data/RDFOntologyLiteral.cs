@@ -14,6 +14,7 @@
    limitations under the License.
 */
 
+using System;
 using RDFSharp.Model;
 
 namespace RDFSharp.Semantics {
@@ -28,8 +29,9 @@ namespace RDFSharp.Semantics {
         /// Default-ctor to build an ontology literal from the given literal.
         /// </summary>
         public RDFOntologyLiteral(RDFLiteral literal) {
-            if (literal   != null) {
-                this.Value = literal;
+            if (literal != null) {
+                this.Value           = literal;
+                this.PatternMemberID = literal.PatternMemberID;
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntologyLiteral because given \"literal\" parameter is null.");

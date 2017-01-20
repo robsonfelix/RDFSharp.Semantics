@@ -14,7 +14,8 @@
    limitations under the License.
 */
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics
+{
 
     /// <summary>
     /// RDFSemanticsEnums represents a collector for all the enumerations used by the "RDFSharp.Semantics" namespace
@@ -22,25 +23,53 @@ namespace RDFSharp.Semantics {
     public static class RDFSemanticsEnums {
 
         /// <summary>
-        /// RDFOntologyTaxonomyCategory represents an enumeration for supported types of taxonomy
+        /// RDFOntologyValidationEvidenceCategory represents an enumeration for possible categories of ontology validation evidence
         /// </summary>
-        public enum RDFOntologyTaxonomyCategory {
+        public enum RDFOntologyValidationEvidenceCategory {
             /// <summary>
-            /// Taxonomy is not specific of ontology model or ontology data
+            /// Specifications have not been violated: ontology may contain semantic inconsistencies
             /// </summary>
-            Generic = 0,
+            Warning = 1,
             /// <summary>
-            /// Taxonomy is specific of ontology model
+            /// Specifications have been violated: ontology will contain semantic inconsistencies
             /// </summary>
-            Model = 1,
-            /// <summary>
-            /// Taxonomy is specific of ontology data
-            /// </summary>
-            Data = 2
+            Error = 2
         };
 
         /// <summary>
-        /// RDFOntologyInferenceType represents an enumeration for possible types of semantic inference
+        /// RDFOntologyReasoningEvidenceCategory represents an enumeration for possible categories of ontology reasoning evidence
+        /// </summary>
+        public enum RDFOntologyReasoningEvidenceCategory {
+            /// <summary>
+            /// Semantic inference has been generated within the ontology class model
+            /// </summary>
+            ClassModel = 1,
+            /// <summary>
+            /// Semantic inference has been generated within the ontology property model
+            /// </summary>
+            PropertyModel = 2,
+            /// <summary>
+            /// Semantic inference has been generated within the ontology data
+            /// </summary>
+            Data = 3
+        };
+
+        /// <summary>
+        /// RDFOntologyReasoningRuleType represents an enumeration for possible types of a reasoning rule
+        /// </summary>
+        public enum RDFOntologyReasoningRuleType {
+            /// <summary>
+            /// RDFSharp-builtin reasoning rule
+            /// </summary>
+            Standard = 1,
+            /// <summary>
+            /// User-defined reasoning rule
+            /// </summary>
+            UserDefined = 2
+        };
+
+        /// <summary>
+        /// RDFOntologyInferenceType represents an enumeration for possible types of a semantic inference
         /// </summary>
         public enum RDFOntologyInferenceType {
             /// <summary>
@@ -77,6 +106,24 @@ namespace RDFSharp.Semantics {
             /// Exports both semantic inferences of ontology model and ontology data 
             /// </summary>
             ModelAndData = 3
+        };
+
+        /// <summary>
+        /// RDFOntologyTaxonomyCategory represents an enumeration for supported types of taxonomy
+        /// </summary>
+        public enum RDFOntologyTaxonomyCategory {
+            /// <summary>
+            /// Taxonomy is not related to ontology model or ontology data
+            /// </summary>
+            Generic = 0,
+            /// <summary>
+            /// Taxonomy is related to ontology model
+            /// </summary>
+            Model = 1,
+            /// <summary>
+            /// Taxonomy is related to ontology data
+            /// </summary>
+            Data = 2
         };
 
     }

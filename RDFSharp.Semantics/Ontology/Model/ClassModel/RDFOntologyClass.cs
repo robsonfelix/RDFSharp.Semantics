@@ -17,7 +17,8 @@
 using System;
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics
+{
 
     /// <summary>
     /// RDFOntologyClass represents a class definition within an ontology model.
@@ -37,7 +38,8 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyClass(RDFResource className) {
             if (className != null) {
-                this.Value = className;
+                this.Value           = className;
+                this.PatternMemberID = className.PatternMemberID;
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntologyClass because given \"className\" parameter is null.");
@@ -49,10 +51,11 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Sets or unsets this ontology class as "owl:DeprecatedClass"
         /// </summary>
-        public void SetDeprecated(Boolean deprecated) {
+        public RDFOntologyClass SetDeprecated(Boolean deprecated) {
             if (!this.IsRestrictionClass() && !this.IsCompositeClass() && !this.IsDataRangeClass() && !this.IsEnumerateClass()) {
                  this.Deprecated = deprecated;
             }
+            return this;
         }
         #endregion
 
