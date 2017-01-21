@@ -54,12 +54,13 @@ namespace RDFSharp.Semantics
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an ontology property with the given non-blank name
+        /// Default-ctor to build an ontology RDF property with the given non-blank name
         /// </summary>
-        internal RDFOntologyProperty(RDFResource propertyName) {
+        public RDFOntologyProperty(RDFResource propertyName) {
             if (propertyName != null) {
                 if (!propertyName.IsBlank) {
                      this.Value           = propertyName;
+                     this.IsRDFProperty   = true;
                      this.PatternMemberID = propertyName.PatternMemberID;
                 }
                 else {
@@ -69,6 +70,13 @@ namespace RDFSharp.Semantics
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntologyProperty because given \"propertyName\" parameter is null.");
             }
+        }
+
+        /// <summary>
+        /// Default-ctor to build an ontology OWL property with the given non-blank name
+        /// </summary>
+        internal RDFOntologyProperty(RDFResource propertyName, Boolean isRDFProperty): this(propertyName) {
+            this.IsRDFProperty = isRDFProperty;
         }
         #endregion
 

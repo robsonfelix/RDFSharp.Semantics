@@ -30,15 +30,21 @@ namespace RDFSharp.Semantics
         /// Flag indicating that this ontology class is "owl:DeprecatedClass"
         /// </summary>
         public Boolean Deprecated { get; internal set; }
+
+        /// <summary>
+        /// Flag indicating that this ontology class has been created or imported as "rdfs:Class"
+        /// </summary>
+        internal Boolean IsRDFSClass { get; set; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an ontology class with the given name and type=OWL
+        /// Default-ctor to build an ontology class with the given name
         /// </summary>
-        public RDFOntologyClass(RDFResource className) {
+        public RDFOntologyClass(RDFResource className, Boolean isRDFSClass=false) {
             if (className != null) {
                 this.Value           = className;
+                this.IsRDFSClass     = isRDFSClass;
                 this.PatternMemberID = className.PatternMemberID;
             }
             else {

@@ -919,6 +919,7 @@ namespace RDFSharp.Semantics {
                 else {
                     result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.RDF.PROPERTY));
                 }
+
                 if  (p.IsFunctionalProperty()) {
                      result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.FUNCTIONAL_PROPERTY));
                 }

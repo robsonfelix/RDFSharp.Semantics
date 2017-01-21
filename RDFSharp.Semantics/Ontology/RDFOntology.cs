@@ -49,9 +49,18 @@ namespace RDFSharp.Semantics
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an empty ontology with the given name
+        /// Default-ctor to build an empty ontology with the given name.
+        /// Initialization is done against BASE ontology and, according to
+        /// RDFSemanticsOptions settings, against DC/FOAF/GEO/SKOS/SIOC ontologies.
         /// </summary>
-        public RDFOntology(RDFResource ontologyName) {
+        public RDFOntology(RDFResource ontologyName): this(ontologyName, false) {
+            this.Init();
+        }
+
+        /// <summary>
+        /// Default-ctor to build an empty reference ontology with the given name
+        /// </summary>
+        internal RDFOntology(RDFResource ontologyName, Boolean isReferenceOntology) {
             if (ontologyName        != null) {
                 this.Value           = ontologyName;
                 this.PatternMemberID = ontologyName.PatternMemberID;
@@ -59,23 +68,10 @@ namespace RDFSharp.Semantics
                 this.Data            = new RDFOntologyData();
                 this.Relations       = new RDFOntologyMetadata();
                 this.Annotations     = new RDFOntologyAnnotationsMetadata();
-                this.Init();
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntology because given \"ontologyName\" parameter is null.");
             }
-        }
-
-        /// <summary>
-        /// Default-ctor to build an empty reference ontology with the given name
-        /// </summary>
-        internal RDFOntology(RDFResource ontologyName, Boolean isReferenceOntology) {
-            this.Value               = ontologyName;
-            this.PatternMemberID     = ontologyName.PatternMemberID;
-            this.Model               = new RDFOntologyModel();
-            this.Data                = new RDFOntologyData();
-            this.Relations           = new RDFOntologyMetadata();
-            this.Annotations         = new RDFOntologyAnnotationsMetadata();
         }
         #endregion
 

@@ -1059,7 +1059,12 @@ namespace RDFSharp.Semantics {
 
                 //Class
                 else {
-                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
+                    if (c.IsRDFSClass) {
+                        result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.RDFS.CLASS));
+                    }
+                    else {
+                        result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
+                    }
                     if (c.IsDeprecatedClass()) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS));
                     }
