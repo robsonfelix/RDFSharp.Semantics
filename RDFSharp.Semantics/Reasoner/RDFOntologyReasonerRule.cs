@@ -19,9 +19,9 @@ using System;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyReasoningRule represents an inference rule executed by a reasoner
+    /// RDFOntologyReasonerRule represents an inference rule executed by a reasoner
     /// </summary>
-    public class RDFOntologyReasoningRule {
+    public class RDFOntologyReasonerRule {
 
         #region Properties
         /// <summary>
@@ -37,51 +37,51 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Type of the rule
         /// </summary>
-        public RDFSemanticsEnums.RDFOntologyReasoningRuleType RuleType { get; internal set; }
+        public RDFSemanticsEnums.RDFOntologyReasonerRuleType RuleType { get; internal set; }
 
         /// <summary>
         /// Delegate for the function which will be executed as body of the rule
         /// </summary>
-        public delegate void ReasoningRuleDelegate(RDFOntology ontology, RDFOntologyReasoningReport report);
+        public delegate void ReasonerRuleDelegate(RDFOntology ontology, RDFOntologyReasonerReport report);
 
         /// <summary>
         /// Function which will be executed as body of the rule
         /// </summary>
-        internal ReasoningRuleDelegate ExecuteRule { get; set; }
+        internal ReasonerRuleDelegate ExecuteRule { get; set; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build a reasoning rule with given name, description and delegate
+        /// Default-ctor to build a reasoner rule with given name, description and delegate
         /// </summary>
-        public RDFOntologyReasoningRule(String ruleName, 
-                                        String ruleDescription,
-                                        ReasoningRuleDelegate ruleDelegate) {
-            if(ruleName                     != null && ruleName.Trim()        != String.Empty) {
-                if(ruleDescription          != null && ruleDescription.Trim() != String.Empty) {
-                    if(ruleDelegate         != null) {
+        public RDFOntologyReasonerRule(String ruleName, 
+                                       String ruleDescription,
+                                       ReasonerRuleDelegate ruleDelegate) {
+            if (ruleName                    != null) {
+                if (ruleDescription         != null) {
+                    if (ruleDelegate        != null) {
                         this.RuleName        = ruleName.Trim();
                         this.RuleDescription = ruleDescription.Trim();
-                        this.RuleType        = RDFSemanticsEnums.RDFOntologyReasoningRuleType.UserDefined;
+                        this.RuleType        = RDFSemanticsEnums.RDFOntologyReasonerRuleType.UserDefined;
                         this.ExecuteRule     = ruleDelegate;
                     }
                     else {
-                        throw new RDFSemanticsException("Cannot create RDFOntologyReasoningRule because given \"ruleDelegate\" parameter is null.");
+                        throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleDelegate\" parameter is null.");
                     }
                 }
                 else {
-                    throw new RDFSemanticsException("Cannot create RDFOntologyReasoningRule because given \"ruleDescription\" parameter is null or empty.");
+                    throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleDescription\" parameter is null.");
                 }
             }
             else {
-                throw new RDFSemanticsException("Cannot create RDFOntologyReasoningRule because given \"ruleName\" parameter is null or empty.");
+                throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleName\" parameter is null.");
             }
         }
         #endregion
 
         #region Interfaces
         /// <summary>
-        /// Gives the string representation of the reasoning rule
+        /// Gives the string representation of the reasoner rule
         /// </summary>
         public override String ToString() {
             return "RULE " + this.RuleName + ": " + this.RuleDescription;

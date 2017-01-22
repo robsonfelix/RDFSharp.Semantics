@@ -37,9 +37,9 @@ namespace RDFSharp.Semantics
         };
 
         /// <summary>
-        /// RDFOntologyReasoningEvidenceCategory represents an enumeration for possible categories of ontology reasoning evidence
+        /// RDFOntologyReasonerEvidenceCategory represents an enumeration for possible categories of ontology reasoner evidence
         /// </summary>
-        public enum RDFOntologyReasoningEvidenceCategory {
+        public enum RDFOntologyReasonerEvidenceCategory {
             /// <summary>
             /// Semantic inference has been generated within the ontology class model
             /// </summary>
@@ -55,9 +55,9 @@ namespace RDFSharp.Semantics
         };
 
         /// <summary>
-        /// RDFOntologyReasoningRuleType represents an enumeration for possible types of a reasoning rule
+        /// RDFOntologyReasonerRuleType represents an enumeration for possible types of a reasoner rule
         /// </summary>
-        public enum RDFOntologyReasoningRuleType {
+        public enum RDFOntologyReasonerRuleType {
             /// <summary>
             /// RDFSharp-builtin reasoning rule
             /// </summary>

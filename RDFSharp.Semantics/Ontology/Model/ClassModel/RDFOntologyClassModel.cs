@@ -304,9 +304,9 @@ namespace RDFSharp.Semantics {
                 else {
 
                     //Enforce taxonomy checks before adding the subClassOf relation
-                    if (!RDFBASEOntologyReasoningHelper.IsSubClassOf(motherClass,        childClass, this)   &&
-                        !RDFBASEOntologyReasoningHelper.IsEquivalentClassOf(motherClass, childClass, this)   &&
-                        !RDFBASEOntologyReasoningHelper.IsDisjointClassWith(motherClass, childClass, this))   {
+                    if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(motherClass,        childClass, this)   &&
+                        !RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(motherClass, childClass, this)   &&
+                        !RDFBASEOntologyReasonerHelper.IsDisjointClassWith(motherClass, childClass, this))   {
                          this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
                     }
                     else {
@@ -342,9 +342,9 @@ namespace RDFSharp.Semantics {
                 else {
 
                     //Enforce taxonomy checks before adding the equivalentClass relation
-                    if (!RDFBASEOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
-                        !RDFBASEOntologyReasoningHelper.IsSuperClassOf(aClass,      bClass, this) &&
-                        !RDFBASEOntologyReasoningHelper.IsDisjointClassWith(aClass, bClass, this)) {
+                    if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this) &&
+                        !RDFBASEOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this) &&
+                        !RDFBASEOntologyReasonerHelper.IsDisjointClassWith(aClass, bClass, this)) {
                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), bClass));
                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                     }
@@ -369,9 +369,9 @@ namespace RDFSharp.Semantics {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
                 //Enforce taxonomy checks before adding the disjointWith relation
-                if (!RDFBASEOntologyReasoningHelper.IsSubClassOf(aClass,        bClass, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsSuperClassOf(aClass,      bClass, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsEquivalentClassOf(aClass, bClass, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this)) {
                      this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), bClass));
                      this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -1153,5 +1153,66 @@ namespace RDFSharp.Semantics {
         #endregion
 
     }
+
+    #region Metadata
+    /// <summary>
+    /// RDFOntologyClassModelMetadata represents a collector for relations describing ontology classes.
+    /// </summary>
+    public class RDFOntologyClassModelMetadata {
+
+        #region Properties
+        /// <summary>
+        /// "rdfs:subClassOf" relations
+        /// </summary>
+        public RDFOntologyTaxonomy SubClassOf { get; internal set; }
+
+        /// <summary>
+        /// "owl:equivalentClass" relations
+        /// </summary>
+        public RDFOntologyTaxonomy EquivalentClass { get; internal set; }
+
+        /// <summary>
+        /// "owl:disjointWith" relations
+        /// </summary>
+        public RDFOntologyTaxonomy DisjointWith { get; internal set; }
+
+        /// <summary>
+        /// "owl:oneOf" relations (specific for enumerate and datarange classes)
+        /// </summary>
+        public RDFOntologyTaxonomy OneOf { get; internal set; }
+
+        /// <summary>
+        /// "owl:intersectionOf" relations (specific for intersection classes)
+        /// </summary>
+        public RDFOntologyTaxonomy IntersectionOf { get; internal set; }
+
+        /// <summary>
+        /// "owl:unionOf" relations (specific for union classes)
+        /// </summary>
+        public RDFOntologyTaxonomy UnionOf { get; internal set; }
+
+        /// <summary>
+        /// "Custom" relations (non-structural taxonomies)
+        /// </summary>
+        public RDFOntologyTaxonomy CustomRelations { get; internal set; }
+        #endregion
+
+        #region Ctors
+        /// <summary>
+        /// Default-ctor to build an empty ontology class model metadata
+        /// </summary>
+        internal RDFOntologyClassModelMetadata() {
+            this.SubClassOf      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.EquivalentClass = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.DisjointWith    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.OneOf           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.IntersectionOf  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.UnionOf         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.CustomRelations = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+        }
+        #endregion
+
+    }
+    #endregion
 
 }

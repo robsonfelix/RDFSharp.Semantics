@@ -19,15 +19,15 @@ using System;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyReasoningEvidence represents an inference evidence generated during execution of a rule
+    /// RDFOntologyReasonerEvidence represents an inference evidence generated during execution of a rule
     /// </summary>
-    public class RDFOntologyReasoningEvidence {
+    public class RDFOntologyReasonerEvidence {
 
         #region Properties
         /// <summary>
         /// Category of the evidence
         /// </summary>
-        public RDFSemanticsEnums.RDFOntologyReasoningEvidenceCategory EvidenceCategory { get; internal set; }
+        public RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory EvidenceCategory { get; internal set; }
 
         /// <summary>
         /// Provenance rule of the evidence
@@ -44,9 +44,9 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build an evidence with given category, provenance and message
         /// </summary>
-        internal RDFOntologyReasoningEvidence(RDFSemanticsEnums.RDFOntologyReasoningEvidenceCategory evidenceCategory,
-                                              String evidenceProvenance,
-                                              RDFOntologyTaxonomyEntry evidenceContent) {
+        internal RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory evidenceCategory,
+                                             String evidenceProvenance,
+                                             RDFOntologyTaxonomyEntry evidenceContent) {
             this.EvidenceCategory   = evidenceCategory;
             this.EvidenceProvenance = evidenceProvenance;
             this.EvidenceContent    = evidenceContent;

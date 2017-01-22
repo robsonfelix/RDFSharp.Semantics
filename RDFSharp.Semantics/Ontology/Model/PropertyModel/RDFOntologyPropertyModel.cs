@@ -348,8 +348,8 @@ namespace RDFSharp.Semantics {
             if (childProperty != null && motherProperty != null && !childProperty.Equals(motherProperty)) {
 
                 //Enforce taxonomy checks before adding the subPropertyOf relation
-                if (!RDFBASEOntologyReasoningHelper.IsSubPropertyOf(motherProperty,        childProperty, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsSubPropertyOf(motherProperty,        childProperty, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this)) {
                      this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), motherProperty));
                 }
                 else {
@@ -371,8 +371,8 @@ namespace RDFSharp.Semantics {
             if (childProperty != null && motherProperty != null && !childProperty.Equals(motherProperty)) {
 
                 //Enforce taxonomy checks before adding the subPropertyOf relation
-                if (!RDFBASEOntologyReasoningHelper.IsSubPropertyOf(motherProperty,        childProperty, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsSubPropertyOf(motherProperty,        childProperty, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this)) {
                      this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), motherProperty));
                 }
                 else {
@@ -394,8 +394,8 @@ namespace RDFSharp.Semantics {
             if (aProperty  != null && bProperty != null && !aProperty.Equals(bProperty)) {
 
                 //Enforce taxonomy checks before adding the equivalentProperty relation
-                if (!RDFBASEOntologyReasoningHelper.IsSubPropertyOf(aProperty,   bProperty, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsSuperPropertyOf(aProperty, bProperty, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsSubPropertyOf(aProperty,   bProperty, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsSuperPropertyOf(aProperty, bProperty, this)) {
                      this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), bProperty));
                      this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -418,8 +418,8 @@ namespace RDFSharp.Semantics {
             if (aProperty  != null && bProperty != null && !aProperty.Equals(bProperty)) {
 
                 //Enforce taxonomy checks before adding the equivalentProperty relation
-                if (!RDFBASEOntologyReasoningHelper.IsSubPropertyOf(aProperty,   bProperty, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsSuperPropertyOf(aProperty, bProperty, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsSubPropertyOf(aProperty,   bProperty, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsSuperPropertyOf(aProperty, bProperty, this)) {
                      this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), bProperty));
                      this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -442,9 +442,9 @@ namespace RDFSharp.Semantics {
             if (aProperty != null && bProperty != null && !aProperty.Equals(bProperty)) {
 
                 //Enforce taxonomy checks before adding the inverseOf relation
-                if (!RDFBASEOntologyReasoningHelper.IsSubPropertyOf(aProperty,        bProperty, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsSuperPropertyOf(aProperty,      bProperty, this) &&
-                    !RDFBASEOntologyReasoningHelper.IsEquivalentPropertyOf(aProperty, bProperty, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsSubPropertyOf(aProperty,        bProperty, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsSuperPropertyOf(aProperty,      bProperty, this) &&
+                    !RDFBASEOntologyReasonerHelper.IsEquivalentPropertyOf(aProperty, bProperty, this)) {
                      this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INVERSE_OF.ToString()), bProperty));
                      this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INVERSE_OF.ToString()), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -994,5 +994,48 @@ namespace RDFSharp.Semantics {
         #endregion
 
     }
+
+    #region Metadata
+    /// <summary>
+    /// RDFOntologyPropertyModelMetadata represents a collector for relations describing ontology properties.
+    /// </summary>
+    public class RDFOntologyPropertyModelMetadata {
+
+        #region Properties
+        /// <summary>
+        /// "rdfs:subPropertyOf" relations
+        /// </summary>
+        public RDFOntologyTaxonomy SubPropertyOf { get; internal set; }
+
+        /// <summary>
+        /// "owl:equivalentProperty" relations
+        /// </summary>
+        public RDFOntologyTaxonomy EquivalentProperty { get; internal set; }
+
+        /// <summary>
+        /// "owl:inverseOf" relations
+        /// </summary>
+        public RDFOntologyTaxonomy InverseOf { get; internal set; }
+
+        /// <summary>
+        /// "Custom" relations (non-structural taxonomies)
+        /// </summary>
+        public RDFOntologyTaxonomy CustomRelations { get; internal set; }
+        #endregion
+
+        #region Ctors
+        /// <summary>
+        /// Default-ctor to build an empty ontology property model metadata
+        /// </summary>
+        internal RDFOntologyPropertyModelMetadata() {
+            this.SubPropertyOf      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.EquivalentProperty = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.InverseOf          = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+            this.CustomRelations    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
+        }
+        #endregion
+
+    }
+    #endregion
 
 }

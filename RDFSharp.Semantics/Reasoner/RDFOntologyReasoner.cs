@@ -39,7 +39,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// List of rules applied by the reasoner
         /// </summary>
-        internal List<RDFOntologyReasoningRule> Rules { get; set; }
+        internal List<RDFOntologyReasonerRule> Rules { get; set; }
         #endregion
 
         #region Ctors
@@ -52,7 +52,7 @@ namespace RDFSharp.Semantics {
                 if (reasonerDescription     != null && reasonerDescription.Trim() != String.Empty) {
                     this.ReasonerName        = reasonerName;
                     this.ReasonerDescription = reasonerDescription;
-                    this.Rules               = new List<RDFOntologyReasoningRule>();
+                    this.Rules               = new List<RDFOntologyReasonerRule>();
                 }
                 else {
                     throw new RDFSemanticsException("Cannot create RDFOntologyReasoner because given \"reasonerDescription\" parameter is null or empty.");
@@ -70,7 +70,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the given rule to the reasoner
         /// </summary>
-        public RDFOntologyReasoner AddRule(RDFOntologyReasoningRule rule) {
+        public RDFOntologyReasoner AddRule(RDFOntologyReasonerRule rule) {
             if (rule   != null) {
                 if (this.SelectRule(rule.RuleName) == null) {
                     this.Rules.Add(rule);
@@ -82,7 +82,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Removes the given rule from the reasoner
         /// </summary>
-        public RDFOntologyReasoner RemoveRule(RDFOntologyReasoningRule rule) {
+        public RDFOntologyReasoner RemoveRule(RDFOntologyReasonerRule rule) {
             if (rule   != null) {
                 if (this.SelectRule(rule.RuleName) != null) {
                     this.Rules.RemoveAll(rs => rs.RuleName.ToUpperInvariant().Equals(rule.RuleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
@@ -94,7 +94,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Selects the given rule from the resoner
         /// </summary>
-        public RDFOntologyReasoningRule SelectRule(String ruleName = "") {
+        public RDFOntologyReasonerRule SelectRule(String ruleName = "") {
             return this.Rules.Find(r => r.RuleName.ToUpperInvariant().Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
         }
         #endregion
@@ -104,7 +104,7 @@ namespace RDFSharp.Semantics {
         /// Triggers the execution of the given rule on the given ontology. 
         /// Returns a boolean indicating if new evidences have been found.
         /// </summary>
-        internal Boolean TriggerRule(String ruleName, RDFOntology ontology, RDFOntologyReasoningReport report) {
+        internal Boolean TriggerRule(String ruleName, RDFOntology ontology, RDFOntologyReasonerReport report) {
             var reasonerRule  = this.SelectRule(ruleName);
             if (reasonerRule != null) {
 
@@ -128,9 +128,9 @@ namespace RDFSharp.Semantics {
         /// Applies the reasoner on the given ontology, producing a reasoning report.
         /// The ontology is progressively enriched with discovered inferences.
         /// </summary>
-        public RDFOntologyReasoningReport ApplyToOntology(RDFOntology ontology) {
+        public RDFOntologyReasonerReport ApplyToOntology(RDFOntology ontology) {
             if (ontology   != null) {
-                var rReport = new RDFOntologyReasoningReport(ontology.Value.PatternMemberID);
+                var rReport = new RDFOntologyReasonerReport(ontology.Value.PatternMemberID);
 
                 //Step 0: Cleanup ontology from inferences
                 ontology.ClearInferences();
@@ -157,7 +157,7 @@ namespace RDFSharp.Semantics {
                 this.TriggerRule("SameAsEntailment",               ontology, rReport);
 
                 //Step 5: Apply custom rules
-                foreach(var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasoningRuleType.UserDefined)) {
+                foreach(var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasonerRuleType.UserDefined)) {
                     this.TriggerRule(sr.RuleName, ontology, rReport);
                 }
 

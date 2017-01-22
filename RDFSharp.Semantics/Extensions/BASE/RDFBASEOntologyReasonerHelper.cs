@@ -20,9 +20,9 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFBASEOntologyReasoningHelper represents an helper for BASE (RDF/RDFS/OWL/XSD) reasoning tasks.
+    /// RDFBASEOntologyReasonerHelper represents an helper for BASE (RDF/RDFS/OWL/XSD) reasoning tasks.
     /// </summary>
-    public static class RDFBASEOntologyReasoningHelper {
+    public static class RDFBASEOntologyReasonerHelper {
 
         #region ClassModel
 

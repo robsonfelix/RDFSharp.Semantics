@@ -294,7 +294,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                 //Enforce taxonomy checks before adding the sameAs relation
-                if (!RDFBASEOntologyReasoningHelper.IsDifferentFactFrom(aFact, bFact, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsDifferentFactFrom(aFact, bFact, this)) {
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), bFact));
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -317,7 +317,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                 //Enforce taxonomy checks before adding the differentFrom relation
-                if (!RDFBASEOntologyReasoningHelper.IsSameFactAs(aFact, bFact, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsSameFactAs(aFact, bFact, this)) {
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), bFact));
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -342,7 +342,7 @@ namespace RDFSharp.Semantics
 
                 //Enforce taxonomy checks before adding the assertion
                 //Creation of transitive cycles is not allowed
-                if (!RDFBASEOntologyReasoningHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
+                if (!RDFBASEOntologyReasonerHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
                      this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
                 }
                 else {
@@ -850,5 +850,48 @@ namespace RDFSharp.Semantics
         #endregion
 
     }
+
+    #region Metadata
+    /// <summary>
+    /// RDFOntologyDataMetadata represents a collector for relations connecting describing ontology facts.
+    /// </summary>
+    public class RDFOntologyDataMetadata {
+
+        #region Properties
+        /// <summary>
+        /// "rdf:type" relations
+        /// </summary>
+        public RDFOntologyTaxonomy ClassType { get; internal set; }
+
+        /// <summary>
+        /// "owl:sameAs" relations
+        /// </summary>
+        public RDFOntologyTaxonomy SameAs { get; internal set; }
+
+        /// <summary>
+        /// "owl:differentFrom" relations
+        /// </summary>
+        public RDFOntologyTaxonomy DifferentFrom { get; internal set; }
+
+        /// <summary>
+        /// "ontology property -> ontology resource" custom relations
+        /// </summary>
+        public RDFOntologyTaxonomy Assertions { get; internal set; }
+        #endregion
+
+        #region Ctors
+        /// <summary>
+        /// Default-ctor to build an empty ontology data metadata
+        /// </summary>
+        internal RDFOntologyDataMetadata() {
+            this.ClassType     = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.SameAs        = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.DifferentFrom = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.Assertions    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+        }
+        #endregion
+
+    }
+    #endregion
 
 }

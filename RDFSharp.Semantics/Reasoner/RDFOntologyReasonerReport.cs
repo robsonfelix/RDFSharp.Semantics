@@ -21,9 +21,9 @@ using System.Collections.Generic;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyReasoningReport represents a detailed report of an ontology reasoner's activity.
+    /// RDFOntologyReasonerReport represents a detailed report of an ontology reasoner's activity.
     /// </summary>
-    public class RDFOntologyReasoningReport:IEnumerable<RDFOntologyReasoningEvidence> {
+    public class RDFOntologyReasonerReport: IEnumerable<RDFOntologyReasonerEvidence> {
 
         #region Properties
         /// <summary>
@@ -36,14 +36,14 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Gets an enumerator on the evidences for iteration
         /// </summary>
-        public IEnumerator<RDFOntologyReasoningEvidence> EvidencesEnumerator {
+        public IEnumerator<RDFOntologyReasonerEvidence> EvidencesEnumerator {
             get { return this.Evidences.GetEnumerator(); }
         }
 
         /// <summary>
         /// List of evidences
         /// </summary>
-        internal List<RDFOntologyReasoningEvidence> Evidences { get; set; }
+        internal List<RDFOntologyReasonerEvidence> Evidences { get; set; }
 
         /// <summary>
         /// Synchronization lock
@@ -53,30 +53,30 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Identifier of the validaton report
         /// </summary>
-        internal Int64 ReasoningReportID { get; set; }
+        internal Int64 ReasonerReportID { get; set; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an empty reasoning report
+        /// Default-ctor to build an empty reasoner report
         /// </summary>
-        internal RDFOntologyReasoningReport(Int64 reportID) {
-            this.ReasoningReportID = reportID;
-            this.SyncLock          = new Object();
-            this.Evidences         = new List<RDFOntologyReasoningEvidence>();
+        internal RDFOntologyReasonerReport(Int64 reportID) {
+            this.ReasonerReportID = reportID;
+            this.SyncLock         = new Object();
+            this.Evidences        = new List<RDFOntologyReasonerEvidence>();
         }
         #endregion
 
         #region Interfaces
         /// <summary>
-        /// Exposes a typed enumerator on the reasoning report's evidences
+        /// Exposes a typed enumerator on the reasoner report's evidences
         /// </summary>
-        IEnumerator<RDFOntologyReasoningEvidence> IEnumerable<RDFOntologyReasoningEvidence>.GetEnumerator() {
+        IEnumerator<RDFOntologyReasonerEvidence> IEnumerable<RDFOntologyReasonerEvidence>.GetEnumerator() {
             return this.Evidences.GetEnumerator();
         }
 
         /// <summary>
-        /// Exposes an untyped enumerator on the reasoning report's evidences
+        /// Exposes an untyped enumerator on the reasoner report's evidences
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
             return this.Evidences.GetEnumerator();
@@ -87,42 +87,42 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Gets the evidences having the given category
         /// </summary>
-        public List<RDFOntologyReasoningEvidence> SelectEvidencesByCategory(RDFSemanticsEnums.RDFOntologyReasoningEvidenceCategory evidenceCategory) {
+        public List<RDFOntologyReasonerEvidence> SelectEvidencesByCategory(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory evidenceCategory) {
             return this.Evidences.FindAll(e => e.EvidenceCategory.Equals(evidenceCategory));
         }
 
         /// <summary>
         /// Gets the evidences having the given provenance rule
         /// </summary>
-        public List<RDFOntologyReasoningEvidence> SelectEvidencesByProvenance(String evidenceProvenance = "") {
+        public List<RDFOntologyReasonerEvidence> SelectEvidencesByProvenance(String evidenceProvenance = "") {
             return this.Evidences.FindAll(e => e.EvidenceProvenance.ToUpper().Equals(evidenceProvenance.Trim().ToUpperInvariant(), StringComparison.Ordinal));
         }
 
         /// <summary>
         /// Gets the evidences having the given content subject
         /// </summary>
-        public List<RDFOntologyReasoningEvidence> SelectEvidencesByContentSubject(RDFOntologyResource evidenceContentSubject) {
+        public List<RDFOntologyReasonerEvidence> SelectEvidencesByContentSubject(RDFOntologyResource evidenceContentSubject) {
             return this.Evidences.FindAll(e => e.EvidenceContent.TaxonomySubject.Equals(evidenceContentSubject));
         }
 
         /// <summary>
         /// Gets the evidences having the given content predicate
         /// </summary>
-        public List<RDFOntologyReasoningEvidence> SelectEvidencesByContentPredicate(RDFOntologyResource evidenceContentPredicate) {
+        public List<RDFOntologyReasonerEvidence> SelectEvidencesByContentPredicate(RDFOntologyResource evidenceContentPredicate) {
             return this.Evidences.FindAll(e => e.EvidenceContent.TaxonomyPredicate.Equals(evidenceContentPredicate));
         }
 
         /// <summary>
         /// Gets the evidences having the given content object
         /// </summary>
-        public List<RDFOntologyReasoningEvidence> SelectEvidencesByContentObject(RDFOntologyResource evidenceContentObject) {
+        public List<RDFOntologyReasonerEvidence> SelectEvidencesByContentObject(RDFOntologyResource evidenceContentObject) {
             return this.Evidences.FindAll(e => e.EvidenceContent.TaxonomyObject.Equals(evidenceContentObject));
         }
 
         /// <summary>
-        /// Adds the given evidence to the reasoning report
+        /// Adds the given evidence to the reasoner report
         /// </summary>
-        internal void AddEvidence(RDFOntologyReasoningEvidence evidence) {
+        internal void AddEvidence(RDFOntologyReasonerEvidence evidence) {
             lock(this.SyncLock) {
                  this.Evidences.Add(evidence);
             }
