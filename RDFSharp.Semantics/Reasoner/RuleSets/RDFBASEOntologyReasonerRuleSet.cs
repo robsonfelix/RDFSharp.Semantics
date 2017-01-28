@@ -190,7 +190,7 @@ namespace RDFSharp.Semantics {
                                                          RDFOntologyReasonerReport report) {
                 var type            = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString());
                 foreach(var c      in ontology.Model.ClassModel.Where(cls => !RDFBASEOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
-                    foreach(var f  in RDFBASEOntologyReasonerHelper.EnlistMembersOfNonLiteralCompatibleClass(c, ontology)) {
+                    foreach(var f  in RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology)) {
 
                         //Create the inference as a taxonomy entry
                         var ctInfer = new RDFOntologyTaxonomyEntry(f, type, c).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);

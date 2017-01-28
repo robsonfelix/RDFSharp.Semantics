@@ -40,7 +40,7 @@ namespace RDFSharp.Semantics {
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("https://rdfsharpsemantics.codeplex.com/dc_ontology#"), true);
+            Instance = new RDFOntology(new RDFResource("https://rdfsharp.codeplex.com/semantics/ontologies/dc#"), true);
             #endregion
 
             #region Classes
@@ -203,30 +203,31 @@ namespace RDFSharp.Semantics {
             #region ClassModel
 
             //SubClassOf
+            var subClassOf  = RDFVocabulary.RDFS.SUB_CLASS_OF.ToRDFOntologyObjectProperty();
             var rdfsLiteral = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT.ToString()),            Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.BOX.ToString()),              rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.FILE_FORMAT.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.ISO3166.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.ISO639_2.ToString()),         rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.ISO639_3.ToString()),         rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.JURISDICTION.ToString()),     Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LICENSE_DOCUMENT.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION.ToString()),         Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD.ToString()),           rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PERIOD_OF_TIME.ToString()),   Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.PHYSICAL_MEDIUM.ToString()),  Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.POINT.ToString()),            rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC1766.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC3066.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC4646.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.RFC5646.ToString()),          rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.SIZE_OR_DURATION.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.URI.ToString()),              rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTERMS.W3CDTF.ToString()),           rdfsLiteral);
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.MOVING_IMAGE.ToString()),      Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.IMAGE.ToString()));
-            Instance.Model.ClassModel.AddSubClassOfRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.STILL_IMAGE.ToString()),       Instance.Model.ClassModel.SelectClass(RDFVocabulary.DC.DCTYPE.IMAGE.ToString()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.AGENT.ToRDFOntologyClass(),            subClassOf, RDFVocabulary.DC.DCTERMS.AGENT_CLASS.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.BOX.ToRDFOntologyClass(),              subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.FILE_FORMAT.ToRDFOntologyClass(),      subClassOf, RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.ISO3166.ToRDFOntologyClass(),          subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.ISO639_2.ToRDFOntologyClass(),         subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.ISO639_3.ToRDFOntologyClass(),         subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.JURISDICTION.ToRDFOntologyClass(),     subClassOf, RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.LICENSE_DOCUMENT.ToRDFOntologyClass(), subClassOf, RDFVocabulary.DC.DCTERMS.RIGHTS_STATEMENT.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.LOCATION.ToRDFOntologyClass(),         subClassOf, RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToRDFOntologyClass(),       subClassOf, RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.PERIOD.ToRDFOntologyClass(),           subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.PERIOD_OF_TIME.ToRDFOntologyClass(),   subClassOf, RDFVocabulary.DC.DCTERMS.LOCATION_PERIOD_OR_JURISDICTION.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.PHYSICAL_MEDIUM.ToRDFOntologyClass(),  subClassOf, RDFVocabulary.DC.DCTERMS.MEDIA_TYPE.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.POINT.ToRDFOntologyClass(),            subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.RFC1766.ToRDFOntologyClass(),          subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.RFC3066.ToRDFOntologyClass(),          subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.RFC4646.ToRDFOntologyClass(),          subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.RFC5646.ToRDFOntologyClass(),          subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.SIZE_OR_DURATION.ToRDFOntologyClass(), subClassOf, RDFVocabulary.DC.DCTERMS.MEDIA_TYPE_OR_EXTENT.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.URI.ToRDFOntologyClass(),              subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTERMS.W3CDTF.ToRDFOntologyClass(),           subClassOf, rdfsLiteral));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTYPE.MOVING_IMAGE.ToRDFOntologyClass(),      subClassOf, RDFVocabulary.DC.DCTYPE.IMAGE.ToRDFOntologyClass()));
+            Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.DC.DCTYPE.STILL_IMAGE.ToRDFOntologyClass(),       subClassOf, RDFVocabulary.DC.DCTYPE.IMAGE.ToRDFOntologyClass()));
 
             #endregion
 

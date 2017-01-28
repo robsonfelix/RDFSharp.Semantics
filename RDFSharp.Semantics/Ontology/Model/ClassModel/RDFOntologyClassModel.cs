@@ -293,12 +293,12 @@ namespace RDFSharp.Semantics {
                                                            RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
-                //Enforce boundary checks on top/bottom OWL classes
-                if (motherClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
-                    childClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString())))    {
+                //Enforce preliminary checks on usage of BASE classes
+                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(childClass.ToString())  != null  ||
+                    RDFBASEOntology.Instance.Model.ClassModel.SelectClass(motherClass.ToString()) != null)  {
 
-                    //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because it violates the taxonomy consistency
-                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
+                    //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because usage of BASE ontology classes is not allowed 
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because usage of BASE ontology classes is not allowed.", childClass, motherClass));
 
                 }
                 else {
@@ -329,14 +329,12 @@ namespace RDFSharp.Semantics {
                                                                 RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
-                //Enforce boundary checks on top/bottom OWL classes
-                if (aClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
-                    bClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.NOTHING.ToString())) ||
-                    aClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString()))   ||                    
-                    bClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.OWL.THING.ToString())))   {
+                //Enforce preliminary checks on usage of BASE classes
+                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(aClass.ToString()) != null  ||
+                    RDFBASEOntology.Instance.Model.ClassModel.SelectClass(bClass.ToString()) != null)  {
 
-                    //Raise warning event to inform the user: EquivalentClass relation cannot be added to the class model because it violates the taxonomy consistency
-                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency. Reserved classes (owl:Nothing/owl:Thing) cannot be used in this kind of relation.", aClass, bClass));
+                    //Raise warning event to inform the user: EquivalentClass relation cannot be added to the class model because usage of BASE ontology classes is not allowed 
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model because usage of BASE ontology classes is not allowed.", aClass, bClass));
 
                 }
                 else {
@@ -368,17 +366,29 @@ namespace RDFSharp.Semantics {
                                                              RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
-                //Enforce taxonomy checks before adding the disjointWith relation
-                if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this) &&
-                    !RDFBASEOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this) &&
-                    !RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this)) {
-                     this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), bClass));
-                     this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                //Enforce preliminary checks on usage of BASE classes
+                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(aClass.ToString()) != null  ||
+                    RDFBASEOntology.Instance.Model.ClassModel.SelectClass(bClass.ToString()) != null)  {
+
+                    //Raise warning event to inform the user: DisjointWith relation cannot be added to the class model because usage of BASE ontology classes is not allowed 
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because usage of BASE ontology classes is not allowed.", aClass, bClass));
+
                 }
                 else {
 
-                     //Raise warning event to inform the user: DisjointWith relation cannot be added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+                    //Enforce taxonomy checks before adding the disjointWith relation
+                    if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(aClass, bClass, this)   &&
+                        !RDFBASEOntologyReasonerHelper.IsSuperClassOf(aClass, bClass, this) &&
+                        !RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this)) {
+                         this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), bClass));
+                         this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                    }
+                    else {
+
+                        //Raise warning event to inform the user: DisjointWith relation cannot be added to the class model because it violates the taxonomy consistency
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+
+                    }
 
                 }
 
@@ -437,7 +447,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel AddCustomRelation(RDFOntologyClass ontologyClass, 
                                                        RDFOntologyProperty ontologyProperty, 
                                                        RDFOntologyResource ontologyResource) {
-            if(ontologyClass != null && ontologyProperty != null && ontologyResource != null) {
+            if (ontologyClass != null && ontologyProperty != null && ontologyResource != null) {
 
                 //Custom annotations
                 if (ontologyProperty.IsAnnotationProperty()) {
@@ -487,6 +497,14 @@ namespace RDFSharp.Semantics {
                      if(ontologyClass is RDFOntologyUnionClass && ontologyResource.IsClass()) {
                         this.AddUnionOfRelation((RDFOntologyUnionClass)ontologyClass, (RDFOntologyClass)ontologyResource);
                      }
+                }
+
+                //owl:ComplementOf
+                else if(ontologyProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.COMPLEMENT_OF.ToString()))) {
+
+                    //Raise warning event to inform the user: Custom relation cannot be added to the class model because usage of owl:ComplementOf is not allowed
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Custom relation between class '{0}' and resource '{1}' cannot be added to the class model because usage of owl:ComplementOf is not allowed.", ontologyClass, ontologyResource));
+
                 }
 
                 //custom
@@ -621,7 +639,19 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel RemoveSubClassOfRelation(RDFOntologyClass childClass, 
                                                               RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null) {
-                this.Relations.SubClassOf.RemoveEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
+
+                //Enforce preliminary checks on usage of BASE classes
+                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(childClass.ToString())  != null  ||
+                    RDFBASEOntology.Instance.Model.ClassModel.SelectClass(motherClass.ToString()) != null)  {
+
+                    //Raise warning event to inform the user: SubClassOf relation cannot be removed from the class model because usage of BASE ontology classes is not allowed 
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be removed from the class model because usage of BASE ontology classes is not allowed.", childClass, motherClass));
+
+                }
+                else {
+                    this.Relations.SubClassOf.RemoveEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
+                }
+
             }
             return this;
         }
@@ -632,8 +662,20 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel RemoveEquivalentClassRelation(RDFOntologyClass aClass, 
                                                                    RDFOntologyClass bClass) {
             if (aClass != null && bClass != null) {
-                this.Relations.EquivalentClass.RemoveEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), bClass));
-                this.Relations.EquivalentClass.RemoveEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), aClass));
+
+                //Enforce preliminary checks on usage of BASE classes
+                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(aClass.ToString()) != null  ||
+                    RDFBASEOntology.Instance.Model.ClassModel.SelectClass(bClass.ToString()) != null)  {
+
+                    //Raise warning event to inform the user: EquivalentClass relation cannot be removed from the class model because usage of BASE ontology classes is not allowed 
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be removed from the class model because usage of BASE ontology classes is not allowed.", aClass, bClass));
+
+                }
+                else {
+                    this.Relations.EquivalentClass.RemoveEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), bClass));
+                    this.Relations.EquivalentClass.RemoveEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), aClass));
+                }
+
             }
             return this;
         }
@@ -644,8 +686,20 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel RemoveDisjointWithRelation(RDFOntologyClass aClass, 
                                                                 RDFOntologyClass bClass) {
             if (aClass != null && bClass != null) {
-                this.Relations.DisjointWith.RemoveEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), bClass));
-                this.Relations.DisjointWith.RemoveEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), aClass));
+
+                //Enforce preliminary checks on usage of BASE classes
+                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(aClass.ToString()) != null  ||
+                    RDFBASEOntology.Instance.Model.ClassModel.SelectClass(bClass.ToString()) != null)  {
+
+                    //Raise warning event to inform the user: DisjointWith relation cannot be removed from the class model because usage of BASE ontology classes is not allowed 
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be removed from the class model because usage of BASE ontology classes is not allowed.", aClass, bClass));
+
+                }
+                else {
+                    this.Relations.DisjointWith.RemoveEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), bClass));
+                    this.Relations.DisjointWith.RemoveEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), aClass));
+                }
+
             }
             return this;
         }
@@ -701,7 +755,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyClassModel RemoveCustomRelation(RDFOntologyClass ontologyClass,
                                                           RDFOntologyProperty ontologyProperty,
                                                           RDFOntologyResource ontologyResource) {
-            if(ontologyClass != null && ontologyProperty != null && ontologyResource != null) {
+            if (ontologyClass != null && ontologyProperty != null && ontologyResource != null) {
 
                 //Custom annotations
                 if (ontologyProperty.IsAnnotationProperty()) {
@@ -1059,12 +1113,7 @@ namespace RDFSharp.Semantics {
 
                 //Class
                 else {
-                    if (c.IsRDFSClass) {
-                        result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.RDFS.CLASS));
-                    }
-                    else {
-                        result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.CLASS));
-                    }
+                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, (c.IsRDFSClass ? RDFVocabulary.RDFS.CLASS : RDFVocabulary.OWL.CLASS)));
                     if (c.IsDeprecatedClass()) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS));
                     }
@@ -1092,7 +1141,7 @@ namespace RDFSharp.Semantics {
 
         #region Reasoner
         /// <summary>
-        /// Clears all the taxonomy entries marked as true semantic inferences (=RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner)
+        /// Clears all the taxonomy entries marked as semantic inferences generated by a reasoner
         /// </summary>
         public RDFOntologyClassModel ClearInferences() {
             var cacheRemove = new Dictionary<Int64, Object>();

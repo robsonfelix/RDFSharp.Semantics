@@ -654,7 +654,7 @@ namespace RDFSharp.Semantics {
                         //Cache-Miss
                         if (!classCache.ContainsKey(domain.PatternMemberID)) {
                              //It's a non literal-compatible class, so we can speed up things by calling the internal method
-                             classCache.Add(domain.PatternMemberID, RDFBASEOntologyReasonerHelper.EnlistMembersOfNonLiteralCompatibleClass(domain, ontology));
+                             classCache.Add(domain.PatternMemberID, RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(domain, ontology));
                         }
 
                         //Cache-Check

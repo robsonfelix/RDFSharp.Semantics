@@ -395,7 +395,7 @@ namespace RDFSharp.Semantics
         }
         #endregion
 
-        #region MembersOf
+        #region EnlistMembers
         /// <summary>
         /// Enlists the facts which are members of the given restriction within the given ontology
         /// </summary>
@@ -684,8 +684,6 @@ namespace RDFSharp.Semantics
         internal static RDFOntologyData EnlistMembersOfLiteralCompatibleClass(RDFOntologyClass ontClass, 
                                                                               RDFOntology ontology) {
             var result              = new RDFOntologyData();
-            var rdfsLiteral         = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString());
-            var xsdString           = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.XSD.STRING.ToString());
 
             #region DataRange
             if (ontClass.IsDataRangeClass()) {
@@ -704,77 +702,62 @@ namespace RDFSharp.Semantics
             }
             #endregion
 
-            #region Pure Literal
-            else if (ontClass.Equals(rdfsLiteral) || RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(ontClass, rdfsLiteral, ontology.Model.ClassModel)) {
+            #region Literal
+            //Asking for "rdfs:Literal" is the only way to get enlistment of plain literals, since they have really no semantic
+            else if (ontClass.Equals(RDFVocabulary.RDFS.LITERAL.ToRDFOntologyClass())) {
                 foreach(var ontLit in ontology.Data.Literals.Values) {
                     result.AddLiteral(ontLit);
                 }
             }
             #endregion
 
-            #region Derived Literal
+            #region SubLiteral
             else {
-
-                #region String Literal
-                if (ontClass.Equals(xsdString) || RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(ontClass, xsdString, ontology.Model.ClassModel)) {
-                    foreach(var ontLit   in ontology.Data.Literals.Values) {
-                        if (ontLit.Value is RDFPlainLiteral) {
+                foreach(var ontLit in ontology.Data.Literals.Values.Where(l => l.Value is RDFTypedLiteral)) {
+                    var dTypeClass  =  ontology.Model.ClassModel.SelectClass(RDFModelUtilities.GetDatatypeFromEnum(((RDFTypedLiteral)ontLit.Value).Datatype));
+                    if (dTypeClass != null) {
+                        if (dTypeClass.Equals(ontClass)
+                            || RDFBASEOntologyReasonerHelper.IsSubClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)
+                            || RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)) {
                             result.AddLiteral(ontLit);
                         }
-                        else {
-                            if (((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.RDFS_LITERAL         ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.RDF_XMLLITERAL       ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_STRING           ||                                
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_ANYURI           ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_NAME             ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_QNAME            ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_NCNAME           ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_ID               ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_TOKEN            ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_NMTOKEN          ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_NORMALIZEDSTRING ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_LANGUAGE         ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_BASE64BINARY     ||
-                                ((RDFTypedLiteral)ontLit.Value).Datatype == RDFModelEnums.RDFDatatypes.XSD_HEXBINARY) {
-                                result.AddLiteral(ontLit);
-                            }
-                        }
                     }
                 }
-                #endregion
-
-                #region Non-String Literal
-                else {
-                    foreach(var ontLit in ontology.Data.Literals.Values.Where(l => l.Value is RDFTypedLiteral)) {
-                        RDFOntologyClass dTypeClass = null;
-
-                        //BASE
-                        if (RDFModelUtilities.GetDatatypeFromEnum(((RDFTypedLiteral)ontLit.Value).Datatype).StartsWith(RDFVocabulary.RDF.BASE_URI)  
-                             || (RDFModelUtilities.GetDatatypeFromEnum(((RDFTypedLiteral)ontLit.Value).Datatype).StartsWith(RDFVocabulary.RDFS.BASE_URI, StringComparison.Ordinal)  
-                             || (RDFModelUtilities.GetDatatypeFromEnum(((RDFTypedLiteral)ontLit.Value).Datatype).StartsWith(RDFVocabulary.XSD.BASE_URI,  StringComparison.Ordinal))))  {
-                            dTypeClass  = RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFModelUtilities.GetDatatypeFromEnum(((RDFTypedLiteral)ontLit.Value).Datatype));
-                        }
-
-                        //Other
-                        else {
-                            dTypeClass  = ontology.Model.ClassModel.SelectClass(RDFModelUtilities.GetDatatypeFromEnum(((RDFTypedLiteral)ontLit.Value).Datatype));
-                        }
-
-                        if (dTypeClass != null) {
-                            if (dTypeClass.Equals(ontClass) 
-                                || RDFBASEOntologyReasonerHelper.IsSubClassOf(dTypeClass,        ontClass, ontology.Model.ClassModel) 
-                                || RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(dTypeClass, ontClass, ontology.Model.ClassModel)) {
-                                result.AddLiteral(ontLit);
-                            }
-                        }
-
-                    }
-                }
-                #endregion
-
             }
             #endregion
 
+            return result;
+        }
+
+        /// <summary>
+        /// Enlists the facts which are members of the given non literal-compatible class within the given ontology
+        /// </summary>
+        internal static RDFOntologyData EnlistMembersOfNonLiteralCompatibleClass(RDFOntologyClass ontClass,
+                                                                                 RDFOntology ontology) {
+            var result     = new RDFOntologyData();
+            if (ontClass  != null && ontology != null) {
+
+                //Restriction
+                if (ontClass.IsRestrictionClass()) {
+                    result = EnlistMembersOfRestriction((RDFOntologyRestriction)ontClass, ontology);
+                }
+
+                //Composite
+                else if (ontClass.IsCompositeClass()) {
+                    result = EnlistMembersOfComposite(ontClass, ontology);
+                }
+
+                //Enumerate
+                else if (ontClass.IsEnumerateClass()) {
+                    result = EnlistMembersOfEnumerate((RDFOntologyEnumerateClass)ontClass, ontology);
+                }
+
+                //Class
+                else {
+                    result = EnlistMembersOfClass(ontClass, ontology);
+                }
+
+            }
             return result;
         }
 

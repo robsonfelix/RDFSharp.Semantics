@@ -200,8 +200,7 @@ namespace RDFSharp.Semantics {
             if (ontClass != null && classModel != null) {
                 result    = (ontClass.IsDataRangeClass() 
                              || ontClass.Equals(RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString())) 
-                             || IsSubClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel) 
-                             || IsEquivalentClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
+                             || IsSubClassOf(ontClass, RDFBASEOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.RDFS.LITERAL.ToString()), classModel));
             }
             return result;
         }
@@ -408,7 +407,7 @@ namespace RDFSharp.Semantics {
         }
         #endregion
 
-        #region EnlistMembersOf
+        #region EnlistMembers
         /// <summary>
         /// Checks if the given fact is member of the given class within the given ontology
         /// </summary>
@@ -423,65 +422,17 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public static RDFOntologyData EnlistMembersOf(RDFOntologyClass ontClass, 
                                                       RDFOntology ontology) {
-            var result      = new RDFOntologyData();
-            if (ontClass   != null && ontology != null) {
+            var result     = new RDFOntologyData();
+            if (ontClass  != null && ontology != null) {
                 
-                //Restriction
-                if (ontClass.IsRestrictionClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfRestriction((RDFOntologyRestriction)ontClass,  ontology);
+                //DataRange/Literal-Compatible
+                if (IsLiteralCompatibleClass(ontClass, ontology.Model.ClassModel)) {
+                    result = RDFSemanticsUtilities.EnlistMembersOfLiteralCompatibleClass(ontClass, ontology);
                 }
 
-                //Composite
-                else if(ontClass.IsCompositeClass()) {
-                    result = RDFSemanticsUtilities.EnlistMembersOfComposite(ontClass, ontology);
-                }
-
-                //Enumerate
-                else if (ontClass.IsEnumerateClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfEnumerate((RDFOntologyEnumerateClass)ontClass, ontology);
-                }
-
-                //DataRange/Literal
-                else if (IsLiteralCompatibleClass(ontClass, ontology.Model.ClassModel)) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfLiteralCompatibleClass(ontClass, ontology);
-                }
-
-                //Class
+                //Restriction/Composite/Enumerate/Class
                 else {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfClass(ontClass, ontology);
-                }
-
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Enlists the facts which are members of the given non literal-compatible class within the given ontology
-        /// (internal-only method for performance purposes, used during validation and reasoning logics)
-        /// </summary>
-        internal static RDFOntologyData EnlistMembersOfNonLiteralCompatibleClass(RDFOntologyClass ontClass,
-                                                                                 RDFOntology ontology) {
-            var result      = new RDFOntologyData();
-            if(ontClass    != null && ontology != null) {
-
-                //Restriction
-                if(ontClass.IsRestrictionClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfRestriction((RDFOntologyRestriction)ontClass, ontology);
-                }
-
-                //Composite
-                else if(ontClass.IsCompositeClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfComposite(ontClass, ontology);
-                }
-
-                //Enumerate
-                else if(ontClass.IsEnumerateClass()) {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfEnumerate((RDFOntologyEnumerateClass)ontClass, ontology);
-                }
-
-                //Class
-                else {
-                    result  = RDFSemanticsUtilities.EnlistMembersOfClass(ontClass, ontology);
+                    result = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(ontClass, ontology);
                 }
 
             }

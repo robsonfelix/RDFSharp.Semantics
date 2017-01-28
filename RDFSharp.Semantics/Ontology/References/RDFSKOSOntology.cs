@@ -40,7 +40,7 @@ namespace RDFSharp.Semantics {
             #region Declarations
 
             #region Ontology
-            Instance = new RDFOntology(new RDFResource("https://rdfsharpsemantics.codeplex.com/skos_ontology#"), true);
+            Instance = new RDFOntology(new RDFResource("https://rdfsharp.codeplex.com/semantics/ontologies/skos#"), true);
             #endregion
 
             #region Classes
