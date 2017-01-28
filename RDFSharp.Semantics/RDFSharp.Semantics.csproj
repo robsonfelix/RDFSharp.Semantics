@@ -81,14 +81,14 @@
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
-    <Compile Include="Reasoner\Helpers\RDFBASEOntologyReasonerHelper.cs" />
-    <Compile Include="Reasoner\RuleSets\RDFBASEOntologyReasonerRuleSet.cs" />
+    <Compile Include="Reasoner\RDFOntologyReasonerHelper.cs" />
+    <Compile Include="Reasoner\RDFOntologyReasonerRuleSet.cs" />
     <!-- Validation -->
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
     <Compile Include="Validator\RDFOntologyValidatorReport.cs" />
     <Compile Include="Validator\RDFOntologyValidatorRule.cs" />
     <Compile Include="Validator\RDFOntologyValidator.cs" />
-    <Compile Include="Validator\RuleSets\RDFBASEOntologyValidatorRuleSet.cs" />
+    <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
   <!-- Nuget and MSBuild stuff -->
   <ItemGroup>

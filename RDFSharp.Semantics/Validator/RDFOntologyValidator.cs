@@ -44,55 +44,55 @@ namespace RDFSharp.Semantics {
                 new RDFOntologyValidatorRule(
                     "Vocabulary_Disjointness", 
                     "This rule checks for disjointness of vocabulary of classes, properties and facts",
-                    RDFBASEOntologyValidatorRuleSet.Vocabulary_Disjointness),
+                    RDFOntologyValidatorRuleSet.Vocabulary_Disjointness),
 
                 //Vocabulary_Declaration
                 new RDFOntologyValidatorRule(
                     "Vocabulary_Declaration", 
                     "This rule checks for complete declaration of classes, properties and facts",
-                    RDFBASEOntologyValidatorRuleSet.Vocabulary_Declaration),
+                    RDFOntologyValidatorRuleSet.Vocabulary_Declaration),
 
                 //Domain_Range
                 new RDFOntologyValidatorRule(
                     "Domain_Range", 
                     "This rule checks for consistency of rdfs:domain and rdfs:range axioms",
-                    RDFBASEOntologyValidatorRuleSet.Domain_Range),
+                    RDFOntologyValidatorRuleSet.Domain_Range),
 
                 //InverseOf
                 new RDFOntologyValidatorRule(
                     "InverseOf", 
                     "This rule checks for consistency of owl:inverseOf axioms",
-                    RDFBASEOntologyValidatorRuleSet.InverseOf),
+                    RDFOntologyValidatorRuleSet.InverseOf),
 
                 //SymmetricProperty
                 new RDFOntologyValidatorRule(
                     "SymmetricProperty",
                     "This rule checks for consistency of owl:SymmetricProperty axioms",
-                    RDFBASEOntologyValidatorRuleSet.SymmetricProperty),
+                    RDFOntologyValidatorRuleSet.SymmetricProperty),
 
                 //ClassType
                 new RDFOntologyValidatorRule(
                     "ClassType", 
                     "This rule checks for consistency of rdf:type axioms",
-                    RDFBASEOntologyValidatorRuleSet.ClassType),
+                    RDFOntologyValidatorRuleSet.ClassType),
 
                 //GlobalCardinalityConstraint
                 new RDFOntologyValidatorRule(
                     "GlobalCardinalityConstraint", 
                     "This rule checks for consistency of global cardinality constraints",
-                    RDFBASEOntologyValidatorRuleSet.GlobalCardinalityConstraint),
+                    RDFOntologyValidatorRuleSet.GlobalCardinalityConstraint),
 
                 //LocalCardinalityConstraint
                 new RDFOntologyValidatorRule(
                     "LocalCardinalityConstraint", 
                     "This rule checks for consistency of local cardinality constraints",
-                    RDFBASEOntologyValidatorRuleSet.LocalCardinalityConstraint),
+                    RDFOntologyValidatorRuleSet.LocalCardinalityConstraint),
 
                 //Deprecation
                 new RDFOntologyValidatorRule(
                     "Deprecation", 
                     "This rule checks for usage of deprecated classes and properties",
-                    RDFBASEOntologyValidatorRuleSet.Deprecation)
+                    RDFOntologyValidatorRuleSet.Deprecation)
 
             };
         }

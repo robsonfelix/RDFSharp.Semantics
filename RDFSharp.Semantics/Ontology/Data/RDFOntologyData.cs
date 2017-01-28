@@ -302,7 +302,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                 //Enforce taxonomy checks before adding the sameAs relation
-                if (!RDFBASEOntologyReasonerHelper.IsDifferentFactFrom(aFact, bFact, this)) {
+                if (!RDFOntologyReasonerHelper.IsDifferentFactFrom(aFact, bFact, this)) {
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), bFact));
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -325,7 +325,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                 //Enforce taxonomy checks before adding the differentFrom relation
-                if (!RDFBASEOntologyReasonerHelper.IsSameFactAs(aFact, bFact, this)) {
+                if (!RDFOntologyReasonerHelper.IsSameFactAs(aFact, bFact, this)) {
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), bFact));
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -350,7 +350,7 @@ namespace RDFSharp.Semantics
 
                 //Enforce taxonomy checks before adding the assertion
                 //Creation of transitive cycles is not allowed for OWL-DL computability reasons
-                if (!RDFBASEOntologyReasonerHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
+                if (!RDFOntologyReasonerHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
                      this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
                 }
                 else {

@@ -304,9 +304,9 @@ namespace RDFSharp.Semantics {
                 else {
 
                     //Enforce taxonomy checks before adding the subClassOf relation
-                    if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(motherClass,        childClass, this)   &&
-                        !RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(motherClass, childClass, this)   &&
-                        !RDFBASEOntologyReasonerHelper.IsDisjointClassWith(motherClass, childClass, this))   {
+                    if (!RDFOntologyReasonerHelper.IsSubClassOf(motherClass,        childClass, this)   &&
+                        !RDFOntologyReasonerHelper.IsEquivalentClassOf(motherClass, childClass, this)   &&
+                        !RDFOntologyReasonerHelper.IsDisjointClassWith(motherClass, childClass, this))   {
                          this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_CLASS_OF.ToString()), motherClass));
                     }
                     else {
@@ -340,9 +340,9 @@ namespace RDFSharp.Semantics {
                 else {
 
                     //Enforce taxonomy checks before adding the equivalentClass relation
-                    if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this) &&
-                        !RDFBASEOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this) &&
-                        !RDFBASEOntologyReasonerHelper.IsDisjointClassWith(aClass, bClass, this)) {
+                    if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this) &&
+                        !RDFOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this) &&
+                        !RDFOntologyReasonerHelper.IsDisjointClassWith(aClass, bClass, this)) {
                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), bClass));
                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_CLASS.ToString()), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                     }
@@ -377,9 +377,9 @@ namespace RDFSharp.Semantics {
                 else {
 
                     //Enforce taxonomy checks before adding the disjointWith relation
-                    if (!RDFBASEOntologyReasonerHelper.IsSubClassOf(aClass, bClass, this)   &&
-                        !RDFBASEOntologyReasonerHelper.IsSuperClassOf(aClass, bClass, this) &&
-                        !RDFBASEOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this)) {
+                    if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass, bClass, this)   &&
+                        !RDFOntologyReasonerHelper.IsSuperClassOf(aClass, bClass, this) &&
+                        !RDFOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this)) {
                          this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), bClass));
                          this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DISJOINT_WITH.ToString()), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                     }
