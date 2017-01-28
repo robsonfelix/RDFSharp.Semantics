@@ -46,11 +46,12 @@
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <!-- Ontology -->
+    <Compile Include="RDFBASEOntology.cs" />
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
+    <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
     <Compile Include="Ontology\RDFOntologyTaxonomy.cs" />
@@ -75,12 +76,6 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
-    <Compile Include="Ontology\References\RDFBASEOntology.cs" />
-    <Compile Include="Ontology\References\RDFDCOntology.cs" />
-    <Compile Include="Ontology\References\RDFFOAFOntology.cs" />
-    <Compile Include="Ontology\References\RDFGEOOntology.cs" />
-    <Compile Include="Ontology\References\RDFSIOCOntology.cs" />
-    <Compile Include="Ontology\References\RDFSKOSOntology.cs" />
     <!-- Reasoning -->
     <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
