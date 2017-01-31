@@ -23,9 +23,9 @@ namespace RDFSharp.Semantics
     public static class RDFSemanticsEnums {
 
         /// <summary>
-        /// RDFOntologyValidationEvidenceCategory represents an enumeration for possible categories of ontology validation evidence
+        /// RDFOntologyValidatorEvidenceCategory represents an enumeration for possible categories of ontology validation evidence
         /// </summary>
-        public enum RDFOntologyValidationEvidenceCategory {
+        public enum RDFOntologyValidatorEvidenceCategory {
             /// <summary>
             /// Specifications have not been violated: ontology may contain semantic inconsistencies
             /// </summary>

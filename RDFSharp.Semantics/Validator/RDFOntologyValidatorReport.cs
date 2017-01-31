@@ -106,7 +106,7 @@ namespace RDFSharp.Semantics {
         /// Gets the warning evidences from the validation report
         /// </summary>
         public List<RDFOntologyValidatorEvidence> SelectWarnings() {
-            return this.Evidences.FindAll(e => e.EvidenceCategory == RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning);
+            return this.Evidences.FindAll(e => e.EvidenceCategory == RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning);
         }
 
         /// <summary>
@@ -114,14 +114,14 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public List<RDFOntologyValidatorEvidence> SelectWarningsByRuleName(String rulename="") {
             return this.Evidences.FindAll(e => e.EvidenceProvenance.ToUpperInvariant().Equals(rulename.Trim().ToUpperInvariant(), StringComparison.Ordinal) && 
-                                               e.EvidenceCategory.Equals(RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Warning));
+                                               e.EvidenceCategory.Equals(RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning));
         }
 
         /// <summary>
         /// Gets the error evidences from the validation report
         /// </summary>
         public List<RDFOntologyValidatorEvidence> SelectErrors() {
-            return this.Evidences.FindAll(e => e.EvidenceCategory == RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error);
+            return this.Evidences.FindAll(e => e.EvidenceCategory == RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public List<RDFOntologyValidatorEvidence> SelectErrorsByRuleName(String rulename = "") {
             return this.Evidences.FindAll(e => e.EvidenceProvenance.ToUpperInvariant().Equals(rulename.Trim().ToUpperInvariant(), StringComparison.Ordinal) &&
-                                               e.EvidenceCategory.Equals(RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory.Error));
+                                               e.EvidenceCategory.Equals(RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error));
         }
 
         /// <summary>

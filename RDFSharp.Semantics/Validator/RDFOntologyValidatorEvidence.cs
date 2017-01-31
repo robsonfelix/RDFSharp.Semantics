@@ -27,7 +27,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Category of this evidence
         /// </summary>
-        public RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory EvidenceCategory { get; internal set; }
+        public RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory EvidenceCategory { get; internal set; }
 
         /// <summary>
         /// Rule which has reported this evidence
@@ -49,10 +49,10 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build an evidence with given category, provenance, message and suggestion
         /// </summary>
-        internal RDFOntologyValidatorEvidence(RDFSemanticsEnums.RDFOntologyValidationEvidenceCategory evidenceCategory,
-                                               String evidenceProvenance,
-                                               String evidenceMessage,
-                                               String evidenceSuggestion) {
+        internal RDFOntologyValidatorEvidence(RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory evidenceCategory,
+                                              String evidenceProvenance,
+                                              String evidenceMessage,
+                                              String evidenceSuggestion) {
             this.EvidenceCategory   = evidenceCategory;
             this.EvidenceProvenance = evidenceProvenance;
             this.EvidenceMessage    = evidenceMessage;
