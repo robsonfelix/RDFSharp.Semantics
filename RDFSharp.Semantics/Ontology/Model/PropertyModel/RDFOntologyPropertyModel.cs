@@ -560,11 +560,6 @@ namespace RDFSharp.Semantics {
                      }
                 }
 
-                //custom
-                else {
-                    this.Relations.CustomRelations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, predicateProperty, ontologyResource));
-                }
-
             }
             return this;
         }
@@ -845,11 +840,6 @@ namespace RDFSharp.Semantics {
                      }
                 }
 
-                //custom
-                else {
-                    this.Relations.CustomRelations.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, predicateProperty, ontologyResource));
-                }
-
             }
             return this;
         }
@@ -889,7 +879,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.SubPropertyOf       = this.Relations.SubPropertyOf.IntersectWith(propertyModel.Relations.SubPropertyOf);
                 result.Relations.EquivalentProperty  = this.Relations.EquivalentProperty.IntersectWith(propertyModel.Relations.EquivalentProperty);
                 result.Relations.InverseOf           = this.Relations.InverseOf.IntersectWith(propertyModel.Relations.InverseOf);
-                result.Relations.CustomRelations     = this.Relations.CustomRelations.IntersectWith(propertyModel.Relations.CustomRelations);
 
                 //Add intersection annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.IntersectWith(propertyModel.Annotations.VersionInfo);
@@ -918,7 +907,6 @@ namespace RDFSharp.Semantics {
             result.Relations.SubPropertyOf       = result.Relations.SubPropertyOf.UnionWith(this.Relations.SubPropertyOf);
             result.Relations.EquivalentProperty  = result.Relations.EquivalentProperty.UnionWith(this.Relations.EquivalentProperty);
             result.Relations.InverseOf           = result.Relations.InverseOf.UnionWith(this.Relations.InverseOf);
-            result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(this.Relations.CustomRelations);
 
             //Add annotations from this property model
             result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
@@ -940,7 +928,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.SubPropertyOf       = result.Relations.SubPropertyOf.UnionWith(propertyModel.Relations.SubPropertyOf);
                 result.Relations.EquivalentProperty  = result.Relations.EquivalentProperty.UnionWith(propertyModel.Relations.EquivalentProperty);
                 result.Relations.InverseOf           = result.Relations.InverseOf.UnionWith(propertyModel.Relations.InverseOf);
-                result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(propertyModel.Relations.CustomRelations);
 
                 //Add annotations from the given property model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(propertyModel.Annotations.VersionInfo);
@@ -972,7 +959,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.SubPropertyOf       = this.Relations.SubPropertyOf.DifferenceWith(propertyModel.Relations.SubPropertyOf);
                 result.Relations.EquivalentProperty  = this.Relations.EquivalentProperty.DifferenceWith(propertyModel.Relations.EquivalentProperty);
                 result.Relations.InverseOf           = this.Relations.InverseOf.DifferenceWith(propertyModel.Relations.InverseOf);
-                result.Relations.CustomRelations     = this.Relations.CustomRelations.DifferenceWith(propertyModel.Relations.CustomRelations);
 
                 //Add difference annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.DifferenceWith(propertyModel.Annotations.VersionInfo);
@@ -994,7 +980,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.SubPropertyOf       = result.Relations.SubPropertyOf.UnionWith(this.Relations.SubPropertyOf);
                 result.Relations.EquivalentProperty  = result.Relations.EquivalentProperty.UnionWith(this.Relations.EquivalentProperty);
                 result.Relations.InverseOf           = result.Relations.InverseOf.UnionWith(this.Relations.InverseOf);
-                result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(this.Relations.CustomRelations);
 
                 //Add annotations from this property model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
@@ -1057,8 +1042,7 @@ namespace RDFSharp.Semantics {
             //Relations
             result       = result.UnionWith(this.Relations.SubPropertyOf.ToRDFGraph(infexpBehavior))
                                  .UnionWith(this.Relations.EquivalentProperty.ToRDFGraph(infexpBehavior))
-                                 .UnionWith(this.Relations.InverseOf.ToRDFGraph(infexpBehavior))
-                                 .UnionWith(this.Relations.CustomRelations.ToRDFGraph(infexpBehavior));
+                                 .UnionWith(this.Relations.InverseOf.ToRDFGraph(infexpBehavior));
 
             //Annotations
             result       = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(infexpBehavior))
@@ -1100,13 +1084,6 @@ namespace RDFSharp.Semantics {
             foreach (var c in cacheRemove.Keys) { this.Relations.InverseOf.Entries.Remove(c); }
             cacheRemove.Clear();
 
-            //CustomRelations
-            foreach (var t in this.Relations.CustomRelations.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner)) {
-                cacheRemove.Add(t.TaxonomyEntryID, null);
-            }
-            foreach (var c in cacheRemove.Keys) { this.Relations.CustomRelations.Entries.Remove(c); }
-            cacheRemove.Clear();
-
             return this;
         }
         #endregion
@@ -1136,11 +1113,6 @@ namespace RDFSharp.Semantics {
         /// "owl:inverseOf" relations
         /// </summary>
         public RDFOntologyTaxonomy InverseOf { get; internal set; }
-
-        /// <summary>
-        /// "Custom" relations (non-structural taxonomies)
-        /// </summary>
-        public RDFOntologyTaxonomy CustomRelations { get; internal set; }
         #endregion
 
         #region Ctors
@@ -1151,7 +1123,6 @@ namespace RDFSharp.Semantics {
             this.SubPropertyOf      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
             this.EquivalentProperty = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
             this.InverseOf          = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.CustomRelations    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
         }
         #endregion
 

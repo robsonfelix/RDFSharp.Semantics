@@ -78,52 +78,6 @@ namespace RDFSharp.Semantics {
         internal static void Vocabulary_Declaration(RDFOntology ontology, RDFOntologyValidatorReport report) {
             RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'Vocabulary_Declaration'");
 
-            #region Ontology
-            //Custom Relations
-            foreach(var o in ontology.Relations.CustomRelations) {
-                //Predicate: Property
-                if(!ontology.Model.PropertyModel.Properties.ContainsKey(o.TaxonomyPredicate.PatternMemberID)) {
-                    report.AddEvidence(new RDFOntologyValidatorEvidence(
-                        RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                        "Vocabulary_Declaration",
-                        String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a custom relation.", o.TaxonomyPredicate),
-                        String.Format("Add declaration of ontology property '{0}' to the property model.", o.TaxonomyPredicate)
-                    ));
-                }
-                //Object: Class/Property/Fact
-                if (o.TaxonomyObject.IsClass()) {
-                    if(!ontology.Model.ClassModel.Classes.ContainsKey(o.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a custom relation.", o.TaxonomyObject),
-                            String.Format("Add declaration of ontology class '{0}' to the class model.", o.TaxonomyObject)
-                        ));
-                    }
-                }
-                else if(o.TaxonomyObject.IsProperty()) {
-                    if(!ontology.Model.PropertyModel.Properties.ContainsKey(o.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a custom relation.", o.TaxonomyObject),
-                            String.Format("Add declaration of ontology property '{0}' to the property model.", o.TaxonomyObject)
-                        ));
-                    }
-                }
-                else if(o.TaxonomyObject.IsFact()) {
-                    if(!ontology.Data.Facts.ContainsKey(o.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology fact '{0}' is not found in the data: it is required by a custom relation.", o.TaxonomyObject),
-                            String.Format("Add declaration of ontology fact '{0}' to the data.", o.TaxonomyObject)
-                        ));
-                    }
-                }
-            }
-            #endregion
-
             #region Classes
 
             //SubClassOf
@@ -257,59 +211,6 @@ namespace RDFSharp.Semantics {
                           String.Format("Declaration of ontology class '{0}' is not found in the class model: complement class '{1}' requires it.", complCls.ComplementOf, complCls),
                           String.Format("Add declaration of ontology class '{0}' to the class model.", complCls.ComplementOf)
                      ));
-                }
-            }
-
-            //Custom Relations
-            foreach(var c in ontology.Model.ClassModel.Relations.CustomRelations) {
-                //Subject: Class
-                if(!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomySubject.PatternMemberID)) {
-                    report.AddEvidence(new RDFOntologyValidatorEvidence(
-                        RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                        "Vocabulary_Declaration",
-                        String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a custom relation.", c.TaxonomySubject),
-                        String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomySubject)
-                    ));
-                }
-                //Predicate: Property
-                if(!ontology.Model.PropertyModel.Properties.ContainsKey(c.TaxonomyPredicate.PatternMemberID)) {
-                    report.AddEvidence(new RDFOntologyValidatorEvidence(
-                        RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                        "Vocabulary_Declaration",
-                        String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a custom relation.", c.TaxonomyPredicate),
-                        String.Format("Add declaration of ontology property '{0}' to the property model.", c.TaxonomyPredicate)
-                    ));
-                }
-                //Object: Class/Property/Fact
-                if (c.TaxonomyObject.IsClass()) {
-                    if(!ontology.Model.ClassModel.Classes.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a custom relation.", c.TaxonomyObject),
-                            String.Format("Add declaration of ontology class '{0}' to the class model.", c.TaxonomyObject)
-                        ));
-                    }
-                }
-                else if(c.TaxonomyObject.IsProperty()) {
-                    if(!ontology.Model.PropertyModel.Properties.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a custom relation.", c.TaxonomyObject),
-                            String.Format("Add declaration of ontology property '{0}' to the property model.", c.TaxonomyObject)
-                        ));
-                    }
-                }
-                else if(c.TaxonomyObject.IsFact()) {
-                    if(!ontology.Data.Facts.ContainsKey(c.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology fact '{0}' is not found in the data: it is required by a custom relation.", c.TaxonomyObject),
-                            String.Format("Add declaration of ontology fact '{0}' to the data.", c.TaxonomyObject)
-                        ));
-                    }
                 }
             }
 
@@ -454,59 +355,6 @@ namespace RDFSharp.Semantics {
                          String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by an 'owl:InverseOf' relation.", p.TaxonomyObject),
                          String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomyObject)
                      ));
-                }
-            }
-
-            //Custom Relations
-            foreach(var p in ontology.Model.PropertyModel.Relations.CustomRelations) {
-                //Subject: Property
-                if(!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomySubject.PatternMemberID)) {
-                    report.AddEvidence(new RDFOntologyValidatorEvidence(
-                        RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                        "Vocabulary_Declaration",
-                        String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a custom relation.", p.TaxonomySubject),
-                        String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomySubject)
-                    ));
-                }
-                //Predicate: Property
-                if(!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomyPredicate.PatternMemberID)) {
-                    report.AddEvidence(new RDFOntologyValidatorEvidence(
-                        RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                        "Vocabulary_Declaration",
-                        String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a custom relation.", p.TaxonomyPredicate),
-                        String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomyPredicate)
-                    ));
-                }
-                //Object: Class/Property/Fact
-                if (p.TaxonomyObject.IsClass()) {
-                    if(!ontology.Model.ClassModel.Classes.ContainsKey(p.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology class '{0}' is not found in the class model: it is required by a custom relation.", p.TaxonomyObject),
-                            String.Format("Add declaration of ontology class '{0}' to the class model.", p.TaxonomyObject)
-                        ));
-                    }
-                }
-                else if(p.TaxonomyObject.IsProperty()) {
-                     if(!ontology.Model.PropertyModel.Properties.ContainsKey(p.TaxonomyObject.PatternMemberID)) {
-                         report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology property '{0}' is not found in the property model: it is required by a custom relation.", p.TaxonomyObject),
-                            String.Format("Add declaration of ontology property '{0}' to the property model.", p.TaxonomyObject)
-                         ));
-                     }
-                }
-                else if(p.TaxonomyObject.IsFact()) {
-                     if(!ontology.Data.Facts.ContainsKey(p.TaxonomyObject.PatternMemberID)) {
-                        report.AddEvidence(new RDFOntologyValidatorEvidence(
-                            RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning,
-                            "Vocabulary_Declaration",
-                            String.Format("Declaration of ontology fact '{0}' is not found in the data: it is required by a custom relation.", p.TaxonomyObject),
-                            String.Format("Add declaration of ontology fact '{0}' to the data.", p.TaxonomyObject)
-                        ));
-                     }
                 }
             }
 

@@ -28,7 +28,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build an empty ontology datarange class with the given name
         /// </summary>
-        public RDFOntologyDataRangeClass(RDFResource className): base(className, false) { }
+        public RDFOntologyDataRangeClass(RDFResource className): base(className) { }
         #endregion
 
     }    

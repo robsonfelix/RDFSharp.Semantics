@@ -35,7 +35,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build an ontology complement class of the given class and with the given name
         /// </summary>
-        public RDFOntologyComplementClass(RDFResource className, RDFOntologyClass complementOf): base(className, false) {
+        public RDFOntologyComplementClass(RDFResource className, RDFOntologyClass complementOf): base(className) {
             if (complementOf     != null) {
                 this.ComplementOf = complementOf;
             }

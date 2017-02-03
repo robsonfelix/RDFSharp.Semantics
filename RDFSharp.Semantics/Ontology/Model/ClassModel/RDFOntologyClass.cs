@@ -32,19 +32,19 @@ namespace RDFSharp.Semantics
         public Boolean Deprecated { get; internal set; }
 
         /// <summary>
-        /// Flag indicating that this ontology class has been created or imported as "rdfs:Class"
+        /// Nature of the ontology class (RDFS/OWL)
         /// </summary>
-        internal Boolean IsRDFSClass { get; set; }
+        public RDFSemanticsEnums.RDFOntologyClassNature Nature { get; internal set; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an ontology class with the given name
+        /// Default-ctor to build an ontology class with the given name and nature
         /// </summary>
-        public RDFOntologyClass(RDFResource className, Boolean isRDFSClass=false) {
+        public RDFOntologyClass(RDFResource className, RDFSemanticsEnums.RDFOntologyClassNature nature=RDFSemanticsEnums.RDFOntologyClassNature.OWL) {
             if (className != null) {
                 this.Value           = className;
-                this.IsRDFSClass     = isRDFSClass;
+                this.Nature          = nature;
                 this.PatternMemberID = className.PatternMemberID;
             }
             else {

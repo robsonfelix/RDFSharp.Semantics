@@ -37,7 +37,7 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologySomeValuesFromRestriction(RDFResource restrictionName, 
                                                     RDFOntologyProperty onProperty, 
-                                                    RDFOntologyClass fromClass): base(restrictionName, onProperty, false) {
+                                                    RDFOntologyClass fromClass): base(restrictionName, onProperty) {
             if (fromClass     != null) {
                 this.FromClass = fromClass;
             }

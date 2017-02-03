@@ -183,15 +183,15 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Gets an ontology class from the given RDF resource
         /// </summary>
-        public static RDFOntologyClass ToRDFOntologyClass(this RDFResource ontResource, Boolean isRDFSClass=false) {
-            return new RDFOntologyClass(ontResource, isRDFSClass);
+        public static RDFOntologyClass ToRDFOntologyClass(this RDFResource ontResource, RDFSemanticsEnums.RDFOntologyClassNature nature=RDFSemanticsEnums.RDFOntologyClassNature.OWL) {
+            return new RDFOntologyClass(ontResource, nature);
         }
 
         /// <summary>
         /// Gets an ontology property from the given RDF resource
         /// </summary>
-        public static RDFOntologyProperty ToRDFOntologyProperty(this RDFResource ontResource, Boolean isRDFProperty=false) {
-            return new RDFOntologyProperty(ontResource, isRDFProperty);
+        internal static RDFOntologyProperty ToRDFOntologyProperty(this RDFResource ontResource) {
+            return new RDFOntologyProperty(ontResource);
         }
 
         /// <summary>

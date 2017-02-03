@@ -37,8 +37,7 @@ namespace RDFSharp.Semantics
         /// Default-ctor to build an ontology restriction with the given name on the given ontology property
         /// </summary>
         internal RDFOntologyRestriction (RDFResource restrictionName, 
-                                         RDFOntologyProperty onProperty,
-                                         Boolean isRDFSClass=false): base(restrictionName, isRDFSClass) {
+                                         RDFOntologyProperty onProperty): base(restrictionName) {
             if (onProperty != null) {
 
                 //AnnotationProperty cannot be restricted

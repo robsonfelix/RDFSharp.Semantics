@@ -44,7 +44,7 @@ namespace RDFSharp.Semantics
         public RDFOntologyCardinalityRestriction(RDFResource restrictionName, 
                                                  RDFOntologyProperty onProperty, 
                                                  Int32 minCardinality, 
-                                                 Int32 maxCardinality): base(restrictionName, onProperty, false) {
+                                                 Int32 maxCardinality): base(restrictionName, onProperty) {
             
             //MinCardinality
             if (minCardinality > 0) {

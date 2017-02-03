@@ -28,7 +28,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build an ontology annotation property from the given non-blank resource
         /// </summary>
-        public RDFOntologyAnnotationProperty(RDFResource propertyName): base(propertyName, false) { }
+        public RDFOntologyAnnotationProperty(RDFResource propertyName): base(propertyName) { }
         #endregion
 
     }

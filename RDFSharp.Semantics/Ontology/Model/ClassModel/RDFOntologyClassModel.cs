@@ -507,11 +507,6 @@ namespace RDFSharp.Semantics {
 
                 }
 
-                //custom
-                else {
-                    this.Relations.CustomRelations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyClass, ontologyProperty, ontologyResource));
-                }
-
             }
             return this;
         }
@@ -807,11 +802,6 @@ namespace RDFSharp.Semantics {
                      }
                 }
 
-                //custom
-                else {
-                    this.Relations.CustomRelations.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyClass, ontologyProperty, ontologyResource));
-                }
-
             }
             return this;
         }
@@ -854,7 +844,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = this.Relations.OneOf.IntersectWith(classModel.Relations.OneOf);
                 result.Relations.IntersectionOf      = this.Relations.IntersectionOf.IntersectWith(classModel.Relations.IntersectionOf);
                 result.Relations.UnionOf             = this.Relations.UnionOf.IntersectWith(classModel.Relations.UnionOf);
-                result.Relations.CustomRelations     = this.Relations.CustomRelations.IntersectWith(classModel.Relations.CustomRelations);
 
                 //Add intersection annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.IntersectWith(classModel.Annotations.VersionInfo);
@@ -886,7 +875,6 @@ namespace RDFSharp.Semantics {
             result.Relations.OneOf               = result.Relations.OneOf.UnionWith(this.Relations.OneOf);
             result.Relations.IntersectionOf      = result.Relations.IntersectionOf.UnionWith(this.Relations.IntersectionOf);
             result.Relations.UnionOf             = result.Relations.UnionOf.UnionWith(this.Relations.UnionOf);
-            result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(this.Relations.CustomRelations);
 
             //Add annotations from this class model
             result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
@@ -911,7 +899,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = result.Relations.OneOf.UnionWith(classModel.Relations.OneOf);
                 result.Relations.IntersectionOf      = result.Relations.IntersectionOf.UnionWith(classModel.Relations.IntersectionOf);
                 result.Relations.UnionOf             = result.Relations.UnionOf.UnionWith(classModel.Relations.UnionOf);
-                result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(classModel.Relations.CustomRelations);
 
                 //Add annotations from the given class model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(classModel.Annotations.VersionInfo);
@@ -946,7 +933,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = this.Relations.OneOf.DifferenceWith(classModel.Relations.OneOf);
                 result.Relations.IntersectionOf      = this.Relations.IntersectionOf.DifferenceWith(classModel.Relations.IntersectionOf);
                 result.Relations.UnionOf             = this.Relations.UnionOf.DifferenceWith(classModel.Relations.UnionOf);
-                result.Relations.CustomRelations     = this.Relations.CustomRelations.DifferenceWith(classModel.Relations.CustomRelations);
 
                 //Add difference annotations
                 result.Annotations.VersionInfo       = this.Annotations.VersionInfo.DifferenceWith(classModel.Annotations.VersionInfo);
@@ -971,7 +957,6 @@ namespace RDFSharp.Semantics {
                 result.Relations.OneOf               = result.Relations.OneOf.UnionWith(this.Relations.OneOf);
                 result.Relations.IntersectionOf      = result.Relations.IntersectionOf.UnionWith(this.Relations.IntersectionOf);
                 result.Relations.UnionOf             = result.Relations.UnionOf.UnionWith(this.Relations.UnionOf);
-                result.Relations.CustomRelations     = result.Relations.CustomRelations.UnionWith(this.Relations.CustomRelations);
 
                 //Add annotations from this class model
                 result.Annotations.VersionInfo       = result.Annotations.VersionInfo.UnionWith(this.Annotations.VersionInfo);
@@ -1113,7 +1098,7 @@ namespace RDFSharp.Semantics {
 
                 //Class
                 else {
-                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, (c.IsRDFSClass ? RDFVocabulary.RDFS.CLASS : RDFVocabulary.OWL.CLASS)));
+                    result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, (c.Nature == RDFSemanticsEnums.RDFOntologyClassNature.OWL ? RDFVocabulary.OWL.CLASS : RDFVocabulary.RDFS.CLASS)));
                     if (c.IsDeprecatedClass()) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.DEPRECATED_CLASS));
                     }
@@ -1124,8 +1109,7 @@ namespace RDFSharp.Semantics {
             //Relations
             result         = result.UnionWith(this.Relations.SubClassOf.ToRDFGraph(infexpBehavior))
                                    .UnionWith(this.Relations.EquivalentClass.ToRDFGraph(infexpBehavior))
-                                   .UnionWith(this.Relations.DisjointWith.ToRDFGraph(infexpBehavior))
-                                   .UnionWith(this.Relations.CustomRelations.ToRDFGraph(infexpBehavior));
+                                   .UnionWith(this.Relations.DisjointWith.ToRDFGraph(infexpBehavior));
 
             //Annotations
             result         = result.UnionWith(this.Annotations.VersionInfo.ToRDFGraph(infexpBehavior))
@@ -1188,13 +1172,6 @@ namespace RDFSharp.Semantics {
             foreach (var c in cacheRemove.Keys) { this.Relations.OneOf.Entries.Remove(c); }
             cacheRemove.Clear();
 
-            //CustomRelations
-            foreach (var t in this.Relations.CustomRelations.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner)) {
-                cacheRemove.Add(t.TaxonomyEntryID, null);
-            }
-            foreach (var c in cacheRemove.Keys) { this.Relations.CustomRelations.Entries.Remove(c); }
-            cacheRemove.Clear();
-
             return this;
         }
         #endregion
@@ -1239,11 +1216,6 @@ namespace RDFSharp.Semantics {
         /// "owl:unionOf" relations (specific for union classes)
         /// </summary>
         public RDFOntologyTaxonomy UnionOf { get; internal set; }
-
-        /// <summary>
-        /// "Custom" relations (non-structural taxonomies)
-        /// </summary>
-        public RDFOntologyTaxonomy CustomRelations { get; internal set; }
         #endregion
 
         #region Ctors
@@ -1257,7 +1229,6 @@ namespace RDFSharp.Semantics {
             this.OneOf           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
             this.IntersectionOf  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
             this.UnionOf         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.CustomRelations = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
         }
         #endregion
 

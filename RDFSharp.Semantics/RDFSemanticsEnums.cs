@@ -126,6 +126,20 @@ namespace RDFSharp.Semantics
             Data = 2
         };
 
+        /// <summary>
+        /// RDFOntologyClassNature represents an enumeration for possible nature of an ontology class (RDFS/OWL)
+        /// </summary>
+        public enum RDFOntologyClassNature {
+            /// <summary>
+            /// rdfs:Class
+            /// </summary>
+            RDFS = 0,
+            /// <summary>
+            /// owl:Class
+            /// </summary>
+            OWL = 1
+        }
+
     }
 
 }

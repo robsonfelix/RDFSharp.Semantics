@@ -28,7 +28,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build an empty ontology intersection class with the given className
         /// </summary>
-        public RDFOntologyIntersectionClass(RDFResource className): base(className, false) { }
+        public RDFOntologyIntersectionClass(RDFResource className): base(className) { }
         #endregion
 
     }

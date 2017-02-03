@@ -29,7 +29,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Default-ctor to build an empty ontology enumerate class with the given name
         /// </summary>
-        public RDFOntologyEnumerateClass(RDFResource className): base(className, false) { }
+        public RDFOntologyEnumerateClass(RDFResource className): base(className) { }
         #endregion
 
     }
