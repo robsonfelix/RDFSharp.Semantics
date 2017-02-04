@@ -801,9 +801,9 @@ namespace RDFSharp.Semantics
         /// Gets an ontology representation of the given graph
         /// </summary>
         internal static RDFOntology FromRDFGraph(RDFGraph ontGraph) {
-            RDFOntology ontology  = null;
-            if (ontGraph         != null) {
-                ontology          = new RDFOntology(new RDFResource(ontGraph.Context.ToString()));
+            RDFOntology ontology    = null;
+            if (ontGraph           != null) {
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("RDFGraph '{0}' is going to be parsed as ontology: informations not recognizable as supported type of ontology taxonomy will be discarded.", ontGraph.Context));
 
 
                 #region Step 1: Prefetch
@@ -855,11 +855,11 @@ namespace RDFSharp.Semantics
 
 
                 #region Step 2: Init Ontology
-                //Ontology URI
+                ontology            = new RDFOntology(new RDFResource(ontGraph.Context.ToString()));
                 if (!rdfType.ContainsTriple(new RDFTriple((RDFResource)ontology.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ONTOLOGY))) {
-                     var ont     = rdfType.SelectTriplesByObject(RDFVocabulary.OWL.ONTOLOGY)
-                                          .FirstOrDefault();
-                     if (ont    != null) {
+                     var ont        = rdfType.SelectTriplesByObject(RDFVocabulary.OWL.ONTOLOGY)
+                                             .FirstOrDefault();
+                     if (ont       != null) {
                          ontology.Value           = ont.Subject;
                          ontology.PatternMemberID = ontology.Value.PatternMemberID;
                      }
