@@ -50,6 +50,9 @@
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
+    <!-- Extensions -->
+    <Compile Include="Extensions\RDFModelExtensions.cs" />
+    <Compile Include="Extensions\RDFQueryExtensions.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
