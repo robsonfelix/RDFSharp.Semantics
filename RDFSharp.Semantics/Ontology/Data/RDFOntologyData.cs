@@ -134,114 +134,145 @@ namespace RDFSharp.Semantics
         }
 
         /// <summary>
-        /// Adds the "ontologyFact -> owl:VersionInfo -> ontologyLiteral" annotation to the data
+        /// Adds the given standard annotation to the given ontology fact
         /// </summary>
-        public RDFOntologyData AddVersionInfoAnnotation(RDFOntologyFact ontologyFact, 
-                                                        RDFOntologyLiteral ontologyLiteral) {
-            if (ontologyFact   != null && ontologyLiteral != null) {
-                this.Annotations.VersionInfo.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()), ontologyLiteral));
+        public RDFOntologyData AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation standardAnnotation,
+                                                     RDFOntologyFact ontologyFact,
+                                                     RDFOntologyResource annotationValue) {
+            if (ontologyFact != null && annotationValue != null) {
+                switch (standardAnnotation) {
+
+                    //owl:versionInfo
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionInfo:
+                         if (annotationValue.IsLiteral()) {
+                             this.Annotations.VersionInfo.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.OWL.VERSION_INFO.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         }
+                         else {
+                             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Cannot annotate ontology fact with owl:versionInfo value '{0}' because it is not an ontology literal", annotationValue));
+                         }
+                         break;
+
+                    //owl:versionIRI
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionIRI:
+                         RDFSemanticsEvents.RaiseSemanticsInfo("Cannot annotate ontology fact with owl:versionIRI because it is reserved for ontologies");
+                         break;
+
+                    //rdfs:comment
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Comment:
+                         if (annotationValue.IsLiteral()) {
+                             this.Annotations.Comment.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.COMMENT.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         }
+                         else {
+                             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Cannot annotate ontology fact with rdfs:comment value '{0}' because it is not an ontology literal", annotationValue));
+                         }
+                         break;
+
+                    //rdfs:label
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Label:
+                         if (annotationValue.IsLiteral()) {
+                             this.Annotations.Label.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.LABEL.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         }
+                         else {
+                             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Cannot annotate ontology fact with rdfs:label value '{0}' because it is not an ontology literal", annotationValue));
+                         }
+                         break;
+
+                    //rdfs:seeAlso
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.SeeAlso:
+                         this.Annotations.SeeAlso.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.SEE_ALSO.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //rdfs:isDefinedBy
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.IsDefinedBy:
+                         this.Annotations.IsDefinedBy.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.IS_DEFINED_BY.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //owl:priorVersion
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.PriorVersion:
+                         RDFSemanticsEvents.RaiseSemanticsInfo("Cannot annotate ontology fact with owl:priorVersion because it is reserved for ontologies");
+                         break;
+
+                    //owl:imports
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Imports:
+                         RDFSemanticsEvents.RaiseSemanticsInfo("Cannot annotate ontology fact with owl:imports because it is reserved for ontologies");
+                         break;
+
+                    //owl:backwardCompatibleWith
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.BackwardCompatibleWith:
+                         RDFSemanticsEvents.RaiseSemanticsInfo("Cannot annotate ontology fact with owl:backwardCompatibleWith because it is reserved for ontologies");
+                         break;
+
+                    //owl:incompatibleWith
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.IncompatibleWith:
+                         RDFSemanticsEvents.RaiseSemanticsInfo("Cannot annotate ontology fact with owl:incompatibleWith because it is reserved for ontologies");
+                         break;
+
+                }
             }
             return this;
         }
 
         /// <summary>
-        /// Adds the "ontologyFact -> rdfs:comment -> ontologyLiteral" annotation to the data
+        /// Adds the given custom annotation to the given ontology fact
         /// </summary>
-        public RDFOntologyData AddCommentAnnotation(RDFOntologyFact ontologyFact, 
-                                                    RDFOntologyLiteral ontologyLiteral) {
-            if (ontologyFact   != null && ontologyLiteral != null) {
-                this.Annotations.Comment.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()), ontologyLiteral));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Adds the "ontologyFact -> rdfs:label -> ontologyLiteral" annotation to the data
-        /// </summary>
-        public RDFOntologyData AddLabelAnnotation(RDFOntologyFact ontologyFact, 
-                                                  RDFOntologyLiteral ontologyLiteral) {
-            if (ontologyFact   != null && ontologyLiteral != null) {
-                this.Annotations.Label.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()), ontologyLiteral));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Adds the "ontologyFact -> rdfs:seeAlso -> ontologyResource" annotation to the data
-        /// </summary>
-        public RDFOntologyData AddSeeAlsoAnnotation(RDFOntologyFact ontologyFact, 
-                                                    RDFOntologyResource ontologyResource) {
-            if (ontologyFact   != null && ontologyResource != null) {
-                this.Annotations.SeeAlso.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()), ontologyResource));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Adds the "ontologyFact -> rdfs:isDefinedBy -> ontologyResource" annotation to the data
-        /// </summary>
-        public RDFOntologyData AddIsDefinedByAnnotation(RDFOntologyFact ontologyFact, 
-                                                        RDFOntologyResource ontologyResource) {
-            if (ontologyFact   != null && ontologyResource != null) {
-                this.Annotations.IsDefinedBy.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()), ontologyResource));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Adds the "ontologyFact -> ontologyAnnotationProperty -> ontologyResource" annotation to the data
-        /// </summary>
-        public RDFOntologyData AddCustomAnnotation(RDFOntologyFact ontologyFact, 
-                                                   RDFOntologyAnnotationProperty ontologyAnnotationProperty, 
-                                                   RDFOntologyResource ontologyResource) {
-            if (ontologyFact   != null && ontologyAnnotationProperty != null && ontologyResource != null) {
+        public RDFOntologyData AddCustomAnnotation(RDFOntologyAnnotationProperty ontologyAnnotationProperty,
+                                                   RDFOntologyFact ontologyFact,
+                                                   RDFOntologyResource annotationValue) {
+            if (ontologyAnnotationProperty != null && ontologyFact != null && annotationValue != null) {
 
                 //owl:versionInfo
-                if (ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))) {
-                    if (ontologyResource.IsLiteral()) {
-                        this.AddVersionInfoAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
-                    }
+                if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_INFO.ToRDFOntologyAnnotationProperty())) {
+                    this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionInfo, ontologyFact, annotationValue);
+                }
+
+                //owl:versionIRI
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_IRI.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionIRI, ontologyFact, annotationValue);
                 }
 
                 //rdfs:comment
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))) {
-                     if(ontologyResource.IsLiteral()) {
-                        this.AddCommentAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
-                     }
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.COMMENT.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.Comment, ontologyFact, annotationValue);
                 }
 
                 //rdfs:label
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))) {
-                     if(ontologyResource.IsLiteral()) {
-                        this.AddLabelAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
-                     }
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.LABEL.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.Label, ontologyFact, annotationValue);
                 }
 
                 //rdfs:seeAlso
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))) {
-                     this.AddSeeAlsoAnnotation(ontologyFact, ontologyResource);
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.SEE_ALSO.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.SeeAlso, ontologyFact, annotationValue);
                 }
 
                 //rdfs:isDefinedBy
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))) {
-                     this.AddIsDefinedByAnnotation(ontologyFact, ontologyResource);
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.IS_DEFINED_BY.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.IsDefinedBy, ontologyFact, annotationValue);
                 }
 
-                //ontology-specific
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString()))              ||
-                        ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString()))                  ||
-                        ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString())) ||
-                        ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString()))        ||
-                        ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString()))) {
-
-                     //Raise warning event to inform the user: Ontology-specific annotation properties cannot be used for facts
-                     RDFSemanticsEvents.RaiseSemanticsWarning("Ontology-specific annotation properties cannot be used for facts.");
-
+                //owl:imports
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.IMPORTS.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.Imports, ontologyFact, annotationValue);
                 }
 
-                //custom
+                //owl:backwardCompatibleWith
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.BackwardCompatibleWith, ontologyFact, annotationValue);
+                }
+
+                //owl:incompatibleWith
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.IncompatibleWith, ontologyFact, annotationValue);
+                }
+
+                //owl:priorVersion
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.PRIOR_VERSION.ToRDFOntologyAnnotationProperty())) {
+                     this.AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.PriorVersion, ontologyFact, annotationValue);
+                }
+
+                //custom annotation
                 else {
-                    this.Annotations.CustomAnnotations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, ontologyAnnotationProperty, ontologyResource));
+                     this.Annotations.CustomAnnotations.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, ontologyAnnotationProperty, annotationValue));
                 }
 
             }
@@ -255,26 +286,15 @@ namespace RDFSharp.Semantics
                                                     RDFOntologyClass ontologyClass) {
             if (ontologyFact != null && ontologyClass != null) {
 
-                //Enforce preliminary checks on usage of BASE classes
-                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(ontologyClass.ToString()) != null) {
-
-                    //Raise warning event to inform the user: ClassType relation cannot be added to the data because usage of BASE ontology classes is not allowed 
-                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because usage of BASE ontology classes is not allowed.", ontologyFact, ontologyClass));
-
+                //Enforce taxonomy checks before adding the ClassType relation
+                //Only plain classes can be assigned as classtypes of facts
+                if (!ontologyClass.IsRestrictionClass() && !ontologyClass.IsCompositeClass() && !ontologyClass.IsEnumerateClass() && !ontologyClass.IsDataRangeClass()) {
+                     this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), ontologyClass));
                 }
                 else {
 
-                    //Enforce taxonomy checks before adding the classType relation
-                    //Only plain classes can be assigned as classtypes of facts
-                    if (!ontologyClass.IsRestrictionClass() && !ontologyClass.IsCompositeClass() && !ontologyClass.IsEnumerateClass() && !ontologyClass.IsDataRangeClass())  {
-                         this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), ontologyClass));
-                    }
-                    else {
-
-                         //Raise warning event to inform the user: ClassType relation cannot be added to the data because only plain classes can be explicitly assigned as class types of facts
-                         RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
-
-                    }
+                     //Raise warning event to inform the user: ClassType relation cannot be added to the data because only plain classes can be explicitly assigned as class types of facts
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
 
                 }
 
@@ -289,7 +309,7 @@ namespace RDFSharp.Semantics
                                                  RDFOntologyFact bFact) {
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
-                //Enforce taxonomy checks before adding the sameAs relation
+                //Enforce taxonomy checks before adding the SameAs relation
                 if (!RDFOntologyReasonerHelper.IsDifferentFactFrom(aFact, bFact, this)) {
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), bFact));
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
@@ -312,13 +332,13 @@ namespace RDFSharp.Semantics
                                                         RDFOntologyFact bFact) {
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
-                //Enforce taxonomy checks before adding the differentFrom relation
+               //Enforce taxonomy checks before adding the DifferentFrom relation
                 if (!RDFOntologyReasonerHelper.IsSameFactAs(aFact, bFact, this)) {
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), bFact));
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
-                     
+
                      //Raise warning event to inform the user: DifferentFrom relation cannot be added to the data because it violates the taxonomy consistency
                      RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
 
@@ -337,13 +357,13 @@ namespace RDFSharp.Semantics
             if (aFact != null && objectProperty != null && bFact != null) {
 
                 //Enforce taxonomy checks before adding the assertion
-                //Creation of transitive cycles is not allowed for OWL-DL computability reasons
+                //Creation of transitive cycles is not allowed (OWL-DL computability)
                 if (!RDFOntologyReasonerHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
                      this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
                 }
                 else {
 
-                    //Raise warning event to inform the user: Assertion relation cannot be added to the data because it violates the taxonomy transitive consistency
+                     //Raise warning event to inform the user: Assertion relation cannot be added to the data because it violates the taxonomy transitive consistency
                      RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and fact '{1}' with transitive property '{2}' cannot be added to the data because it would violate the taxonomy consistency (transitive cycle detected).", aFact, bFact, objectProperty));
 
                 }
@@ -392,102 +412,130 @@ namespace RDFSharp.Semantics
         }
 
         /// <summary>
-        /// Removes the "ontologyFact -> owl:VersionInfo -> ontologyLiteral" annotation from the data
+        /// Removes the given standard annotation from the given ontology fact
         /// </summary>
-        public RDFOntologyData RemoveVersionInfoAnnotation(RDFOntologyFact ontologyFact, 
-                                                           RDFOntologyLiteral ontologyLiteral) {
-            if (ontologyFact != null && ontologyLiteral != null) {
-                this.Annotations.VersionInfo.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()), ontologyLiteral));
+        public RDFOntologyData RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation standardAnnotation,
+                                                        RDFOntologyFact ontologyFact,
+                                                        RDFOntologyResource annotationValue) {
+            if (ontologyFact != null && annotationValue != null) {
+                switch (standardAnnotation) {
+
+                    //owl:versionInfo
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionInfo:
+                         this.Annotations.VersionInfo.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.OWL.VERSION_INFO.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //owl:versionIRI
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionIRI:
+                         this.Annotations.VersionIRI.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.OWL.VERSION_IRI.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //rdfs:comment
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Comment:
+                         this.Annotations.Comment.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.COMMENT.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //rdfs:label
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Label:
+                         this.Annotations.Label.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.LABEL.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //rdfs:seeAlso
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.SeeAlso:
+                         this.Annotations.SeeAlso.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.SEE_ALSO.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //rdfs:isDefinedBy
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.IsDefinedBy:
+                         this.Annotations.IsDefinedBy.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDFS.IS_DEFINED_BY.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //owl:priorVersion
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.PriorVersion:
+                         this.Annotations.PriorVersion.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.OWL.PRIOR_VERSION.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //owl:imports
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Imports:
+                         this.Annotations.Imports.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.OWL.IMPORTS.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //owl:backwardCompatibleWith
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.BackwardCompatibleWith:
+                         this.Annotations.BackwardCompatibleWith.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                    //owl:incompatibleWith
+                    case RDFSemanticsEnums.RDFOntologyStandardAnnotation.IncompatibleWith:
+                         this.Annotations.IncompatibleWith.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToRDFOntologyAnnotationProperty(), annotationValue));
+                         break;
+
+                }
             }
             return this;
         }
 
         /// <summary>
-        /// Removes the "ontologyFact -> rdfs:comment -> ontologyLiteral" annotation from the data
+        /// Removes the given custom annotation from the given ontology fact
         /// </summary>
-        public RDFOntologyData RemoveCommentAnnotation(RDFOntologyFact ontologyFact, 
-                                                       RDFOntologyLiteral ontologyLiteral) {
-            if (ontologyFact != null && ontologyLiteral != null) {
-                this.Annotations.Comment.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()), ontologyLiteral));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Removes the "ontologyFact -> rdfs:label -> ontologyLiteral" annotation from the data
-        /// </summary>
-        public RDFOntologyData RemoveLabelAnnotation(RDFOntologyFact ontologyFact, 
-                                                     RDFOntologyLiteral ontologyLiteral) {
-            if (ontologyFact != null && ontologyLiteral != null) {
-                this.Annotations.Label.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()), ontologyLiteral));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Removes the "ontologyFact -> rdfs:seeAlso -> ontologyResource" annotation from the data
-        /// </summary>
-        public RDFOntologyData RemoveSeeAlsoAnnotation(RDFOntologyFact ontologyFact, 
-                                                       RDFOntologyResource ontologyResource) {
-            if (ontologyFact != null && ontologyResource != null) {
-                this.Annotations.SeeAlso.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()), ontologyResource));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Removes the "ontologyFact -> rdfs:isDefinedBy -> ontologyResource" annotation from the data
-        /// </summary>
-        public RDFOntologyData RemoveIsDefinedByAnnotation(RDFOntologyFact ontologyFact, 
-                                                           RDFOntologyResource ontologyResource) {
-            if (ontologyFact != null && ontologyResource != null) {
-                this.Annotations.IsDefinedBy.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()), ontologyResource));
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Removes the "ontologyFact -> ontologyAnnotationProperty -> ontologyResource" annotation from the data
-        /// </summary>
-        public RDFOntologyData RemoveCustomAnnotation(RDFOntologyFact ontologyFact, 
-                                                      RDFOntologyAnnotationProperty ontologyAnnotationProperty, 
-                                                      RDFOntologyResource ontologyResource) {
-            if (ontologyFact != null && ontologyAnnotationProperty != null && ontologyResource != null) {
+        public RDFOntologyData RemoveCustomAnnotation(RDFOntologyAnnotationProperty ontologyAnnotationProperty,
+                                                      RDFOntologyFact ontologyFact,
+                                                      RDFOntologyResource annotationValue) {
+            if (ontologyAnnotationProperty != null && ontologyFact != null && annotationValue != null) {
 
                 //owl:versionInfo
-                if (ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString()))) {
-                    if (ontologyResource.IsLiteral()) {
-                        this.RemoveVersionInfoAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
-                    }
+                if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_INFO.ToRDFOntologyAnnotationProperty())) {
+                    this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionInfo, ontologyFact, annotationValue);
+                }
+
+                //owl:versionIRI
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.VERSION_IRI.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionIRI, ontologyFact, annotationValue);
                 }
 
                 //rdfs:comment
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString()))) {
-                     if(ontologyResource.IsLiteral()) {
-                        this.RemoveCommentAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
-                     }
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.COMMENT.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.Comment, ontologyFact, annotationValue);
                 }
 
                 //rdfs:label
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString()))) {
-                     if(ontologyResource.IsLiteral()) {
-                        this.RemoveLabelAnnotation(ontologyFact, (RDFOntologyLiteral)ontologyResource);
-                     }
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.LABEL.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.Label, ontologyFact, annotationValue);
                 }
 
                 //rdfs:seeAlso
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString()))) {
-                     this.RemoveSeeAlsoAnnotation(ontologyFact, ontologyResource);
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.SEE_ALSO.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.SeeAlso, ontologyFact, annotationValue);
                 }
 
                 //rdfs:isDefinedBy
-                else if(ontologyAnnotationProperty.Equals(RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString()))) {
-                     this.RemoveIsDefinedByAnnotation(ontologyFact, ontologyResource);
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.RDFS.IS_DEFINED_BY.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.IsDefinedBy, ontologyFact, annotationValue);
                 }
 
-                //custom
+                //owl:imports
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.IMPORTS.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.Imports, ontologyFact, annotationValue);
+                }
+
+                //owl:backwardCompatibleWith
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.BackwardCompatibleWith, ontologyFact, annotationValue);
+                }
+
+                //owl:incompatibleWith
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.IncompatibleWith, ontologyFact, annotationValue);
+                }
+
+                //owl:priorVersion
+                else if (ontologyAnnotationProperty.Equals(RDFVocabulary.OWL.PRIOR_VERSION.ToRDFOntologyAnnotationProperty())) {
+                     this.RemoveStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation.PriorVersion, ontologyFact, annotationValue);
+                }
+
+                //custom annotation
                 else {
-                     this.Annotations.CustomAnnotations.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, ontologyAnnotationProperty, ontologyResource));
+                     this.Annotations.CustomAnnotations.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, ontologyAnnotationProperty, annotationValue));
                 }
 
             }
@@ -500,18 +548,7 @@ namespace RDFSharp.Semantics
         public RDFOntologyData RemoveClassTypeRelation(RDFOntologyFact ontologyFact, 
                                                        RDFOntologyClass ontologyClass) {
             if (ontologyFact != null && ontologyClass != null) {
-
-                //Enforce preliminary checks on usage of BASE classes
-                if (RDFBASEOntology.Instance.Model.ClassModel.SelectClass(ontologyClass.ToString()) != null) {
-
-                    //Raise warning event to inform the user: ClassType relation cannot be removed from the data because usage of BASE ontology classes is not allowed 
-                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be removed from the data because usage of BASE ontology classes is not allowed.", ontologyFact, ontologyClass));
-
-                }
-                else {
-                    this.Relations.ClassType.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), ontologyClass));
-                }
-
+                this.Relations.ClassType.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), ontologyClass));
             }
             return this;
         }
@@ -790,7 +827,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Clears all the taxonomy entries marked as semantic inferences generated by a reasoner
         /// </summary>
-        public RDFOntologyData ClearInferences() {
+        public void ClearInferences() {
             var cacheRemove = new Dictionary<Int64, Object>();
 
             //ClassType
@@ -821,7 +858,6 @@ namespace RDFSharp.Semantics
             foreach (var c in cacheRemove.Keys) { this.Relations.Assertions.Entries.Remove(c); }
             cacheRemove.Clear();
 
-            return this;
         }
         #endregion
 

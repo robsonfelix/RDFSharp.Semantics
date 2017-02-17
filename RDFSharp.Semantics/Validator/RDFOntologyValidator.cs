@@ -105,11 +105,17 @@ namespace RDFSharp.Semantics {
         internal RDFOntologyValidatorReport AnalyzeOntology(RDFOntology ontology) {
             var report = new RDFOntologyValidatorReport(ontology.Value.PatternMemberID);
 
+            //Expand the ontology with the BASE ontology definitions
+            ontology   = ontology.UnionWith(RDFBASEOntology.Instance);
+
             //Execute the validation rules
             Parallel.ForEach(this.Rules, rule => {
                 rule.ExecuteRule(ontology, report);
             });
-            
+
+            //Unexpand the ontology with the BASE ontology definitions
+            ontology   = ontology.DifferenceWith(RDFBASEOntology.Instance);
+
             return report;
         }
         #endregion

@@ -23,6 +23,52 @@ namespace RDFSharp.Semantics
     public static class RDFSemanticsEnums {
 
         /// <summary>
+        /// RDFOntologyStandardAnnotation represents an enumeration for predefined ontology annotation properties
+        /// </summary>
+        public enum RDFOntologyStandardAnnotation {
+            /// <summary>
+            /// owl:versionInfo
+            /// </summary>
+            VersionInfo = 1,
+            /// <summary>
+            /// owl:versionIRI
+            /// </summary>
+            VersionIRI = 2,
+            /// <summary>
+            /// rdfs:comment
+            /// </summary>
+            Comment = 3,
+            /// <summary>
+            /// rdfs:label
+            /// </summary>
+            Label = 4,
+            /// <summary>
+            /// rdfs:seeAlso
+            /// </summary>
+            SeeAlso = 5,
+            /// <summary>
+            /// rdfs:isDefinedBy
+            /// </summary>
+            IsDefinedBy = 6,
+            /// <summary>
+            /// owl:imports
+            /// </summary>
+            Imports = 7,
+            /// <summary>
+            /// owl:BackwardCompatibleWith
+            /// </summary>
+            BackwardCompatibleWith = 8,
+            /// <summary>
+            /// owl:IncompatibleWith
+            /// </summary>
+            IncompatibleWith = 9,
+            /// <summary>
+            /// owl:PriorVersion
+            /// </summary>
+            PriorVersion = 10
+        }
+
+        /// <summary>
         /// RDFOntologyValidatorEvidenceCategory represents an enumeration for possible categories of ontology validation evidence
         /// </summary>
         public enum RDFOntologyValidatorEvidenceCategory {

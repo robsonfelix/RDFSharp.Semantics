@@ -40,12 +40,12 @@ namespace RDFSharp.Semantics
                                          RDFOntologyProperty onProperty): base(restrictionName) {
             if (onProperty != null) {
 
-                //AnnotationProperty cannot be restricted
+                //Annotation properties cannot be restricted (OWL-DL)
                 if (!onProperty.IsAnnotationProperty()) {
                      this.OnProperty = onProperty;
                 }
                 else {
-                    throw new RDFSemanticsException("Cannot create RDFOntologyRestriction because given \"onProperty\" parameter (" + onProperty + ") is an annotation property.");
+                     throw new RDFSemanticsException("Cannot create RDFOntologyRestriction because given \"onProperty\" parameter is an annotation property (this is forbidden in OWL-DL).");
                 }
 
             }

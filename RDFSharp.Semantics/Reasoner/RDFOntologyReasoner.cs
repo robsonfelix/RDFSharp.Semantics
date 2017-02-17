@@ -135,16 +135,19 @@ namespace RDFSharp.Semantics {
                 //Step 0: Cleanup ontology from inferences
                 ontology.ClearInferences();
 
-                //Step 1: Apply class-based rules
+                //Step 1: Expand the ontology with the BASE ontology definitions
+                ontology    = ontology.UnionWith(RDFBASEOntology.Instance);
+
+                //Step 2: Apply class-based rules
                 this.TriggerRule("EquivalentClassTransitivity",    ontology, rReport);
                 this.TriggerRule("SubClassTransitivity",           ontology, rReport);
                 this.TriggerRule("DisjointWithEntailment",         ontology, rReport);
 
-                //Step 2: Apply property-based rules
+                //Step 3: Apply property-based rules
                 this.TriggerRule("EquivalentPropertyTransitivity", ontology, rReport);
                 this.TriggerRule("SubPropertyTransitivity",        ontology, rReport);
 
-                //Step 3: Apply data-based rules
+                //Step 4: Apply data-based rules
                 this.TriggerRule("SameAsTransitivity",             ontology, rReport);
                 this.TriggerRule("DifferentFromEntailment",        ontology, rReport);
                 this.TriggerRule("ClassTypeEntailment",            ontology, rReport);
@@ -157,9 +160,12 @@ namespace RDFSharp.Semantics {
                 this.TriggerRule("SameAsEntailment",               ontology, rReport);
 
                 //Step 5: Apply custom rules
-                foreach(var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasonerRuleType.UserDefined)) {
+                foreach (var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasonerRuleType.UserDefined)) {
                     this.TriggerRule(sr.RuleName, ontology, rReport);
                 }
+
+                //Step 6: Unexpand the ontology with the BASE ontology definitions
+                ontology    = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
                 return rReport;
             }
