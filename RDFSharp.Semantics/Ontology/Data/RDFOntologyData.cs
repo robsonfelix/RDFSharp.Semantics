@@ -289,7 +289,7 @@ namespace RDFSharp.Semantics
                 //Enforce taxonomy checks before adding the ClassType relation
                 //Only plain classes can be assigned as classtypes of facts
                 if (!ontologyClass.IsRestrictionClass() && !ontologyClass.IsCompositeClass() && !ontologyClass.IsEnumerateClass() && !ontologyClass.IsDataRangeClass()) {
-                     this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), ontologyClass));
+                     this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), ontologyClass));
                 }
                 else {
 
@@ -311,8 +311,8 @@ namespace RDFSharp.Semantics
 
                 //Enforce taxonomy checks before adding the SameAs relation
                 if (!RDFOntologyReasonerHelper.IsDifferentFactFrom(aFact, bFact, this)) {
-                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), bFact));
-                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), bFact));
+                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
 
@@ -334,8 +334,8 @@ namespace RDFSharp.Semantics
 
                //Enforce taxonomy checks before adding the DifferentFrom relation
                 if (!RDFOntologyReasonerHelper.IsSameFactAs(aFact, bFact, this)) {
-                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), bFact));
-                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), bFact));
+                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
 
@@ -548,7 +548,7 @@ namespace RDFSharp.Semantics
         public RDFOntologyData RemoveClassTypeRelation(RDFOntologyFact ontologyFact, 
                                                        RDFOntologyClass ontologyClass) {
             if (ontologyFact != null && ontologyClass != null) {
-                this.Relations.ClassType.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDF.TYPE.ToString()), ontologyClass));
+                this.Relations.ClassType.RemoveEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), ontologyClass));
             }
             return this;
         }
@@ -559,8 +559,8 @@ namespace RDFSharp.Semantics
         public RDFOntologyData RemoveSameAsRelation(RDFOntologyFact aFact, 
                                                     RDFOntologyFact bFact) {
             if (aFact != null && bFact != null) {
-                this.Relations.SameAs.RemoveEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), bFact));
-                this.Relations.SameAs.RemoveEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.SAME_AS.ToString()), aFact));
+                this.Relations.SameAs.RemoveEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), bFact));
+                this.Relations.SameAs.RemoveEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), aFact));
             }
             return this;
         }
@@ -571,8 +571,8 @@ namespace RDFSharp.Semantics
         public RDFOntologyData RemoveDifferentFromRelation(RDFOntologyFact aFact, 
                                                            RDFOntologyFact bFact) {
             if (aFact != null && bFact != null) {
-                this.Relations.DifferentFrom.RemoveEntry(new RDFOntologyTaxonomyEntry(aFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), bFact));
-                this.Relations.DifferentFrom.RemoveEntry(new RDFOntologyTaxonomyEntry(bFact, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.DIFFERENT_FROM.ToString()), aFact));
+                this.Relations.DifferentFrom.RemoveEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), bFact));
+                this.Relations.DifferentFrom.RemoveEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), aFact));
             }
             return this;
         }

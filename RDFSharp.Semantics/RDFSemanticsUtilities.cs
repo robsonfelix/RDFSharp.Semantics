@@ -841,16 +841,16 @@ namespace RDFSharp.Semantics
                 var sameAs          = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.SAME_AS);
                 var differentFrom   = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.DIFFERENT_FROM);
 
-                var versionInfoAnn  = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_INFO.ToString());
-                var commentAnn      = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.COMMENT.ToString());
-                var labelAnn        = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.LABEL.ToString());
-                var seeAlsoAnn      = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SEE_ALSO.ToString());
-                var isDefinedByAnn  = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.IS_DEFINED_BY.ToString());
-                var versionIRIAnn   = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.VERSION_IRI.ToString());
-                var priorVersionAnn = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToString());
-                var backwardCWAnn   = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToString());
-                var incompWithAnn   = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToString());
-                var importsAnn      = RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.IMPORTS.ToString());
+                var versionInfoAnn  = RDFVocabulary.OWL.VERSION_INFO.ToRDFOntologyAnnotationProperty();
+                var commentAnn      = RDFVocabulary.RDFS.COMMENT.ToRDFOntologyAnnotationProperty();
+                var labelAnn        = RDFVocabulary.RDFS.LABEL.ToRDFOntologyAnnotationProperty();
+                var seeAlsoAnn      = RDFVocabulary.RDFS.SEE_ALSO.ToRDFOntologyAnnotationProperty();
+                var isDefinedByAnn  = RDFVocabulary.RDFS.IS_DEFINED_BY.ToRDFOntologyAnnotationProperty();
+                var versionIRIAnn   = RDFVocabulary.OWL.VERSION_IRI.ToRDFOntologyAnnotationProperty();
+                var priorVersionAnn = RDFVocabulary.OWL.PRIOR_VERSION.ToRDFOntologyAnnotationProperty();
+                var backwardCWAnn   = RDFVocabulary.OWL.BACKWARD_COMPATIBLE_WITH.ToRDFOntologyAnnotationProperty();
+                var incompWithAnn   = RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToRDFOntologyAnnotationProperty();
+                var importsAnn      = RDFVocabulary.OWL.IMPORTS.ToRDFOntologyAnnotationProperty();
                 #endregion
 
 

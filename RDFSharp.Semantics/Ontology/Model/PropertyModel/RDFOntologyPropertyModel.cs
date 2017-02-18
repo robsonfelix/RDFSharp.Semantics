@@ -381,7 +381,7 @@ namespace RDFSharp.Semantics {
                 //Enforce taxonomy checks before adding the subPropertyOf relation
                 if (!RDFOntologyReasonerHelper.IsSubPropertyOf(motherProperty,        childProperty, this)  &&
                     !RDFOntologyReasonerHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this))  {
-                     this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), motherProperty));
+                     this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty(), motherProperty));
                 }
                 else {
 
@@ -404,7 +404,7 @@ namespace RDFSharp.Semantics {
                 //Enforce taxonomy checks before adding the subPropertyOf relation
                 if (!RDFOntologyReasonerHelper.IsSubPropertyOf(motherProperty,        childProperty, this)  &&
                     !RDFOntologyReasonerHelper.IsEquivalentPropertyOf(motherProperty, childProperty, this))  {
-                     this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), motherProperty));
+                     this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty(), motherProperty));
                 }
                 else {
 
@@ -427,8 +427,8 @@ namespace RDFSharp.Semantics {
                 //Enforce taxonomy checks before adding the equivalentProperty relation
                 if (!RDFOntologyReasonerHelper.IsSubPropertyOf(aProperty,   bProperty, this)  &&
                     !RDFOntologyReasonerHelper.IsSuperPropertyOf(aProperty, bProperty, this))  {
-                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), bProperty));
-                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), bProperty));
+                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
 
@@ -451,8 +451,8 @@ namespace RDFSharp.Semantics {
                 //Enforce taxonomy checks before adding the equivalentProperty relation
                 if (!RDFOntologyReasonerHelper.IsSubPropertyOf(aProperty,   bProperty, this)  &&
                     !RDFOntologyReasonerHelper.IsSuperPropertyOf(aProperty, bProperty, this))  {
-                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), bProperty));
-                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), bProperty));
+                     this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
 
@@ -476,8 +476,8 @@ namespace RDFSharp.Semantics {
                 if (!RDFOntologyReasonerHelper.IsSubPropertyOf(aProperty,        bProperty, this)  &&
                     !RDFOntologyReasonerHelper.IsSuperPropertyOf(aProperty,      bProperty, this)  &&
                     !RDFOntologyReasonerHelper.IsEquivalentPropertyOf(aProperty, bProperty, this))  {
-                     this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INVERSE_OF.ToString()), bProperty));
-                     this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INVERSE_OF.ToString()), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                     this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.INVERSE_OF.ToRDFOntologyObjectProperty(), bProperty));
+                     this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.INVERSE_OF.ToRDFOntologyObjectProperty(), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
 
@@ -641,7 +641,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel RemoveSubPropertyOfRelation(RDFOntologyObjectProperty childProperty, 
                                                                     RDFOntologyObjectProperty motherProperty) {
             if (childProperty != null && motherProperty != null) {
-                this.Relations.SubPropertyOf.RemoveEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), motherProperty));
+                this.Relations.SubPropertyOf.RemoveEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty(), motherProperty));
             }
             return this;
         }
@@ -652,7 +652,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel RemoveSubPropertyOfRelation(RDFOntologyDatatypeProperty childProperty, 
                                                                     RDFOntologyDatatypeProperty motherProperty) {
             if (childProperty != null && motherProperty != null) {
-                this.Relations.SubPropertyOf.RemoveEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToString()), motherProperty));
+                this.Relations.SubPropertyOf.RemoveEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty(), motherProperty));
             }
             return this;
         }
@@ -663,8 +663,8 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel RemoveEquivalentPropertyRelation(RDFOntologyObjectProperty aProperty, 
                                                                          RDFOntologyObjectProperty bProperty) {
             if (aProperty != null && bProperty != null) {
-                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), bProperty));
-                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), aProperty));
+                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), bProperty));
+                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), aProperty));
             }
             return this;
         }
@@ -675,8 +675,8 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel RemoveEquivalentPropertyRelation(RDFOntologyDatatypeProperty aProperty, 
                                                                          RDFOntologyDatatypeProperty bProperty) {
             if (aProperty != null && bProperty != null) {
-                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), bProperty));
-                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToString()), aProperty));
+                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), bProperty));
+                this.Relations.EquivalentProperty.RemoveEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), aProperty));
             }
             return this;
         }
@@ -687,8 +687,8 @@ namespace RDFSharp.Semantics {
         public RDFOntologyPropertyModel RemoveInverseOfRelation(RDFOntologyObjectProperty aProperty, 
                                                                 RDFOntologyObjectProperty bProperty) {
             if (aProperty != null && bProperty != null) {
-                this.Relations.InverseOf.RemoveEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INVERSE_OF.ToString()), bProperty));
-                this.Relations.InverseOf.RemoveEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFBASEOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.OWL.INVERSE_OF.ToString()), aProperty));
+                this.Relations.InverseOf.RemoveEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.INVERSE_OF.ToRDFOntologyObjectProperty(), bProperty));
+                this.Relations.InverseOf.RemoveEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.INVERSE_OF.ToRDFOntologyObjectProperty(), aProperty));
             }
             return this;
         }
