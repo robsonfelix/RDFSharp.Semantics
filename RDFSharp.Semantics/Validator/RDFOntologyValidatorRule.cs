@@ -50,8 +50,8 @@ namespace RDFSharp.Semantics {
         /// Default-ctor to build an empty validation rule with given name, description and delegate
         /// </summary>
         internal RDFOntologyValidatorRule(String ruleName,
-                                           String ruleDescription,
-                                           ValidationRuleDelegate ruleDelegate) {
+                                          String ruleDescription,
+                                          ValidationRuleDelegate ruleDelegate) {
             this.RuleName        = ruleName;
             this.RuleDescription = ruleDescription;
             this.ExecuteRule     = ruleDelegate;
