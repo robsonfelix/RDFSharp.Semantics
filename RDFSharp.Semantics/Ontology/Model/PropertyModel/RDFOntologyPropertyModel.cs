@@ -236,7 +236,7 @@ namespace RDFSharp.Semantics {
 
                     //owl:versionInfo
                     case RDFSemanticsEnums.RDFOntologyStandardAnnotation.VersionInfo:
-                         if(annotationValue.IsLiteral()) {
+                         if (annotationValue.IsLiteral()) {
                              this.Annotations.VersionInfo.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFVocabulary.OWL.VERSION_INFO.ToRDFOntologyAnnotationProperty(), annotationValue));
                          }
                          else {
@@ -251,7 +251,7 @@ namespace RDFSharp.Semantics {
 
                     //rdfs:comment
                     case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Comment:
-                         if(annotationValue.IsLiteral()) {
+                         if (annotationValue.IsLiteral()) {
                              this.Annotations.Comment.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFVocabulary.RDFS.COMMENT.ToRDFOntologyAnnotationProperty(), annotationValue));
                          }
                          else {
@@ -261,7 +261,7 @@ namespace RDFSharp.Semantics {
 
                     //rdfs:label
                     case RDFSemanticsEnums.RDFOntologyStandardAnnotation.Label:
-                         if(annotationValue.IsLiteral()) {
+                         if (annotationValue.IsLiteral()) {
                              this.Annotations.Label.AddEntry(new RDFOntologyTaxonomyEntry(ontologyProperty, RDFVocabulary.RDFS.LABEL.ToRDFOntologyAnnotationProperty(), annotationValue));
                          }
                          else {
