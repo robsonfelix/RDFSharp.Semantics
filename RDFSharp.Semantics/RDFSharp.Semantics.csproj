@@ -49,10 +49,8 @@
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
+    <Compile Include="RDFSemanticsExtensions.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
-    <!-- Extensions -->
-    <Compile Include="Extensions\RDFModelExtensions.cs" />
-    <Compile Include="Extensions\RDFQueryExtensions.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
@@ -78,21 +76,20 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
-    <!-- Reasoning -->
+    <!-- Reasoner -->
     <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerHelper.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerRuleSet.cs" />
-    <!-- Validation -->
+    <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
     <Compile Include="Validator\RDFOntologyValidatorReport.cs" />
     <Compile Include="Validator\RDFOntologyValidatorRule.cs" />
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
-  <!-- Nuget and MSBuild stuff -->
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -286,15 +286,28 @@ namespace RDFSharp.Semantics
                                                     RDFOntologyClass ontologyClass) {
             if (ontologyFact != null && ontologyClass != null) {
 
-                //Enforce taxonomy checks before adding the ClassType relation
-                //Only plain classes can be assigned as classtypes of facts
-                if (!ontologyClass.IsRestrictionClass() && !ontologyClass.IsCompositeClass() && !ontologyClass.IsEnumerateClass() && !ontologyClass.IsDataRangeClass()) {
-                     this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), ontologyClass));
+                //Enforce preliminary check on usage of BASE classes
+                if (!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(ontologyClass.PatternMemberID)) {
+
+                     //Enforce taxonomy checks before adding the ClassType relation
+                     if (!ontologyClass.IsRestrictionClass() 
+                          && !ontologyClass.IsCompositeClass() 
+                          && !ontologyClass.IsEnumerateClass() 
+                          && !ontologyClass.IsDataRangeClass()) {
+                          this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), ontologyClass));
+                     }
+                     else {
+
+                          //Raise warning event to inform the user: ClassType relation cannot be added to the data because only plain classes can be explicitly assigned as class types of facts
+                          RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
+
+                     }
+
                 }
                 else {
 
-                     //Raise warning event to inform the user: ClassType relation cannot be added to the data because only plain classes can be explicitly assigned as class types of facts
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
+                     //Raise warning event to inform the user: ClassType relation cannot be added to the data because usage of BASE reserved classes compromises the taxonomy consistency
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because because usage of BASE reserved classes compromises the taxonomy consistency.", ontologyFact, ontologyClass));
 
                 }
 
@@ -356,15 +369,26 @@ namespace RDFSharp.Semantics
                                                     RDFOntologyFact bFact) {
             if (aFact != null && objectProperty != null && bFact != null) {
 
-                //Enforce taxonomy checks before adding the assertion
-                //Creation of transitive cycles is not allowed (OWL-DL computability)
-                if (!RDFOntologyReasonerHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
-                     this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
+                //Enforce preliminary check on usage of BASE properties
+                if (!RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(objectProperty.PatternMemberID)) {
+
+                     //Enforce taxonomy checks before adding the assertion
+                     //Creation of transitive cycles is not allowed (OWL-DL)
+                     if (!RDFOntologyReasonerHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
+                          this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
+                     }
+                     else {
+
+                          //Raise warning event to inform the user: Assertion relation cannot be added to the data because it violates the taxonomy transitive consistency
+                          RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and fact '{1}' with transitive property '{2}' cannot be added to the data because it would violate the taxonomy consistency (transitive cycle detected).", aFact, bFact, objectProperty));
+
+                     }
+
                 }
                 else {
 
-                     //Raise warning event to inform the user: Assertion relation cannot be added to the data because it violates the taxonomy transitive consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and fact '{1}' with transitive property '{2}' cannot be added to the data because it would violate the taxonomy consistency (transitive cycle detected).", aFact, bFact, objectProperty));
+                     //Raise warning event to inform the user: Assertion relation cannot be added to the data because usage of BASE reserved properties compromises the taxonomy consistency
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and fact '{1}' cannot be added to the data because usage of BASE reserved properties compromises the taxonomy consistency.", aFact, bFact));
 
                 }
 
@@ -379,8 +403,19 @@ namespace RDFSharp.Semantics
                                                     RDFOntologyDatatypeProperty datatypeProperty, 
                                                     RDFOntologyLiteral ontologyLiteral) {
             if (ontologyFact != null && datatypeProperty != null && ontologyLiteral != null) {
-                this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, datatypeProperty, ontologyLiteral));
-                this.AddLiteral(ontologyLiteral);
+
+                //Enforce preliminary check on usage of BASE properties
+                if (!RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(datatypeProperty.PatternMemberID)) {
+                     this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, datatypeProperty, ontologyLiteral));
+                     this.AddLiteral(ontologyLiteral);
+                }
+                else {
+
+                     //Raise warning event to inform the user: Assertion relation cannot be added to the data because usage of BASE reserved properties compromises the taxonomy consistency
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and literal '{1}' cannot be added to the data because usage of BASE reserved properties compromises the taxonomy consistency.", ontologyFact, ontologyLiteral));
+
+                }
+
             }
             return this;
         }

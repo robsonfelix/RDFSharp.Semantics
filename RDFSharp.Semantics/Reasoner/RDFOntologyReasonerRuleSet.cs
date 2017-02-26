@@ -162,7 +162,8 @@ namespace RDFSharp.Semantics {
             internal static void SubPropertyTransitivityExec(RDFOntology ontology,
                                                              RDFOntologyReasonerReport report) {
                 var subPropertyOf    = RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty();
-                foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                       !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
                     foreach(var sp  in RDFOntologyReasonerHelper.EnlistSuperPropertiesOf(p, ontology.Model.PropertyModel)) {
 
                         //Create the inference as a taxonomy entry
@@ -189,7 +190,8 @@ namespace RDFSharp.Semantics {
             internal static void ClassTypeEntailmentExec(RDFOntology ontology,
                                                          RDFOntologyReasonerReport report) {
                 var type            = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
-                foreach(var c      in ontology.Model.ClassModel.Where(cls => !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
+                foreach(var c      in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
+                                                                                && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
                     foreach(var f  in RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology)) {
 
                         //Create the inference as a taxonomy entry
@@ -215,7 +217,8 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void PropertyEntailmentExec(RDFOntology ontology,
                                                         RDFOntologyReasonerReport report) {
-                foreach(var p1             in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach(var p1             in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
 
                     //Filter the assertions using the current property (F1 P1 F2)
                     var p1Asns              = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p1);
@@ -260,7 +263,8 @@ namespace RDFSharp.Semantics {
             internal static void DomainEntailmentExec(RDFOntology ontology,
                                                       RDFOntologyReasonerReport report) {
                 var type                  = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
-                foreach(var p            in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach(var p            in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
                     if (p.Domain         != null) {
 
                         //Filter the assertions using the current property (F1 P1 F2)
@@ -294,7 +298,8 @@ namespace RDFSharp.Semantics {
             internal static void RangeEntailmentExec(RDFOntology ontology,
                                                      RDFOntologyReasonerReport report) {
                 var type                    = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
-                foreach(var p              in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach(var p              in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
                     if (p.Range            != null) {
 
                         //Filter the assertions using the current property (F1 P1 F2)
@@ -540,7 +545,8 @@ namespace RDFSharp.Semantics {
             internal static void EquivalentPropertyTransitivityExec(RDFOntology ontology,
                                                                     RDFOntologyReasonerReport report) {
                 var equivProperty    = RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty();
-                foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                       !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
                     foreach(var ep  in RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(p, ontology.Model.PropertyModel)) {
 
                         //Create the inference as a taxonomy entry
@@ -642,7 +648,8 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void InverseOfEntailmentExec(RDFOntology ontology,
                                                          RDFOntologyReasonerReport report) {
-                foreach(var p1             in ontology.Model.PropertyModel.Where(prop => prop.IsObjectProperty())) {
+                foreach(var p1             in ontology.Model.PropertyModel.Where(prop => prop.IsObjectProperty() &&
+                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
 
                     //Filter the assertions using the current property (F1 P1 F2)
                     var p1Asns              = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p1);
@@ -754,7 +761,8 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void SymmetricPropertyEntailmentExec(RDFOntology ontology,
                                                                  RDFOntologyReasonerReport report) {
-                foreach(var p          in ontology.Model.PropertyModel.Where(prop => prop.IsSymmetricProperty())) {
+                foreach(var p          in ontology.Model.PropertyModel.Where(prop => prop.IsSymmetricProperty() &&
+                                                                                         !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
 
                     //Filter the assertions using the current property (F1 P F2)
                     var pAsns           = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p);
@@ -791,7 +799,8 @@ namespace RDFSharp.Semantics {
             internal static void TransitivePropertyEntailmentExec(RDFOntology ontology,
                                                                   RDFOntologyReasonerReport report) {
                 var transPropCache      = new Dictionary<Int64, RDFOntologyData>();
-                foreach(var p          in ontology.Model.PropertyModel.Where(prop => prop.IsTransitiveProperty())) {
+                foreach(var p          in ontology.Model.PropertyModel.Where(prop => prop.IsTransitiveProperty() &&
+                                                                                         !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
 
                     //Filter the assertions using the current property (F1 P F2)
                     var pAsns           = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p);

@@ -324,16 +324,28 @@ namespace RDFSharp.Semantics {
                                                            RDFOntologyClass motherClass) {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
-                //Enforce taxonomy checks before adding the subClassOf relation
-                if (!RDFOntologyReasonerHelper.IsSubClassOf(motherClass,        childClass, this)  &&
-                    !RDFOntologyReasonerHelper.IsEquivalentClassOf(motherClass, childClass, this)  &&
-                    !RDFOntologyReasonerHelper.IsDisjointClassWith(motherClass, childClass, this))  {
-                     this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFVocabulary.RDFS.SUB_CLASS_OF.ToRDFOntologyObjectProperty(), motherClass));
+                //Enforce preliminary checks on usage of BASE classes
+                if (!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(childClass.PatternMemberID) 
+                     && !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(motherClass.PatternMemberID)) {
+
+                     //Enforce taxonomy checks before adding the subClassOf relation
+                     if (!RDFOntologyReasonerHelper.IsSubClassOf(motherClass, childClass, this) 
+                          && !RDFOntologyReasonerHelper.IsEquivalentClassOf(motherClass, childClass, this) 
+                          && !RDFOntologyReasonerHelper.IsDisjointClassWith(motherClass, childClass, this)) {
+                          this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFVocabulary.RDFS.SUB_CLASS_OF.ToRDFOntologyObjectProperty(), motherClass));
+                     }
+                     else {
+
+                          //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because it violates the taxonomy consistency
+                          RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
+
+                     }
+
                 }
                 else {
 
-                     //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", childClass, motherClass));
+                     //Raise warning event to inform the user: SubClassOf relation cannot be added to the class model because usage of BASE reserved classes compromises the taxonomy consistency
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SubClassOf relation between child class '{0}' and mother class '{1}' cannot be added to the class model usage of BASE reserved classes compromises the taxonomy consistency.", childClass, motherClass));
 
                 }
 
@@ -348,17 +360,29 @@ namespace RDFSharp.Semantics {
                                                                 RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
-                //Enforce taxonomy checks before adding the equivalentClass relation
-                if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this)  &&
-                    !RDFOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this)  &&
-                    !RDFOntologyReasonerHelper.IsDisjointClassWith(aClass, bClass, this))  {
-                     this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty(), bClass));
-                     this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty(), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                //Enforce preliminary checks on usage of BASE classes
+                if (!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(aClass.PatternMemberID)
+                     && !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(bClass.PatternMemberID)) {
+
+                     //Enforce taxonomy checks before adding the equivalentClass relation
+                     if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass, bClass, this)
+                          && !RDFOntologyReasonerHelper.IsSuperClassOf(aClass, bClass, this)
+                          && !RDFOntologyReasonerHelper.IsDisjointClassWith(aClass, bClass, this)) {
+                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty(), bClass));
+                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty(), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                     }
+                     else {
+                     
+                          //Raise warning event to inform the user: EquivalentClass relation cannot be added to the class model because it violates the taxonomy consistency
+                          RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+                     
+                     }
+
                 }
                 else {
 
-                     //Raise warning event to inform the user: EquivalentClass relation cannot be added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+                     //Raise warning event to inform the user: EquivalentClass relation cannot be added to the class model because usage of BASE reserved classes compromises the taxonomy consistency
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("EquivalentClass relation between class '{0}' and class '{1}' cannot be added to the class model usage of BASE reserved classes compromises the taxonomy consistency.", aClass, bClass));
 
                 }
 
@@ -373,17 +397,29 @@ namespace RDFSharp.Semantics {
                                                              RDFOntologyClass bClass) {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
-                //Enforce taxonomy checks before adding the disjointWith relation
-                if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass,        bClass, this)  &&
-                    !RDFOntologyReasonerHelper.IsSuperClassOf(aClass,      bClass, this)  &&
-                    !RDFOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this))  {
-                     this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty(), bClass));
-                     this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty(), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                //Enforce preliminary checks on usage of BASE classes
+                if (!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(aClass.PatternMemberID)
+                     && !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(bClass.PatternMemberID)) {
+
+                     //Enforce taxonomy checks before adding the disjointWith relation
+                     if (!RDFOntologyReasonerHelper.IsSubClassOf(aClass, bClass, this)
+                          && !RDFOntologyReasonerHelper.IsSuperClassOf(aClass, bClass, this)
+                          && !RDFOntologyReasonerHelper.IsEquivalentClassOf(aClass, bClass, this)) {
+                          this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty(), bClass));
+                          this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty(), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                     }
+                     else {
+
+                          //Raise warning event to inform the user: DisjointWith relation cannot be added to the class model because it violates the taxonomy consistency
+                          RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+
+                     }
+
                 }
                 else {
 
-                     //Raise warning event to inform the user: DisjointWith relation cannot be added to the class model because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model because it violates the taxonomy consistency.", aClass, bClass));
+                     //Raise warning event to inform the user: DisjointWith relation cannot be added to the class model because usage of BASE reserved classes compromises the taxonomy consistency
+                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DisjointWith relation between class '{0}' and class '{1}' cannot be added to the class model usage of BASE reserved classes compromises the taxonomy consistency.", aClass, bClass));
 
                 }
 
@@ -832,7 +868,7 @@ namespace RDFSharp.Semantics {
             var result        = new RDFGraph();
 
             //Definitions
-            foreach(var    c in this) {
+            foreach(var    c in this.Where(c => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(c.PatternMemberID))) {
 
                 //Restriction
                 if (c.IsRestrictionClass()) {

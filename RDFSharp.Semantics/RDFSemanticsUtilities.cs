@@ -855,7 +855,8 @@ namespace RDFSharp.Semantics
 
 
                 #region Step 2: Init Ontology
-                ontology            = new RDFOntology(new RDFResource(ontGraph.Context.ToString()));
+                ontology            = new RDFOntology(new RDFResource(ontGraph.Context.ToString())).UnionWith(RDFBASEOntology.Instance);
+                ontology.Value      = new RDFResource(ontGraph.Context.ToString());
                 if (!rdfType.ContainsTriple(new RDFTriple((RDFResource)ontology.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ONTOLOGY))) {
                      var ont        = rdfType.SelectTriplesByObject(RDFVocabulary.OWL.ONTOLOGY)
                                              .FirstOrDefault();
@@ -1056,7 +1057,7 @@ namespace RDFSharp.Semantics
                         if (onProp        != null) {
 
                             //Ensure to not try creating a restriction over an annotation property
-                            if (!onProp.IsAnnotationProperty()) {
+                            if (!onProp.IsAnnotationProperty() && !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(onProp.PatternMemberID)) {
                                  var restr = new RDFOntologyRestriction((RDFResource)r.Subject, onProp);
                                  ontology.Model.ClassModel.AddClass(restr);
                             }
@@ -1252,7 +1253,8 @@ namespace RDFSharp.Semantics
 
 
                 #region Step 5: Init Data
-                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
+                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
+                                                                                && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
                     foreach(var t  in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
                         var f       = ontology.Data.SelectFact(t.Subject.ToString());
                         if (f      == null) {
@@ -1576,7 +1578,8 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 6.4: Finalize RDFS:[Domain|Range]
-                foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach (var p in ontology.Model.PropertyModel.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)
+                                                                                && !prop.IsAnnotationProperty())) {
        
                     #region Domain
                     var d    = domain.SelectTriplesBySubject((RDFResource)p.Value).FirstOrDefault();
@@ -1616,7 +1619,8 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 6.5: Finalize PropertyModel [RDFS:SubPropertyOf|OWL:EquivalentProperty|OWL:InverseOf]
-                foreach (var p in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach (var p in ontology.Model.PropertyModel.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)
+                                                                                && !prop.IsAnnotationProperty())) {
 
                     #region SubPropertyOf
                     foreach(var spof in subpropOf.SelectTriplesBySubject((RDFResource)p.Value)) {
@@ -1688,7 +1692,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 6.6: Finalize ClassModel [RDFS:SubClassOf|OWL:EquivalentClass|OWL:DisjointWith]]
-                foreach (var c in ontology.Model.ClassModel) {
+                foreach (var c in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
 
                     #region SubClassOf
                     foreach (var scof in subclassOf.SelectTriplesBySubject((RDFResource)c.Value)) {
@@ -1796,7 +1800,8 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Assertion
-                foreach(var p        in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty())) {
+                foreach(var p        in ontology.Model.PropertyModel.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)
+                                                                                       && !prop.IsAnnotationProperty())) {
                     foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value).Where(triple => !triple.Subject.Equals(ontology)
                                                                                                                    && !ontology.Model.ClassModel.Classes.ContainsKey(triple.Subject.PatternMemberID)
                                                                                                                    && !ontology.Model.PropertyModel.Properties.ContainsKey(triple.Subject.PatternMemberID))) {
@@ -2442,7 +2447,7 @@ namespace RDFSharp.Semantics
 
 
             }
-            return ontology;
+            return ontology.DifferenceWith(RDFBASEOntology.Instance);
         }
 
         /// <summary>
