@@ -413,28 +413,36 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public static Boolean IsMemberOf(RDFOntologyFact ontFact, 
                                          RDFOntologyClass ontClass, 
-                                         RDFOntology ontology) { 
-            return(ontFact != null && ontClass != null && ontology != null ? EnlistMembersOf(ontClass, ontology).Facts.ContainsKey(ontFact.PatternMemberID) : false);
+                                         RDFOntology ontology,
+                                         Boolean useBASEOntology=true) { 
+            return(ontFact != null && ontClass != null && ontology != null ? EnlistMembersOf(ontClass, ontology, useBASEOntology).Facts.ContainsKey(ontFact.PatternMemberID) : false);
         }
 
         /// <summary>
         /// Enlists the facts which are members of the given class within the given ontology
         /// </summary>
         public static RDFOntologyData EnlistMembersOf(RDFOntologyClass ontClass, 
-                                                      RDFOntology ontology) {
-            var result     = new RDFOntologyData();
-            if (ontClass  != null && ontology != null) {
-                
+                                                      RDFOntology ontology,
+                                                      Boolean useBASEOntology=true) {
+            var result       = new RDFOntologyData();
+            if (ontClass    != null && ontology != null) {
+                if (useBASEOntology) {
+                    ontology = ontology.UnionWith(RDFBASEOntology.Instance);
+                }
+
                 //DataRange/Literal-Compatible
                 if (IsLiteralCompatibleClass(ontClass, ontology.Model.ClassModel)) {
-                    result = RDFSemanticsUtilities.EnlistMembersOfLiteralCompatibleClass(ontClass, ontology);
+                    result   = RDFSemanticsUtilities.EnlistMembersOfLiteralCompatibleClass(ontClass, ontology);
                 }
 
                 //Restriction/Composite/Enumerate/Class
                 else {
-                    result = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(ontClass, ontology);
+                    result   = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(ontClass, ontology);
                 }
 
+                if (useBASEOntology) {
+                    ontology = ontology.DifferenceWith(RDFBASEOntology.Instance);
+                }
             }
             return result;
         }

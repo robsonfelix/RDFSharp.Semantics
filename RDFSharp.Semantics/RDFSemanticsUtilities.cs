@@ -649,11 +649,11 @@ namespace RDFSharp.Semantics
                 var iTaxonomy      = ontology.Model.ClassModel.Relations.IntersectionOf.SelectEntriesBySubject(ontCompClass);
                 foreach (var       tEntry in iTaxonomy) {
                     if  (firstIter) {
-                        result     = RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology);
+                        result     = RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology, false);
                         firstIter  = false;
                     }
                     else {
-                        result     = result.IntersectWith(RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology));
+                        result     = result.IntersectWith(RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology, false));
                     }
                 }
 
@@ -665,14 +665,14 @@ namespace RDFSharp.Semantics
                 //Filter "unionOf" relations made with the given union class
                 var uTaxonomy      = ontology.Model.ClassModel.Relations.UnionOf.SelectEntriesBySubject(ontCompClass);
                 foreach (var       tEntry in uTaxonomy) {
-                    result         = result.UnionWith(RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology));
+                    result         = result.UnionWith(RDFOntologyReasonerHelper.EnlistMembersOf((RDFOntologyClass)tEntry.TaxonomyObject, ontology, false));
                 }
 
             }
 
             //Complement
             else if (ontCompClass is RDFOntologyComplementClass) {
-                result             = ontology.Data.DifferenceWith(RDFOntologyReasonerHelper.EnlistMembersOf(((RDFOntologyComplementClass)ontCompClass).ComplementOf, ontology));
+                result             = ontology.Data.DifferenceWith(RDFOntologyReasonerHelper.EnlistMembersOf(((RDFOntologyComplementClass)ontCompClass).ComplementOf, ontology, false));
             }
 
             return result;
