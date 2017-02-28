@@ -108,6 +108,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyReasonerReport ApplyToOntology(RDFOntology ontology) {
             if (ontology   != null) {
                 var rReport = new RDFOntologyReasonerReport(ontology.Value.PatternMemberID);
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}': existing inferences will be cleared and BASE ontology will be temporarily joined.", ontology.Value));
 
                 //Step 0: Cleanup ontology from inferences
                 ontology.ClearInferences();

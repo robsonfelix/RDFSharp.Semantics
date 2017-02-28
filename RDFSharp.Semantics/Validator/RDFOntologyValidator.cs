@@ -104,6 +104,7 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal RDFOntologyValidatorReport AnalyzeOntology(RDFOntology ontology) {
             var report = new RDFOntologyValidatorReport(ontology.Value.PatternMemberID);
+            RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}': BASE ontology will be temporarily joined.", ontology.Value));
 
             //Expand the ontology with the BASE ontology definitions
             ontology   = ontology.UnionWith(RDFBASEOntology.Instance);
