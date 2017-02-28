@@ -27,16 +27,6 @@ namespace RDFSharp.Semantics {
 
         #region Properties
         /// <summary>
-        /// Name of the reasoner
-        /// </summary>
-        public String ReasonerName { get; internal set; }
-
-        /// <summary>
-        /// Description of the reasoner
-        /// </summary>
-        public String ReasonerDescription { get; internal set; }
-
-        /// <summary>
         /// List of rules applied by the reasoner
         /// </summary>
         internal List<RDFOntologyReasonerRule> Rules { get; set; }
@@ -44,23 +34,10 @@ namespace RDFSharp.Semantics {
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an empty ontology reasoner with given name and description
+        /// Default-ctor to build an empty ontology reasoner
         /// </summary>
-        public RDFOntologyReasoner(String reasonerName, 
-                                   String reasonerDescription) {
-            if (reasonerName                != null && reasonerName.Trim()        != String.Empty) {
-                if (reasonerDescription     != null && reasonerDescription.Trim() != String.Empty) {
-                    this.ReasonerName        = reasonerName;
-                    this.ReasonerDescription = reasonerDescription;
-                    this.Rules               = new List<RDFOntologyReasonerRule>();
-                }
-                else {
-                    throw new RDFSemanticsException("Cannot create RDFOntologyReasoner because given \"reasonerDescription\" parameter is null or empty.");
-                }
-            }
-            else {
-                throw new RDFSemanticsException("Cannot create RDFOntologyReasoner because given \"reasonerName\" parameter is null or empty.");
-            }            
+        public RDFOntologyReasoner() {
+            this.Rules = new List<RDFOntologyReasonerRule>();
         }
         #endregion
 
