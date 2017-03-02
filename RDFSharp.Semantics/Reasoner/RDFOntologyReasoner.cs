@@ -43,7 +43,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Creates an empty ontology reasoner
         /// </summary>
-        public RDFOntologyReasoner CreateNew() {
+        public static RDFOntologyReasoner CreateNew() {
             return new RDFOntologyReasoner();
         }
         #endregion
