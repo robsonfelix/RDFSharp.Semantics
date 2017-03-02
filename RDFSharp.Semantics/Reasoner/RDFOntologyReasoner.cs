@@ -36,8 +36,15 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build an empty ontology reasoner
         /// </summary>
-        public RDFOntologyReasoner() {
+        internal RDFOntologyReasoner() {
             this.Rules = new List<RDFOntologyReasonerRule>();
+        }
+
+        /// <summary>
+        /// Creates an empty ontology reasoner
+        /// </summary>
+        public RDFOntologyReasoner CreateNew() {
+            return new RDFOntologyReasoner();
         }
         #endregion
 
@@ -47,7 +54,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the given rule to the reasoner
         /// </summary>
-        public RDFOntologyReasoner AddRule(RDFOntologyReasonerRule rule) {
+        public RDFOntologyReasoner WithRule(RDFOntologyReasonerRule rule) {
             if (rule   != null) {
                 if (this.SelectRule(rule.RuleName) == null) {
                     this.Rules.Add(rule);
@@ -57,21 +64,9 @@ namespace RDFSharp.Semantics {
         }
 
         /// <summary>
-        /// Removes the given rule from the reasoner
-        /// </summary>
-        public RDFOntologyReasoner RemoveRule(RDFOntologyReasonerRule rule) {
-            if (rule   != null) {
-                if (this.SelectRule(rule.RuleName) != null) {
-                    this.Rules.RemoveAll(rs => rs.RuleName.Equals(rule.RuleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
-                }
-            }
-            return this;
-        }
-
-        /// <summary>
         /// Selects the given rule from the resoner
         /// </summary>
-        public RDFOntologyReasonerRule SelectRule(String ruleName = "") {
+        internal RDFOntologyReasonerRule SelectRule(String ruleName = "") {
             return this.Rules.FirstOrDefault(r => r.RuleName.Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
         }
         #endregion
