@@ -24,7 +24,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyReasonerRuleSet represents a collection of rules available to reasoners.
     /// </summary>
-    public static class RDFOntologyReasonerRuleSet {
+    public class RDFOntologyReasonerRuleSet {
 
         #region RDFS
         /// <summary>
@@ -111,15 +111,6 @@ namespace RDFSharp.Semantics {
                                                                        "RangeEntailment (rdfs3) implements structural entailments based on 'rdfs:range' taxonomy:" +
                                                                        "((F1 P F2) AND (P RDFS:RANGE C)) => (F2 RDF:TYPE C)",
                                                                        RangeEntailmentExec);
-
-                #region Finalization
-                SubClassTransitivity.RuleType    = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                SubPropertyTransitivity.RuleType = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                ClassTypeEntailment.RuleType     = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                PropertyEntailment.RuleType      = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                DomainEntailment.RuleType        = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                RangeEntailment.RuleType         = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                #endregion
 
             }
             #endregion
@@ -451,18 +442,6 @@ namespace RDFSharp.Semantics {
                                                                               "TransitivePropertyEntailment implements data entailments based on 'owl:TransitiveProperty' axiom:" +
                                                                               "((F1 P F2) AND (F2 P F3) AND (P TYPE TRANSITIVEPROPERTY)) => (F1 P F3)",
                                                                               TransitivePropertyEntailmentExec);
-
-                #region Finalization
-                EquivalentClassTransitivity.RuleType    = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                DisjointWithEntailment.RuleType         = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                EquivalentPropertyTransitivity.RuleType = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                SameAsTransitivity.RuleType             = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                DifferentFromEntailment.RuleType        = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                InverseOfEntailment.RuleType            = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                SameAsEntailment.RuleType               = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                SymmetricPropertyEntailment.RuleType    = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                TransitivePropertyEntailment.RuleType   = RDFSemanticsEnums.RDFOntologyReasonerRuleType.Standard;
-                #endregion
 
             }
             #endregion

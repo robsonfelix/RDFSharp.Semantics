@@ -101,20 +101,6 @@ namespace RDFSharp.Semantics
         };
 
         /// <summary>
-        /// RDFOntologyReasonerRuleType represents an enumeration for possible types of a reasoner rule
-        /// </summary>
-        public enum RDFOntologyReasonerRuleType {
-            /// <summary>
-            /// RDFSharp-builtin reasoning rule
-            /// </summary>
-            Standard = 1,
-            /// <summary>
-            /// User-defined reasoning rule
-            /// </summary>
-            UserDefined = 2
-        };
-
-        /// <summary>
         /// RDFOntologyInferenceType represents an enumeration for possible types of a semantic inference
         /// </summary>
         public enum RDFOntologyInferenceType {

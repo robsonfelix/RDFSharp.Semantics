@@ -35,11 +35,6 @@ namespace RDFSharp.Semantics {
         public String RuleDescription { get; internal set; }
 
         /// <summary>
-        /// Type of the rule
-        /// </summary>
-        public RDFSemanticsEnums.RDFOntologyReasonerRuleType RuleType { get; internal set; }
-
-        /// <summary>
         /// Delegate for the function which will be executed as body of the rule
         /// </summary>
         public delegate void ReasonerRuleDelegate(RDFOntology ontology, RDFOntologyReasonerReport report);
@@ -54,15 +49,14 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Default-ctor to build a reasoner rule with given name, description and delegate
         /// </summary>
-        public RDFOntologyReasonerRule(String ruleName, 
-                                       String ruleDescription,
-                                       ReasonerRuleDelegate ruleDelegate) {
+        internal RDFOntologyReasonerRule(String ruleName, 
+                                         String ruleDescription,
+                                         ReasonerRuleDelegate ruleDelegate) {
             if (ruleName                    != null) {
                 if (ruleDescription         != null) {
                     if (ruleDelegate        != null) {
-                        this.RuleName        = ruleName.Trim();
-                        this.RuleDescription = ruleDescription.Trim();
-                        this.RuleType        = RDFSemanticsEnums.RDFOntologyReasonerRuleType.UserDefined;
+                        this.RuleName        = ruleName.Trim().ToUpperInvariant();
+                        this.RuleDescription = ruleDescription.Trim().ToUpperInvariant();
                         this.ExecuteRule     = ruleDelegate;
                     }
                     else {

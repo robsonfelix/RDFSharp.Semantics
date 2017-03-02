@@ -62,7 +62,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyReasoner RemoveRule(RDFOntologyReasonerRule rule) {
             if (rule   != null) {
                 if (this.SelectRule(rule.RuleName) != null) {
-                    this.Rules.RemoveAll(rs => rs.RuleName.ToUpperInvariant().Equals(rule.RuleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
+                    this.Rules.RemoveAll(rs => rs.RuleName.Equals(rule.RuleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
                 }
             }
             return this;
@@ -72,7 +72,7 @@ namespace RDFSharp.Semantics {
         /// Selects the given rule from the resoner
         /// </summary>
         public RDFOntologyReasonerRule SelectRule(String ruleName = "") {
-            return this.Rules.Find(r => r.RuleName.ToUpperInvariant().Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
+            return this.Rules.FirstOrDefault(r => r.RuleName.Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
         }
         #endregion
 
@@ -137,12 +137,7 @@ namespace RDFSharp.Semantics {
                 this.TriggerRule("PropertyEntailment",             ontology, rReport);
                 this.TriggerRule("SameAsEntailment",               ontology, rReport);
 
-                //Step 5: Apply custom rules
-                foreach (var sr in this.Rules.Where(r => r.RuleType == RDFSemanticsEnums.RDFOntologyReasonerRuleType.UserDefined)) {
-                    this.TriggerRule(sr.RuleName, ontology, rReport);
-                }
-
-                //Step 6: Unexpand the ontology with the BASE ontology definitions
+                //Step 5: Unexpand the ontology with the BASE ontology definitions
                 ontology    = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
                 return rReport;
