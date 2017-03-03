@@ -803,7 +803,7 @@ namespace RDFSharp.Semantics
         internal static RDFOntology FromRDFGraph(RDFGraph ontGraph) {
             RDFOntology ontology    = null;
             if (ontGraph           != null) {
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Graph '{0}' is going to be parsed as Ontology: be aware that not all the triples of the graph may have a recognizable ontology semantics, for this reason they may be discarded.", ontGraph.Context));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Graph '{0}' is going to be parsed as Ontology: triples not having supported ontology semantics may be discarded.", ontGraph.Context));
 
 
                 #region Step 1: Prefetch
