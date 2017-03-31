@@ -12,5 +12,5 @@ There are many ways that you can contribute to the RDFSharp.Semantics project:
     <li>Tell others about the RDFSharp.Semantics project :)</li>
 </ul>
 <hr>
-RDFSharp.Semantics is also available on <b><a href="http://www.nuget.org/packages?q=rdfsharp.semantics">NuGet</a></b> and <b><a href="https://rdfsharpsemantics.codeplex.com/">Codeplex</a></b>!
+RDFSharp.Semantics is also available on <b><a href="http://www.nuget.org/packages?q=rdfsharp.semantics">NuGet</a></b>!
 <hr>
