@@ -17,6 +17,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RDFSharp.Semantics {
 
@@ -122,9 +123,13 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the given evidence to the reasoner report
         /// </summary>
-        internal void AddEvidence(RDFOntologyReasonerEvidence evidence) {
+        internal Boolean AddEvidence(RDFOntologyReasonerEvidence evidence) {
             lock(this.SyncLock) {
-                 this.Evidences.Add(evidence);
+                if (!this.Evidences.Contains(evidence)) {
+                     this.Evidences.Add(evidence);
+                     return true;
+                }
+                return false;
             }
         }
         #endregion
