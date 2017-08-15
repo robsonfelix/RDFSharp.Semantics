@@ -21,7 +21,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyReasonerEvidence represents an inference evidence generated during execution of a rule
     /// </summary>
-    public class RDFOntologyReasonerEvidence {
+    public class RDFOntologyReasonerEvidence: IEquatable<RDFOntologyReasonerEvidence> {
 
         #region Properties
         /// <summary>
@@ -50,6 +50,15 @@ namespace RDFSharp.Semantics {
             this.EvidenceCategory   = evidenceCategory;
             this.EvidenceProvenance = evidenceProvenance;
             this.EvidenceContent    = evidenceContent;
+        }
+        #endregion
+
+        #region Interfaces
+        /// <summary>
+        /// Performs the equality comparison between two reasoner evidences
+        /// </summary>
+        public Boolean Equals(RDFOntologyReasonerEvidence other) {
+            return (other != null && this.EvidenceContent.Equals(other.EvidenceContent));
         }
         #endregion
 
