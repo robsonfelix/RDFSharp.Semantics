@@ -166,12 +166,12 @@ namespace RDFSharp.Semantics {
 
         #region Properties
         /// <summary>
-        /// If true (default) the reasoner will clear existing inferences from the ontology before starting a new analysis.
+        /// If true the reasoner will clear existing inferences from the ontology before starting a new analysis. Default is true.
         /// </summary>
         public Boolean ClearExistingInferences { get; set; }
 
         /// <summary>
-        /// If true (default) the reasoner will automatically merge inferences into the ontology during the analysis.
+        /// If true the reasoner will automatically merge inferences into the ontology during the analysis. Default is false.
         /// </summary>
         public Boolean AutoMergeInferences { get; set; }
         #endregion
@@ -179,7 +179,7 @@ namespace RDFSharp.Semantics {
         #region Ctors
         public RDFReasonerOptions() {
             this.ClearExistingInferences = true;
-            this.AutoMergeInferences = true;
+            this.AutoMergeInferences = false;
         }
         #endregion
 
