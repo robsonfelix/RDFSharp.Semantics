@@ -121,6 +121,71 @@ namespace RDFSharp.Semantics {
         }
 
         /// <summary>
+        /// Merges the evidences of the reasoner report into the given ontology
+        /// </summary>
+        public void Merge(RDFOntology ontology) {
+            if (ontology != null) {
+                foreach(var evidence in this) {
+                    switch (evidence.EvidenceProvenance) {
+                        
+                        //RDFS
+                        case "SubClassTransitivity":
+                            ontology.Model.ClassModel.Relations.SubClassOf.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "SubPropertyTransitivity":
+                            ontology.Model.PropertyModel.Relations.SubPropertyOf.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "ClassTypeEntailment":
+                            ontology.Data.Relations.ClassType.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "PropertyEntailment":
+                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "DomainEntailment":
+                            ontology.Data.Relations.ClassType.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "RangeEntailment":
+                            ontology.Data.Relations.ClassType.AddEntry(evidence.EvidenceContent);
+                            break;
+
+                        //OWL-DL
+                        case "EquivalentClassTransitivity":
+                            ontology.Model.ClassModel.Relations.EquivalentClass.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "DisjointWithEntailment":
+                            ontology.Model.ClassModel.Relations.DisjointWith.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "EquivalentPropertyTransitivity":
+                            ontology.Model.PropertyModel.Relations.EquivalentProperty.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "SameAsTransitivity":
+                            ontology.Data.Relations.SameAs.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "DifferentFromEntailment":
+                            ontology.Data.Relations.DifferentFrom.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "InverseOfEntailment":
+                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "SameAsEntailment":
+                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "SymmetricPropertyEntailment":
+                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
+                            break;
+                        case "TransitivePropertyEntailment":
+                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
+                            break;
+
+                        //OTHERS
+                        default: break;
+
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Adds the given evidence to the reasoner report
         /// </summary>
         internal Boolean AddEvidence(RDFOntologyReasonerEvidence evidence) {
