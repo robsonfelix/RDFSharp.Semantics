@@ -145,7 +145,7 @@ namespace RDFSharp.Semantics {
                 infCount    += this.TriggerRule("PropertyEntailment", ontology, report, options);
                 infCount    += this.TriggerRule("SameAsEntailment", ontology, report, options);
 
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}': found total of {1} new inferences.", ontology.Value, infCount));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}': found {1} new inferences.", ontology.Value, infCount));
                 #endregion
 
                 //Unexpand ontology
