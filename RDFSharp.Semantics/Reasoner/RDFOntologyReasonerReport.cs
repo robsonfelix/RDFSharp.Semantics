@@ -17,7 +17,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RDFSharp.Semantics {
 
@@ -31,20 +30,20 @@ namespace RDFSharp.Semantics {
         /// Counter of the evidences
         /// </summary>
         public Int32 EvidencesCount {
-            get { return this.Evidences.Values.Count; }
+            get { return this.Evidences.Count; }
         }
 
         /// <summary>
         /// Gets an enumerator on the evidences for iteration
         /// </summary>
         public IEnumerator<RDFOntologyReasonerEvidence> EvidencesEnumerator {
-            get { return this.Evidences.Values.GetEnumerator(); }
+            get { return this.Evidences.GetEnumerator(); }
         }
 
         /// <summary>
-        /// Dictionary of evidences
+        /// List of evidences
         /// </summary>
-        internal Dictionary<Int64, RDFOntologyReasonerEvidence> Evidences { get; set; }
+        internal List<RDFOntologyReasonerEvidence> Evidences { get; set; }
 
         /// <summary>
         /// Synchronization lock
@@ -64,7 +63,7 @@ namespace RDFSharp.Semantics {
         internal RDFOntologyReasonerReport(Int64 reportID) {
             this.ReasonerReportID = reportID;
             this.SyncLock         = new Object();
-            this.Evidences        = new Dictionary<Int64, RDFOntologyReasonerEvidence>();
+            this.Evidences        = new List<RDFOntologyReasonerEvidence>();
         }
         #endregion
 
@@ -73,14 +72,14 @@ namespace RDFSharp.Semantics {
         /// Exposes a typed enumerator on the reasoner report's evidences
         /// </summary>
         IEnumerator<RDFOntologyReasonerEvidence> IEnumerable<RDFOntologyReasonerEvidence>.GetEnumerator() {
-            return this.Evidences.Values.GetEnumerator();
+            return this.Evidences.GetEnumerator();
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the reasoner report's evidences
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Evidences.Values.GetEnumerator();
+            return this.Evidences.GetEnumerator();
         }
         #endregion
 
@@ -89,112 +88,43 @@ namespace RDFSharp.Semantics {
         /// Gets the evidences having the given category
         /// </summary>
         public List<RDFOntologyReasonerEvidence> SelectEvidencesByCategory(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory evidenceCategory) {
-            return this.Evidences.Values.Where(e => e.EvidenceCategory.Equals(evidenceCategory)).ToList();
+            return this.Evidences.FindAll(e => e.EvidenceCategory.Equals(evidenceCategory));
         }
 
         /// <summary>
         /// Gets the evidences having the given provenance rule
         /// </summary>
         public List<RDFOntologyReasonerEvidence> SelectEvidencesByProvenance(String evidenceProvenance = "") {
-            return this.Evidences.Values.Where(e => e.EvidenceProvenance.ToUpper().Equals(evidenceProvenance.Trim().ToUpperInvariant(), StringComparison.Ordinal)).ToList();
+            return this.Evidences.FindAll(e => e.EvidenceProvenance.ToUpper().Equals(evidenceProvenance.Trim().ToUpperInvariant(), StringComparison.Ordinal));
         }
 
         /// <summary>
         /// Gets the evidences having the given content subject
         /// </summary>
         public List<RDFOntologyReasonerEvidence> SelectEvidencesByContentSubject(RDFOntologyResource evidenceContentSubject) {
-            return this.Evidences.Values.Where(e => e.EvidenceContent.TaxonomySubject.Equals(evidenceContentSubject)).ToList();
+            return this.Evidences.FindAll(e => e.EvidenceContent.TaxonomySubject.Equals(evidenceContentSubject));
         }
 
         /// <summary>
         /// Gets the evidences having the given content predicate
         /// </summary>
         public List<RDFOntologyReasonerEvidence> SelectEvidencesByContentPredicate(RDFOntologyResource evidenceContentPredicate) {
-            return this.Evidences.Values.Where(e => e.EvidenceContent.TaxonomyPredicate.Equals(evidenceContentPredicate)).ToList();
+            return this.Evidences.FindAll(e => e.EvidenceContent.TaxonomyPredicate.Equals(evidenceContentPredicate));
         }
 
         /// <summary>
         /// Gets the evidences having the given content object
         /// </summary>
         public List<RDFOntologyReasonerEvidence> SelectEvidencesByContentObject(RDFOntologyResource evidenceContentObject) {
-            return this.Evidences.Values.Where(e => e.EvidenceContent.TaxonomyObject.Equals(evidenceContentObject)).ToList();
-        }
-
-        /// <summary>
-        /// Merges the evidences of the reasoner report into the given ontology
-        /// </summary>
-        public void Merge(RDFOntology ontology) {
-            if (ontology != null) {
-                foreach(var evidence in this) {
-                    switch (evidence.EvidenceProvenance) {
-                        
-                        //RDFS
-                        case "SubClassTransitivity":
-                            ontology.Model.ClassModel.Relations.SubClassOf.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "SubPropertyTransitivity":
-                            ontology.Model.PropertyModel.Relations.SubPropertyOf.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "ClassTypeEntailment":
-                            ontology.Data.Relations.ClassType.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "PropertyEntailment":
-                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "DomainEntailment":
-                            ontology.Data.Relations.ClassType.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "RangeEntailment":
-                            ontology.Data.Relations.ClassType.AddEntry(evidence.EvidenceContent);
-                            break;
-
-                        //OWL-DL
-                        case "EquivalentClassTransitivity":
-                            ontology.Model.ClassModel.Relations.EquivalentClass.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "DisjointWithEntailment":
-                            ontology.Model.ClassModel.Relations.DisjointWith.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "EquivalentPropertyTransitivity":
-                            ontology.Model.PropertyModel.Relations.EquivalentProperty.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "SameAsTransitivity":
-                            ontology.Data.Relations.SameAs.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "DifferentFromEntailment":
-                            ontology.Data.Relations.DifferentFrom.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "InverseOfEntailment":
-                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "SameAsEntailment":
-                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "SymmetricPropertyEntailment":
-                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
-                            break;
-                        case "TransitivePropertyEntailment":
-                            ontology.Data.Relations.Assertions.AddEntry(evidence.EvidenceContent);
-                            break;
-
-                        //OTHERS
-                        default: break;
-
-                    }
-                }
-            }
+            return this.Evidences.FindAll(e => e.EvidenceContent.TaxonomyObject.Equals(evidenceContentObject));
         }
 
         /// <summary>
         /// Adds the given evidence to the reasoner report
         /// </summary>
-        internal Boolean AddEvidence(RDFOntologyReasonerEvidence evidence) {
+        internal void AddEvidence(RDFOntologyReasonerEvidence evidence) {
             lock(this.SyncLock) {
-                 if (!this.Evidences.ContainsKey(evidence.EvidenceContent.TaxonomyEntryID)) {
-                      this.Evidences.Add(evidence.EvidenceContent.TaxonomyEntryID, evidence);
-                      return true;
-                 }
-                 return false;
+                 this.Evidences.Add(evidence);
             }
         }
         #endregion
