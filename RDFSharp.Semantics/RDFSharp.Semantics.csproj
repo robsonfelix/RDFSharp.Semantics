@@ -36,8 +36,8 @@
   </PropertyGroup>
   <!-- Microsoft .NET references -->
   <ItemGroup>
-    <Reference Include="RDFSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RDFSharp.1.0.0\lib\net40\RDFSharp.dll</HintPath>
+    <Reference Include="RDFSharp, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RDFSharp.1.0.1\lib\net40\RDFSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -91,7 +91,9 @@
     <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
