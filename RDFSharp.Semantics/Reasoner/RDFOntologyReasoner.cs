@@ -112,41 +112,43 @@ namespace RDFSharp.Semantics {
         public RDFOntologyReasonerReport ApplyToOntology(RDFOntology ontology, RDFReasonerOptions options) {
             if (ontology    != null) {
                 var report   = new RDFOntologyReasonerReport(ontology.Value.PatternMemberID);
-                
-                
+
+                //Cleanup ontology
                 if (options == null)
                     options  = new RDFReasonerOptions();
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}': existing inferences " + (options.ClearExistingInferences ? "will" : "will not") + " be cleared.", ontology.Value));
-
-                //Step 0: Cleanup ontology
                 if (options.ClearExistingInferences)
                     ontology.ClearInferences();
 
-                //Step 1: Expand ontology
+                //Expand ontology
                 ontology     = ontology.UnionWith(RDFBASEOntology.Instance);
 
-                //Step 2: Apply class-based rules
-                this.TriggerRule("EquivalentClassTransitivity", ontology, report, options);
-                this.TriggerRule("SubClassTransitivity", ontology, report, options);
-                this.TriggerRule("DisjointWithEntailment", ontology, report, options);
+                #region Triggers
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}': existing inferences " + (options.ClearExistingInferences ? "have been" : "have not been") + " cleared.", ontology.Value));
 
-                //Step 3: Apply property-based rules
-                this.TriggerRule("EquivalentPropertyTransitivity", ontology, report, options);
-                this.TriggerRule("SubPropertyTransitivity", ontology, report, options);
+                //Apply model rules
+                var infCount = 0;
+                infCount    += this.TriggerRule("EquivalentClassTransitivity", ontology, report, options);
+                infCount    += this.TriggerRule("SubClassTransitivity", ontology, report, options);
+                infCount    += this.TriggerRule("DisjointWithEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("EquivalentPropertyTransitivity", ontology, report, options);
+                infCount    += this.TriggerRule("SubPropertyTransitivity", ontology, report, options);
 
-                //Step 4: Apply data-based rules
-                this.TriggerRule("SameAsTransitivity", ontology, report, options);
-                this.TriggerRule("DifferentFromEntailment", ontology, report, options);
-                this.TriggerRule("ClassTypeEntailment", ontology, report, options);
-                this.TriggerRule("DomainEntailment", ontology, report, options);
-                this.TriggerRule("RangeEntailment", ontology, report, options);
-                this.TriggerRule("InverseOfEntailment", ontology, report, options);
-                this.TriggerRule("SymmetricPropertyEntailment", ontology, report, options);
-                this.TriggerRule("TransitivePropertyEntailment", ontology, report, options);
-                this.TriggerRule("PropertyEntailment", ontology, report, options);
-                this.TriggerRule("SameAsEntailment", ontology, report, options);
+                //Apply data rules
+                infCount    += this.TriggerRule("SameAsTransitivity", ontology, report, options);
+                infCount    += this.TriggerRule("DifferentFromEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("ClassTypeEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("DomainEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("RangeEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("InverseOfEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("SymmetricPropertyEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("TransitivePropertyEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("PropertyEntailment", ontology, report, options);
+                infCount    += this.TriggerRule("SameAsEntailment", ontology, report, options);
 
-                //Step 5: Unexpand ontology
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}': found total of {1} new inferences.", ontology.Value, infCount));
+                #endregion
+
+                //Unexpand ontology
                 ontology     = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
                 return report;
@@ -167,12 +169,12 @@ namespace RDFSharp.Semantics {
 
         #region Properties
         /// <summary>
-        /// If true (by default) the reasoner will clear existing inferences from the ontology before starting a new analysis.
+        /// If true (default) the reasoner will clear existing inferences from the ontology before starting a new analysis.
         /// </summary>
         public Boolean ClearExistingInferences { get; set; }
 
         /// <summary>
-        /// If true (by default) the reasoner will automatically merge inferences into the ontology during the analysis.
+        /// If true (default) the reasoner will automatically merge inferences into the ontology during the analysis.
         /// </summary>
         public Boolean AutoMergeInferences { get; set; }
         #endregion
