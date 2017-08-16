@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RDFSharp.Semantics {
 
@@ -87,9 +86,7 @@ namespace RDFSharp.Semantics {
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", ruleName));
 
                 //Launch the reasoning rule
-                Parallel.Invoke(() => {
-                    inferenceCounter = reasonerRule.ExecuteRule(ontology, report, options);
-                });
+                inferenceCounter = reasonerRule.ExecuteRule(ontology, report, options);
                 
                 //Raise termination signal
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, inferenceCounter));

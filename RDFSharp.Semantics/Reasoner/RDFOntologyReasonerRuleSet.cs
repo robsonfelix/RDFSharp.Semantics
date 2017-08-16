@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using RDFSharp.Model;
 
 namespace RDFSharp.Semantics {
@@ -25,7 +24,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyReasonerRuleSet represents a collection of rules available to reasoners.
     /// </summary>
-    public class RDFOntologyReasonerRuleSet {
+    public partial class RDFOntologyReasonerRuleSet {
 
         #region RDFS
         /// <summary>
@@ -139,7 +138,7 @@ namespace RDFSharp.Semantics {
 
                         //Add the inference to the report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "SubClassTransitivity", sem_inf)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -170,7 +169,7 @@ namespace RDFSharp.Semantics {
 
                         //Add the inference into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.PropertyModel, "SubPropertyTransitivity", sem_inf)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -200,7 +199,7 @@ namespace RDFSharp.Semantics {
 
                         //Add the inference into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "ClassTypeEntailment", sem_inf)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -242,7 +241,7 @@ namespace RDFSharp.Semantics {
 
                                 //Add the inference into the reasoning report
                                 if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "PropertyEntailment", sem_inf)))
-                                    Interlocked.Increment(ref inferenceCounter);
+                                    inferenceCounter++;
 
                             }
 
@@ -282,7 +281,7 @@ namespace RDFSharp.Semantics {
 
                             //Add the inference into the reasoning report
                             if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "DomainEntailment", sem_inf)))
-                                Interlocked.Increment(ref inferenceCounter);
+                                inferenceCounter++;
 
                         }
 
@@ -319,7 +318,7 @@ namespace RDFSharp.Semantics {
 
                             //Add the inference into the reasoning report
                             if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "RangeEntailment", sem_inf)))
-                                Interlocked.Increment(ref inferenceCounter);
+                                inferenceCounter++;
 
                         }
 
@@ -477,9 +476,9 @@ namespace RDFSharp.Semantics {
 
                         //Add the inferences into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "EquivalentClassTransitivity", sem_infA)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "EquivalentClassTransitivity", sem_infB)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -512,9 +511,9 @@ namespace RDFSharp.Semantics {
 
                         //Add the inferences into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "DisjointWithEntailment", sem_infA)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "DisjointWithEntailment", sem_infB)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -546,9 +545,9 @@ namespace RDFSharp.Semantics {
 
                         //Add the inferences into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.PropertyModel, "EquivalentPropertyTransitivity", sem_infA)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.PropertyModel, "EquivalentPropertyTransitivity", sem_infB)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -579,9 +578,9 @@ namespace RDFSharp.Semantics {
 
                         //Add the inferences into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "SameAsTransitivity", sem_infA)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "SameAsTransitivity", sem_infB)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -613,9 +612,9 @@ namespace RDFSharp.Semantics {
 
                         //Add the inferences into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "DifferentFromEntailment", sem_infA)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "DifferentFromEntailment", sem_infB)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
                 }
@@ -653,7 +652,7 @@ namespace RDFSharp.Semantics {
 
                             //Add the inferences into the reasoning report
                             if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "InverseOfEntailment", sem_inf)))
-                                Interlocked.Increment(ref inferenceCounter);
+                                inferenceCounter++;
 
                         }
 
@@ -695,7 +694,7 @@ namespace RDFSharp.Semantics {
 
                                 //Add the inferences into the reasoning report
                                 if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "SameAsEntailment", sem_inf)))
-                                    Interlocked.Increment(ref inferenceCounter);
+                                    inferenceCounter++;
 
                             }
                             #endregion
@@ -713,7 +712,7 @@ namespace RDFSharp.Semantics {
 
                                 //Add the inferences into the reasoning report
                                 if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "SameAsEntailment", sem_inf)))
-                                    Interlocked.Increment(ref inferenceCounter);
+                                    inferenceCounter++;
 
                             }
                             #endregion
@@ -751,7 +750,7 @@ namespace RDFSharp.Semantics {
 
                         //Add the inferences into the reasoning report
                         if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "SymmetricPropertyEntailment", sem_inf)))
-                            Interlocked.Increment(ref inferenceCounter);
+                            inferenceCounter++;
 
                     }
 
@@ -791,7 +790,7 @@ namespace RDFSharp.Semantics {
 
                             //Add the inferences into the reasoning report
                             if (report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "TransitivePropertyEntailment", sem_inf)))
-                                Interlocked.Increment(ref inferenceCounter);
+                                inferenceCounter++;
 
                         }
 
