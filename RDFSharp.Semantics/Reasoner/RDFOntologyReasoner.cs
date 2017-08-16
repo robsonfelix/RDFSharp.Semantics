@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RDFSharp.Semantics {
 
@@ -74,68 +75,81 @@ namespace RDFSharp.Semantics {
         #region Reasoning
         /// <summary>
         /// Triggers the execution of the given rule on the given ontology. 
-        /// Returns a boolean indicating if new evidences have been found.
+        /// Returns the count of new evidences found.
         /// </summary>
-        internal Boolean TriggerRule(String ruleName, RDFOntology ontology, RDFOntologyReasonerReport report) {
-            var reasonerRule  = this.SelectRule(ruleName);
-            if (reasonerRule != null) {
+        internal Int32 TriggerRule(String ruleName, RDFOntology ontology, RDFOntologyReasonerReport report, RDFReasonerOptions options) {
+            var inferenceCounter = 0;
+
+            var reasonerRule     = this.SelectRule(ruleName);
+            if (reasonerRule    != null) {
 
                 //Raise launching signal
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", ruleName));
 
                 //Launch the reasoning rule
-                var oldCnt    = report.EvidencesCount;
-                reasonerRule.ExecuteRule(ontology, report);
-                var newCnt    = report.EvidencesCount - oldCnt;
-
+                Parallel.Invoke(() => {
+                    inferenceCounter = reasonerRule.ExecuteRule(ontology, report, options);
+                });
+                
                 //Raise termination signal
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, newCnt));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, inferenceCounter));
 
-                return newCnt > 0;
             }
-            return false;
+
+            return inferenceCounter;
         }
 
         /// <summary>
-        /// Applies the reasoner on the given ontology, producing a reasoning report.
-        /// The ontology is progressively enriched with discovered inferences.
+        /// Applies the reasoner on the given ontology, producing a detailed reasoning report.
         /// </summary>
         public RDFOntologyReasonerReport ApplyToOntology(RDFOntology ontology) {
-            if (ontology   != null) {
-                var rReport = new RDFOntologyReasonerReport(ontology.Value.PatternMemberID);
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}': existing inferences will be cleared and BASE ontology will be temporarily joined.", ontology.Value));
+            return this.ApplyToOntology(ontology, new RDFReasonerOptions());
+        }
 
-                //Step 0: Cleanup ontology from inferences
-                ontology.ClearInferences();
+        /// <summary>
+        /// Applies the reasoner on the given ontology, producing a detailed reasoning report.
+        /// </summary>
+        public RDFOntologyReasonerReport ApplyToOntology(RDFOntology ontology, RDFReasonerOptions options) {
+            if (ontology    != null) {
+                var report   = new RDFOntologyReasonerReport(ontology.Value.PatternMemberID);
+                
+                
+                if (options == null)
+                    options  = new RDFReasonerOptions();
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}': existing inferences " + (options.ClearExistingInferences ? "will" : "will not") + " be cleared.", ontology.Value));
 
-                //Step 1: Expand the ontology with the BASE ontology definitions
-                ontology    = ontology.UnionWith(RDFBASEOntology.Instance);
+                //Step 0: Cleanup ontology
+                if (options.ClearExistingInferences)
+                    ontology.ClearInferences();
+
+                //Step 1: Expand ontology
+                ontology     = ontology.UnionWith(RDFBASEOntology.Instance);
 
                 //Step 2: Apply class-based rules
-                this.TriggerRule("EquivalentClassTransitivity",    ontology, rReport);
-                this.TriggerRule("SubClassTransitivity",           ontology, rReport);
-                this.TriggerRule("DisjointWithEntailment",         ontology, rReport);
+                this.TriggerRule("EquivalentClassTransitivity", ontology, report, options);
+                this.TriggerRule("SubClassTransitivity", ontology, report, options);
+                this.TriggerRule("DisjointWithEntailment", ontology, report, options);
 
                 //Step 3: Apply property-based rules
-                this.TriggerRule("EquivalentPropertyTransitivity", ontology, rReport);
-                this.TriggerRule("SubPropertyTransitivity",        ontology, rReport);
+                this.TriggerRule("EquivalentPropertyTransitivity", ontology, report, options);
+                this.TriggerRule("SubPropertyTransitivity", ontology, report, options);
 
                 //Step 4: Apply data-based rules
-                this.TriggerRule("SameAsTransitivity",             ontology, rReport);
-                this.TriggerRule("DifferentFromEntailment",        ontology, rReport);
-                this.TriggerRule("ClassTypeEntailment",            ontology, rReport);
-                this.TriggerRule("DomainEntailment",               ontology, rReport);
-                this.TriggerRule("RangeEntailment",                ontology, rReport);
-                this.TriggerRule("InverseOfEntailment",            ontology, rReport);
-                this.TriggerRule("SymmetricPropertyEntailment",    ontology, rReport);
-                this.TriggerRule("TransitivePropertyEntailment",   ontology, rReport);
-                this.TriggerRule("PropertyEntailment",             ontology, rReport);
-                this.TriggerRule("SameAsEntailment",               ontology, rReport);
+                this.TriggerRule("SameAsTransitivity", ontology, report, options);
+                this.TriggerRule("DifferentFromEntailment", ontology, report, options);
+                this.TriggerRule("ClassTypeEntailment", ontology, report, options);
+                this.TriggerRule("DomainEntailment", ontology, report, options);
+                this.TriggerRule("RangeEntailment", ontology, report, options);
+                this.TriggerRule("InverseOfEntailment", ontology, report, options);
+                this.TriggerRule("SymmetricPropertyEntailment", ontology, report, options);
+                this.TriggerRule("TransitivePropertyEntailment", ontology, report, options);
+                this.TriggerRule("PropertyEntailment", ontology, report, options);
+                this.TriggerRule("SameAsEntailment", ontology, report, options);
 
-                //Step 5: Unexpand the ontology with the BASE ontology definitions
-                ontology    = ontology.DifferenceWith(RDFBASEOntology.Instance);
+                //Step 5: Unexpand ontology
+                ontology     = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
-                return rReport;
+                return report;
             }
             throw new RDFSemanticsException("Cannot apply RDFOntologyReasoner because given \"ontology\" parameter is null.");
         }
@@ -144,5 +158,33 @@ namespace RDFSharp.Semantics {
         #endregion
 
     }
+
+    #region RDFReasonerOptions
+    /// <summary>
+    /// RDFReasonerOptions represents a configuration given to a reasoner for customizing its behavior
+    /// </summary>
+    public class RDFReasonerOptions {
+
+        #region Properties
+        /// <summary>
+        /// If true (by default) the reasoner will clear existing inferences from the ontology before starting a new analysis.
+        /// </summary>
+        public Boolean ClearExistingInferences { get; set; }
+
+        /// <summary>
+        /// If true (by default) the reasoner will automatically merge inferences into the ontology during the analysis.
+        /// </summary>
+        public Boolean AutoMergeInferences { get; set; }
+        #endregion
+
+        #region Ctors
+        public RDFReasonerOptions() {
+            this.ClearExistingInferences = true;
+            this.AutoMergeInferences = true;
+        }
+        #endregion
+
+    }
+    #endregion
 
 }
