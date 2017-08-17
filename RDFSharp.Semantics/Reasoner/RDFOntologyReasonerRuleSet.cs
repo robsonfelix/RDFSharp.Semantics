@@ -453,7 +453,10 @@ namespace RDFSharp.Semantics {
                                                                  RDFOntologyReasonerReport report) {
                 var equivalentClass  = RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty();
                 foreach(var c       in ontology.Model.ClassModel) {
-                    foreach(var ec  in RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(c, ontology.Model.ClassModel)) {
+
+                    //Enlist the equivalent classes of the current class
+                    var equivclasses = RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(c, ontology.Model.ClassModel);
+                    foreach (var ec in equivclasses) {
 
                         //Create the inference as a taxonomy entry
                         var sem_infA = new RDFOntologyTaxonomyEntry(c,  equivalentClass, ec).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
@@ -466,6 +469,7 @@ namespace RDFSharp.Semantics {
                             report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "EquivalentClassTransitivity", sem_infB));
 
                     }
+
                 }
             }
 
@@ -477,13 +481,16 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void DisjointWithEntailmentExec(RDFOntology ontology,
                                                             RDFOntologyReasonerReport report) {
-                var disjointWith     = RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty();
-                foreach(var c       in ontology.Model.ClassModel) {
-                    foreach(var dwc in RDFOntologyReasonerHelper.EnlistDisjointClassesWith(c, ontology.Model.ClassModel)) {
+                var disjointWith      = RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty();
+                foreach (var c       in ontology.Model.ClassModel) {
+
+                    //Enlist the disjoint classes of the current class
+                    var disjclasses   = RDFOntologyReasonerHelper.EnlistDisjointClassesWith(c, ontology.Model.ClassModel);
+                    foreach (var dwc in disjclasses) {
 
                         //Create the inference as a taxonomy entry
-                        var sem_infA = new RDFOntologyTaxonomyEntry(c,   disjointWith, dwc).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
-                        var sem_infB = new RDFOntologyTaxonomyEntry(dwc, disjointWith,   c).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
+                        var sem_infA  = new RDFOntologyTaxonomyEntry(c,   disjointWith, dwc).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
+                        var sem_infB  = new RDFOntologyTaxonomyEntry(dwc, disjointWith,   c).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
 
                         //Add the inference to the ontology and to the report
                         if (ontology.Model.ClassModel.Relations.DisjointWith.AddEntry(sem_infA))
@@ -492,6 +499,7 @@ namespace RDFSharp.Semantics {
                             report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "DisjointWithEntailment", sem_infB));
 
                     }
+
                 }
             }
 
