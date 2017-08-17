@@ -99,7 +99,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Applies the reasoner on the given ontology, producing a reasoning report.
         /// </summary>
-        public RDFOntologyReasonerReport ApplyToOntology(RDFOntology ontology) {
+        public RDFOntologyReasonerReport ApplyToOntology(ref RDFOntology ontology) {
             if (ontology   != null) {
                 var report  = new RDFOntologyReasonerReport();
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}' ...", ontology.Value));
