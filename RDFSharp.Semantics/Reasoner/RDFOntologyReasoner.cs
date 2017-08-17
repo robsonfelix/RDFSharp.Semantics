@@ -91,7 +91,7 @@ namespace RDFSharp.Semantics {
                 //Raise termination signal
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, newCnt-oldCnt));
 
-                return newCnt > 0;
+                return (newCnt-oldCnt > 0);
             }
             return false;
         }
