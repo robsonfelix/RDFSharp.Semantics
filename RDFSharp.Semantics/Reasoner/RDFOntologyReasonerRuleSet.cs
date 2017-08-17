@@ -126,7 +126,10 @@ namespace RDFSharp.Semantics {
                                                           RDFOntologyReasonerReport report) {
                 var subClassOf       = RDFVocabulary.RDFS.SUB_CLASS_OF.ToRDFOntologyObjectProperty();
                 foreach(var c       in ontology.Model.ClassModel) {
-                    foreach(var sc  in RDFOntologyReasonerHelper.EnlistSuperClassesOf(c, ontology.Model.ClassModel)) {
+
+                    //Enlist the superclasses of the current class
+                    var superclasses = RDFOntologyReasonerHelper.EnlistSuperClassesOf(c, ontology.Model.ClassModel);
+                    foreach (var sc in superclasses) {
 
                         //Create the inference as a taxonomy entry
                         var sem_inf  = new RDFOntologyTaxonomyEntry(c, subClassOf, sc).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
@@ -136,6 +139,7 @@ namespace RDFSharp.Semantics {
                             report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.ClassModel, "SubClassTransitivity", sem_inf));
 
                     }
+
                 }
             }
 
@@ -148,9 +152,15 @@ namespace RDFSharp.Semantics {
             internal static void SubPropertyTransitivityExec(RDFOntology ontology,
                                                              RDFOntologyReasonerReport report) {
                 var subPropertyOf    = RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty();
-                foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
-                                                                                       !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
-                    foreach(var sp  in RDFOntologyReasonerHelper.EnlistSuperPropertiesOf(p, ontology.Model.PropertyModel)) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and annotation properties)
+                var availableprops   = ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                     !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+                foreach (var p      in availableprops) {
+
+                    //Enlist the superproperties of the current property
+                    var superprops   = RDFOntologyReasonerHelper.EnlistSuperPropertiesOf(p, ontology.Model.PropertyModel);
+                    foreach (var sp in superprops) {
 
                         //Create the inference as a taxonomy entry
                         var sem_inf  = new RDFOntologyTaxonomyEntry(p, subPropertyOf, sp).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
@@ -161,6 +171,7 @@ namespace RDFSharp.Semantics {
 
                     }
                 }
+
             }
 
             /// <summary>
@@ -173,13 +184,13 @@ namespace RDFSharp.Semantics {
                 var type             = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
 
                 //Calculate the set of available classes on which to perform the reasoning (exclude BASE classes and literal-compatible classes)
-                var availClasses     = ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
+                var availableclasses = ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
                                                                                 && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel)).ToList();
-                foreach (var c      in availClasses) {
+                foreach (var c      in availableclasses) {
 
                     //Enlist the members of the current class
-                    var compClasses  = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology);
-                    foreach (var f   in compClasses) {
+                    var clsMembers   = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology);
+                    foreach (var f   in clsMembers) {
 
                         //Create the inference as a taxonomy entry
                         var sem_inf  = new RDFOntologyTaxonomyEntry(f, type, c).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
