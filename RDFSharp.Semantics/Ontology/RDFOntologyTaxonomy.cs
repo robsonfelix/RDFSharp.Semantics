@@ -91,15 +91,18 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Adds the given taxonomy entry to the taxonomy
         /// </summary>
-        internal RDFOntologyTaxonomy AddEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
-            if (taxonomyEntry != null) {
-                lock (this.SyncLock) {
-                    if (!this.ContainsEntry(taxonomyEntry)) {
-                         this.Entries.Add(taxonomyEntry.TaxonomyEntryID, taxonomyEntry);
-                    }
-                }
+        internal Boolean AddEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
+            if (taxonomyEntry == null)
+                return false;
+
+            lock(this.SyncLock) {
+                 if (!this.ContainsEntry(taxonomyEntry)) {
+                      this.Entries.Add(taxonomyEntry.TaxonomyEntryID, taxonomyEntry);
+                      return true;
+                 }
+                 else
+                      return false;
             }
-            return this;
         }
         #endregion
 
