@@ -51,11 +51,6 @@ namespace RDFSharp.Semantics {
         /// Dictionary of ontology entries composing the taxonomy
         /// </summary>
         internal Dictionary<Int64, RDFOntologyTaxonomyEntry> Entries { get; set; }
-
-        /// <summary>
-        /// Synchronization lock
-        /// </summary>
-        internal Object SyncLock { get; set; }
         #endregion
 
         #region Ctors
@@ -65,7 +60,6 @@ namespace RDFSharp.Semantics {
         internal RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory category) {
             this.Category = category;
             this.Entries  = new Dictionary<Int64, RDFOntologyTaxonomyEntry>();
-            this.SyncLock = new Object();
         }
         #endregion
 
@@ -92,17 +86,13 @@ namespace RDFSharp.Semantics {
         /// Adds the given taxonomy entry to the taxonomy
         /// </summary>
         internal Boolean AddEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
-            if (taxonomyEntry == null)
-                return false;
-
-            lock(this.SyncLock) {
-                 if (!this.ContainsEntry(taxonomyEntry)) {
-                      this.Entries.Add(taxonomyEntry.TaxonomyEntryID, taxonomyEntry);
-                      return true;
-                 }
-                 else
-                      return false;
+            if (taxonomyEntry != null) {
+                if (!this.ContainsEntry(taxonomyEntry)) {
+                     this.Entries.Add(taxonomyEntry.TaxonomyEntryID, taxonomyEntry);
+                     return true;
+                }
             }
+            return false;
         }
         #endregion
 
@@ -112,10 +102,8 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal RDFOntologyTaxonomy RemoveEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
             if (taxonomyEntry != null) {
-                lock (this.SyncLock) {
-                    if (this.ContainsEntry(taxonomyEntry)) {
-                        this.Entries.Remove(taxonomyEntry.TaxonomyEntryID);
-                    }
+                if (this.ContainsEntry(taxonomyEntry)) {
+                    this.Entries.Remove(taxonomyEntry.TaxonomyEntryID);
                 }
             }
             return this;
