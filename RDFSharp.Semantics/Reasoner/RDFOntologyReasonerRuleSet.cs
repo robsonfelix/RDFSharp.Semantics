@@ -704,8 +704,11 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void SymmetricPropertyEntailmentExec(RDFOntology ontology,
                                                                  RDFOntologyReasonerReport report) {
-                foreach(var p          in ontology.Model.PropertyModel.Where(prop => prop.IsSymmetricProperty() &&
-                                                                                         !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and not-symmetric properties)
+                var availableprops       = ontology.Model.PropertyModel.Where(prop => prop.IsSymmetricProperty() &&
+                                                                                        !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+                foreach (var p          in availableprops) {
 
                     //Filter the assertions using the current property (F1 P F2)
                     var pAsns           = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p);
@@ -728,6 +731,7 @@ namespace RDFSharp.Semantics {
                     }
 
                 }
+
             }
 
             /// <summary>
@@ -737,8 +741,11 @@ namespace RDFSharp.Semantics {
             internal static void TransitivePropertyEntailmentExec(RDFOntology ontology,
                                                                   RDFOntologyReasonerReport report) {
                 var transPropCache      = new Dictionary<Int64, RDFOntologyData>();
-                foreach(var p          in ontology.Model.PropertyModel.Where(prop => prop.IsTransitiveProperty() &&
-                                                                                         !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and not-transitive properties)
+                var availableprops      = ontology.Model.PropertyModel.Where(prop => prop.IsTransitiveProperty() &&
+                                                                                        !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+                foreach (var p         in availableprops) {
 
                     //Filter the assertions using the current property (F1 P F2)
                     var pAsns           = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p);
