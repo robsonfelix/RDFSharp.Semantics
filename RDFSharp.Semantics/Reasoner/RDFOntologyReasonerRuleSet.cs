@@ -598,23 +598,27 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void InverseOfEntailmentExec(RDFOntology ontology,
                                                          RDFOntologyReasonerReport report) {
-                foreach(var p1             in ontology.Model.PropertyModel.Where(prop => prop.IsObjectProperty() &&
-                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and annotation/datatype properties)
+                var availableprops           = ontology.Model.PropertyModel.Where(prop => prop.IsObjectProperty() &&
+                                                                                                !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+                foreach (var p1             in availableprops) {
 
                     //Filter the assertions using the current property (F1 P1 F2)
-                    var p1Asns              = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p1);
+                    var p1Asns               = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p1);
 
                     //Enlist the inverse properties of the current property
-                    foreach(var p2         in RDFOntologyReasonerHelper.EnlistInversePropertiesOf((RDFOntologyObjectProperty)p1, ontology.Model.PropertyModel)) {
+                    var inverseprops         = RDFOntologyReasonerHelper.EnlistInversePropertiesOf((RDFOntologyObjectProperty)p1, ontology.Model.PropertyModel);
+                    foreach (var p2         in inverseprops) {
 
                         //Iterate the compatible assertions
-                        foreach(var p1Asn  in p1Asns) {
+                        foreach(var p1Asn   in p1Asns) {
 
                             //Taxonomy-check for securing inference consistency
                             if (p2.IsObjectProperty() && p1Asn.TaxonomyObject.IsFact()) {
 
                                 //Create the inference as a taxonomy entry
-                                var sem_inf = new RDFOntologyTaxonomyEntry(p1Asn.TaxonomyObject, p2, p1Asn.TaxonomySubject).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
+                                var sem_inf  = new RDFOntologyTaxonomyEntry(p1Asn.TaxonomyObject, p2, p1Asn.TaxonomySubject).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
 
                                 //Add the inference to the ontology and to the report
                                 if (ontology.Data.Relations.Assertions.AddEntry(sem_inf))
@@ -626,6 +630,7 @@ namespace RDFSharp.Semantics {
 
                     }
                 }
+
             }
 
             /// <summary>
@@ -636,6 +641,8 @@ namespace RDFSharp.Semantics {
             internal static void SameAsEntailmentExec(RDFOntology ontology,
                                                       RDFOntologyReasonerReport report) {
                 foreach(var f1                 in ontology.Data) {
+
+                    //Enlist the same facts of the current fact
                     var sameFacts               = RDFOntologyReasonerHelper.EnlistSameFactsAs(f1, ontology.Data);
                     if (sameFacts.FactsCount    > 0) {
 
@@ -687,6 +694,7 @@ namespace RDFSharp.Semantics {
                         }
 
                     }
+
                 }
             }
 
