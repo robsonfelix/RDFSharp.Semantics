@@ -102,7 +102,7 @@ namespace RDFSharp.Semantics {
         public RDFOntologyReasonerReport ApplyToOntology(ref RDFOntology ontology) {
             if (ontology   != null) {
                 var report  = new RDFOntologyReasonerReport();
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}' ...", ontology.Value));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}'", ontology.Value));
 
                 //Expand ontology
                 ontology    = ontology.UnionWith(RDFBASEOntology.Instance);
@@ -118,9 +118,9 @@ namespace RDFSharp.Semantics {
                 this.TriggerRule("DifferentFromEntailment",        ontology, report);
 
                 //Apply second rule-block
-                this.TriggerRule("ClassTypeEntailment",            ontology, report);
                 this.TriggerRule("DomainEntailment",               ontology, report);
                 this.TriggerRule("RangeEntailment",                ontology, report);
+                this.TriggerRule("ClassTypeEntailment",            ontology, report);
                 this.TriggerRule("InverseOfEntailment",            ontology, report);
                 this.TriggerRule("SymmetricPropertyEntailment",    ontology, report);
                 this.TriggerRule("TransitivePropertyEntailment",   ontology, report);
@@ -131,7 +131,7 @@ namespace RDFSharp.Semantics {
                 //Unexpand ontology
                 ontology    = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}' ...", ontology.Value));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}'", ontology.Value));
                 return report;
             }
             throw new RDFSemanticsException("Cannot apply RDFOntologyReasoner because given \"ontology\" parameter is null.");
