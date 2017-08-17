@@ -174,7 +174,7 @@ namespace RDFSharp.Semantics {
 
                 //Calculate the set of available classes on which to perform the reasoning (exclude BASE classes and literal-compatible classes)
                 var availClasses     = ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
-                                                                                && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel));
+                                                                                && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel)).ToList();
                 foreach (var c      in availClasses) {
 
                     //Enlist the members of the current class
