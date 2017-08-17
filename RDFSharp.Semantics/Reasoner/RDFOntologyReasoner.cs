@@ -86,10 +86,10 @@ namespace RDFSharp.Semantics {
                 //Launch the reasoning rule
                 var oldCnt    = report.EvidencesCount;
                 reasonerRule.ExecuteRule(ontology, report);
-                var newCnt    = report.EvidencesCount - oldCnt;
+                var newCnt    = report.EvidencesCount;
 
                 //Raise termination signal
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, newCnt));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, newCnt-oldCnt));
 
                 return newCnt > 0;
             }
