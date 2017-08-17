@@ -31,7 +31,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking for disjointness of vocabulary of classes, properties and facts
         /// </summary>
         internal static void Vocabulary_Disjointness(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'Vocabulary_Disjointness'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'Vocabulary_Disjointness'");
 
             #region ClassModel
             foreach (var c in ontology.Model.ClassModel) {
@@ -76,7 +76,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking for declaration of classes, properties and facts
         /// </summary>
         internal static void Vocabulary_Declaration(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'Vocabulary_Declaration'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'Vocabulary_Declaration'");
 
             #region Classes
 
@@ -471,7 +471,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking for consistency of rdfs:domain and rdfs:range axioms
         /// </summary>
         internal static void Domain_Range(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'Domain_Range'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'Domain_Range'");
 
             #region Domain_Range
             var classCache    = new Dictionary<Int64, RDFOntologyData>();
@@ -574,7 +574,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking for consistency of owl:inverseOf axioms
         /// </summary>
         internal static void InverseOf(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'InverseOf'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'InverseOf'");
 
             #region InverseOf
             foreach (var invOf   in ontology.Model.PropertyModel.Relations.InverseOf) {
@@ -623,7 +623,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking for consistency of owl:SymmetricProperty axioms
         /// </summary>
         internal static void SymmetricProperty(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'SymmetricProperty'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'SymmetricProperty'");
 
             #region SymmetricProperty
             foreach(var symProp  in ontology.Model.PropertyModel.Where(prop => prop.IsSymmetricProperty() && (prop.Domain != null || prop.Range != null))) {
@@ -668,7 +668,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking for consistency of rdf:type axioms
         /// </summary>
         internal static void ClassType(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'ClassType'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'ClassType'");
 
             #region Facts
             var disjWithCache       = new Dictionary<Int64, RDFOntologyClassModel>();
@@ -726,7 +726,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking consistency of global cardinality constraints
         /// </summary>
         internal static void GlobalCardinalityConstraint(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'GlobalCardinalityConstraint'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'GlobalCardinalityConstraint'");
 
             #region GlobalCardinalityConstraint
             foreach (var prop    in ontology.Model.PropertyModel.Where(p => p.Functional || (p.IsObjectProperty() && ((RDFOntologyObjectProperty)p).InverseFunctional))) {
@@ -810,7 +810,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking consistency of local cardinality constraints
         /// </summary>
         internal static void LocalCardinalityConstraint(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'LocalCardinalityConstraint'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'LocalCardinalityConstraint'");
 
             #region LocalCardinalityConstraint
             //OWL-DL requires that for a transitive property no local cardinality constraints should
@@ -863,7 +863,7 @@ namespace RDFSharp.Semantics {
         /// Validation rule checking for usage of deprecated classes and properties
         /// </summary>
         internal static void Deprecation(RDFOntology ontology, RDFOntologyValidatorReport report) {
-            RDFSemanticsEvents.RaiseSemanticsInfo("Launched execution of validation rule 'Deprecation'");
+            RDFSemanticsEvents.RaiseSemanticsInfo("Launching execution of validation rule 'Deprecation'");
 
             #region Class
             foreach (var deprCls   in ontology.Data.Relations.ClassType.Where(c => c.TaxonomyObject.IsDeprecatedClass())) {
