@@ -190,7 +190,7 @@ namespace RDFSharp.Semantics {
 
                     //Enlist the members of the current class
                     var clsMembers   = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology);
-                    foreach (var f   in clsMembers) {
+                    foreach (var f  in clsMembers) {
 
                         //Create the inference as a taxonomy entry
                         var sem_inf  = new RDFOntologyTaxonomyEntry(f, type, c).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
@@ -211,8 +211,12 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void PropertyEntailmentExec(RDFOntology ontology,
                                                         RDFOntologyReasonerReport report) {
-                foreach(var p1             in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
-                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and annotation properties)
+                var availableprops          = ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+
+                foreach (var p1            in availableprops) {
 
                     //Filter the assertions using the current property (F1 P1 F2)
                     var p1Asns              = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p1);
@@ -252,8 +256,11 @@ namespace RDFSharp.Semantics {
             internal static void DomainEntailmentExec(RDFOntology ontology,
                                                       RDFOntologyReasonerReport report) {
                 var type                  = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
-                foreach(var p            in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
-                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and annotation properties)
+                var availableprops        = ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+                foreach (var p           in availableprops) {
                     if (p.Domain         != null) {
 
                         //Filter the assertions using the current property (F1 P1 F2)
@@ -282,8 +289,11 @@ namespace RDFSharp.Semantics {
             internal static void RangeEntailmentExec(RDFOntology ontology,
                                                      RDFOntologyReasonerReport report) {
                 var type                    = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
-                foreach(var p              in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
-                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and annotation properties)
+                var availableprops          = ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                            !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+                foreach (var p             in availableprops) {
                     if (p.Range            != null) {
 
                         //Filter the assertions using the current property (F1 P1 F2)
