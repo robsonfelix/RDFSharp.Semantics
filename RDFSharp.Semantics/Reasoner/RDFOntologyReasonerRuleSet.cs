@@ -543,7 +543,10 @@ namespace RDFSharp.Semantics {
                                                         RDFOntologyReasonerReport report) {
                 var sameAs           = RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty();
                 foreach(var f       in ontology.Data) {
-                    foreach(var sf  in RDFOntologyReasonerHelper.EnlistSameFactsAs(f, ontology.Data)) {
+
+                    //Enlist the same facts of the current fact
+                    var samefacts    = RDFOntologyReasonerHelper.EnlistSameFactsAs(f, ontology.Data);
+                    foreach (var sf in samefacts) {
 
                         //Create the inference as a taxonomy entry
                         var sem_infA = new RDFOntologyTaxonomyEntry(f,  sameAs, sf).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
@@ -556,6 +559,7 @@ namespace RDFSharp.Semantics {
                             report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "SameAsTransitivity", sem_infB));
 
                     }
+
                 }
             }
 
@@ -568,7 +572,10 @@ namespace RDFSharp.Semantics {
                                                              RDFOntologyReasonerReport report) {
                 var differentFrom    = RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty();
                 foreach(var f       in ontology.Data) {
-                    foreach(var df  in RDFOntologyReasonerHelper.EnlistDifferentFactsFrom(f, ontology.Data)) {
+
+                    //Enlist the different facts of the current fact
+                    var differfacts  = RDFOntologyReasonerHelper.EnlistDifferentFactsFrom(f, ontology.Data);
+                    foreach (var df in differfacts) {
 
                         //Create the inference as a taxonomy entry
                         var sem_infA = new RDFOntologyTaxonomyEntry(f,  differentFrom, df).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
@@ -581,6 +588,7 @@ namespace RDFSharp.Semantics {
                             report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "DifferentFromEntailment", sem_infB));
 
                     }
+
                 }
             }
 
