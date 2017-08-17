@@ -83,7 +83,8 @@ namespace RDFSharp.Semantics {
 
         #region Add
         /// <summary>
-        /// Adds the given taxonomy entry to the taxonomy
+        /// Adds the given taxonomy entry to the taxonomy.
+        /// Returns true if the insertion has been made.
         /// </summary>
         internal Boolean AddEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
             if (taxonomyEntry != null) {
@@ -98,15 +99,17 @@ namespace RDFSharp.Semantics {
 
         #region Remove
         /// <summary>
-        /// Removes the given taxonomy entry from the taxonomy
+        /// Removes the given taxonomy entry from the taxonomy.
+        /// Returns true if the deletion has been made.
         /// </summary>
-        internal RDFOntologyTaxonomy RemoveEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
+        internal Boolean RemoveEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
             if (taxonomyEntry != null) {
                 if (this.ContainsEntry(taxonomyEntry)) {
                     this.Entries.Remove(taxonomyEntry.TaxonomyEntryID);
+                    return true;
                 }
             }
-            return this;
+            return false;
         }
         #endregion
 
