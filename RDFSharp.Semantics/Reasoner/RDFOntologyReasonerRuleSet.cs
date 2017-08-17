@@ -170,19 +170,26 @@ namespace RDFSharp.Semantics {
             /// </summary>
             internal static void ClassTypeEntailmentExec(RDFOntology ontology,
                                                          RDFOntologyReasonerReport report) {
-                var type            = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
-                foreach(var c      in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
-                                                                                && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel))) {
-                    foreach(var f  in RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology)) {
+                var type             = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
+
+                //Calculate the set of available classes on which to perform the reasoning (exclude BASE classes and literal-compatible classes)
+                var availClasses     = ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
+                                                                                && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel));
+                foreach (var c      in availClasses) {
+
+                    //Enlist the members of the current class
+                    var compClasses  = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology);
+                    foreach (var f   in compClasses) {
 
                         //Create the inference as a taxonomy entry
-                        var sem_inf = new RDFOntologyTaxonomyEntry(f, type, c).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
+                        var sem_inf  = new RDFOntologyTaxonomyEntry(f, type, c).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
 
                         //Add the inference to the ontology and to the report
                         if (ontology.Data.Relations.ClassType.AddEntry(sem_inf))
                             report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.Data, "ClassTypeEntailment", sem_inf));
 
                     }
+
                 }
             }
 
