@@ -510,9 +510,15 @@ namespace RDFSharp.Semantics {
             internal static void EquivalentPropertyTransitivityExec(RDFOntology ontology,
                                                                     RDFOntologyReasonerReport report) {
                 var equivProperty    = RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty();
-                foreach(var p       in ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
-                                                                                       !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
-                    foreach(var ep  in RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(p, ontology.Model.PropertyModel)) {
+
+                //Calculate the set of available properties on which to perform the reasoning (exclude BASE properties and annotation properties)
+                var availableprops   = ontology.Model.PropertyModel.Where(prop => !prop.IsAnnotationProperty() &&
+                                                                                        !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID)).ToList();
+                foreach (var p      in availableprops) {
+
+                    //Enlist the equivalent properties of the current property
+                    var equivprops   = RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(p, ontology.Model.PropertyModel);
+                    foreach (var ep in equivprops) {
 
                         //Create the inference as a taxonomy entry
                         var sem_infA = new RDFOntologyTaxonomyEntry(p,  equivProperty, ep).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner);
@@ -525,6 +531,7 @@ namespace RDFSharp.Semantics {
                             report.AddEvidence(new RDFOntologyReasonerEvidence(RDFSemanticsEnums.RDFOntologyReasonerEvidenceCategory.PropertyModel, "EquivalentPropertyTransitivity", sem_infB));
 
                     }
+
                 }
             }
 
