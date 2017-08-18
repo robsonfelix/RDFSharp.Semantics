@@ -104,19 +104,18 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal RDFOntologyValidatorReport AnalyzeOntology(RDFOntology ontology) {
             var report = new RDFOntologyValidatorReport(ontology.Value.PatternMemberID);
-            RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}': BASE ontology will be temporarily joined.", ontology.Value));
+            RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}'", ontology.Value));
 
-            //Expand the ontology with the BASE ontology definitions
+            //Expand ontology
             ontology   = ontology.UnionWith(RDFBASEOntology.Instance);
 
-            //Execute the validation rules
-            Parallel.ForEach(this.Rules, rule => {
-                rule.ExecuteRule(ontology, report);
-            });
+            //Execute rules
+            Parallel.ForEach(this.Rules, rule => { rule.ExecuteRule(ontology, report); });
 
-            //Unexpand the ontology with the BASE ontology definitions
+            //Unexpand ontology
             ontology   = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
+            RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator has been applied on Ontology '{0}'", ontology.Value));
             return report;
         }
         #endregion
