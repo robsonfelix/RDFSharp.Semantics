@@ -44,11 +44,6 @@ namespace RDFSharp.Semantics {
         /// List of evidences
         /// </summary>
         internal List<RDFOntologyValidatorEvidence> Evidences { get; set; }
-
-        /// <summary>
-        /// Synchronization lock
-        /// </summary>
-        internal Object SyncLock { get; set; }
         #endregion
 
         #region Ctors
@@ -56,7 +51,6 @@ namespace RDFSharp.Semantics {
         /// Default-ctor to build an empty report
         /// </summary>
         internal RDFOntologyValidatorReport() {
-			this.SyncLock  = new Object();
             this.Evidences = new List<RDFOntologyValidatorEvidence>();            
         }
         #endregion
@@ -130,9 +124,7 @@ namespace RDFSharp.Semantics {
         /// Adds the given evidence to the validation report
         /// </summary>
         internal void AddEvidence(RDFOntologyValidatorEvidence evidence) {
-            lock(this.SyncLock) {
-                 this.Evidences.Add(evidence);
-            }
+            this.Evidences.Add(evidence);
         }
         #endregion
 
