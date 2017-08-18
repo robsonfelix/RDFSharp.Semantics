@@ -192,6 +192,7 @@ namespace RDFSharp.Semantics
         internal static RDFOntologyPropertyModel EnlistSubPropertiesOf(RDFOntologyProperty ontProperty, 
                                                                        RDFOntologyPropertyModel propertyModel) {
             var result            = new RDFOntologyPropertyModel();
+
             // Transitivity of "rdfs:subPropertyOf" taxonomy: ((A SUBPROPERTYOF B)  &&  (B SUBPROPERTYOF C))  =>  (A SUBPROPERTYOF C)
             foreach(var sp       in propertyModel.Relations.SubPropertyOf.SelectEntriesByObject(ontProperty)) {
                 result.AddProperty((RDFOntologyProperty)sp.TaxonomySubject);
@@ -226,6 +227,7 @@ namespace RDFSharp.Semantics
         internal static RDFOntologyPropertyModel EnlistSuperPropertiesOf(RDFOntologyProperty ontProperty, 
                                                                          RDFOntologyPropertyModel propertyModel) {
             var result            = new RDFOntologyPropertyModel();
+
             // Transitivity of "rdfs:subPropertyOf" taxonomy: ((A SUPERPROPERTYOF B)  &&  (B SUPERPROPERTYOF C))  =>  (A SUPERPROPERTYOF C)
             foreach(var sp       in propertyModel.Relations.SubPropertyOf.SelectEntriesBySubject(ontProperty)) {
                 result.AddProperty((RDFOntologyProperty)sp.TaxonomyObject);
@@ -261,6 +263,7 @@ namespace RDFSharp.Semantics
                                                                                    RDFOntologyPropertyModel propertyModel,
                                                                                    Dictionary<Int64, RDFOntologyProperty> visitContext) {
             var result            = new RDFOntologyPropertyModel();
+
             #region visitContext
             if (visitContext     == null) {
                 visitContext      = new Dictionary<Int64, RDFOntologyProperty>() { { ontProperty.PatternMemberID, ontProperty } };
@@ -641,7 +644,7 @@ namespace RDFSharp.Semantics
                                                                  RDFOntology ontology) {
             var result             = new RDFOntologyData();
 
-            //Intersection
+            #region Intersection
             if (ontCompClass      is RDFOntologyIntersectionClass) {
 
                 //Filter "intersectionOf" relations made with the given intersection class
@@ -658,8 +661,9 @@ namespace RDFSharp.Semantics
                 }
 
             }
+            #endregion
 
-            //Union
+            #region Union
             else if (ontCompClass is RDFOntologyUnionClass) {
 
                 //Filter "unionOf" relations made with the given union class
@@ -669,11 +673,13 @@ namespace RDFSharp.Semantics
                 }
 
             }
+            #endregion
 
-            //Complement
+            #region Complement
             else if (ontCompClass is RDFOntologyComplementClass) {
                 result             = ontology.Data.DifferenceWith(RDFOntologyReasonerHelper.EnlistMembersOf(((RDFOntologyComplementClass)ontCompClass).ComplementOf, ontology, false));
             }
+            #endregion
 
             return result;
         }
