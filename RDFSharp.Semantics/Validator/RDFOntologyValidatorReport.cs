@@ -49,21 +49,15 @@ namespace RDFSharp.Semantics {
         /// Synchronization lock
         /// </summary>
         internal Object SyncLock { get; set; }
-		
-        /// <summary>
-        /// Identifier of the validaton report
-        /// </summary>
-        internal Int64 ValidationReportID { get; set; }
         #endregion
 
         #region Ctors
         /// <summary>
         /// Default-ctor to build an empty report
         /// </summary>
-        internal RDFOntologyValidatorReport(Int64 reportID) {
-            this.ValidationReportID = reportID;
-			this.SyncLock           = new Object();
-            this.Evidences          = new List<RDFOntologyValidatorEvidence>();            
+        internal RDFOntologyValidatorReport() {
+			this.SyncLock  = new Object();
+            this.Evidences = new List<RDFOntologyValidatorEvidence>();            
         }
         #endregion
 

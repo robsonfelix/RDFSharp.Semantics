@@ -103,7 +103,7 @@ namespace RDFSharp.Semantics {
         /// Analyzes the given ontology and produces a detailed report of found evidences
         /// </summary>
         internal RDFOntologyValidatorReport AnalyzeOntology(RDFOntology ontology) {
-            var report = new RDFOntologyValidatorReport(ontology.Value.PatternMemberID);
+            var report = new RDFOntologyValidatorReport();
             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}'", ontology.Value));
 
             //Expand ontology
