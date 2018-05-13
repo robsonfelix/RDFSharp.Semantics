@@ -25,7 +25,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyTaxonomy represents a register for storing a generic taxonomy relationship.
     /// </summary>
-    public class RDFOntologyTaxonomy: IEnumerable<RDFOntologyTaxonomyEntry> {
+    public sealed class RDFOntologyTaxonomy: IEnumerable<RDFOntologyTaxonomyEntry> {
 
         #region Properties
         /// <summary>

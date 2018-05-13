@@ -26,7 +26,7 @@ namespace RDFSharp.Semantics
     /// <summary>
     /// RDFOntologyData represents the data component (A-BOX) of an ontology.
     /// </summary>
-    public class RDFOntologyData: IEnumerable<RDFOntologyFact> {
+    public sealed class RDFOntologyData: IEnumerable<RDFOntologyFact> {
 
         #region Properties
         /// <summary>

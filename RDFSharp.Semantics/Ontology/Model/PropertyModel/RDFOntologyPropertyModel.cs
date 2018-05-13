@@ -25,7 +25,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyPropertyModel represents the property-oriented model component (T-BOX) of an ontology.
     /// </summary>
-    public class RDFOntologyPropertyModel: IEnumerable<RDFOntologyProperty> {
+    public sealed class RDFOntologyPropertyModel: IEnumerable<RDFOntologyProperty> {
 
         #region Properties
         /// <summary>

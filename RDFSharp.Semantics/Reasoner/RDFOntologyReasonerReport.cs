@@ -24,7 +24,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyReasonerReport represents a detailed report of an ontology reasoner's activity.
     /// </summary>
-    public class RDFOntologyReasonerReport: IEnumerable<RDFOntologyReasonerEvidence> {
+    public sealed class RDFOntologyReasonerReport: IEnumerable<RDFOntologyReasonerEvidence> {
 
         #region Properties
         /// <summary>

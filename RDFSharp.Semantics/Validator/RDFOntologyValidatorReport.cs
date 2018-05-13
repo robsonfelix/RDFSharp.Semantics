@@ -23,7 +23,7 @@ namespace RDFSharp.Semantics {
     /// <summary>
     /// RDFOntologyValidatorReport represents a detailed report of an ontology analysis.
     /// </summary>
-    public class RDFOntologyValidatorReport: IEnumerable<RDFOntologyValidatorEvidence> {
+    public sealed class RDFOntologyValidatorReport: IEnumerable<RDFOntologyValidatorEvidence> {
 
         #region Properties
         /// <summary>
