@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
   <!-- RDFSharp.Semantics project properties -->
   <PropertyGroup>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -10,6 +11,7 @@
     <RootNamespace>RDFSharp.Semantics</RootNamespace>
     <AssemblyName>RDFSharp.Semantics</AssemblyName>
   </PropertyGroup>
+
   <!-- RDFSharp.Semantics build configurations -->
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -34,15 +36,17 @@
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Release\RDFSharp.Semantics.xml</DocumentationFile>
   </PropertyGroup>
+
   <!-- Microsoft .NET references -->
   <ItemGroup>
-    <Reference Include="RDFSharp, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RDFSharp.1.0.1\lib\net40\RDFSharp.dll</HintPath>
+    <Reference Include="RDFSharp, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RDFSharp.1.0.2\lib\net40\RDFSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
+
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,8 +94,11 @@
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
+
+  <!-- NuGet references -->
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
