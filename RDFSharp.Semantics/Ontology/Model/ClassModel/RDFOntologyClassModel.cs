@@ -116,7 +116,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Annotations describing classes of the ontology class model
         /// </summary>
-        public RDFOntologyAnnotationsMetadata Annotations { get; internal set; }
+        public RDFOntologyAnnotations Annotations { get; internal set; }
 
         /// <summary>
         /// Relations describing classes of the ontology class model
@@ -135,7 +135,7 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyClassModel() {
             this.Classes     = new Dictionary<Int64, RDFOntologyClass>();
-            this.Annotations = new RDFOntologyAnnotationsMetadata();
+            this.Annotations = new RDFOntologyAnnotations();
             this.Relations   = new RDFOntologyClassModelMetadata();
         }
         #endregion
@@ -1067,60 +1067,5 @@ namespace RDFSharp.Semantics {
         #endregion
 
     }
-
-    #region Metadata
-    /// <summary>
-    /// RDFOntologyClassModelMetadata represents a collector for relations describing ontology classes.
-    /// </summary>
-    public class RDFOntologyClassModelMetadata {
-
-        #region Properties
-        /// <summary>
-        /// "rdfs:subClassOf" relations
-        /// </summary>
-        public RDFOntologyTaxonomy SubClassOf { get; internal set; }
-
-        /// <summary>
-        /// "owl:equivalentClass" relations
-        /// </summary>
-        public RDFOntologyTaxonomy EquivalentClass { get; internal set; }
-
-        /// <summary>
-        /// "owl:disjointWith" relations
-        /// </summary>
-        public RDFOntologyTaxonomy DisjointWith { get; internal set; }
-
-        /// <summary>
-        /// "owl:oneOf" relations (specific for enumerate and datarange classes)
-        /// </summary>
-        public RDFOntologyTaxonomy OneOf { get; internal set; }
-
-        /// <summary>
-        /// "owl:intersectionOf" relations (specific for intersection classes)
-        /// </summary>
-        public RDFOntologyTaxonomy IntersectionOf { get; internal set; }
-
-        /// <summary>
-        /// "owl:unionOf" relations (specific for union classes)
-        /// </summary>
-        public RDFOntologyTaxonomy UnionOf { get; internal set; }
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Default-ctor to build an empty ontology class model metadata
-        /// </summary>
-        internal RDFOntologyClassModelMetadata() {
-            this.SubClassOf      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.EquivalentClass = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.DisjointWith    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.OneOf           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.IntersectionOf  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.UnionOf         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-        }
-        #endregion
-
-    }
-    #endregion
 
 }

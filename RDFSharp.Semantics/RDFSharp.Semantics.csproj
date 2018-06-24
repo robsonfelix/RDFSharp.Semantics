@@ -57,14 +57,17 @@
     <Compile Include="RDFSemanticsUtilities.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
+    <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
     <Compile Include="Ontology\RDFOntologyTaxonomy.cs" />
     <Compile Include="Ontology\Data\RDFOntologyData.cs" />
+    <Compile Include="Ontology\Data\RDFOntologyDataMetadata.cs" />
     <Compile Include="Ontology\Data\RDFOntologyFact.cs" />
     <Compile Include="Ontology\Data\RDFOntologyLiteral.cs" />
     <Compile Include="Ontology\Model\RDFOntologyModel.cs" />
     <Compile Include="Ontology\Model\ClassModel\RDFOntologyClass.cs" />
     <Compile Include="Ontology\Model\ClassModel\RDFOntologyClassModel.cs" />
+    <Compile Include="Ontology\Model\ClassModel\RDFOntologyClassModelMetadata.cs" />
     <Compile Include="Ontology\Model\ClassModel\Classes\Composites\RDFOntologyComplementClass.cs" />
     <Compile Include="Ontology\Model\ClassModel\Classes\Composites\RDFOntologyIntersectionClass.cs" />
     <Compile Include="Ontology\Model\ClassModel\Classes\Composites\RDFOntologyUnionClass.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="Ontology\Model\ClassModel\Classes\Restrictions\RDFOntologySomeValuesFromRestriction.cs" />
     <Compile Include="Ontology\Model\PropertyModel\RDFOntologyProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\RDFOntologyPropertyModel.cs" />
+    <Compile Include="Ontology\Model\PropertyModel\RDFOntologyPropertyModelMetadata.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
@@ -95,7 +99,7 @@
     <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
 
-  <!-- NuGet references -->
+  <!-- NuGet -->
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

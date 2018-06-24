@@ -170,7 +170,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Annotations describing properties of the ontology property model
         /// </summary>
-        public RDFOntologyAnnotationsMetadata Annotations { get; internal set; }
+        public RDFOntologyAnnotations Annotations { get; internal set; }
 
         /// <summary>
         /// Relations describing properties of the ontology property model
@@ -189,7 +189,7 @@ namespace RDFSharp.Semantics {
         /// </summary>
         public RDFOntologyPropertyModel() {
             this.Properties  = new Dictionary<Int64, RDFOntologyProperty>();
-            this.Annotations = new RDFOntologyAnnotationsMetadata();
+            this.Annotations = new RDFOntologyAnnotations();
             this.Relations   = new RDFOntologyPropertyModelMetadata();
         }
         #endregion
@@ -999,42 +999,5 @@ namespace RDFSharp.Semantics {
         #endregion
 
     }
-
-    #region Metadata
-    /// <summary>
-    /// RDFOntologyPropertyModelMetadata represents a collector for relations describing ontology properties.
-    /// </summary>
-    public class RDFOntologyPropertyModelMetadata {
-
-        #region Properties
-        /// <summary>
-        /// "rdfs:subPropertyOf" relations
-        /// </summary>
-        public RDFOntologyTaxonomy SubPropertyOf { get; internal set; }
-
-        /// <summary>
-        /// "owl:equivalentProperty" relations
-        /// </summary>
-        public RDFOntologyTaxonomy EquivalentProperty { get; internal set; }
-
-        /// <summary>
-        /// "owl:inverseOf" relations
-        /// </summary>
-        public RDFOntologyTaxonomy InverseOf { get; internal set; }
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Default-ctor to build an empty ontology property model metadata
-        /// </summary>
-        internal RDFOntologyPropertyModelMetadata() {
-            this.SubPropertyOf      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.EquivalentProperty = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-            this.InverseOf          = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Model);
-        }
-        #endregion
-
-    }
-    #endregion
 
 }

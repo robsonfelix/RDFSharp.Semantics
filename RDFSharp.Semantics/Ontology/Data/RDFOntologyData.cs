@@ -60,7 +60,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Annotations describing facts of the ontology data
         /// </summary>
-        public RDFOntologyAnnotationsMetadata Annotations { get; internal set; }
+        public RDFOntologyAnnotations Annotations { get; internal set; }
 
         /// <summary>
         /// Relations describing facts of the ontology data
@@ -85,7 +85,7 @@ namespace RDFSharp.Semantics
         public RDFOntologyData() {
             this.Facts       = new Dictionary<Int64, RDFOntologyFact>();
             this.Literals    = new Dictionary<Int64, RDFOntologyLiteral>();
-            this.Annotations = new RDFOntologyAnnotationsMetadata();
+            this.Annotations = new RDFOntologyAnnotations();
             this.Relations   = new RDFOntologyDataMetadata();
         }
         #endregion
@@ -899,48 +899,5 @@ namespace RDFSharp.Semantics
         #endregion
 
     }
-
-    #region Metadata
-    /// <summary>
-    /// RDFOntologyDataMetadata represents a collector for relations connecting describing ontology facts.
-    /// </summary>
-    public class RDFOntologyDataMetadata {
-
-        #region Properties
-        /// <summary>
-        /// "rdf:type" relations
-        /// </summary>
-        public RDFOntologyTaxonomy ClassType { get; internal set; }
-
-        /// <summary>
-        /// "owl:sameAs" relations
-        /// </summary>
-        public RDFOntologyTaxonomy SameAs { get; internal set; }
-
-        /// <summary>
-        /// "owl:differentFrom" relations
-        /// </summary>
-        public RDFOntologyTaxonomy DifferentFrom { get; internal set; }
-
-        /// <summary>
-        /// "ontology property -> ontology resource" custom relations
-        /// </summary>
-        public RDFOntologyTaxonomy Assertions { get; internal set; }
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Default-ctor to build an empty ontology data metadata
-        /// </summary>
-        internal RDFOntologyDataMetadata() {
-            this.ClassType     = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
-            this.SameAs        = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
-            this.DifferentFrom = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
-            this.Assertions    = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
-        }
-        #endregion
-
-    }
-    #endregion
 
 }

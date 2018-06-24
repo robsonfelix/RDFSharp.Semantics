@@ -38,7 +38,7 @@ namespace RDFSharp.Semantics {
         /// <summary>
         /// Annotations describing the ontology
         /// </summary>
-        public RDFOntologyAnnotationsMetadata Annotations { get; internal set; }
+        public RDFOntologyAnnotations Annotations { get; internal set; }
         #endregion
 
         #region Ctors
@@ -51,7 +51,7 @@ namespace RDFSharp.Semantics {
                 this.PatternMemberID = ontologyName.PatternMemberID;
                 this.Model           = new RDFOntologyModel();
                 this.Data            = new RDFOntologyData();
-                this.Annotations     = new RDFOntologyAnnotationsMetadata();
+                this.Annotations     = new RDFOntologyAnnotations();
             }
             else {
                 throw new RDFSemanticsException("Cannot create RDFOntology because given \"ontologyName\" parameter is null.");
@@ -536,91 +536,6 @@ namespace RDFSharp.Semantics {
         #endregion
 
     }
-
-    #region Metadata
-    /// <summary>
-    /// RDFOntologyAnnotationsMetadata represents a collector for annotations describing ontology resources.
-    /// </summary>
-    public class RDFOntologyAnnotationsMetadata {
-
-        #region Properties
-        /// <summary>
-        /// "owl:versionInfo" annotations
-        /// </summary>
-        public RDFOntologyTaxonomy VersionInfo { get; internal set; }
-
-        /// <summary>
-        /// "owl:versionIRI" annotations
-        /// </summary>
-        public RDFOntologyTaxonomy VersionIRI { get; internal set; }
-
-        /// <summary>
-        /// "rdfs:comment" annotations
-        /// </summary>
-        public RDFOntologyTaxonomy Comment { get; internal set; }
-
-        /// <summary>
-        /// "rdfs:label" annotations
-        /// </summary>
-        public RDFOntologyTaxonomy Label { get; internal set; }
-
-        /// <summary>
-        /// "rdfs:seeAlso" annotations
-        /// </summary>
-        public RDFOntologyTaxonomy SeeAlso { get; internal set; }
-
-        /// <summary>
-        /// "rdfs:isDefinedBy" annotations
-        /// </summary>
-        public RDFOntologyTaxonomy IsDefinedBy { get; internal set; }
-
-        /// <summary>
-        /// "owl:priorVersion" annotations (specific for ontologies)
-        /// </summary>
-        public RDFOntologyTaxonomy PriorVersion { get; internal set; }
-
-        /// <summary>
-        /// "owl:BackwardCompatibleWith" annotations (specific for ontologies)
-        /// </summary>
-        public RDFOntologyTaxonomy BackwardCompatibleWith { get; internal set; }
-
-        /// <summary>
-        /// "owl:IncompatibleWith" annotations (specific for ontologies)
-        /// </summary>
-        public RDFOntologyTaxonomy IncompatibleWith { get; internal set; }
-
-        /// <summary>
-        /// "owl:imports" annotations (specific for ontologies)
-        /// </summary>
-        public RDFOntologyTaxonomy Imports { get; internal set; }
-
-        /// <summary>
-        /// Custom-property annotations
-        /// </summary>
-        public RDFOntologyTaxonomy CustomAnnotations { get; internal set; }
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Default-ctor to build an empty ontology annotations metadata
-        /// </summary>
-        internal RDFOntologyAnnotationsMetadata() {
-            this.VersionInfo            = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.VersionIRI             = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.Comment                = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.Label                  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.SeeAlso                = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.IsDefinedBy            = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.PriorVersion           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.BackwardCompatibleWith = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.IncompatibleWith       = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.Imports                = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-            this.CustomAnnotations      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Generic);
-        }
-        #endregion
-
-    }
-    #endregion
 
     #region RDFBASEOntology
     /// <summary>
