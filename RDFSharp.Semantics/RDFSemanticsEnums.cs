@@ -145,15 +145,15 @@ namespace RDFSharp.Semantics
         /// </summary>
         public enum RDFOntologyTaxonomyCategory {
             /// <summary>
-            /// Taxonomy is not related to ontology model or ontology data
+            /// Annotation taxonomy
             /// </summary>
-            Generic = 0,
+            Annotation = 0,
             /// <summary>
-            /// Taxonomy is related to ontology model
+            /// Model taxonomy
             /// </summary>
             Model = 1,
             /// <summary>
-            /// Taxonomy is related to ontology data
+            /// Data taxonomy
             /// </summary>
             Data = 2
         };
