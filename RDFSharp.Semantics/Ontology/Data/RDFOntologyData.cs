@@ -323,7 +323,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                 //Enforce taxonomy checks before adding the SameAs relation
-                if (!RDFOntologyReasonerHelper.IsDifferentFactFrom(aFact, bFact, this)) {
+                if (!this.IsDifferentFactFrom(aFact, bFact)) {
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), bFact));
                      this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -346,7 +346,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                //Enforce taxonomy checks before adding the DifferentFrom relation
-                if (!RDFOntologyReasonerHelper.IsSameFactAs(aFact, bFact, this)) {
+                if (!this.IsSameFactAs(aFact, bFact)) {
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), bFact));
                      this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -374,7 +374,7 @@ namespace RDFSharp.Semantics
 
                      //Enforce taxonomy checks before adding the assertion
                      //Creation of transitive cycles is not allowed (OWL-DL)
-                     if (!RDFOntologyReasonerHelper.IsTransitiveAssertionOf(bFact, objectProperty, aFact, this)) {
+                     if (!this.IsTransitiveAssertionOf(bFact, objectProperty, aFact)) {
                           this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
                      }
                      else {

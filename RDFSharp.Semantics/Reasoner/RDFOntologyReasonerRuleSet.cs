@@ -128,7 +128,7 @@ namespace RDFSharp.Semantics {
                 foreach(var c       in ontology.Model.ClassModel) {
 
                     //Enlist the superclasses of the current class
-                    var superclasses = RDFOntologyReasonerHelper.EnlistSuperClassesOf(c, ontology.Model.ClassModel);
+                    var superclasses = ontology.Model.ClassModel.EnlistSuperClassesOf(c);
                     foreach (var sc in superclasses) {
 
                         //Create the inference as a taxonomy entry
@@ -159,7 +159,7 @@ namespace RDFSharp.Semantics {
                 foreach (var p      in availableprops) {
 
                     //Enlist the superproperties of the current property
-                    var superprops   = RDFOntologyReasonerHelper.EnlistSuperPropertiesOf(p, ontology.Model.PropertyModel);
+                    var superprops   = ontology.Model.PropertyModel.EnlistSuperPropertiesOf(p);
                     foreach (var sp in superprops) {
 
                         //Create the inference as a taxonomy entry
@@ -185,11 +185,11 @@ namespace RDFSharp.Semantics {
 
                 //Calculate the set of available classes on which to perform the reasoning (exclude BASE classes and literal-compatible classes)
                 var availableclasses = ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
-                                                                                && !RDFOntologyReasonerHelper.IsLiteralCompatibleClass(cls, ontology.Model.ClassModel)).ToList();
+                                                                                && !ontology.Model.ClassModel.IsLiteralCompatibleClass(cls)).ToList();
                 foreach (var c      in availableclasses) {
 
                     //Enlist the members of the current class
-                    var clsMembers   = RDFSemanticsUtilities.EnlistMembersOfNonLiteralCompatibleClass(c, ontology);
+                    var clsMembers   = ontology.EnlistMembersOfNonLiteralCompatibleClass(c);
                     foreach (var f  in clsMembers) {
 
                         //Create the inference as a taxonomy entry
@@ -222,8 +222,8 @@ namespace RDFSharp.Semantics {
                     var p1Asns              = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p1);
 
                     //Enlist the compatible properties of the current property (P1 [SUBPROPERTYOF|EQUIVALENTPROPERTY] P2)
-                    foreach(var p2         in RDFOntologyReasonerHelper.EnlistSuperPropertiesOf(p1, ontology.Model.PropertyModel)
-                                                    .UnionWith(RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(p1, ontology.Model.PropertyModel))) {
+                    foreach(var p2         in ontology.Model.PropertyModel.EnlistSuperPropertiesOf(p1)
+                                                                          .UnionWith(ontology.Model.PropertyModel.EnlistEquivalentPropertiesOf(p1))) {
 
                         //Iterate the compatible assertions
                         foreach(var p1Asn  in p1Asns) {
@@ -455,7 +455,7 @@ namespace RDFSharp.Semantics {
                 foreach(var c       in ontology.Model.ClassModel) {
 
                     //Enlist the equivalent classes of the current class
-                    var equivclasses = RDFOntologyReasonerHelper.EnlistEquivalentClassesOf(c, ontology.Model.ClassModel);
+                    var equivclasses = ontology.Model.ClassModel.EnlistEquivalentClassesOf(c);
                     foreach (var ec in equivclasses) {
 
                         //Create the inference as a taxonomy entry
@@ -485,7 +485,7 @@ namespace RDFSharp.Semantics {
                 foreach (var c       in ontology.Model.ClassModel) {
 
                     //Enlist the disjoint classes of the current class
-                    var disjclasses   = RDFOntologyReasonerHelper.EnlistDisjointClassesWith(c, ontology.Model.ClassModel);
+                    var disjclasses   = ontology.Model.ClassModel.EnlistDisjointClassesWith(c);
                     foreach (var dwc in disjclasses) {
 
                         //Create the inference as a taxonomy entry
@@ -517,7 +517,7 @@ namespace RDFSharp.Semantics {
                 foreach (var p      in availableprops) {
 
                     //Enlist the equivalent properties of the current property
-                    var equivprops   = RDFOntologyReasonerHelper.EnlistEquivalentPropertiesOf(p, ontology.Model.PropertyModel);
+                    var equivprops   = ontology.Model.PropertyModel.EnlistEquivalentPropertiesOf(p);
                     foreach (var ep in equivprops) {
 
                         //Create the inference as a taxonomy entry
@@ -545,7 +545,7 @@ namespace RDFSharp.Semantics {
                 foreach(var f       in ontology.Data) {
 
                     //Enlist the same facts of the current fact
-                    var samefacts    = RDFOntologyReasonerHelper.EnlistSameFactsAs(f, ontology.Data);
+                    var samefacts    = ontology.Data.EnlistSameFactsAs(f);
                     foreach (var sf in samefacts) {
 
                         //Create the inference as a taxonomy entry
@@ -574,7 +574,7 @@ namespace RDFSharp.Semantics {
                 foreach(var f       in ontology.Data) {
 
                     //Enlist the different facts of the current fact
-                    var differfacts  = RDFOntologyReasonerHelper.EnlistDifferentFactsFrom(f, ontology.Data);
+                    var differfacts  = ontology.Data.EnlistDifferentFactsFrom(f);
                     foreach (var df in differfacts) {
 
                         //Create the inference as a taxonomy entry
@@ -608,7 +608,7 @@ namespace RDFSharp.Semantics {
                     var p1Asns               = ontology.Data.Relations.Assertions.SelectEntriesByPredicate(p1);
 
                     //Enlist the inverse properties of the current property
-                    var inverseprops         = RDFOntologyReasonerHelper.EnlistInversePropertiesOf((RDFOntologyObjectProperty)p1, ontology.Model.PropertyModel);
+                    var inverseprops         = ontology.Model.PropertyModel.EnlistInversePropertiesOf((RDFOntologyObjectProperty)p1);
                     foreach (var p2         in inverseprops) {
 
                         //Iterate the compatible assertions
@@ -643,7 +643,7 @@ namespace RDFSharp.Semantics {
                 foreach(var f1                 in ontology.Data) {
 
                     //Enlist the same facts of the current fact
-                    var sameFacts               = RDFOntologyReasonerHelper.EnlistSameFactsAs(f1, ontology.Data);
+                    var sameFacts               = ontology.Data.EnlistSameFactsAs(f1);
                     if (sameFacts.FactsCount    > 0) {
 
                         //Filter the assertions using the current fact
@@ -757,7 +757,7 @@ namespace RDFSharp.Semantics {
                         if (pAsn.TaxonomyObject.IsFact()) {
 
                             if(!transPropCache.ContainsKey(pAsn.TaxonomySubject.PatternMemberID)) {
-                                transPropCache.Add(pAsn.TaxonomySubject.PatternMemberID, RDFOntologyReasonerHelper.EnlistTransitiveAssertionsOf((RDFOntologyFact)pAsn.TaxonomySubject, (RDFOntologyObjectProperty)p, ontology.Data));
+                                transPropCache.Add(pAsn.TaxonomySubject.PatternMemberID, ontology.Data.EnlistTransitiveAssertionsOf((RDFOntologyFact)pAsn.TaxonomySubject, (RDFOntologyObjectProperty)p));
                             }
                             foreach(var te in transPropCache[pAsn.TaxonomySubject.PatternMemberID]) {
 
