@@ -23,7 +23,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("Marco De Salvo")]
 [assembly: AssemblyProduct("RDFSharp.Semantics")]
 [assembly: AssemblyCopyright("Marco De Salvo")]
-[assembly: AssemblyVersion("1.0.2")]
+[assembly: AssemblyVersion("1.2.0")]
 [assembly: ComVisible(false)]
 [assembly: Guid("2BE71F3A-943B-464A-8FE8-7D7BCBF23100")]
-[assembly: InternalsVisibleTo("RDFSharp.Semantics.Ontologies")]
