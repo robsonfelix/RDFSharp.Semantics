@@ -99,6 +99,7 @@
     <!-- Reasoner -->
     <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
+    <Compile Include="Reasoner\RDFOntologyReasonerExtensions.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerRuleSet.cs" />
