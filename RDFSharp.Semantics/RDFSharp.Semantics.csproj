@@ -89,13 +89,13 @@
     <Compile Include="Architecture\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Architecture\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Architecture\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
-	<!-- Catalog -->
-	<Compile Include="Catalog\RDFBASEOntology.cs" />
-    <Compile Include="Catalog\RDFDCOntology.cs" />
-    <Compile Include="Catalog\RDFFOAFOntology.cs" />
-    <Compile Include="Catalog\RDFGEOOntology.cs" />
-    <Compile Include="Catalog\RDFSIOCOntology.cs" />
-    <Compile Include="Catalog\RDFSKOSOntology.cs" />
+	<!-- Ontologies -->
+	<Compile Include="Ontologies\RDFBASEOntology.cs" />
+    <Compile Include="Ontologies\RDFDCOntology.cs" />
+    <Compile Include="Ontologies\RDFFOAFOntology.cs" />
+    <Compile Include="Ontologies\RDFGEOOntology.cs" />
+    <Compile Include="Ontologies\RDFSIOCOntology.cs" />
+    <Compile Include="Ontologies\RDFSKOSOntology.cs" />
     <!-- Reasoner -->
     <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
