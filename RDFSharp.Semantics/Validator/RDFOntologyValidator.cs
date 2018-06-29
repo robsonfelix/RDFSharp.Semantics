@@ -21,24 +21,24 @@ using System.Threading.Tasks;
 namespace RDFSharp.Semantics {
 
     /// <summary>
-    /// RDFOntologyValidator analyzes a given ontology through a predefined set of RDFS/OWL-DL rules
+    /// RDFOntologyValidator analyzes a given ontology through a set of RDFS/OWL-DL rules
     /// in order to find error and inconsistency evidences affecting its model and data.
     /// </summary>
-    internal class RDFOntologyValidator {
+    public static class RDFOntologyValidator {
 
         #region Properties
         /// <summary>
         /// List of rules applied by the ontology validator
         /// </summary>
-        internal List<RDFOntologyValidatorRule> Rules { get; set; }
+        internal static List<RDFOntologyValidatorRule> Rules { get; set; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an ontology validator
+        /// Static-ctor to build an ontology validator
         /// </summary>
-        internal RDFOntologyValidator() {
-            this.Rules = new List<RDFOntologyValidatorRule>() {
+        static RDFOntologyValidator() {
+            Rules = new List<RDFOntologyValidatorRule>() {
 
                 //Vocabulary_Disjointness
                 new RDFOntologyValidatorRule(
@@ -100,20 +100,27 @@ namespace RDFSharp.Semantics {
 
         #region Methods
         /// <summary>
+        /// Validate the given ontology against a set of RDFS/OWL-DL rules, detecting errors and inconsistencies affecting its model and data.
+        /// </summary>
+        public static RDFOntologyValidatorReport Validate(this RDFOntology ontology) {
+            if (ontology != null)
+                return AnalyzeOntology(ontology);
+            else
+                return new RDFOntologyValidatorReport();
+        }
+
+        /// <summary>
         /// Analyzes the given ontology and produces a detailed report of found evidences
         /// </summary>
-        internal RDFOntologyValidatorReport AnalyzeOntology(RDFOntology ontology) {
-            var report = new RDFOntologyValidatorReport();
+        internal static RDFOntologyValidatorReport AnalyzeOntology(RDFOntology ontology) {
+            var report      = new RDFOntologyValidatorReport();
             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}'", ontology.Value));
 
             //Expand ontology
-            ontology   = ontology.UnionWith(RDFBASEOntology.Instance);
-
+            var ontologyExp = ontology.UnionWith(RDFBASEOntology.Instance);
+            
             //Execute rules
-            Parallel.ForEach(this.Rules, rule => { rule.ExecuteRule(ontology, report); });
-
-            //Unexpand ontology
-            ontology   = ontology.DifferenceWith(RDFBASEOntology.Instance);
+            Parallel.ForEach(Rules, rule => { rule.ExecuteRule(ontologyExp, report); });
 
             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator has been applied on Ontology '{0}'", ontology.Value));
             return report;
