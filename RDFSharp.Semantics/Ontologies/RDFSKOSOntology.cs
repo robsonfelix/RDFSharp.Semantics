@@ -165,6 +165,10 @@ namespace RDFSharp.Semantics {
 
             #endregion
 
+            #region Register
+            RDFOntologyRegister.AddOntology("SKOS", Instance);
+            #endregion
+
         }
         #endregion
 

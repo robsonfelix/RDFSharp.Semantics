@@ -59,14 +59,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         static RDFOntologyRegister() {
             Instance                 = new RDFOntologyRegister();
-            Instance.StaticRegister  = new Dictionary<String, RDFOntology>() {
-                { "BASE", RDFBASEOntology.Instance },
-                { "DC",   RDFDCOntology.Instance   },
-                { "FOAF", RDFFOAFOntology.Instance },
-                { "GEO",  RDFGEOOntology.Instance  },
-                { "SKOS", RDFSKOSOntology.Instance },
-                { "SIOC", RDFSIOCOntology.Instance }
-            };
+            Instance.StaticRegister  = new Dictionary<String, RDFOntology>() { { "BASE", RDFBASEOntology.Instance } };
             Instance.DynamicRegister = new Dictionary<String, RDFOntology>();
         }
         #endregion

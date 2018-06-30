@@ -310,6 +310,10 @@ namespace RDFSharp.Semantics {
 
             #endregion
 
+            #region Register
+            RDFOntologyRegister.AddOntology("DC", Instance);
+            #endregion
+
         }
         #endregion
 
