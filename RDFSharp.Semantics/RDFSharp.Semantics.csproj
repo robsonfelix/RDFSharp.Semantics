@@ -87,11 +87,6 @@
     <Compile Include="Architecture\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
     <!-- Ontologies -->
     <Compile Include="Ontologies\RDFBASEOntology.cs" />
-    <Compile Include="Ontologies\RDFDCOntology.cs" />
-    <Compile Include="Ontologies\RDFFOAFOntology.cs" />
-    <Compile Include="Ontologies\RDFGEOOntology.cs" />
-    <Compile Include="Ontologies\RDFSIOCOntology.cs" />
-    <Compile Include="Ontologies\RDFSKOSOntology.cs" />
     <!-- Validator -->
   </ItemGroup>
   <!-- NuGet -->

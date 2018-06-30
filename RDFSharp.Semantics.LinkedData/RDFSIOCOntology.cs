@@ -16,7 +16,8 @@
 
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.LinkedData
+{
 
     /// <summary>
     /// RDFSIOCOntology represents an OWL-DL ontology implementation of SIOC vocabulary

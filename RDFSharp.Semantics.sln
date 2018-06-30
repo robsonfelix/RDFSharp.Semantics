@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.Reasoner
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.Validator", "RDFSharp.Semantics.Validator\RDFSharp.Semantics.Validator.csproj", "{40C21A0A-9283-4308-83BC-25393C0AADB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.LinkedData", "RDFSharp.Semantics.LinkedData\RDFSharp.Semantics.LinkedData.csproj", "{A9CE2B9B-DD1A-4D59-9EBC-253D9857C583}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{40C21A0A-9283-4308-83BC-25393C0AADB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40C21A0A-9283-4308-83BC-25393C0AADB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40C21A0A-9283-4308-83BC-25393C0AADB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9CE2B9B-DD1A-4D59-9EBC-253D9857C583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CE2B9B-DD1A-4D59-9EBC-253D9857C583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CE2B9B-DD1A-4D59-9EBC-253D9857C583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CE2B9B-DD1A-4D59-9EBC-253D9857C583}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

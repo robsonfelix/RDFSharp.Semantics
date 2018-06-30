@@ -16,7 +16,8 @@
 
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.LinkedData
+{
 
     /// <summary>
     /// RDFDCOntology represents an OWL-DL ontology implementation of Dublin Core vocabulary
