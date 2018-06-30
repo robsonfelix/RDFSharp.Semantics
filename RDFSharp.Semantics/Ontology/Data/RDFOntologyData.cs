@@ -287,19 +287,16 @@ namespace RDFSharp.Semantics
             if (ontologyFact != null && ontologyClass != null) {
 
                 //Enforce preliminary check on usage of BASE classes
-                if (!RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(ontologyClass.PatternMemberID)) {
+                if (!RDFOntologyTaxonomyChecker.CheckReservedClass(ontologyClass)) {
 
                      //Enforce taxonomy checks before adding the ClassType relation
-                     if (!ontologyClass.IsRestrictionClass() 
-                          && !ontologyClass.IsCompositeClass() 
-                          && !ontologyClass.IsEnumerateClass() 
-                          && !ontologyClass.IsDataRangeClass()) {
-                          this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), ontologyClass));
+                     if (RDFOntologyTaxonomyChecker.CheckClassTypeCompatibility(ontologyClass)) {
+                         this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), ontologyClass));
                      }
                      else {
 
-                          //Raise warning event to inform the user: ClassType relation cannot be added to the data because only plain classes can be explicitly assigned as class types of facts
-                          RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
+                         //Raise warning event to inform the user: ClassType relation cannot be added to the data because only plain classes can be explicitly assigned as class types of facts
+                         RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("ClassType relation between fact '{0}' and class '{1}' cannot be added to the data because only plain classes can be explicitly assigned as class types of facts.", ontologyFact, ontologyClass));
 
                      }
 
@@ -370,7 +367,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && objectProperty != null && bFact != null) {
 
                 //Enforce preliminary check on usage of BASE properties
-                if (!RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(objectProperty.PatternMemberID)) {
+                if (!RDFOntologyTaxonomyChecker.CheckReservedProperty(objectProperty)) {
 
                      //Enforce taxonomy checks before adding the assertion
                      //Creation of transitive cycles is not allowed (OWL-DL)
@@ -405,7 +402,7 @@ namespace RDFSharp.Semantics
             if (ontologyFact != null && datatypeProperty != null && ontologyLiteral != null) {
 
                 //Enforce preliminary check on usage of BASE properties
-                if (!RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(datatypeProperty.PatternMemberID)) {
+                if (!RDFOntologyTaxonomyChecker.CheckReservedProperty(datatypeProperty)) {
                      this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, datatypeProperty, ontologyLiteral));
                      this.AddLiteral(ontologyLiteral);
                 }

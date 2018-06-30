@@ -58,6 +58,7 @@
     <Compile Include="Ontology\RDFOntologyRegister.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
     <Compile Include="Ontology\RDFOntologyTaxonomy.cs" />
+    <Compile Include="Ontology\RDFOntologyTaxonomyChecker.cs" />
     <Compile Include="Ontology\RDFOntologyTaxonomyEntry.cs" />
     <Compile Include="Ontology\Data\RDFOntologyData.cs" />
     <Compile Include="Ontology\Data\RDFOntologyDataExtensions.cs" />
