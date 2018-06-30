@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <!-- RDFSharp.Semantics project properties -->
   <PropertyGroup>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -11,7 +10,6 @@
     <RootNamespace>RDFSharp.Semantics</RootNamespace>
     <AssemblyName>RDFSharp.Semantics</AssemblyName>
   </PropertyGroup>
-
   <!-- RDFSharp.Semantics build configurations -->
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -36,7 +34,6 @@
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Release\RDFSharp.Semantics.xml</DocumentationFile>
   </PropertyGroup>
-
   <!-- Microsoft .NET references -->
   <ItemGroup>
     <Reference Include="RDFSharp, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -46,7 +43,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
-
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,7 +54,7 @@
     <!-- Architecture -->
     <Compile Include="Architecture\RDFOntology.cs" />
     <Compile Include="Architecture\RDFOntologyAnnotations.cs" />
-	<Compile Include="Architecture\RDFOntologyRegister.cs" />
+    <Compile Include="Architecture\RDFOntologyRegister.cs" />
     <Compile Include="Architecture\RDFOntologyResource.cs" />
     <Compile Include="Architecture\RDFOntologyTaxonomy.cs" />
     <Compile Include="Architecture\RDFOntologyTaxonomyEntry.cs" />
@@ -89,20 +85,13 @@
     <Compile Include="Architecture\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Architecture\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Architecture\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
-	<!-- Ontologies -->
-	<Compile Include="Ontologies\RDFBASEOntology.cs" />
+    <!-- Ontologies -->
+    <Compile Include="Ontologies\RDFBASEOntology.cs" />
     <Compile Include="Ontologies\RDFDCOntology.cs" />
     <Compile Include="Ontologies\RDFFOAFOntology.cs" />
     <Compile Include="Ontologies\RDFGEOOntology.cs" />
     <Compile Include="Ontologies\RDFSIOCOntology.cs" />
     <Compile Include="Ontologies\RDFSKOSOntology.cs" />
-    <!-- Reasoner -->
-    <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerExtensions.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerRuleSet.cs" />
     <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
     <Compile Include="Validator\RDFOntologyValidatorReport.cs" />
@@ -110,11 +99,9 @@
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
-
   <!-- NuGet -->
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
 </Project>
