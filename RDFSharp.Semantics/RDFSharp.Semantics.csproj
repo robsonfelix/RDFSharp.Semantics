@@ -93,11 +93,6 @@
     <Compile Include="Ontologies\RDFSIOCOntology.cs" />
     <Compile Include="Ontologies\RDFSKOSOntology.cs" />
     <!-- Validator -->
-    <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
-    <Compile Include="Validator\RDFOntologyValidatorReport.cs" />
-    <Compile Include="Validator\RDFOntologyValidatorRule.cs" />
-    <Compile Include="Validator\RDFOntologyValidator.cs" />
-    <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
   <!-- NuGet -->
   <ItemGroup>

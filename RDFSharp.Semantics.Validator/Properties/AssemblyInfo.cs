@@ -16,15 +16,12 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-[assembly: AssemblyTitle("RDFSharp.Semantics")]
-[assembly: AssemblyDescription("Model OWL-DL ontologies with RDFSharp")]
+[assembly: AssemblyTitle("RDFSharp.Semantics.Validator")]
+[assembly: AssemblyDescription("Validate OWL-DL ontologies with RDFSharp")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marco De Salvo")]
 [assembly: AssemblyProduct("RDFSharp.Semantics")]
 [assembly: AssemblyCopyright("Marco De Salvo")]
 [assembly: AssemblyVersion("1.2.0")]
 [assembly: ComVisible(false)]
-[assembly: Guid("2BE71F3A-943B-464A-8FE8-7D7BCBF23100")]
-[assembly: InternalsVisibleTo("RDFSharp.Semantics.Reasoner")]
-[assembly: InternalsVisibleTo("RDFSharp.Semantics.Validator")]
+[assembly: Guid("40C21A0A-9283-4308-83BC-25393C0AADB3")]
