@@ -19,7 +19,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Reasoner
+{
 
     /// <summary>
     /// RDFOntologyReasonerReport represents a detailed report of an ontology reasoner's activity.

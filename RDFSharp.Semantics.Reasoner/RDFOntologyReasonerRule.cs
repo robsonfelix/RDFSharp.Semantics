@@ -16,7 +16,8 @@
 
 using System;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Reasoner
+{
 
     /// <summary>
     /// RDFOntologyReasonerRule represents an inference rule executed by a reasoner

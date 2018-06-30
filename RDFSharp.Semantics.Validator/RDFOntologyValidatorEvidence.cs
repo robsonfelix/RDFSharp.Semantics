@@ -16,7 +16,8 @@
 
 using System;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Validator
+{
 
     /// <summary>
     /// RDFOntologyValidatorEvidence represents an evidence reported by a validation rule.

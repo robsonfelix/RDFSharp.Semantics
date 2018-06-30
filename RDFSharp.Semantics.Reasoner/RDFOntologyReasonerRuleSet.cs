@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Reasoner {
 
     /// <summary>
     /// RDFOntologyReasonerRuleSet represents a collection of rules available to reasoners.

@@ -18,7 +18,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Validator
+{
 
     /// <summary>
     /// RDFOntologyValidatorReport represents a detailed report of an ontology analysis.

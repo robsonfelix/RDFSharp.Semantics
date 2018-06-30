@@ -18,7 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Reasoner
+{
 
     /// <summary>
     /// RDFOntologyReasoner represents an inference engine applied on a given ontology

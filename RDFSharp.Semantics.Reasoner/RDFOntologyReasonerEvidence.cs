@@ -16,7 +16,8 @@
 
 using System;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Reasoner
+{
 
     /// <summary>
     /// RDFOntologyReasonerEvidence represents an inference evidence generated during execution of a rule

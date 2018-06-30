@@ -16,7 +16,8 @@
 
 using System;
 
-namespace RDFSharp.Semantics {
+namespace RDFSharp.Semantics.Validator
+{
 
     /// <summary>
     /// RDFOntologyValidatorRule represents a rule which analyzes a specific syntactic/semantic aspect of an ontology.
