@@ -38,7 +38,7 @@ namespace RDFSharp.Semantics.Reasoner
         /// <summary>
         /// Delegate for the function which will be executed as body of the rule
         /// </summary>
-        public delegate void ReasonerRuleDelegate(RDFOntology ontology, RDFOntologyReasonerReport report);
+        public delegate Int64 ReasonerRuleDelegate(RDFOntology ontology, RDFOntologyReasonerReport report);
 
         /// <summary>
         /// Function which will be executed as body of the rule

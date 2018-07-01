@@ -85,14 +85,12 @@ namespace RDFSharp.Semantics.Reasoner
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", ruleName));
 
                 //Launch the reasoning rule
-                var oldCnt    = report.EvidencesCount;
-                reasonerRule.ExecuteRule(ontology, report);
-                var newCnt    = report.EvidencesCount;
-
+                var infCount  = reasonerRule.ExecuteRule(ontology, report);
+                
                 //Raise termination signal
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, newCnt-oldCnt));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, infCount));
 
-                return (newCnt-oldCnt > 0);
+                return (infCount > 0);
             }
             return false;
         }
@@ -109,24 +107,24 @@ namespace RDFSharp.Semantics.Reasoner
                 ontology    = ontology.UnionWith(RDFBASEOntology.Instance);
 
                 #region Triggers
-                //Apply first rules
-                this.TriggerRule("EquivalentClassTransitivity",    ontology, report);
-                this.TriggerRule("SubClassTransitivity",           ontology, report);
-                this.TriggerRule("DisjointWithEntailment",         ontology, report);
-                this.TriggerRule("EquivalentPropertyTransitivity", ontology, report);
-                this.TriggerRule("SubPropertyTransitivity",        ontology, report);
-                this.TriggerRule("SameAsTransitivity",             ontology, report);
-                this.TriggerRule("DifferentFromEntailment",        ontology, report);
+                //Apply basic rules
+                var eqct    = this.TriggerRule("EquivalentClassTransitivity",    ontology, report);
+                var sbct    = this.TriggerRule("SubClassTransitivity",           ontology, report);
+                var dwen    = this.TriggerRule("DisjointWithEntailment",         ontology, report);
+                var eqpt    = this.TriggerRule("EquivalentPropertyTransitivity", ontology, report);
+                var sbpt    = this.TriggerRule("SubPropertyTransitivity",        ontology, report);
+                var smat    = this.TriggerRule("SameAsTransitivity",             ontology, report);
+                var dffe    = this.TriggerRule("DifferentFromEntailment",        ontology, report);
 
-                //Apply second rules
-                this.TriggerRule("DomainEntailment",               ontology, report);
-                this.TriggerRule("RangeEntailment",                ontology, report);
-                this.TriggerRule("ClassTypeEntailment",            ontology, report);
-                this.TriggerRule("InverseOfEntailment",            ontology, report);
-                this.TriggerRule("SymmetricPropertyEntailment",    ontology, report);
-                this.TriggerRule("TransitivePropertyEntailment",   ontology, report);
-                this.TriggerRule("PropertyEntailment",             ontology, report);
-                this.TriggerRule("SameAsEntailment",               ontology, report);
+                //Apply extended rules
+                var dome    = this.TriggerRule("DomainEntailment",               ontology, report);
+                var rane    = this.TriggerRule("RangeEntailment",                ontology, report);
+                var clte    = this.TriggerRule("ClassTypeEntailment",            ontology, report);
+                var iofe    = this.TriggerRule("InverseOfEntailment",            ontology, report);
+                var sype    = this.TriggerRule("SymmetricPropertyEntailment",    ontology, report);
+                var trpe    = this.TriggerRule("TransitivePropertyEntailment",   ontology, report);
+                var prpe    = this.TriggerRule("PropertyEntailment",             ontology, report);
+                var smae    = this.TriggerRule("SameAsEntailment",               ontology, report);
                 #endregion
 
                 //Unexpand ontology
