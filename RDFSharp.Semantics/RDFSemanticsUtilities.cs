@@ -15,11 +15,9 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using RDFSharp.Model;
-using RDFSharp.Query;
 
 namespace RDFSharp.Semantics
 {
