@@ -82,11 +82,11 @@ namespace RDFSharp.Semantics
 
         #region Methods
         /// <summary>
-        /// Adds the given ontology to the register, if it has unique prefix.
+        /// Adds the given ontology to the register (if it has unique prefix.
         /// </summary>
         public static void AddOntology(String prefix, RDFOntology ontology) {
             if (prefix != null && prefix.Trim() != String.Empty && ontology != null) {
-                if (GetByPrefix(prefix) == null) {
+                if (GetOntologybyPrefix(prefix) == null) {
                     Instance.DynamicRegister.Add(prefix, ontology);
                 }
             }
@@ -95,13 +95,20 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Retrieves an ontology by seeking presence of its prefix.
         /// </summary>
-        public static RDFOntology GetByPrefix(String prefix) {
+        public static RDFOntology GetOntologybyPrefix(String prefix) {
             if (prefix != null && prefix.Trim() != String.Empty) {
                  if (Instance.Register.Keys.Contains(prefix.Trim().ToUpperInvariant())) {
                      return Instance.Register[prefix.Trim().ToUpperInvariant()];
                  }
             }
             return null;
+        }
+        
+        /// <summary>
+        /// Gets the list of registered ontology prefixes
+        /// </summary>
+        public static List<String> GetRegisteredPrefixes() {
+            return Instance.Register.Keys.ToList();
         }
         #endregion
 
