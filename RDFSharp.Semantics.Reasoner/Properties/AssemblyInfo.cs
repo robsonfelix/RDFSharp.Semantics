@@ -17,11 +17,11 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RDFSharp.Semantics.Reasoner")]
-[assembly: AssemblyDescription("Reason over OWL-DL ontologies with RDFSharp")]
+[assembly: AssemblyDescription("Reason over OWL-DL ontologies with RDFSharp.Semantics")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marco De Salvo")]
 [assembly: AssemblyProduct("RDFSharp.Semantics")]
 [assembly: AssemblyCopyright("Marco De Salvo")]
-[assembly: AssemblyVersion("1.2.0")]
+[assembly: AssemblyVersion("1.5.0")]
 [assembly: ComVisible(false)]
 [assembly: Guid("F83FFAD7-0EA5-4F31-AA27-C10F3AEBA13E")]

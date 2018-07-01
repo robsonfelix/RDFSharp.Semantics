@@ -22,6 +22,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Marco De Salvo")]
 [assembly: AssemblyProduct("RDFSharp.Semantics")]
 [assembly: AssemblyCopyright("Marco De Salvo")]
-[assembly: AssemblyVersion("1.2.0")]
+[assembly: AssemblyVersion("1.5.0")]
 [assembly: ComVisible(false)]
 [assembly: Guid("A9CE2B9B-DD1A-4D59-9EBC-253D9857C583")]
