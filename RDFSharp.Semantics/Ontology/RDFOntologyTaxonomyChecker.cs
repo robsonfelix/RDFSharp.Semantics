@@ -15,10 +15,6 @@
 */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using RDFSharp.Model;
 
 namespace RDFSharp.Semantics
 {
@@ -134,11 +130,40 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Checks if the given class can be assigned as classtype of facts
         /// </summary>
-        public static Boolean CheckClassTypeCompatibility(RDFOntologyClass ontologyClass) {
+        internal static Boolean CheckClassTypeCompatibility(RDFOntologyClass ontologyClass) {
             return (!ontologyClass.IsRestrictionClass()
                         && !ontologyClass.IsCompositeClass()
                              && !ontologyClass.IsEnumerateClass()
                                  && !ontologyClass.IsDataRangeClass());
+        }
+
+        /// <summary>
+        /// Checks if the given afact can be set sameas the given bfact
+        /// </summary>
+        internal static Boolean CheckSameAsCompatibility(RDFOntologyData ontologyData, 
+                                                         RDFOntologyFact aFact, 
+                                                         RDFOntologyFact bFact) {
+            return (!ontologyData.IsDifferentFactFrom(aFact, bFact));
+        }
+
+        /// <summary>
+        /// Checks if the given afact can be set differentfrom the given bfact
+        /// </summary>
+        internal static Boolean CheckDifferentFromCompatibility(RDFOntologyData ontologyData, 
+                                                                RDFOntologyFact aFact, 
+                                                                RDFOntologyFact bFact) {
+            return (!ontologyData.IsSameFactAs(aFact, bFact));
+        }
+
+        /// <summary>
+        /// Checks if the given "aFact -> objectProperty -> bFact" has transitive assertions
+        /// which would cause transitive cycles (unallowed concept in OWL-DL)
+        /// </summary>
+        internal static Boolean CheckTransitiveAssertionCompatibility(RDFOntologyData ontologyData,
+                                                                      RDFOntologyFact aFact,
+                                                                      RDFOntologyObjectProperty objectProperty,
+                                                                      RDFOntologyFact bFact) {
+            return !ontologyData.IsTransitiveAssertionOf(bFact, objectProperty, aFact);
         }
         #endregion
 

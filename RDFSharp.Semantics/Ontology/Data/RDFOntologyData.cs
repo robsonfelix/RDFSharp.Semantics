@@ -320,14 +320,14 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                 //Enforce taxonomy checks before adding the SameAs relation
-                if (!this.IsDifferentFactFrom(aFact, bFact)) {
-                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), bFact));
-                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                if (RDFOntologyTaxonomyChecker.CheckSameAsCompatibility(this, aFact, bFact)) {
+                    this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), bFact));
+                    this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
 
-                     //Raise warning event to inform the user: SameAs relation cannot be added to the data because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SameAs relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
+                    //Raise warning event to inform the user: SameAs relation cannot be added to the data because it violates the taxonomy consistency
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("SameAs relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
 
                 }
 
@@ -343,14 +343,14 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                //Enforce taxonomy checks before adding the DifferentFrom relation
-                if (!this.IsSameFactAs(aFact, bFact)) {
-                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), bFact));
-                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+                if (RDFOntologyTaxonomyChecker.CheckDifferentFromCompatibility(this, aFact, bFact)) {
+                    this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), bFact));
+                    this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
                 else {
 
-                     //Raise warning event to inform the user: DifferentFrom relation cannot be added to the data because it violates the taxonomy consistency
-                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
+                    //Raise warning event to inform the user: DifferentFrom relation cannot be added to the data because it violates the taxonomy consistency
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("DifferentFrom relation between fact '{0}' and fact '{1}' cannot be added to the data because it violates the taxonomy consistency.", aFact, bFact));
 
                 }
 
@@ -371,13 +371,13 @@ namespace RDFSharp.Semantics
 
                      //Enforce taxonomy checks before adding the assertion
                      //Creation of transitive cycles is not allowed (OWL-DL)
-                     if (!this.IsTransitiveAssertionOf(bFact, objectProperty, aFact)) {
-                          this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
+                     if (RDFOntologyTaxonomyChecker.CheckTransitiveAssertionCompatibility(this, aFact, objectProperty, bFact)) {
+                         this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
                      }
                      else {
 
-                          //Raise warning event to inform the user: Assertion relation cannot be added to the data because it violates the taxonomy transitive consistency
-                          RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and fact '{1}' with transitive property '{2}' cannot be added to the data because it would violate the taxonomy consistency (transitive cycle detected).", aFact, bFact, objectProperty));
+                         //Raise warning event to inform the user: Assertion relation cannot be added to the data because it violates the taxonomy transitive consistency
+                         RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation between fact '{0}' and fact '{1}' with transitive property '{2}' cannot be added to the data because it would violate the taxonomy consistency (transitive cycle detected).", aFact, bFact, objectProperty));
 
                      }
 
