@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RDFSharp.Model;
 
 namespace RDFSharp.Semantics.Reasoner
 {
@@ -25,6 +26,117 @@ namespace RDFSharp.Semantics.Reasoner
     /// RDFOntologyReasonerExtensions contains utility methods for miscellaneous reasoning tasks
     /// </summary>
     public static class RDFOntologyReasonerExtensions {
+
+        #region GetInferences
+        /// <summary>
+        /// Gets an ontology made by semantic inferences found in the given one
+        /// </summary>
+        public static RDFOntology GetInferences(this RDFOntology ontology) {
+            var result       = new RDFOntology((RDFResource)ontology.Value);
+            if (ontology    != null) {
+                result.Model = ontology.Model.GetInferences();
+                result.Data  = ontology.Data.GetInferences();
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets an ontology model made by semantic inferences found in the given one
+        /// </summary>
+        public static RDFOntologyModel GetInferences(this RDFOntologyModel ontologyModel) {
+            var result               = new RDFOntologyModel();
+            if (ontologyModel       != null) {
+                result.ClassModel    = ontologyModel.ClassModel.GetInferences();
+                result.PropertyModel = ontologyModel.PropertyModel.GetInferences();
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets an ontology class model made by semantic inferences found in the given one
+        /// </summary>
+        public static RDFOntologyClassModel GetInferences(this RDFOntologyClassModel ontologyClassModel) {
+            var result              = new RDFOntologyClassModel();
+            if (ontologyClassModel != null) {
+
+                //SubClassOf
+                foreach (var entry in ontologyClassModel.Relations.SubClassOf.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SubClassOf.AddEntry(entry);
+
+                //EquivalentClass
+                foreach (var entry in ontologyClassModel.Relations.EquivalentClass.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SubClassOf.AddEntry(entry);
+
+                //DisjointWith
+                foreach (var entry in ontologyClassModel.Relations.DisjointWith.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SubClassOf.AddEntry(entry);
+
+                //UnionOf
+                foreach (var entry in ontologyClassModel.Relations.UnionOf.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SubClassOf.AddEntry(entry);
+
+                //IntersectionOf
+                foreach (var entry in ontologyClassModel.Relations.IntersectionOf.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SubClassOf.AddEntry(entry);
+
+                //OneOf
+                foreach (var entry in ontologyClassModel.Relations.OneOf.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SubClassOf.AddEntry(entry);
+
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets an ontology property model made by semantic inferences found in the given one
+        /// </summary>
+        public static RDFOntologyPropertyModel GetInferences(this RDFOntologyPropertyModel ontologyPropertyModel) {
+            var result                 = new RDFOntologyPropertyModel();
+            if (ontologyPropertyModel != null) {
+
+                //SubPropertyOf
+                foreach (var entry in ontologyPropertyModel.Relations.SubPropertyOf.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SubPropertyOf.AddEntry(entry);
+
+                //EquivalentProperty
+                foreach (var entry in ontologyPropertyModel.Relations.EquivalentProperty.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.EquivalentProperty.AddEntry(entry);
+
+                //InverseOf
+                foreach (var entry in ontologyPropertyModel.Relations.InverseOf.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.InverseOf.AddEntry(entry);
+
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets an ontology data made by semantic inferences found in the given one
+        /// </summary>
+        public static RDFOntologyData GetInferences(this RDFOntologyData ontologyData) {
+            var result              = new RDFOntologyData();
+            if (ontologyData       != null) {
+
+                //ClassType
+                foreach (var entry in ontologyData.Relations.ClassType.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.ClassType.AddEntry(entry);
+
+                //SameAs
+                foreach (var entry in ontologyData.Relations.SameAs.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.SameAs.AddEntry(entry);
+
+                //DifferentFrom
+                foreach (var entry in ontologyData.Relations.DifferentFrom.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.DifferentFrom.AddEntry(entry);
+
+                //Assertions
+                foreach (var entry in ontologyData.Relations.Assertions.Where(tEntry => tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.API || tEntry.InferenceType == RDFSemanticsEnums.RDFOntologyInferenceType.Reasoner))
+                    result.Relations.Assertions.AddEntry(entry);
+
+            }
+            return result;
+        }
+        #endregion
 
         #region ClearInferences
         /// <summary>
