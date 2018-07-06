@@ -82,7 +82,7 @@ namespace RDFSharp.Semantics
 
         #region Methods
         /// <summary>
-        /// Adds the given ontology to the register (if it has unique prefix.
+        /// Adds the given ontology to the register (if it has unique prefix
         /// </summary>
         public static void AddOntology(String prefix, RDFOntology ontology) {
             if (prefix != null && prefix.Trim() != String.Empty && ontology != null) {
@@ -93,7 +93,7 @@ namespace RDFSharp.Semantics
         }
 
         /// <summary>
-        /// Retrieves an ontology by seeking presence of its prefix.
+        /// Retrieves a registered ontology by seeking presence of its prefix
         /// </summary>
         public static RDFOntology GetOntologybyPrefix(String prefix) {
             if (prefix != null && prefix.Trim() != String.Empty) {
