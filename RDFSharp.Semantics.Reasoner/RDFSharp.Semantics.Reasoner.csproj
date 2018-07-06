@@ -51,7 +51,9 @@
     <Compile Include="RDFOntologyReasonerExtensions.cs" />
     <Compile Include="RDFOntologyReasonerReport.cs" />
     <Compile Include="RDFOntologyReasonerRule.cs" />
-    <Compile Include="RDFOntologyReasonerRuleSets.cs" />
+    <!-- RuleSets -->
+    <Compile Include="RuleSets\OWL_DL.cs" />
+    <Compile Include="RuleSets\RDFS.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RDFSharp.Semantics\RDFSharp.Semantics.csproj">
