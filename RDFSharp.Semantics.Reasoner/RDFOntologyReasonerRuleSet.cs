@@ -22,9 +22,9 @@ using RDFSharp.Model;
 namespace RDFSharp.Semantics.Reasoner {
 
     /// <summary>
-    /// RDFOntologyReasonerRuleSet represents a collection of rules available to reasoners.
+    /// RDFOntologyReasonerRuleSets represents a collection of rules available to reasoners.
     /// </summary>
-    public class RDFOntologyReasonerRuleSet {
+    public static class RDFOntologyReasonerRuleSets {
 
         #region RDFS
         /// <summary>
