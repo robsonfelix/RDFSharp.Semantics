@@ -87,7 +87,7 @@ namespace RDFSharp.Semantics
         public static void AddOntology(String prefix, RDFOntology ontology) {
             if (prefix != null && prefix.Trim() != String.Empty && ontology != null) {
                 if (GetOntologybyPrefix(prefix) == null) {
-                    Instance.DynamicRegister.Add(prefix, ontology);
+                    Instance.DynamicRegister.Add(prefix.Trim().ToUpperInvariant(), ontology);
                 }
                 else {
                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Cannot add ontology with '{0}' prefix to the register, because it already exists.", prefix));
