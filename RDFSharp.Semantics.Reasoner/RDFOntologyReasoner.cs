@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,27 +25,57 @@ namespace RDFSharp.Semantics.Reasoner
     /// <summary>
     /// RDFOntologyReasoner represents an inference engine applied on a given ontology
     /// </summary>
-    public class RDFOntologyReasoner {
+    public sealed class RDFOntologyReasoner : IEnumerable<RDFOntologyReasonerRule> {
 
         #region Properties
         /// <summary>
-        /// List of rules applied by the reasoner
+        /// Description of the reasoner
         /// </summary>
-        internal List<RDFOntologyReasonerRule> Rules { get; set; }
+        public String ReasonerDescription { get; internal set; }
+
+        /// <summary>
+        /// Count of the rules composing the reasoner
+        /// </summary>
+        public Int32 RulesCount {
+            get { return this.Rules.Count; }
+        }
+
+    /// <summary>
+    /// List of rules applied by the reasoner
+    /// </summary>
+    internal List<RDFOntologyReasonerRule> Rules { get; set; }
         #endregion
 
         #region Ctors
         /// <summary>
         /// Default-ctor to build an empty ontology reasoner
         /// </summary>
-        public RDFOntologyReasoner() {
-            this.Rules = new List<RDFOntologyReasonerRule>();
+        public RDFOntologyReasoner(String reasonerDescription) {
+            this.Rules                   = new List<RDFOntologyReasonerRule>();
+            if (reasonerDescription     != null && reasonerDescription.Trim() != String.Empty)
+                this.ReasonerDescription = reasonerDescription.Trim();            
+        }
+        #endregion
+
+        #region Interfaces
+        /// <summary>
+        /// Exposes a typed enumerator on the reasoner's rules
+        /// </summary>
+        IEnumerator<RDFOntologyReasonerRule> IEnumerable<RDFOntologyReasonerRule>.GetEnumerator() {
+            return this.Rules.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Exposes an untyped enumerator on the reasoner's rules
+        /// </summary>
+        IEnumerator IEnumerable.GetEnumerator() {
+            return this.Rules.GetEnumerator();
         }
         #endregion
 
         #region Methods
 
-        #region Management
+        #region Add
         /// <summary>
         /// Adds the given rule to the reasoner
         /// </summary>
@@ -56,7 +87,9 @@ namespace RDFSharp.Semantics.Reasoner
             }
             return this;
         }
+        #endregion
 
+        #region Select
         /// <summary>
         /// Selects the given rule from the resoner
         /// </summary>
@@ -68,7 +101,7 @@ namespace RDFSharp.Semantics.Reasoner
         }
         #endregion
 
-        #region Reasoning
+        #region Apply
         /// <summary>
         /// Triggers the execution of the given rule on the given ontology. 
         /// Returns a boolean indicating if new evidences have been found.
