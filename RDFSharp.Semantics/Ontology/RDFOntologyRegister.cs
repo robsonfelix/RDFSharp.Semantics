@@ -89,6 +89,9 @@ namespace RDFSharp.Semantics
                 if (GetOntologybyPrefix(prefix) == null) {
                     Instance.DynamicRegister.Add(prefix, ontology);
                 }
+                else {
+                    RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Cannot add ontology with '{0}' prefix to the register, because it already exists.", prefix));
+                }
             }
         }
 
