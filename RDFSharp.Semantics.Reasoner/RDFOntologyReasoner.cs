@@ -37,15 +37,8 @@ namespace RDFSharp.Semantics.Reasoner
         /// <summary>
         /// Default-ctor to build an empty ontology reasoner
         /// </summary>
-        internal RDFOntologyReasoner() {
+        public RDFOntologyReasoner() {
             this.Rules = new List<RDFOntologyReasonerRule>();
-        }
-
-        /// <summary>
-        /// Creates an empty ontology reasoner
-        /// </summary>
-        public static RDFOntologyReasoner CreateNew() {
-            return new RDFOntologyReasoner();
         }
         #endregion
 
@@ -55,9 +48,9 @@ namespace RDFSharp.Semantics.Reasoner
         /// <summary>
         /// Adds the given rule to the reasoner
         /// </summary>
-        public RDFOntologyReasoner WithRule(RDFOntologyReasonerRule rule) {
+        public RDFOntologyReasoner AddRule(RDFOntologyReasonerRule rule) {
             if (rule   != null) {
-                if (this.SelectRule(rule.RuleName) == null) {
+                if (this.SelectRuleByName(rule.RuleName) == null) {
                     this.Rules.Add(rule);
                 }
             }
@@ -67,8 +60,11 @@ namespace RDFSharp.Semantics.Reasoner
         /// <summary>
         /// Selects the given rule from the resoner
         /// </summary>
-        internal RDFOntologyReasonerRule SelectRule(String ruleName = "") {
-            return this.Rules.FirstOrDefault(r => r.RuleName.Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
+        public RDFOntologyReasonerRule SelectRuleByName(String ruleName) {
+            if (ruleName  != null &&  ruleName.Trim() != String.Empty)
+                return this.Rules.FirstOrDefault(r => r.RuleName.Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
+            else
+                return null;
         }
         #endregion
 
@@ -78,7 +74,7 @@ namespace RDFSharp.Semantics.Reasoner
         /// Returns a boolean indicating if new evidences have been found.
         /// </summary>
         internal Boolean TriggerRule(String ruleName, RDFOntology ontology, RDFOntologyReasonerReport report) {
-            var reasonerRule  = this.SelectRule(ruleName);
+            var reasonerRule  = this.SelectRuleByName(ruleName);
             if (reasonerRule != null) {
 
                 //Raise launching signal

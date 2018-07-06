@@ -50,11 +50,11 @@ namespace RDFSharp.Semantics.Reasoner
         /// <summary>
         /// Default-ctor to build a reasoner rule with given name, description and delegate
         /// </summary>
-        internal RDFOntologyReasonerRule(String ruleName, 
-                                         String ruleDescription,
-                                         ReasonerRuleDelegate ruleDelegate) {
-            if (ruleName                    != null) {
-                if (ruleDescription         != null) {
+        public RDFOntologyReasonerRule(String ruleName, 
+                                       String ruleDescription,
+                                       ReasonerRuleDelegate ruleDelegate) {
+            if (ruleName                    != null && ruleName.Trim()        != String.Empty) {
+                if (ruleDescription         != null && ruleDescription.Trim() != String.Empty) {
                     if (ruleDelegate        != null) {
                         this.RuleName        = ruleName.Trim().ToUpperInvariant();
                         this.RuleDescription = ruleDescription.Trim().ToUpperInvariant();
@@ -65,11 +65,11 @@ namespace RDFSharp.Semantics.Reasoner
                     }
                 }
                 else {
-                    throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleDescription\" parameter is null.");
+                    throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleDescription\" parameter is null or empty.");
                 }
             }
             else {
-                throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleName\" parameter is null.");
+                throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleName\" parameter is null or empty.");
             }
         }
         #endregion
