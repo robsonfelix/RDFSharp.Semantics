@@ -51,6 +51,12 @@
     <Compile Include="RDFOntologyReasonerExtensions.cs" />
     <Compile Include="RDFOntologyReasonerReport.cs" />
     <Compile Include="RDFOntologyReasonerRule.cs" />
+    <!-- Ontologies -->
+    <Compile Include="Ontologies\RDFDCOntology.cs" />
+    <Compile Include="Ontologies\RDFFOAFOntology.cs" />
+    <Compile Include="Ontologies\RDFGEOOntology.cs" />
+    <Compile Include="Ontologies\RDFSIOCOntology.cs" />
+    <Compile Include="Ontologies\RDFSKOSOntology.cs" />
     <!-- RuleSets -->
     <Compile Include="RuleSets\OWL_DL.cs" />
     <Compile Include="RuleSets\RDFS.cs" />

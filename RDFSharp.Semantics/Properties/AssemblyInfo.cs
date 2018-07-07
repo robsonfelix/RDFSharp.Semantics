@@ -26,6 +26,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyVersion("1.5.0")]
 [assembly: ComVisible(false)]
 [assembly: Guid("2BE71F3A-943B-464A-8FE8-7D7BCBF23100")]
-[assembly: InternalsVisibleTo("RDFSharp.Semantics.LinkedData")]
 [assembly: InternalsVisibleTo("RDFSharp.Semantics.Reasoner")]
 [assembly: InternalsVisibleTo("RDFSharp.Semantics.Validator")]
