@@ -60,6 +60,7 @@
     <!-- RuleSets -->
     <Compile Include="RuleSets\OWL_DL.cs" />
     <Compile Include="RuleSets\RDFS.cs" />
+    <Compile Include="RuleSets\SKOS.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RDFSharp.Semantics\RDFSharp.Semantics.csproj">

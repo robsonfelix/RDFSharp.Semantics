@@ -16,7 +16,7 @@
 
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics.LinkedData
+namespace RDFSharp.Semantics.Ontologies
 {
 
     /// <summary>
