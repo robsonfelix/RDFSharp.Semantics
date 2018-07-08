@@ -92,7 +92,7 @@ namespace RDFSharp.Semantics
         /// Gives the string representation of the reasoner rule
         /// </summary>
         public override String ToString() {
-            return "RULE '" + this.RuleName + "' {PRIORITY " + this.RulePriority + "}: " + this.RuleDescription;
+            return this.RuleName + " (PRIORITY " + this.RulePriority + "): " + this.RuleDescription;
         }
         #endregion
 
