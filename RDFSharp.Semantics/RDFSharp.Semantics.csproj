@@ -46,7 +46,6 @@
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RDFBASEOntology.cs" />
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
@@ -87,6 +86,27 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
+    <!-- Reasoner -->
+    <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
+    <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
+    <Compile Include="Reasoner\RDFOntologyReasonerExtensions.cs" />
+    <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
+    <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
+    <Compile Include="Reasoner\Ontologies\RDFBASEOntology.cs" />
+    <Compile Include="Reasoner\Ontologies\RDFDCOntology.cs" />
+    <Compile Include="Reasoner\Ontologies\RDFFOAFOntology.cs" />
+    <Compile Include="Reasoner\Ontologies\RDFGEOOntology.cs" />
+    <Compile Include="Reasoner\Ontologies\RDFSIOCOntology.cs" />
+    <Compile Include="Reasoner\Ontologies\RDFSKOSOntology.cs" />
+    <Compile Include="Reasoner\RuleSets\OWL_DL.cs" />
+    <Compile Include="Reasoner\RuleSets\RDFS.cs" />
+    <Compile Include="Reasoner\RuleSets\SKOS.cs" />
+    <!-- Validator -->
+    <Compile Include="Validator\RDFOntologyValidator.cs" />
+    <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
+    <Compile Include="Validator\RDFOntologyValidatorReport.cs" />
+    <Compile Include="Validator\RDFOntologyValidatorRule.cs" />
+    <Compile Include="Validator\RDFOntologyValidatorRuleSet.cs" />
   </ItemGroup>
   <!-- NuGet -->
   <ItemGroup>
