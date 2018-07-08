@@ -16,7 +16,7 @@
 
 using System;
 
-namespace RDFSharp.Semantics.Reasoner
+namespace RDFSharp.Semantics
 {
 
     /// <summary>

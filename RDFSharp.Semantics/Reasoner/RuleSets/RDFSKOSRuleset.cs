@@ -18,7 +18,7 @@ using System;
 using System.Linq;
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics.Reasoner.RuleSets
+namespace RDFSharp.Semantics
 {
 
     /// <summary>
