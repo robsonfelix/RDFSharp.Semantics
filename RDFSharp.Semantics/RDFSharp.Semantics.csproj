@@ -98,9 +98,8 @@
     <Compile Include="Reasoner\Ontologies\RDFGEOOntology.cs" />
     <Compile Include="Reasoner\Ontologies\RDFSIOCOntology.cs" />
     <Compile Include="Reasoner\Ontologies\RDFSKOSOntology.cs" />
-    <Compile Include="Reasoner\RuleSets\OWL_DL.cs" />
-    <Compile Include="Reasoner\RuleSets\RDFS.cs" />
-    <Compile Include="Reasoner\RuleSets\SKOS.cs" />
+    <Compile Include="Reasoner\RuleSets\RDFBASERuleset.cs" />
+    <Compile Include="Reasoner\RuleSets\RDFSKOSRuleset.cs" />
     <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
