@@ -40,10 +40,10 @@ namespace RDFSharp.Semantics.Reasoner
             get { return this.Rules.Count; }
         }
 
-    /// <summary>
-    /// List of rules applied by the reasoner
-    /// </summary>
-    internal List<RDFOntologyReasonerRule> Rules { get; set; }
+        /// <summary>
+        /// List of rules applied by the reasoner
+        /// </summary>
+        internal List<RDFOntologyReasonerRule> Rules { get; set; }
         #endregion
 
         #region Ctors
@@ -51,9 +51,8 @@ namespace RDFSharp.Semantics.Reasoner
         /// Default-ctor to build an empty ontology reasoner
         /// </summary>
         public RDFOntologyReasoner(String reasonerDescription) {
-            this.Rules                   = new List<RDFOntologyReasonerRule>();
-            if (reasonerDescription     != null && reasonerDescription.Trim() != String.Empty)
-                this.ReasonerDescription = reasonerDescription.Trim();            
+            this.ReasonerDescription = reasonerDescription;
+            this.Rules               = new List<RDFOntologyReasonerRule>();
         }
         #endregion
 
