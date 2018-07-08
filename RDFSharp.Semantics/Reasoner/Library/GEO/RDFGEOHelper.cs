@@ -15,35 +15,14 @@
 */
 
 using System;
-using System.Linq;
-using RDFSharp.Model;
 
-namespace RDFSharp.Semantics.SKOS
+namespace RDFSharp.Semantics.GEO
 {
 
     /// <summary>
-    /// RDFSKOSRuleset implements a subset of SKOS entailment rules
+    ///  RDFGEOHelper contains utility methods supporting W3C GEO modeling and reasoning
     /// </summary>
-    public static class RDFSKOSRuleset {
-
-        #region Properties
-        /// <summary>
-        /// Counter of rules contained in the SKOS ruleset
-        /// </summary>
-        public static readonly Int32 RulesCount = 0;
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Static-ctor to initialize the SKOS ruleset
-        /// </summary>
-        static RDFSKOSRuleset() {
-
-        }
-        #endregion
-
-        #region Methods
-        #endregion
+    public static class RDFGEOHelper {
 
     }
 

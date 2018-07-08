@@ -15,35 +15,14 @@
 */
 
 using System;
-using System.Linq;
-using RDFSharp.Model;
 
-namespace RDFSharp.Semantics.SKOS
+namespace RDFSharp.Semantics.DC
 {
 
     /// <summary>
-    /// RDFSKOSRuleset implements a subset of SKOS entailment rules
+    ///  RDFDCHelper contains utility methods supporting Dublin Core modeling and reasoning
     /// </summary>
-    public static class RDFSKOSRuleset {
-
-        #region Properties
-        /// <summary>
-        /// Counter of rules contained in the SKOS ruleset
-        /// </summary>
-        public static readonly Int32 RulesCount = 0;
-        #endregion
-
-        #region Ctors
-        /// <summary>
-        /// Static-ctor to initialize the SKOS ruleset
-        /// </summary>
-        static RDFSKOSRuleset() {
-
-        }
-        #endregion
-
-        #region Methods
-        #endregion
+    public static class RDFDCHelper {
 
     }
 
