@@ -135,7 +135,7 @@ namespace RDFSharp.Semantics
                 ontology    = ontology.UnionWith(RDFBASEOntology.Instance);
 
                 #region Triggers
-                //Apply basic rules
+                //Apply basic RDFS/OWL-DL rules
                 var eqct    = this.TriggerRule("EquivalentClassTransitivity",    ontology, report);
                 var sbct    = this.TriggerRule("SubClassTransitivity",           ontology, report);
                 var dwen    = this.TriggerRule("DisjointWithEntailment",         ontology, report);
@@ -144,7 +144,7 @@ namespace RDFSharp.Semantics
                 var smat    = this.TriggerRule("SameAsTransitivity",             ontology, report);
                 var dffe    = this.TriggerRule("DifferentFromEntailment",        ontology, report);
 
-                //Apply extended rules
+                //Apply extended RDFS/OWL-DL rules
                 var dome    = this.TriggerRule("DomainEntailment",               ontology, report);
                 var rane    = this.TriggerRule("RangeEntailment",                ontology, report);
                 var clte    = this.TriggerRule("ClassTypeEntailment",            ontology, report);
