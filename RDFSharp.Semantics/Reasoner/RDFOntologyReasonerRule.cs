@@ -36,6 +36,11 @@ namespace RDFSharp.Semantics
         public String RuleDescription { get; internal set; }
 
         /// <summary>
+        /// Execution priority of the rule (less is more priority)
+        /// </summary>
+        public UInt32 RulePriority { get; internal set; }
+
+        /// <summary>
         /// Delegate for the function which will be executed as body of the rule
         /// </summary>
         public delegate Int64 ReasonerRuleDelegate(RDFOntology ontology, RDFOntologyReasonerReport report);
@@ -48,17 +53,25 @@ namespace RDFSharp.Semantics
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build a reasoner rule with given name, description and delegate
+        /// Default-ctor to build a reasoner rule
         /// </summary>
         public RDFOntologyReasonerRule(String ruleName, 
                                        String ruleDescription,
+                                       UInt32 rulePriority,
                                        ReasonerRuleDelegate ruleDelegate) {
-            if (ruleName                    != null && ruleName.Trim()        != String.Empty) {
-                if (ruleDescription         != null && ruleDescription.Trim() != String.Empty) {
-                    if (ruleDelegate        != null) {
-                        this.RuleName        = ruleName.Trim().ToUpperInvariant();
-                        this.RuleDescription = ruleDescription.Trim().ToUpperInvariant();
-                        this.ExecuteRule     = ruleDelegate;
+            if (ruleName                     != null && ruleName.Trim()        != String.Empty) {
+                if (ruleDescription          != null && ruleDescription.Trim() != String.Empty) {
+                    if (ruleDelegate         != null) {
+                        this.RuleName         = ruleName.Trim().ToUpperInvariant();
+                        this.RuleDescription  = ruleDescription.Trim().ToUpperInvariant();
+
+                        //Shift rule priority to guarantee preliminar execution of BASE rules
+                        if (rulePriority     <= RDFBASERuleset.RulesCount)
+                            this.RulePriority = rulePriority + (UInt32)RDFBASERuleset.RulesCount + 1;
+                        else
+                            this.RulePriority = rulePriority;
+
+                        this.ExecuteRule      = ruleDelegate;
                     }
                     else {
                         throw new RDFSemanticsException("Cannot create RDFOntologyReasonerRule because given \"ruleDelegate\" parameter is null.");
@@ -79,7 +92,7 @@ namespace RDFSharp.Semantics
         /// Gives the string representation of the reasoner rule
         /// </summary>
         public override String ToString() {
-            return "RULE " + this.RuleName + ": " + this.RuleDescription;
+            return "RULE '" + this.RuleName + "' {PRIORITY '" + this.RulePriority + "'}: " + this.RuleDescription;
         }
         #endregion
 

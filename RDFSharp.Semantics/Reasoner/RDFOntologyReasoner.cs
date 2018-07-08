@@ -102,61 +102,36 @@ namespace RDFSharp.Semantics
 
         #region Apply
         /// <summary>
-        /// Triggers the execution of the given rule on the given ontology. 
-        /// Returns a boolean indicating if new evidences have been found.
-        /// </summary>
-        internal Boolean TriggerRule(String ruleName, RDFOntology ontology, RDFOntologyReasonerReport report) {
-            var reasonerRule  = this.SelectRuleByName(ruleName);
-            if (reasonerRule != null) {
-
-                //Raise launching signal
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", ruleName));
-
-                //Launch the reasoning rule
-                var infCount  = reasonerRule.ExecuteRule(ontology, report);
-                
-                //Raise termination signal
-                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", ruleName, infCount));
-
-                return (infCount > 0);
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Applies the reasoner on the given ontology, producing a reasoning report.
         /// </summary>
         public RDFOntologyReasonerReport ApplyToOntology(ref RDFOntology ontology) {
-            if (ontology   != null) {
-                var report  = new RDFOntologyReasonerReport();
+            if (ontology           != null) {
+                var report          = new RDFOntologyReasonerReport();
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}'", ontology.Value));
 
-                //Expand ontology
-                ontology    = ontology.UnionWith(RDFBASEOntology.Instance);
+                //STEP 1: Expand ontology with BASE definitions
+                ontology            = ontology.UnionWith(RDFBASEOntology.Instance);
 
-                #region Triggers
-                //Apply basic RDFS/OWL-DL rules
-                var eqct    = this.TriggerRule("EquivalentClassTransitivity",    ontology, report);
-                var sbct    = this.TriggerRule("SubClassTransitivity",           ontology, report);
-                var dwen    = this.TriggerRule("DisjointWithEntailment",         ontology, report);
-                var eqpt    = this.TriggerRule("EquivalentPropertyTransitivity", ontology, report);
-                var sbpt    = this.TriggerRule("SubPropertyTransitivity",        ontology, report);
-                var smat    = this.TriggerRule("SameAsTransitivity",             ontology, report);
-                var dffe    = this.TriggerRule("DifferentFromEntailment",        ontology, report);
+                //STEP 2: Execute BASE rules
+                var baseRules       = this.Rules.Where(x => x.RulePriority <= RDFBASERuleset.RulesCount)
+                                                .OrderBy(x => x.RulePriority);
+                foreach (var bRule in baseRules) {
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", bRule.RuleName));
+                    var infCounter  = bRule.ExecuteRule(ontology, report);
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", bRule.RuleName, infCounter));
+                }
 
-                //Apply extended RDFS/OWL-DL rules
-                var dome    = this.TriggerRule("DomainEntailment",               ontology, report);
-                var rane    = this.TriggerRule("RangeEntailment",                ontology, report);
-                var clte    = this.TriggerRule("ClassTypeEntailment",            ontology, report);
-                var iofe    = this.TriggerRule("InverseOfEntailment",            ontology, report);
-                var sype    = this.TriggerRule("SymmetricPropertyEntailment",    ontology, report);
-                var trpe    = this.TriggerRule("TransitivePropertyEntailment",   ontology, report);
-                var prpe    = this.TriggerRule("PropertyEntailment",             ontology, report);
-                var smae    = this.TriggerRule("SameAsEntailment",               ontology, report);
-                #endregion
+                //STEP 3: Execute custom rules
+                var customRules     = this.Rules.Where(x => x.RulePriority > RDFBASERuleset.RulesCount)
+                                                .OrderBy(x => x.RulePriority);
+                foreach (var cRule in customRules) {
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", cRule.RuleName));
+                    var infCounter  = cRule.ExecuteRule(ontology, report);
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", cRule.RuleName, infCounter));
+                }
 
-                //Unexpand ontology
-                ontology    = ontology.DifferenceWith(RDFBASEOntology.Instance);
+                //STEP 4: Unexpand ontology from  BASE definitions
+                ontology            = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}'", ontology.Value));
                 return report;
