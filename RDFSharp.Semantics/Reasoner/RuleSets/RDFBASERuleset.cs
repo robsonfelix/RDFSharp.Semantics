@@ -117,7 +117,7 @@ namespace RDFSharp.Semantics
 
         #region Ctors
         /// <summary>
-        /// Static-ctor to initialize the RDFS ruleset
+        /// Static-ctor to initialize the BASE ruleset
         /// </summary>
         static RDFBASERuleset() {
 
