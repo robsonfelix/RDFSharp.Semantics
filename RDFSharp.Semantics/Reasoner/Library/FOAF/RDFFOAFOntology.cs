@@ -261,10 +261,6 @@ namespace RDFSharp.Semantics.FOAF
 
             #endregion
 
-            #region Register
-            RDFOntologyRegister.AddOntology("FOAF", Instance);
-            #endregion
-
         }
         #endregion
 
