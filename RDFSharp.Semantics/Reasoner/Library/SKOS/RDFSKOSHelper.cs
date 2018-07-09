@@ -137,6 +137,31 @@ namespace RDFSharp.Semantics.SKOS
             }
             return ontologyData;
         }
+        
+        /// <summary>
+        /// Adds the "conceptScheme -> skos:hasTopConcept -> concept" assertion to the ontology data
+        /// </summary>
+        public static RDFOntologyData AddSKOSHasTopConceptAssertion(this RDFOntologyData ontologyData, RDFResource conceptScheme, RDFResource concept) {
+            if (ontologyData             != null && concept != null && conceptScheme != null) {
+                var conceptSchemeFact     = new RDFOntologyFact(conceptScheme);
+                var conceptFact           = new RDFOntologyFact(concept);
+                var conceptSchemeClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
+                var conceptClass          = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());                
+                var hasTopConceptProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HAS_TOP_CONCEPT.ToString());
+
+                //Add fact
+                ontologyData.AddFact(conceptSchemeFact);
+                ontologyData.AddFact(conceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptSchemeFact, conceptSchemeClass);
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:hasTopConcept assertion
+                ontologyData.AddAssertionRelation(conceptSchemeFact, (RDFOntologyObjectProperty)hasTopConceptProperty, conceptFact);
+            }
+            return ontologyData;
+        }
         #endregion
 
     }
