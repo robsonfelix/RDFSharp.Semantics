@@ -93,10 +93,6 @@ namespace RDFSharp.Semantics.GEO
 
             #endregion
 
-            #region Register
-            RDFOntologyRegister.AddOntology("GEO", Instance);
-            #endregion
-
         }
         #endregion
 
