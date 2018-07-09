@@ -337,10 +337,6 @@ namespace RDFSharp.Semantics.SIOC
 
             #endregion
 
-            #region Register
-            RDFOntologyRegister.AddOntology("SIOC", Instance);
-            #endregion
-
         }
         #endregion
 
