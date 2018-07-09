@@ -93,6 +93,23 @@ namespace RDFSharp.Semantics.SKOS
             }
             return ontologyData;
         }
+        
+        /// <summary>
+        /// Adds the given fact to the ontology data as instance of "skosxl:Label"
+        /// </summary>
+        public static RDFOntologyData AddSKOSLabel(this RDFOntologyData ontologyData, RDFResource label) {
+            if (ontologyData  != null && label != null) {
+                var labelFact  = new RDFOntologyFact(label);
+                var labelClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
+
+                //Add fact
+                ontologyData.AddFact(labelFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(labelFact, labelClass);
+            }
+            return ontologyData;
+        }
         #endregion
 
     }
