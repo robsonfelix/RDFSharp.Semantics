@@ -187,6 +187,30 @@ namespace RDFSharp.Semantics.SKOS
             }
             return ontologyData;
         }
+        
+        /// <summary>
+        /// Adds the "aConcept -> skos:semanticRelation -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static RDFOntologyData AddSKOSSemanticRelationAssertion(this RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData != null && aConcept != null && bConcept != null) {
+                var aConceptFact             = new RDFOntologyFact(aConcept);
+                var bConceptFact             = new RDFOntologyFact(bConcept);
+                var conceptClass             = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var semanticRelationProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SEMANTIC_RELATION.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:semanticRelation assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)semanticRelationProperty, bConceptFact);
+            }
+            return ontologyData;
+        }
         #endregion
 
     }
