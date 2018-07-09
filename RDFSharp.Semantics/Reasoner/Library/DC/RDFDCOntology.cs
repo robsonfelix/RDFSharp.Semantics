@@ -311,10 +311,6 @@ namespace RDFSharp.Semantics.DC
 
             #endregion
 
-            #region Register
-            RDFOntologyRegister.AddOntology("DC", Instance);
-            #endregion
-
         }
         #endregion
 
