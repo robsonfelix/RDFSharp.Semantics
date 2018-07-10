@@ -203,7 +203,30 @@ namespace RDFSharp.Semantics.SKOS
             }
         }
         
-                /// <summary>
+        /// <summary>
+        /// Adds the "aConcept -> skos:related -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static void AddRelatedAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData       != null && aConcept != null && bConcept != null) {
+                var aConceptFact    = new RDFOntologyFact(aConcept);
+                var bConceptFact    = new RDFOntologyFact(bConcept);
+                var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var relatedProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.RELATED.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:related assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)relatedProperty, bConceptFact);
+            }
+        }
+        
+        /// <summary>
         /// Adds the "aConcept -> skos:broader -> bConcept" assertion to the ontology data
         /// </summary>
         public static void AddBroaderAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
