@@ -202,6 +202,98 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)semanticRelationProperty, bConceptFact);
             }
         }
+        
+                /// <summary>
+        /// Adds the "aConcept -> skos:broader -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static void AddBroaderAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData       != null && aConcept != null && bConcept != null) {
+                var aConceptFact    = new RDFOntologyFact(aConcept);
+                var bConceptFact    = new RDFOntologyFact(bConcept);
+                var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var broaderProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:broader assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)broaderProperty, bConceptFact);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aConcept -> skos:broaderTransitive -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static void AddBroaderTransitiveAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData                 != null && aConcept != null && bConcept != null) {
+                var aConceptFact              = new RDFOntologyFact(aConcept);
+                var bConceptFact              = new RDFOntologyFact(bConcept);
+                var conceptClass              = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var broaderTransitiveProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:broaderTransitive assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)broaderTransitiveProperty, bConceptFact);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aConcept -> skos:narrower -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static void AddNarrowerAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData        != null && aConcept != null && bConcept != null) {
+                var aConceptFact     = new RDFOntologyFact(aConcept);
+                var bConceptFact     = new RDFOntologyFact(bConcept);
+                var conceptClass     = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var narrowerProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:narrower assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)narrowerProperty, bConceptFact);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aConcept -> skos:narrowerTransitive -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static void AddNarrowerTransitiveAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData                  != null && aConcept != null && bConcept != null) {
+                var aConceptFact               = new RDFOntologyFact(aConcept);
+                var bConceptFact               = new RDFOntologyFact(bConcept);
+                var conceptClass               = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var narrowerTransitiveProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:narrowerTransitive assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)narrowerTransitiveProperty, bConceptFact);
+            }
+        }
         #endregion
 
     }
