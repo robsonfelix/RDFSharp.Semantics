@@ -317,6 +317,52 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)narrowerTransitiveProperty, bConceptFact);
             }
         }
+        
+        /// <summary>
+        /// Adds the "aConcept -> skos:closeMatch -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static void AddCloseMatchAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData          != null && aConcept != null && bConcept != null) {
+                var aConceptFact       = new RDFOntologyFact(aConcept);
+                var bConceptFact       = new RDFOntologyFact(bConcept);
+                var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var closeMatchProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.CLOSE_MATCH.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:closeMatch assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)closeMatchProperty, bConceptFact);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aConcept -> skos:exactMatch -> bConcept" assertion to the ontology data
+        /// </summary>
+        public static void AddExactMatchAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
+            if (ontologyData          != null && aConcept != null && bConcept != null) {
+                var aConceptFact       = new RDFOntologyFact(aConcept);
+                var bConceptFact       = new RDFOntologyFact(bConcept);
+                var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var exactMatchProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.EXACT_MATCH.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:exactMatch assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)exactMatchProperty, bConceptFact);
+            }
+        }
         #endregion
 
     }
