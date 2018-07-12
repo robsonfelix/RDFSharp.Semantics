@@ -420,6 +420,26 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)mappingRelationProperty, bConceptFact);
             }
         }
+        
+        /// <summary>
+        /// Adds the "conceptFact -> skos:notation -> notationLiteral" assertion to the ontology data
+        /// </summary>
+        public static void AddNotationAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral notationLiteral) {
+            if (ontologyData        != null && conceptFact != null && notationLiteral != null) {
+                var conceptClass     = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var notationProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NOTATION.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(notationLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:notation assertion
+                ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyDatatypeProperty)notationProperty, notationLiteral);
+            }
+        }
         #endregion
 
     }
