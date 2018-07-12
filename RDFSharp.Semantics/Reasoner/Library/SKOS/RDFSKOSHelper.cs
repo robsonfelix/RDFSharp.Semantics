@@ -29,9 +29,8 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Adds the given fact to the ontology data as instance of "skos:Collection"
         /// </summary>
-        public static void AddCollection(RDFOntologyData ontologyData, RDFResource collection) {
-            if (ontologyData       != null && collection != null) {
-                var collectionFact  = new RDFOntologyFact(collection);
+        public static void AddCollection(RDFOntologyData ontologyData, RDFOntologyFact collectionFact) {
+            if (ontologyData       != null && collectionFact != null) {
                 var collectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString());
 
                 //Add fact
@@ -45,9 +44,8 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Adds the given fact to the ontology data as instance of "skos:Concept"
         /// </summary>
-        public static void AddConcept(RDFOntologyData ontologyData, RDFResource concept) {
-            if (ontologyData    != null && concept != null) {
-                var conceptFact  = new RDFOntologyFact(concept);
+        public static void AddConcept(RDFOntologyData ontologyData, RDFOntologyFact conceptFact) {
+            if (ontologyData    != null && conceptFact != null) {
                 var conceptClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
 
                 //Add fact
@@ -61,9 +59,8 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Adds the given fact to the ontology data as instance of "skos:ConceptScheme"
         /// </summary>
-        public static void AddConceptScheme(RDFOntologyData ontologyData, RDFResource conceptScheme) {
-            if (ontologyData          != null && conceptScheme != null) {
-                var conceptSchemeFact  = new RDFOntologyFact(conceptScheme);
+        public static void AddConceptScheme(RDFOntologyData ontologyData, RDFOntologyFact conceptSchemeFact) {
+            if (ontologyData          != null && conceptSchemeFact != null) {
                 var conceptSchemeClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
 
                 //Add fact
@@ -77,9 +74,8 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Adds the given fact to the ontology data as instance of "skos:OrderedCollection"
         /// </summary>
-        public static void AddOrderedCollection(RDFOntologyData ontologyData, RDFResource orderedCollection) {
-            if (ontologyData              != null && orderedCollection != null) {
-                var orderedCollectionFact  = new RDFOntologyFact(orderedCollection);
+        public static void AddOrderedCollection(RDFOntologyData ontologyData, RDFOntologyFact orderedCollectionFact) {
+            if (ontologyData              != null && orderedCollectionFact != null) {
                 var orderedCollectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString());
 
                 //Add fact
@@ -89,13 +85,12 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddClassTypeRelation(orderedCollectionFact, orderedCollectionClass);
             }
         }
-        
+
         /// <summary>
         /// Adds the given fact to the ontology data as instance of "skosxl:Label"
         /// </summary>
-        public static void AddLabel(RDFOntologyData ontologyData, RDFResource label) {
-            if (ontologyData  != null && label != null) {
-                var labelFact  = new RDFOntologyFact(label);
+        public static void AddLabel(RDFOntologyData ontologyData, RDFOntologyFact labelFact) {
+            if (ontologyData  != null && labelFact != null) {
                 var labelClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
 
                 //Add fact
@@ -109,12 +104,10 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Assertions
         /// <summary>
-        /// Adds the "concept -> skos:inScheme -> conceptScheme" assertion to the ontology data
+        /// Adds the "conceptFact -> skos:inScheme -> conceptSchemeFact" assertion to the ontology data
         /// </summary>
-        public static void AddInSchemeAssertion(RDFOntologyData ontologyData, RDFResource concept, RDFResource conceptScheme) {
-            if (ontologyData          != null && concept != null && conceptScheme != null) {
-                var conceptFact        = new RDFOntologyFact(concept);
-                var conceptSchemeFact  = new RDFOntologyFact(conceptScheme);
+        public static void AddInSchemeAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact conceptSchemeFact) {
+            if (ontologyData          != null && conceptFact != null && conceptSchemeFact != null) {
                 var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var conceptSchemeClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
                 var inSchemeProperty   = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.IN_SCHEME.ToString());
@@ -131,14 +124,12 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyObjectProperty)inSchemeProperty, conceptSchemeFact);
             }
         }
-        
+
         /// <summary>
-        /// Adds the "conceptScheme -> skos:hasTopConcept -> concept" assertion to the ontology data
+        /// Adds the "conceptSchemeFact -> skos:hasTopConcept -> conceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddHasTopConceptAssertion(RDFOntologyData ontologyData, RDFResource conceptScheme, RDFResource concept) {
-            if (ontologyData             != null && concept != null && conceptScheme != null) {
-                var conceptSchemeFact     = new RDFOntologyFact(conceptScheme);
-                var conceptFact           = new RDFOntologyFact(concept);
+        public static void AddHasTopConceptAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptSchemeFact, RDFOntologyFact conceptFact) {
+            if (ontologyData             != null && conceptFact != null && conceptSchemeFact != null) {
                 var conceptSchemeClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
                 var conceptClass          = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());                
                 var hasTopConceptProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HAS_TOP_CONCEPT.ToString());
@@ -155,14 +146,12 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(conceptSchemeFact, (RDFOntologyObjectProperty)hasTopConceptProperty, conceptFact);
             }
         }
-        
+
         /// <summary>
-        /// Adds the "concept -> skos:topConceptOf -> conceptScheme" assertion to the ontology data
+        /// Adds the "conceptFact -> skos:topConceptOf -> conceptSchemeFact" assertion to the ontology data
         /// </summary>
-        public static void AddTopConceptOfAssertion(RDFOntologyData ontologyData, RDFResource concept, RDFResource conceptScheme) {
-            if (ontologyData            != null && concept != null && conceptScheme != null) {
-                var conceptFact          = new RDFOntologyFact(concept);
-                var conceptSchemeFact    = new RDFOntologyFact(conceptScheme);
+        public static void AddTopConceptOfAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact conceptSchemeFact) {
+            if (ontologyData            != null && conceptFact != null && conceptSchemeFact != null) {
                 var conceptClass         = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var conceptSchemeClass   = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());                
                 var topConceptOfProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.TOP_CONCEPT_OF.ToString());
@@ -179,14 +168,12 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyObjectProperty)topConceptOfProperty, conceptSchemeFact);
             }
         }
-        
+
         /// <summary>
-        /// Adds the "aConcept -> skos:semanticRelation -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:semanticRelation -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddSemanticRelationAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData != null && aConcept != null && bConcept != null) {
-                var aConceptFact             = new RDFOntologyFact(aConcept);
-                var bConceptFact             = new RDFOntologyFact(bConcept);
+        public static void AddSemanticRelationAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData                != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass             = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var semanticRelationProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SEMANTIC_RELATION.ToString());
 
@@ -202,14 +189,12 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)semanticRelationProperty, bConceptFact);
             }
         }
-        
+
         /// <summary>
-        /// Adds the "aConcept -> skos:related -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:related -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddRelatedAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData       != null && aConcept != null && bConcept != null) {
-                var aConceptFact    = new RDFOntologyFact(aConcept);
-                var bConceptFact    = new RDFOntologyFact(bConcept);
+        public static void AddRelatedAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData       != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var relatedProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.RELATED.ToString());
 
@@ -225,14 +210,12 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)relatedProperty, bConceptFact);
             }
         }
-        
+
         /// <summary>
-        /// Adds the "aConcept -> skos:broader -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:broader -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddBroaderAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData       != null && aConcept != null && bConcept != null) {
-                var aConceptFact    = new RDFOntologyFact(aConcept);
-                var bConceptFact    = new RDFOntologyFact(bConcept);
+        public static void AddBroaderAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData       != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var broaderProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER.ToString());
 
@@ -250,12 +233,10 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Adds the "aConcept -> skos:broaderTransitive -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:broaderTransitive -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddBroaderTransitiveAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData                 != null && aConcept != null && bConcept != null) {
-                var aConceptFact              = new RDFOntologyFact(aConcept);
-                var bConceptFact              = new RDFOntologyFact(bConcept);
+        public static void AddBroaderTransitiveAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData                 != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass              = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var broaderTransitiveProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE.ToString());
 
@@ -273,12 +254,10 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Adds the "aConcept -> skos:narrower -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:narrower -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddNarrowerAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData        != null && aConcept != null && bConcept != null) {
-                var aConceptFact     = new RDFOntologyFact(aConcept);
-                var bConceptFact     = new RDFOntologyFact(bConcept);
+        public static void AddNarrowerAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData        != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass     = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var narrowerProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString());
 
@@ -296,12 +275,10 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Adds the "aConcept -> skos:narrowerTransitive -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:narrowerTransitive -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddNarrowerTransitiveAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData                  != null && aConcept != null && bConcept != null) {
-                var aConceptFact               = new RDFOntologyFact(aConcept);
-                var bConceptFact               = new RDFOntologyFact(bConcept);
+        public static void AddNarrowerTransitiveAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData                  != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass               = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var narrowerTransitiveProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE.ToString());
 
@@ -317,14 +294,12 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)narrowerTransitiveProperty, bConceptFact);
             }
         }
-        
+
         /// <summary>
-        /// Adds the "aConcept -> skos:closeMatch -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:closeMatch -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddCloseMatchAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData          != null && aConcept != null && bConcept != null) {
-                var aConceptFact       = new RDFOntologyFact(aConcept);
-                var bConceptFact       = new RDFOntologyFact(bConcept);
+        public static void AddCloseMatchAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData          != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var closeMatchProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.CLOSE_MATCH.ToString());
 
@@ -342,12 +317,10 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Adds the "aConcept -> skos:exactMatch -> bConcept" assertion to the ontology data
+        /// Adds the "aConceptFact -> skos:exactMatch -> bConceptFact" assertion to the ontology data
         /// </summary>
-        public static void AddExactMatchAssertion(RDFOntologyData ontologyData, RDFResource aConcept, RDFResource bConcept) {
-            if (ontologyData          != null && aConcept != null && bConcept != null) {
-                var aConceptFact       = new RDFOntologyFact(aConcept);
-                var bConceptFact       = new RDFOntologyFact(bConcept);
+        public static void AddExactMatchAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData          != null && aConceptFact != null && bConceptFact != null) {
                 var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var exactMatchProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.EXACT_MATCH.ToString());
 
@@ -361,6 +334,69 @@ namespace RDFSharp.Semantics.SKOS
 
                 //Add skos:exactMatch assertion
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)exactMatchProperty, bConceptFact);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aConceptFact -> skos:broadMatch -> bConceptFact" assertion to the ontology data
+        /// </summary>
+        public static void AddBroadMatchAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData          != null && aConceptFact != null && bConceptFact != null) {
+                var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var broadMatchProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROAD_MATCH.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:broadMatch assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)broadMatchProperty, bConceptFact);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aConceptFact -> skos:narrowMatch -> bConceptFact" assertion to the ontology data
+        /// </summary>
+        public static void AddNarrowMatchAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData           != null && aConceptFact != null && bConceptFact != null) {
+                var conceptClass        = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var narrowMatchProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROW_MATCH.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:narrowMatch assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)narrowMatchProperty, bConceptFact);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aConceptFact -> skos:relatedMatch -> bConceptFact" assertion to the ontology data
+        /// </summary>
+        public static void AddRelatedMatchAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            if (ontologyData            != null && aConceptFact != null && bConceptFact != null) {
+                var conceptClass         = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var relatedMatchProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.RELATED_MATCH.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aConceptFact);
+                ontologyData.AddFact(bConceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+
+                //Add skos:relatedMatch assertion
+                ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)relatedMatchProperty, bConceptFact);
             }
         }
         #endregion
