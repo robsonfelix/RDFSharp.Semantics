@@ -25,6 +25,8 @@ namespace RDFSharp.Semantics.SKOS
     /// </summary>
     public static class RDFSKOSHelper {
 
+        #region Modeling
+
         #region Facts
         /// <summary>
         /// Adds the given fact to the ontology data as instance of "skos:Collection"
@@ -399,7 +401,7 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)relatedMatchProperty, bConceptFact);
             }
         }
-        
+
         /// <summary>
         /// Adds the "aConceptFact -> skos:mappingRelation -> bConceptFact" assertion to the ontology data
         /// </summary>
@@ -420,7 +422,7 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)mappingRelationProperty, bConceptFact);
             }
         }
-        
+
         /// <summary>
         /// Adds the "conceptFact -> skos:notation -> notationLiteral" assertion to the ontology data
         /// </summary>
@@ -440,6 +442,150 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyDatatypeProperty)notationProperty, notationLiteral);
             }
         }
+        #endregion
+
+        #region Annotations
+        /// <summary>
+        /// Adds the "conceptFact -> skos:note -> noteLiteral" annotation to the ontology data
+        /// </summary>
+        public static void AddNoteAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral noteLiteral) {
+            if (ontologyData    != null && conceptFact != null && noteLiteral != null) {
+                var conceptClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var noteProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NOTE.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(noteLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:note annotation
+                ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)noteProperty, conceptFact, noteLiteral);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "conceptFact -> skos:changeNote -> changeNoteLiteral" annotation to the ontology data
+        /// </summary>
+        public static void AddChangeNoteAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral changeNoteLiteral) {
+            if (ontologyData          != null && conceptFact != null && changeNoteLiteral != null) {
+                var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var changeNoteProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.CHANGE_NOTE.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(changeNoteLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:changeNote annotation
+                ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)changeNoteProperty, conceptFact, changeNoteLiteral);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "conceptFact -> skos:editorialNote -> editorialNoteLiteral" annotation to the ontology data
+        /// </summary>
+        public static void AddEditorialNoteAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral editorialNoteLiteral) {
+            if (ontologyData             != null && conceptFact != null && editorialNoteLiteral != null) {
+                var conceptClass          = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var editorialNoteProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.EDITORIAL_NOTE.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(editorialNoteLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:editorialNote annotation
+                ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)editorialNoteProperty, conceptFact, editorialNoteLiteral);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "conceptFact -> skos:historyNote -> historyNoteLiteral" annotation to the ontology data
+        /// </summary>
+        public static void AddHistoryNoteAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral historyNoteLiteral) {
+            if (ontologyData           != null && conceptFact != null && historyNoteLiteral != null) {
+                var conceptClass        = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var historyNoteProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HISTORY_NOTE.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(historyNoteLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:historyNote annotation
+                ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)historyNoteProperty, conceptFact, historyNoteLiteral);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "conceptFact -> skos:scopeNote -> scopeNoteLiteral" annotation to the ontology data
+        /// </summary>
+        public static void AddScopeNoteAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral scopeNoteLiteral) {
+            if (ontologyData         != null && conceptFact != null && scopeNoteLiteral != null) {
+                var conceptClass      = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var scopeNoteProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SCOPE_NOTE.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(scopeNoteLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:scopeNote annotation
+                ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)scopeNoteProperty, conceptFact, scopeNoteLiteral);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "conceptFact -> skos:definition -> definitionLiteral" annotation to the ontology data
+        /// </summary>
+        public static void AddDefinitionAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral definitionLiteral) {
+            if (ontologyData          != null && conceptFact != null && definitionLiteral != null) {
+                var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var definitionProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.DEFINITION.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(definitionLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:definition annotation
+                ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)definitionProperty, conceptFact, definitionLiteral);
+            }
+        }
+
+        /// <summary>
+        /// Adds the "conceptFact -> skos:example -> exampleLiteral" annotation to the ontology data
+        /// </summary>
+        public static void AddExampleAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral exampleLiteral) {
+            if (ontologyData       != null && conceptFact != null && exampleLiteral != null) {
+                var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var exampleProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.EXAMPLE.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(conceptFact);
+                ontologyData.AddLiteral(exampleLiteral);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:example annotation
+                ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)exampleProperty, conceptFact, exampleLiteral);
+            }
+        }
+        #endregion
+
         #endregion
 
     }
