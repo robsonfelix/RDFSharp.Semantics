@@ -453,31 +453,10 @@ namespace RDFSharp.Semantics.SKOS
             if (ontologyData                != null && conceptFact != null && prefLabelLiteral != null) {
                 var conceptClass             = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var prefLabelProperty        = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
-                var canAddPrefLabelAnnot     = false;
 
                 //Taxonomy checks: only plain literals are allowed as skos:prefLabel annotations
                 if (prefLabelLiteral.Value  is RDFPlainLiteral) {
-                    var prefLabelLiteralLang = ((RDFPlainLiteral)prefLabelLiteral.Value).Language;
-
-                    //Plain literal without language tag: only one occurrence of this annotation is allowed
-                    if (String.IsNullOrEmpty(prefLabelLiteralLang)) {
-                        canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                                           .SelectEntriesByPredicate(prefLabelProperty)
-                                                                                           .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral 
-                                                                                                       && String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)));
-                    }
-
-                    //Plain literal with language tag: only one occurrence of this annotation per language tag is allowed
-                    else {
-                        canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                                           .SelectEntriesByPredicate(prefLabelProperty)
-                                                                                           .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
-                                                                                                       && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
-                                                                                                       && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang)));
-                    }
-
-                    //If taxonomy checks are passed, add skos:preflabel annotation
-                    if (canAddPrefLabelAnnot) {
+                    if (CanAddPrefLabelAnnotation(ontologyData, conceptFact, prefLabelLiteral)) {
 
                         //Add fact and literal
                         ontologyData.AddFact(conceptFact);
@@ -490,13 +469,39 @@ namespace RDFSharp.Semantics.SKOS
                         ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)prefLabelProperty, conceptFact, prefLabelLiteral);
 
                     }
-
+                    else {
+                        RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Cannot annotate skos:concept '{0}' with skos:prefLabel '{1}' literal value, because skos taxonomy checks are violated.", conceptFact, prefLabelLiteral));
+                    }
                 }
                 else {
                     RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Cannot annotate skos:concept '{0}' with skos:prefLabel '{1}' literal value, because skos requires a plain literal.", conceptFact, prefLabelLiteral));
                 }
 
             }
+        }
+        private static Boolean CanAddPrefLabelAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral prefLabelLiteral) {
+            var canAddPrefLabelAnnot = false;
+            var prefLabelProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
+            var prefLabelLiteralLang = ((RDFPlainLiteral)prefLabelLiteral.Value).Language;
+
+            //Plain literal without language tag: only one occurrence of this annotation is allowed
+            if (String.IsNullOrEmpty(prefLabelLiteralLang)) {
+                canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
+                                                                                   .SelectEntriesByPredicate(prefLabelProperty)
+                                                                                   .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                               && String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)));
+            }
+
+            //Plain literal with language tag: only one occurrence of this annotation per language tag is allowed
+            else {
+                canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
+                                                                                   .SelectEntriesByPredicate(prefLabelProperty)
+                                                                                   .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                               && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
+                                                                                               && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang)));
+            }
+
+            return canAddPrefLabelAnnot;
         }
 
         /// <summary>
