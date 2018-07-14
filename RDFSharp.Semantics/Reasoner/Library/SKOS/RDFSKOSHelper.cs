@@ -626,7 +626,6 @@ namespace RDFSharp.Semantics.SKOS
             return canAddHiddenLabelAnnot;
         }
 
-
         /// <summary>
         /// Adds the "conceptFact -> skos:note -> noteLiteral" annotation to the ontology data
         /// </summary>
