@@ -750,6 +750,128 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Reasoning
 
+        #region Broader
+        /// <summary>
+        /// Checks if the given aConcept has broader concept the given bConcept within the given data
+        /// </summary>
+        public static Boolean HasBroaderConcept(this RDFOntologyData data, RDFOntologyFact aConcept, RDFOntologyFact bConcept) {
+            return (aConcept != null && bConcept != null && data != null ? data.EnlistBroaderConceptsOf(aConcept).Facts.ContainsKey(bConcept.PatternMemberID) : false);
+        }
+
+        /// <summary>
+        /// Enlists the broader concepts of the given concept within the given data
+        /// </summary>
+        public static RDFOntologyData EnlistBroaderConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
+            var result     = new RDFOntologyData();
+            if (concept   != null && data != null) {
+
+                //Add skos:broader concepts to result
+                foreach( var broader in data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                      .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER.ToString()))) {
+                    result.AddFact((RDFOntologyFact)broader.TaxonomyObject);
+                }
+
+                //Add skos:broaderTransitive concepts to result
+                result     = result.UnionWith(data.EnlistBroaderConceptsOfInternal(concept, null))
+                                   .RemoveFact(concept); //Safety deletion
+
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Subsumes the "skos:broaderTransitive" taxonomy to discover direct and indirect broader concepts of the given concept
+        /// </summary>
+        internal static RDFOntologyData EnlistBroaderConceptsOfInternal(this RDFOntologyData data, RDFOntologyFact concept, Dictionary<Int64, RDFOntologyFact> visitContext) {
+            var result        = new RDFOntologyData();
+
+            #region visitContext
+            if (visitContext == null) {
+                visitContext  = new Dictionary<Int64, RDFOntologyFact>() { { concept.PatternMemberID, concept } };
+            }
+            else {
+                if (!visitContext.ContainsKey(concept.PatternMemberID)) {
+                     visitContext.Add(concept.PatternMemberID, concept);
+                }
+                else {
+                     return result;
+                }
+            }
+            #endregion
+
+            // Transitivity of "skos:broaderTransitive" taxonomy: ((A SKOS:BROADERTRANSITIVE B)  &&  (B SKOS:BROADERTRANSITIVE C))  =>  (A SKOS:BROADERTRANSITIVE C)
+            var broaderTrProp = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE.ToString());
+            foreach (var bt  in data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                         .SelectEntriesByPredicate(broaderTrProp)) {
+                result.AddFact((RDFOntologyFact)bt.TaxonomyObject);
+                result        = result.UnionWith(data.EnlistBroaderConceptsOfInternal((RDFOntologyFact)bt.TaxonomyObject, visitContext));
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Narrower
+        /// <summary>
+        /// Checks if the given aConcept has narrower concept the given bConcept within the given data
+        /// </summary>
+        public static Boolean HasNarrowerConcept(this RDFOntologyData data, RDFOntologyFact aConcept, RDFOntologyFact bConcept) {
+            return (aConcept != null && bConcept != null && data != null ? data.EnlistNarrowerConceptsOf(aConcept).Facts.ContainsKey(bConcept.PatternMemberID) : false);
+        }
+
+        /// <summary>
+        /// Enlists the narrower concepts of the given concept within the given data
+        /// </summary>
+        public static RDFOntologyData EnlistNarrowerConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
+            var result   = new RDFOntologyData();
+            if (concept != null && data != null) {
+
+                //Add skos:narrower concepts to result
+                foreach (var narrower in data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                       .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString()))) {
+                    result.AddFact((RDFOntologyFact)narrower.TaxonomyObject);
+                }
+
+                //Add skos:narrowerTransitive concepts to result
+                result   = result.UnionWith(data.EnlistNarrowerConceptsOfInternal(concept, null))
+                                 .RemoveFact(concept); //Safety deletion
+
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Subsumes the "skos:narrowerTransitive" taxonomy to discover direct and indirect narrower concepts of the given concept
+        /// </summary>
+        internal static RDFOntologyData EnlistNarrowerConceptsOfInternal(this RDFOntologyData data, RDFOntologyFact concept, Dictionary<Int64, RDFOntologyFact> visitContext) {
+            var result         = new RDFOntologyData();
+
+            #region visitContext
+            if (visitContext  == null) {
+                visitContext   = new Dictionary<Int64, RDFOntologyFact>() { { concept.PatternMemberID, concept } };
+            }
+            else {
+                if (!visitContext.ContainsKey(concept.PatternMemberID)) {
+                     visitContext.Add(concept.PatternMemberID, concept);
+                }
+                else {
+                     return result;
+                }
+            }
+            #endregion
+
+            // Transitivity of "skos:narrowerTransitive" taxonomy: ((A SKOS:NARROWERTRANSITIVE B)  &&  (B SKOS:NARROWERTRANSITIVE C))  =>  (A SKOS:NARROWERTRANSITIVE C)
+            var narrowerTrProp = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE.ToString());
+            foreach (var nt   in data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                          .SelectEntriesByPredicate(narrowerTrProp)) {
+                result.AddFact((RDFOntologyFact)nt.TaxonomyObject);
+                result         = result.UnionWith(data.EnlistBroaderConceptsOfInternal((RDFOntologyFact)nt.TaxonomyObject, visitContext));
+            }
+
+            return result;
+        }
+        #endregion
+
         #region ExactMatch
         /// <summary>
         /// Checks if the given aConcept skos:exactMatch the given bConcept within the given data
