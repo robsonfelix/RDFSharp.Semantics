@@ -379,10 +379,10 @@ namespace RDFSharp.Semantics {
             if (childProperty != null && motherProperty != null && !childProperty.Equals(motherProperty)) {
 
                 //Enforce preliminary checks on usage of BASE properties
-                if (!RDFOntologyTaxonomyChecker.CheckReservedProperty(childProperty) && !RDFOntologyTaxonomyChecker.CheckReservedProperty(motherProperty)) {
+                if (!RDFBASEChecker.CheckReservedProperty(childProperty) && !RDFBASEChecker.CheckReservedProperty(motherProperty)) {
 
                      //Enforce taxonomy checks before adding the subPropertyOf relation
-                     if (RDFOntologyTaxonomyChecker.CheckSubPropertyOfCompatibility(this, childProperty, motherProperty)) {
+                     if (RDFBASEChecker.CheckSubPropertyOfCompatibility(this, childProperty, motherProperty)) {
                          this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty(), motherProperty));
                      }
                      else {
@@ -412,10 +412,10 @@ namespace RDFSharp.Semantics {
             if (childProperty != null && motherProperty != null && !childProperty.Equals(motherProperty)) {
 
                 //Enforce preliminary checks on usage of BASE properties
-                if (!RDFOntologyTaxonomyChecker.CheckReservedProperty(childProperty) && !RDFOntologyTaxonomyChecker.CheckReservedProperty(motherProperty)) {
+                if (!RDFBASEChecker.CheckReservedProperty(childProperty) && !RDFBASEChecker.CheckReservedProperty(motherProperty)) {
 
                     //Enforce taxonomy checks before adding the subPropertyOf relation
-                    if (RDFOntologyTaxonomyChecker.CheckSubPropertyOfCompatibility(this, childProperty, motherProperty)) {
+                    if (RDFBASEChecker.CheckSubPropertyOfCompatibility(this, childProperty, motherProperty)) {
                         this.Relations.SubPropertyOf.AddEntry(new RDFOntologyTaxonomyEntry(childProperty, RDFVocabulary.RDFS.SUB_PROPERTY_OF.ToRDFOntologyObjectProperty(), motherProperty));
                      }
                      else {
@@ -445,10 +445,10 @@ namespace RDFSharp.Semantics {
             if (aProperty  != null && bProperty != null && !aProperty.Equals(bProperty)) {
 
                 //Enforce preliminary checks on usage of BASE properties
-                if (!RDFOntologyTaxonomyChecker.CheckReservedProperty(aProperty) && !RDFOntologyTaxonomyChecker.CheckReservedProperty(bProperty)) {
+                if (!RDFBASEChecker.CheckReservedProperty(aProperty) && !RDFBASEChecker.CheckReservedProperty(bProperty)) {
 
                     //Enforce taxonomy checks before adding the equivalentProperty relation
-                    if (RDFOntologyTaxonomyChecker.CheckEquivalentPropertyCompatibility(this, aProperty, bProperty)) {
+                    if (RDFBASEChecker.CheckEquivalentPropertyCompatibility(this, aProperty, bProperty)) {
                         this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), bProperty));
                         this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                      }
@@ -479,10 +479,10 @@ namespace RDFSharp.Semantics {
             if (aProperty  != null && bProperty != null && !aProperty.Equals(bProperty)) {
 
                 //Enforce preliminary checks on usage of BASE properties
-                if (!RDFOntologyTaxonomyChecker.CheckReservedProperty(aProperty) && !RDFOntologyTaxonomyChecker.CheckReservedProperty(bProperty)) {
+                if (!RDFBASEChecker.CheckReservedProperty(aProperty) && !RDFBASEChecker.CheckReservedProperty(bProperty)) {
 
                     //Enforce taxonomy checks before adding the equivalentProperty relation
-                    if (RDFOntologyTaxonomyChecker.CheckEquivalentPropertyCompatibility(this, aProperty, bProperty)) {
+                    if (RDFBASEChecker.CheckEquivalentPropertyCompatibility(this, aProperty, bProperty)) {
                         this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), bProperty));
                         this.Relations.EquivalentProperty.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.EQUIVALENT_PROPERTY.ToRDFOntologyObjectProperty(), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                      }
@@ -513,10 +513,10 @@ namespace RDFSharp.Semantics {
             if (aProperty != null && bProperty != null && !aProperty.Equals(bProperty)) {
 
                 //Enforce preliminary checks on usage of BASE properties
-                if (!RDFOntologyTaxonomyChecker.CheckReservedProperty(aProperty) && !RDFOntologyTaxonomyChecker.CheckReservedProperty(bProperty)) {
+                if (!RDFBASEChecker.CheckReservedProperty(aProperty) && !RDFBASEChecker.CheckReservedProperty(bProperty)) {
 
                     //Enforce taxonomy checks before adding the inverseOf relation
-                    if (RDFOntologyTaxonomyChecker.CheckInverseOfPropertyCompatibility(this, aProperty, bProperty)) {
+                    if (RDFBASEChecker.CheckInverseOfPropertyCompatibility(this, aProperty, bProperty)) {
                         this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(aProperty, RDFVocabulary.OWL.INVERSE_OF.ToRDFOntologyObjectProperty(), bProperty));
                         this.Relations.InverseOf.AddEntry(new RDFOntologyTaxonomyEntry(bProperty, RDFVocabulary.OWL.INVERSE_OF.ToRDFOntologyObjectProperty(), aProperty).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                      }

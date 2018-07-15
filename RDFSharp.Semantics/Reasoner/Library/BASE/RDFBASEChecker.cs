@@ -20,9 +20,9 @@ namespace RDFSharp.Semantics
 {
 
     /// <summary>
-    /// RDFOntologyTaxonomyChecker is responsible for implicit validation of ontologies during modeling
+    /// RDFBASEChecker is responsible for implicit validation of ontologies during modeling
     /// </summary>
-    internal static class RDFOntologyTaxonomyChecker {
+    internal static class RDFBASEChecker {
 
         #region ClassModel
         /// <summary>
