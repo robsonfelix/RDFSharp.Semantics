@@ -24,7 +24,7 @@ namespace RDFSharp.Semantics.SKOS
     /// <summary>
     /// RDFSKOSChecker is responsible for implicit validation of SKOS ontologies during modeling
     /// </summary>
-    public static class RDFSKOSChecker {
+    internal static class RDFSKOSChecker {
 
         #region Annotations
         /// <summary>
