@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using RDFSharp.Model;
 
@@ -156,7 +157,7 @@ namespace RDFSharp.Semantics.SKOS
         public static void AddTopConceptOfAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact conceptSchemeFact) {
             if (ontologyData            != null && conceptFact != null && conceptSchemeFact != null) {
                 var conceptClass         = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
-                var conceptSchemeClass   = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());                
+                var conceptSchemeClass   = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
                 var topConceptOfProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.TOP_CONCEPT_OF.ToString());
 
                 //Add fact
@@ -211,6 +212,9 @@ namespace RDFSharp.Semantics.SKOS
 
                 //Add skos:related assertion
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)relatedProperty, bConceptFact);
+                //Add skos:related assertion as inference
+                ontologyData.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(bConceptFact, (RDFOntologyObjectProperty)relatedProperty, aConceptFact)
+                                                 .SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
             }
         }
 
@@ -316,6 +320,9 @@ namespace RDFSharp.Semantics.SKOS
 
                 //Add skos:closeMatch assertion
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)closeMatchProperty, bConceptFact);
+                //Add skos:closeMatch assertion as inference
+                ontologyData.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(bConceptFact, (RDFOntologyObjectProperty)closeMatchProperty, aConceptFact)
+                                                 .SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
             }
         }
 
@@ -337,6 +344,9 @@ namespace RDFSharp.Semantics.SKOS
 
                 //Add skos:exactMatch assertion
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)exactMatchProperty, bConceptFact);
+                //Add skos:exactMatch assertion as inference
+                ontologyData.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(bConceptFact, (RDFOntologyObjectProperty)exactMatchProperty, aConceptFact)
+                                                 .SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
             }
         }
 
@@ -400,6 +410,9 @@ namespace RDFSharp.Semantics.SKOS
 
                 //Add skos:relatedMatch assertion
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)relatedMatchProperty, bConceptFact);
+                //Add skos:relatedMatch assertion as inference
+                ontologyData.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(bConceptFact, (RDFOntologyObjectProperty)relatedMatchProperty, aConceptFact)
+                                                 .SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
             }
         }
 
@@ -686,6 +699,62 @@ namespace RDFSharp.Semantics.SKOS
                 //Add skos:example annotation
                 ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)exampleProperty, conceptFact, exampleLiteral);
             }
+        }
+        #endregion
+
+        #endregion
+
+        #region Reasoning
+
+        #region ExactMatch
+        /// <summary>
+        /// Checks if the given aConcept skos:exactMatch the given bConcept within the given data
+        /// </summary>
+        public static Boolean IsExactMatchOf(this RDFOntologyData data, RDFOntologyFact aConcept, RDFOntologyFact bConcept) {
+            return (aConcept != null && bConcept != null && data != null ? data.EnlistExactMatchesOf(aConcept).Facts.ContainsKey(bConcept.PatternMemberID) : false);
+        }
+
+        /// <summary>
+        /// Enlists the skos:exactMatch concepts of the given concept within the given data
+        /// </summary>
+        public static RDFOntologyData EnlistExactMatchesOf(this RDFOntologyData data, RDFOntologyFact concept) {
+            var result   = new RDFOntologyData();
+            if (concept != null && data != null) {
+                result   = data.EnlistExactMatchesOfInternal(concept, null)
+                               .RemoveFact(concept); //Safety deletion
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Subsumes the "skos:exactMatch" taxonomy to discover direct and indirect exactmatches of the given concept
+        /// </summary>
+        internal static RDFOntologyData EnlistExactMatchesOfInternal(this RDFOntologyData data, RDFOntologyFact concept, Dictionary<Int64, RDFOntologyFact> visitContext) {
+            var result         = new RDFOntologyData();
+
+            #region visitContext
+            if (visitContext  == null) {
+                visitContext   = new Dictionary<Int64, RDFOntologyFact>() { { concept.PatternMemberID, concept } };
+            }
+            else {
+                if (!visitContext.ContainsKey(concept.PatternMemberID)) {
+                     visitContext.Add(concept.PatternMemberID, concept);
+                }
+                else {
+                     return result;
+                }
+            }
+            #endregion
+
+            // Transitivity of "skos:exactMatch" taxonomy: ((A SKOS:EXACTMATCH B)  &&  (B SKOS:EXACTMATCH C))  =>  (A SKOS:EXACTMATCH C)
+            var exactMatchProp = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.EXACT_MATCH.ToString());
+            foreach (var em   in data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                          .SelectEntriesByPredicate(exactMatchProp)) {
+                result.AddFact((RDFOntologyFact)em.TaxonomyObject);
+                result         = result.UnionWith(data.EnlistExactMatchesOfInternal((RDFOntologyFact)em.TaxonomyObject, visitContext));
+            }
+
+            return result;
         }
         #endregion
 
