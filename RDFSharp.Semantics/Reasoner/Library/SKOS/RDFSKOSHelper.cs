@@ -456,6 +456,50 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyDatatypeProperty)notationProperty, notationLiteral);
             }
         }
+
+        /// <summary>
+        /// Adds the "aLabel -> skosxl:labelRelation -> bLabel" assertion to the ontology data
+        /// </summary>
+        public static void AddLabelRelationAssertion(RDFOntologyData ontologyData, RDFOntologyFact aLabel, RDFOntologyFact bLabel) {
+            if (ontologyData             != null && aLabel != null && bLabel != null) {
+                var labelClass            = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
+                var labelRelationProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LABEL_RELATION.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aLabel);
+                ontologyData.AddFact(bLabel);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aLabel, labelClass);
+                ontologyData.AddClassTypeRelation(bLabel, labelClass);
+
+                //Add skosxl:labelRelation assertion
+                ontologyData.AddAssertionRelation(aLabel, (RDFOntologyObjectProperty)labelRelationProperty, bLabel);
+                //Add skosxl:labelRelation assertion as inference
+                ontologyData.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(bLabel, (RDFOntologyObjectProperty)labelRelationProperty, aLabel)
+                                                 .SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
+            }
+        }
+
+        /// <summary>
+        /// Adds the "aLabel -> skosxl:literalForm -> bLabel" assertion to the ontology data
+        /// </summary>
+        public static void AddLiteralFormAssertion(RDFOntologyData ontologyData, RDFOntologyFact label, RDFOntologyLiteral literal) {
+            if (ontologyData           != null && label != null && literal != null) {
+                var labelClass          = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
+                var literalFormProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
+
+                //Add fact and literal
+                ontologyData.AddFact(label);
+                ontologyData.AddLiteral(literal);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(label, labelClass);
+
+                //Add skosxl:literalForm assertion
+                ontologyData.AddAssertionRelation(label, (RDFOntologyDatatypeProperty)literalFormProperty, literal);
+            }
+        }
         #endregion
 
         #region Annotations
