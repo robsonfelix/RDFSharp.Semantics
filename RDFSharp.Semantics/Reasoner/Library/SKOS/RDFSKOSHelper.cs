@@ -482,7 +482,7 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Adds the "aLabel -> skosxl:literalForm -> bLabel" assertion to the ontology data
+        /// Adds the "label -> skosxl:literalForm -> literal" assertion to the ontology data
         /// </summary>
         public static void AddLiteralFormAssertion(RDFOntologyData ontologyData, RDFOntologyFact label, RDFOntologyLiteral literal) {
             if (ontologyData           != null && label != null && literal != null) {
