@@ -1006,6 +1006,35 @@ namespace RDFSharp.Semantics.SKOS
         }
         #endregion
 
+        #region CloseMatch
+        /// <summary>
+        /// Checks if the given aConcept has close match concept the given bConcept within the given data
+        /// </summary>
+        public static Boolean HasCloseMatchConcept(this RDFOntologyData data, RDFOntologyFact aConcept, RDFOntologyFact bConcept) {
+            return (aConcept != null && bConcept != null && data != null ? data.EnlistCloseMatchConceptsOf(aConcept).Facts.ContainsKey(bConcept.PatternMemberID) : false);
+        }
+
+        /// <summary>
+        /// Enlists the close match concepts of the given concept within the given data
+        /// </summary>
+        public static RDFOntologyData EnlistCloseMatchConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
+            var result     = new RDFOntologyData();
+            if (concept   != null && data != null) {
+
+                //Add skos:closeMatch concepts to result
+                foreach (var closeMatch in data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                         .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.CLOSE_MATCH.ToString()))) {
+                    result.AddFact((RDFOntologyFact)closeMatch.TaxonomyObject);
+
+                    //Exploit skos:exactMatch taxonomy
+                    result = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)closeMatch.TaxonomyObject));
+                }
+
+            }
+            return result;
+        }
+        #endregion
+
         #endregion
 
     }
