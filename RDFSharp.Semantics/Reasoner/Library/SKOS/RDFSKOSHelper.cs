@@ -827,35 +827,6 @@ namespace RDFSharp.Semantics.SKOS
         }
         #endregion
 
-        #region BroadMatch
-        /// <summary>
-        /// Checks if the given aConcept has broad match concept the given bConcept within the given data
-        /// </summary>
-        public static Boolean HasBroadMatchConcept(this RDFOntologyData data, RDFOntologyFact aConcept, RDFOntologyFact bConcept) {
-            return (aConcept != null && bConcept != null && data != null ? data.EnlistBroadMatchConceptsOf(aConcept).Facts.ContainsKey(bConcept.PatternMemberID) : false);
-        }
-
-        /// <summary>
-        /// Enlists the broad match concepts of the given concept within the given data
-        /// </summary>
-        public static RDFOntologyData EnlistBroadMatchConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
-            var result     = new RDFOntologyData();
-            if (concept   != null && data != null) {
-
-                //Add skos:broadMatch concepts to result
-                foreach (var broadMatch in data.Relations.Assertions.SelectEntriesBySubject(concept)
-                                                         .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROAD_MATCH.ToString()))) {
-                    result.AddFact((RDFOntologyFact)broadMatch.TaxonomyObject);
-
-                    //Exploit skos:exactMatch taxonomy
-                    result = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)broadMatch.TaxonomyObject));
-                }
-
-            }
-            return result;
-        }
-        #endregion
-
         #region Narrower
         /// <summary>
         /// Checks if the given aConcept has narrower concept the given bConcept within the given data
@@ -925,35 +896,6 @@ namespace RDFSharp.Semantics.SKOS
         }
         #endregion
 
-        #region NarrowMatch
-        /// <summary>
-        /// Checks if the given aConcept has narrow match concept the given bConcept within the given data
-        /// </summary>
-        public static Boolean HasNarrowMatchConcept(this RDFOntologyData data, RDFOntologyFact aConcept, RDFOntologyFact bConcept) {
-            return (aConcept != null && bConcept != null && data != null ? data.EnlistNarrowMatchConceptsOf(aConcept).Facts.ContainsKey(bConcept.PatternMemberID) : false);
-        }
-
-        /// <summary>
-        /// Enlists the narrow match concepts of the given concept within the given data
-        /// </summary>
-        public static RDFOntologyData EnlistNarrowMatchConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
-            var result     = new RDFOntologyData();
-            if (concept   != null && data != null) {
-
-                //Add skos:narrowMatch concepts to result
-                foreach (var narrowMatch in data.Relations.Assertions.SelectEntriesBySubject(concept)
-                                                          .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROW_MATCH.ToString()))) {
-                    result.AddFact((RDFOntologyFact)narrowMatch.TaxonomyObject);
-
-                    //Exploit skos:exactMatch taxonomy
-                    result = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)narrowMatch.TaxonomyObject));
-                }
-
-            }
-            return result;
-        }
-        #endregion
-
         #region ExactMatch
         /// <summary>
         /// Checks if the given aConcept skos:exactMatch the given bConcept within the given data
@@ -1002,35 +944,6 @@ namespace RDFSharp.Semantics.SKOS
                 result         = result.UnionWith(data.EnlistExactMatchesOfInternal((RDFOntologyFact)em.TaxonomyObject, visitContext));
             }
 
-            return result;
-        }
-        #endregion
-
-        #region CloseMatch
-        /// <summary>
-        /// Checks if the given aConcept has close match concept the given bConcept within the given data
-        /// </summary>
-        public static Boolean HasCloseMatchConcept(this RDFOntologyData data, RDFOntologyFact aConcept, RDFOntologyFact bConcept) {
-            return (aConcept != null && bConcept != null && data != null ? data.EnlistCloseMatchConceptsOf(aConcept).Facts.ContainsKey(bConcept.PatternMemberID) : false);
-        }
-
-        /// <summary>
-        /// Enlists the close match concepts of the given concept within the given data
-        /// </summary>
-        public static RDFOntologyData EnlistCloseMatchConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
-            var result     = new RDFOntologyData();
-            if (concept   != null && data != null) {
-
-                //Add skos:closeMatch concepts to result
-                foreach (var closeMatch in data.Relations.Assertions.SelectEntriesBySubject(concept)
-                                                         .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.CLOSE_MATCH.ToString()))) {
-                    result.AddFact((RDFOntologyFact)closeMatch.TaxonomyObject);
-
-                    //Exploit skos:exactMatch taxonomy
-                    result = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)closeMatch.TaxonomyObject));
-                }
-
-            }
             return result;
         }
         #endregion
