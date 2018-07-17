@@ -26,6 +26,21 @@ namespace RDFSharp.Semantics.SKOS
     /// </summary>
     internal static class RDFSKOSChecker {
 
+        #region Assertions
+        /// <summary>
+        /// Checks if the skos:related assertion can be added to the given aConcept with the given bConcept
+        /// </summary>
+        internal static Boolean CheckRelatedAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            var canAddRelatedAssert = false;
+
+            //Search for a clash with hierarchical relations
+            canAddRelatedAssert = (!RDFSKOSHelper.HasBroaderConcept(ontologyData, aConceptFact, bConceptFact) &&
+                                   !RDFSKOSHelper.HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact)); 
+
+            return canAddRelatedAssert;
+        }
+        #endregion
+
         #region Annotations
         /// <summary>
         /// Checks if the skos:prefLabel annotation can be added to the given concept
