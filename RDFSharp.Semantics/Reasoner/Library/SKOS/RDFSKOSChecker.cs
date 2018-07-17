@@ -28,7 +28,7 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Assertions
         /// <summary>
-        /// Checks if the skos:broader or skos:boraderTransitive assertion can be added to the given aConcept with the given bConcept
+        /// Checks if the skos:broader or skos:broaderTransitive assertion can be added to the given aConcept with the given bConcept
         /// </summary>
         internal static Boolean CheckBroaderAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
             var canAddBroaderAssert = false;
