@@ -250,7 +250,7 @@ namespace RDFSharp.Semantics.SKOS
         /// </summary>
         public static void AddBroaderTransitiveAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
             if (ontologyData                      != null && aConceptFact != null && bConceptFact != null) {
-                if (!HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact)) {
+                if (RDFSKOSChecker.CheckBroaderAssertion(ontologyData, aConceptFact, bConceptFact)) {
                      var conceptClass              = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                      var broaderTransitiveProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE.ToString());
                      
@@ -296,7 +296,7 @@ namespace RDFSharp.Semantics.SKOS
         /// </summary>
         public static void AddNarrowerTransitiveAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
             if (ontologyData                       != null && aConceptFact != null && bConceptFact != null) {
-                if (!HasBroaderConcept(ontologyData, aConceptFact, bConceptFact)) {
+                if (RDFSKOSChecker.CheckNarrowerAssertion(ontologyData, aConceptFact, bConceptFact)) {
                      var conceptClass               = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                      var narrowerTransitiveProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE.ToString());
                      
