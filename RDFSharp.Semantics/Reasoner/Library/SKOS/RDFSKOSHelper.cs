@@ -111,7 +111,7 @@ namespace RDFSharp.Semantics.SKOS
         /// Adds the "conceptFact -> skos:inScheme -> conceptSchemeFact" assertion to the ontology data
         /// </summary>
         public static void AddInSchemeAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact conceptSchemeFact) {
-            if (ontologyData          != null && conceptFact != null && conceptSchemeFact != null) {
+            if (ontologyData          != null && conceptFact != null && conceptSchemeFact != null && !conceptFact.Equals(conceptSchemeFact)) {
                 var conceptClass       = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var conceptSchemeClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
                 var inSchemeProperty   = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.IN_SCHEME.ToString());
@@ -133,7 +133,7 @@ namespace RDFSharp.Semantics.SKOS
         /// Adds the "conceptSchemeFact -> skos:hasTopConcept -> conceptFact" assertion to the ontology data
         /// </summary>
         public static void AddHasTopConceptAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptSchemeFact, RDFOntologyFact conceptFact) {
-            if (ontologyData             != null && conceptFact != null && conceptSchemeFact != null) {
+            if (ontologyData             != null && conceptFact != null && conceptSchemeFact != null && !conceptSchemeFact.Equals(conceptFact)) {
                 var conceptSchemeClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
                 var conceptClass          = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());                
                 var hasTopConceptProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HAS_TOP_CONCEPT.ToString());
@@ -155,7 +155,7 @@ namespace RDFSharp.Semantics.SKOS
         /// Adds the "conceptFact -> skos:topConceptOf -> conceptSchemeFact" assertion to the ontology data
         /// </summary>
         public static void AddTopConceptOfAssertion(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact conceptSchemeFact) {
-            if (ontologyData            != null && conceptFact != null && conceptSchemeFact != null) {
+            if (ontologyData            != null && conceptFact != null && conceptSchemeFact != null && !conceptFact.Equals(conceptSchemeFact)) {
                 var conceptClass         = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var conceptSchemeClass   = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString());
                 var topConceptOfProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.TOP_CONCEPT_OF.ToString());
