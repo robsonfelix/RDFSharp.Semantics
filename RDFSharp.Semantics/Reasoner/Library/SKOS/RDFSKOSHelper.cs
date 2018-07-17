@@ -226,21 +226,21 @@ namespace RDFSharp.Semantics.SKOS
         /// Adds the "aConceptFact -> skos:broader -> bConceptFact" assertion to the ontology data
         /// </summary>
         public static void AddBroaderAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
-            if (ontologyData            != null && aConceptFact != null && bConceptFact != null) {
-                if (!HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact)) { 
-                     var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
-                     var broaderProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER.ToString());
+            if (ontologyData           != null && aConceptFact != null && bConceptFact != null) {
+                if (RDFSKOSChecker.CheckBroaderAssertion(ontologyData, aConceptFact, bConceptFact)) { 
+                    var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                    var broaderProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER.ToString());
                      
-                     //Add fact
-                     ontologyData.AddFact(aConceptFact);
-                     ontologyData.AddFact(bConceptFact);
+                    //Add fact
+                    ontologyData.AddFact(aConceptFact);
+                    ontologyData.AddFact(bConceptFact);
                      
-                     //Add classtype relation
-                     ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
-                     ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+                    //Add classtype relation
+                    ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                    ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
                      
-                     //Add skos:broader assertion
-                     ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)broaderProperty, bConceptFact);
+                    //Add skos:broader assertion
+                    ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)broaderProperty, bConceptFact);
                 }
             }
         }
@@ -272,21 +272,21 @@ namespace RDFSharp.Semantics.SKOS
         /// Adds the "aConceptFact -> skos:narrower -> bConceptFact" assertion to the ontology data
         /// </summary>
         public static void AddNarrowerAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
-            if (ontologyData             != null && aConceptFact != null && bConceptFact != null) {
-                if (!HasBroaderConcept(ontologyData, aConceptFact, bConceptFact)) {
-                     var conceptClass     = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
-                     var narrowerProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString());
+            if (ontologyData            != null && aConceptFact != null && bConceptFact != null) {
+                if (RDFSKOSChecker.CheckNarrowerAssertion(ontologyData, aConceptFact, bConceptFact)) {
+                    var conceptClass     = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                    var narrowerProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString());
                      
-                     //Add fact
-                     ontologyData.AddFact(aConceptFact);
-                     ontologyData.AddFact(bConceptFact);
+                    //Add fact
+                    ontologyData.AddFact(aConceptFact);
+                    ontologyData.AddFact(bConceptFact);
                      
-                     //Add classtype relation
-                     ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
-                     ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
+                    //Add classtype relation
+                    ontologyData.AddClassTypeRelation(aConceptFact, conceptClass);
+                    ontologyData.AddClassTypeRelation(bConceptFact, conceptClass);
                      
-                     //Add skos:narrower assertion
-                     ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)narrowerProperty, bConceptFact);
+                    //Add skos:narrower assertion
+                    ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)narrowerProperty, bConceptFact);
                 }
             }
         }
