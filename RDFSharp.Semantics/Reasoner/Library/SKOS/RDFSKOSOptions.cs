@@ -29,7 +29,7 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Properties
         /// <summary>
-        /// If enabled, skos:exactMatch will be used to enhance entailments within hierarchical relations (default:FALSE)
+        /// If enabled, skos:exactMatch will be used to enhance entailments on hierarchical relations (default:FALSE)
         /// </summary>
         public static Boolean EnableExactMatchEntailments { get; set; }
         #endregion
