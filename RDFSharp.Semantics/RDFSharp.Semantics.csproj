@@ -105,6 +105,7 @@
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSChecker.cs" />
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSHelper.cs" />
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSOntology.cs" />
+    <Compile Include="Reasoner\Library\SKOS\RDFSKOSOptions.cs" />
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSRuleset.cs" />
     <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidator.cs" />
