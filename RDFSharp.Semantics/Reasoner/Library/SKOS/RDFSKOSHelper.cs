@@ -106,7 +106,9 @@ namespace RDFSharp.Semantics.SKOS
         }
         #endregion
 
-        #region Assertions
+        #region Relations
+
+        #region ConceptScheme Relations
         /// <summary>
         /// Adds the "conceptFact -> skos:inScheme -> conceptSchemeFact" assertion to the ontology data
         /// </summary>
@@ -172,7 +174,9 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyObjectProperty)topConceptOfProperty, conceptSchemeFact);
             }
         }
+        #endregion
 
+        #region Semantic Relations
         /// <summary>
         /// Adds the "aConceptFact -> skos:semanticRelation -> bConceptFact" assertion to the ontology data
         /// </summary>
@@ -313,7 +317,9 @@ namespace RDFSharp.Semantics.SKOS
                 }
             }
         }
+        #endregion
 
+        #region Mapping Relations
         /// <summary>
         /// Adds the "aConceptFact -> skos:closeMatch -> bConceptFact" assertion to the ontology data
         /// </summary>
@@ -448,7 +454,9 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(aConceptFact, (RDFOntologyObjectProperty)mappingRelationProperty, bConceptFact);
             }
         }
+        #endregion
 
+        #region Notation Relations
         /// <summary>
         /// Adds the "conceptFact -> skos:notation -> notationLiteral" assertion to the ontology data
         /// </summary>
@@ -468,7 +476,9 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyDatatypeProperty)notationProperty, notationLiteral);
             }
         }
+        #endregion
 
+        #region Label Relations (SKOS-XL)
         /// <summary>
         /// Adds the "aLabel -> skosxl:labelRelation -> bLabel" assertion to the ontology data
         /// </summary>
@@ -514,7 +524,11 @@ namespace RDFSharp.Semantics.SKOS
         }
         #endregion
 
+        #endregion
+
         #region Annotations
+
+        #region Lexical Labeling Annotations
         /// <summary>
         /// Adds the "conceptFact -> skos:prefLabel -> prefLabelLiteral" annotation to the ontology data
         /// </summary>
@@ -616,7 +630,9 @@ namespace RDFSharp.Semantics.SKOS
 
             }
         }
+        #endregion
 
+        #region Documentation Annotations
         /// <summary>
         /// Adds the "conceptFact -> skos:note -> noteLiteral" annotation to the ontology data
         /// </summary>
@@ -756,6 +772,8 @@ namespace RDFSharp.Semantics.SKOS
                 ontologyData.AddCustomAnnotation((RDFOntologyAnnotationProperty)exampleProperty, conceptFact, exampleLiteral);
             }
         }
+        #endregion
+
         #endregion
 
         #endregion
