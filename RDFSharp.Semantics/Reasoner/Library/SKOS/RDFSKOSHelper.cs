@@ -795,17 +795,20 @@ namespace RDFSharp.Semantics.SKOS
             var result         = new RDFOntologyData();
             if (concept       != null && data != null) {
 
-                //Add skos:broader concepts to result
-                foreach(var broader in data.Relations.Assertions.SelectEntriesBySubject(concept)
-                                                     .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER.ToString()))) {
-                    result.AddFact((RDFOntologyFact)broader.TaxonomyObject);
+                //Get skos:broader concepts
+                var broader    = data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                          .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROADER.ToString()));
 
-                    //Exploit skos:exactMatch taxonomy
-                    if (RDFSKOSOptions.EnableExactMatchEntailments)
-                        result = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)broader.TaxonomyObject));
+                //Get skos:broadMatch concepts
+                var broadMatch = data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                          .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.BROAD_MATCH.ToString()));
+
+                //Merge concepts
+                foreach (var broadConcept in broader.UnionWith(broadMatch)) {
+                    result.AddFact((RDFOntologyFact)broadConcept.TaxonomyObject);
                 }
 
-                //Add skos:broaderTransitive concepts to result
+                //Get skos:broaderTransitive concepts
                 result         = result.UnionWith(data.EnlistBroaderConceptsOfInternal(concept, null))
                                        .RemoveFact(concept); //Safety deletion
 
@@ -839,10 +842,6 @@ namespace RDFSharp.Semantics.SKOS
                                                          .SelectEntriesByPredicate(broaderTrProp)) {
                 result.AddFact((RDFOntologyFact)bt.TaxonomyObject);
 
-                //Exploit skos:exactMatch taxonomy
-                if (RDFSKOSOptions.EnableExactMatchEntailments)
-                    result    = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)bt.TaxonomyObject));
-
                 //Exploit skos:broaderTransitive taxonomy
                 result        = result.UnionWith(data.EnlistBroaderConceptsOfInternal((RDFOntologyFact)bt.TaxonomyObject, visitContext));
             }
@@ -863,20 +862,23 @@ namespace RDFSharp.Semantics.SKOS
         /// Enlists the narrower concepts of the given concept within the given data
         /// </summary>
         public static RDFOntologyData EnlistNarrowerConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
-            var result         = new RDFOntologyData();
-            if (concept       != null && data != null) {
+            var result          = new RDFOntologyData();
+            if (concept        != null && data != null) {
 
-                //Add skos:narrower concepts to result
-                foreach (var narrower in data.Relations.Assertions.SelectEntriesBySubject(concept)
-                                                       .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString()))) {
-                    result.AddFact((RDFOntologyFact)narrower.TaxonomyObject);
+                //Get skos:narrower concepts
+                var narrower    = data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                           .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString()));
 
-                    //Exploit skos:exactMatch taxonomy
-                    if (RDFSKOSOptions.EnableExactMatchEntailments)
-                        result = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)narrower.TaxonomyObject));
+                //Get skos:narrowMatch concepts
+                var narrowMatch = data.Relations.Assertions.SelectEntriesBySubject(concept)
+                                                           .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROW_MATCH.ToString()));
+
+                //Merge results
+                foreach (var narrowConcept in narrower.UnionWith(narrowMatch)) {
+                    result.AddFact((RDFOntologyFact)narrowConcept.TaxonomyObject);
                 }
 
-                //Add skos:narrowerTransitive concepts to result
+                //Get skos:narrowerTransitive concepts
                 result         = result.UnionWith(data.EnlistNarrowerConceptsOfInternal(concept, null))
                                        .RemoveFact(concept); //Safety deletion
 
@@ -910,12 +912,8 @@ namespace RDFSharp.Semantics.SKOS
                                                           .SelectEntriesByPredicate(narrowerTrProp)) {
                 result.AddFact((RDFOntologyFact)nt.TaxonomyObject);
 
-                //Exploit skos:exactMatch taxonomy
-                if (RDFSKOSOptions.EnableExactMatchEntailments)
-                    result     = result.UnionWith(EnlistExactMatchesOf(data, (RDFOntologyFact)nt.TaxonomyObject));
-
                 //Exploit skos:narrowerTransitive taxonomy
-                result         = result.UnionWith(data.EnlistBroaderConceptsOfInternal((RDFOntologyFact)nt.TaxonomyObject, visitContext));
+                result         = result.UnionWith(data.EnlistNarrowerConceptsOfInternal((RDFOntologyFact)nt.TaxonomyObject, visitContext));
             }
 
             return result;
