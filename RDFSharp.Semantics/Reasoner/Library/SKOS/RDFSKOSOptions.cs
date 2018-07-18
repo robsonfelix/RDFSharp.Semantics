@@ -29,7 +29,7 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Properties
         /// <summary>
-        /// If enabled, skos:exactMatch will be used to enhance entailments whenever semantically possible (default:FALSE)
+        /// If enabled, skos:exactMatch will be used to enhance entailments whenever semantically possible (default:TRUE)
         /// </summary>
         public static Boolean EnableExactMatchEntailments { get; set; }
         #endregion
@@ -39,7 +39,7 @@ namespace RDFSharp.Semantics.SKOS
         /// Static-ctor to initialize the singleton instance of RDFSKOSOptions
         /// </summary>
         static RDFSKOSOptions() {
-            EnableExactMatchEntailments = false;
+            EnableExactMatchEntailments = true;
         }
         #endregion
 
