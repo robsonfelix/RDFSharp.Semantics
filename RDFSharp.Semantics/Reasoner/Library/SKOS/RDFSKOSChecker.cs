@@ -33,20 +33,20 @@ namespace RDFSharp.Semantics.SKOS
         internal static Boolean CheckBroaderAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
             var canAddBroaderAssert = false;
 
-            //Search for a clash with hierarchical relations
-            canAddBroaderAssert     = (!RDFSKOSHelper.HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact) &&
-                                       !RDFSKOSHelper.HasNarrowMatchConcept(ontologyData, aConceptFact, bConceptFact));
+            //Avoid clash with hierarchical relations
+            canAddBroaderAssert     = !RDFSKOSHelper.HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact);
 
-            //Search for a clash with associative relations
+            //Avoid clash with associative relations
             if (canAddBroaderAssert) {
-                canAddBroaderAssert = (!RDFSKOSHelper.HasRelatedConcept(ontologyData, aConceptFact, bConceptFact) &&
-                                       !RDFSKOSHelper.HasRelatedMatchConcept(ontologyData, aConceptFact, bConceptFact));
+                canAddBroaderAssert = !RDFSKOSHelper.HasRelatedConcept(ontologyData, aConceptFact, bConceptFact);
             }
 
-            //Search for a clash with mapping relations
+            //Avoid clash with mapping relations
             if (canAddBroaderAssert) {
-                canAddBroaderAssert = (!RDFSKOSHelper.HasCloseMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
-                                       !RDFSKOSHelper.HasExactMatchConcept(ontologyData, aConceptFact, bConceptFact));
+                canAddBroaderAssert = (!RDFSKOSHelper.HasNarrowMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
+                                       !RDFSKOSHelper.HasCloseMatchConcept(ontologyData, aConceptFact, bConceptFact)  &&
+                                       !RDFSKOSHelper.HasExactMatchConcept(ontologyData, aConceptFact, bConceptFact)  &&
+                                       !RDFSKOSHelper.HasRelatedMatchConcept(ontologyData, aConceptFact, bConceptFact));
             }
 
             return canAddBroaderAssert;
@@ -58,20 +58,20 @@ namespace RDFSharp.Semantics.SKOS
         internal static Boolean CheckNarrowerAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
             var canAddNarrowerAssert = false;
 
-            //Search for a clash with hierarchical relations
-            canAddNarrowerAssert     = (!RDFSKOSHelper.HasBroaderConcept(ontologyData, aConceptFact, bConceptFact) &&
-                                        !RDFSKOSHelper.HasBroadMatchConcept(ontologyData, aConceptFact, bConceptFact));
+            //Avoid clash with hierarchical relations
+            canAddNarrowerAssert     = !RDFSKOSHelper.HasBroaderConcept(ontologyData, aConceptFact, bConceptFact);
 
-            //Search for a clash with associative relations
+            //Avoid clash with associative relations
             if (canAddNarrowerAssert) {
-                canAddNarrowerAssert = (!RDFSKOSHelper.HasRelatedConcept(ontologyData, aConceptFact, bConceptFact) &&
-                                        !RDFSKOSHelper.HasRelatedMatchConcept(ontologyData, aConceptFact, bConceptFact));
+                canAddNarrowerAssert = !RDFSKOSHelper.HasRelatedConcept(ontologyData, aConceptFact, bConceptFact);
             }
 
-            //Search for a clash with mapping relations
+            //Avoid clash with mapping relations
             if (canAddNarrowerAssert) {
-                canAddNarrowerAssert = (!RDFSKOSHelper.HasCloseMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
-                                        !RDFSKOSHelper.HasExactMatchConcept(ontologyData, aConceptFact, bConceptFact));
+                canAddNarrowerAssert = (!RDFSKOSHelper.HasBroadMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
+                                        !RDFSKOSHelper.HasCloseMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
+                                        !RDFSKOSHelper.HasExactMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
+                                        !RDFSKOSHelper.HasRelatedMatchConcept(ontologyData, aConceptFact, bConceptFact));
             }
 
             return canAddNarrowerAssert;
@@ -83,19 +83,39 @@ namespace RDFSharp.Semantics.SKOS
         internal static Boolean CheckRelatedAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
             var canAddRelatedAssert = false;
 
-            //Search for a clash with hierarchical relations
+            //Avoid clash with hierarchical relations
             canAddRelatedAssert     = (!RDFSKOSHelper.HasBroaderConcept(ontologyData, aConceptFact, bConceptFact)     &&
-                                       !RDFSKOSHelper.HasBroadMatchConcept(ontologyData, aConceptFact, bConceptFact)  &&
-                                       !RDFSKOSHelper.HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact)    &&
-                                       !RDFSKOSHelper.HasNarrowMatchConcept(ontologyData, aConceptFact, bConceptFact));
+                                       !RDFSKOSHelper.HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact));
 
-            //Search for a clash with mapping relations
+            //Avoid clash with mapping relations
             if (canAddRelatedAssert) {
-                canAddRelatedAssert = (!RDFSKOSHelper.HasCloseMatchConcept(ontologyData, aConceptFact, bConceptFact)  &&
+                canAddRelatedAssert = (!RDFSKOSHelper.HasBroadMatchConcept(ontologyData, aConceptFact, bConceptFact)  &&
+                                       !RDFSKOSHelper.HasNarrowMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
+                                       !RDFSKOSHelper.HasCloseMatchConcept(ontologyData, aConceptFact, bConceptFact)  &&
                                        !RDFSKOSHelper.HasExactMatchConcept(ontologyData, aConceptFact, bConceptFact));
             }
 
             return canAddRelatedAssert;
+        }
+
+        /// <summary>
+        /// Checks if the skos:closeMatch/skos:exactMatch assertion can be added to the given aConcept with the given bConcept
+        /// </summary>
+        internal static Boolean CheckCloseOrExactMatchAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
+            var canAddCloseOrExactMatchAssert = false;
+
+            //Avoid clash with hierarchical relations
+            canAddCloseOrExactMatchAssert     = (!RDFSKOSHelper.HasBroaderConcept(ontologyData, aConceptFact, bConceptFact)     &&
+                                                 !RDFSKOSHelper.HasNarrowerConcept(ontologyData, aConceptFact, bConceptFact));
+
+            //Avoid clash with mapping relations
+            if (canAddCloseOrExactMatchAssert) {
+                canAddCloseOrExactMatchAssert = (!RDFSKOSHelper.HasBroadMatchConcept(ontologyData, aConceptFact, bConceptFact)  &&
+                                                 !RDFSKOSHelper.HasNarrowMatchConcept(ontologyData, aConceptFact, bConceptFact) &&
+                                                 !RDFSKOSHelper.HasRelatedConcept(ontologyData, aConceptFact, bConceptFact));
+            }
+
+            return canAddCloseOrExactMatchAssert;
         }
         #endregion
 
