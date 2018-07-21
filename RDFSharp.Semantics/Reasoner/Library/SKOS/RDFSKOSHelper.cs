@@ -495,24 +495,41 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Collection Relations
         /// <summary>
-        /// Adds the "collectionFact -> skos:member -> conceptFact" assertion to the ontology data 
+        /// SKOSMemberType is an enumeration for supported types of skos:member objects
         /// </summary>
-        public static void AddMemberAssertion(RDFOntologyData ontologyData, RDFOntologyFact collectionFact, RDFOntologyFact conceptFact) {
-            if (ontologyData       != null && collectionFact != null && conceptFact != null) {
+        public enum RDFSKOSMemberType {
+            /// <summary>
+            /// skos:Concept
+            /// </summary>
+            Concept = 0,
+            /// <summary>
+            /// skos:Collection
+            /// </summary>
+            Collection = 1
+        }
+
+        /// <summary>
+        /// Adds the "collectionFact -> skos:member -> collectionMember" assertion to the ontology data 
+        /// </summary>
+        public static void AddMemberAssertion(RDFOntologyData ontologyData, RDFOntologyFact collectionFact, RDFOntologyFact collectionMember, RDFSKOSMemberType skosMemberType) {
+            if (ontologyData       != null && collectionFact != null && collectionMember != null) {
                 var collectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString());
                 var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var memberProperty  = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER.ToString());
 
                 //Add facts
                 ontologyData.AddFact(collectionFact);
-                ontologyData.AddFact(conceptFact);
+                ontologyData.AddFact(collectionMember);
 
                 //Add classtype relation
                 ontologyData.AddClassTypeRelation(collectionFact, collectionClass);
-                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+                if (skosMemberType == RDFSKOSMemberType.Concept)
+                    ontologyData.AddClassTypeRelation(collectionMember, conceptClass);
+                else
+                    ontologyData.AddClassTypeRelation(collectionMember, collectionClass);
 
                 //Add skos:member assertion
-                ontologyData.AddAssertionRelation(collectionFact, (RDFOntologyObjectProperty)memberProperty, conceptFact);
+                ontologyData.AddAssertionRelation(collectionFact, (RDFOntologyObjectProperty)memberProperty, collectionMember);
             }
         }
         #endregion
