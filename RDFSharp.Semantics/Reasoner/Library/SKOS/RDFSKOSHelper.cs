@@ -493,6 +493,30 @@ namespace RDFSharp.Semantics.SKOS
         }
         #endregion
 
+        #region Collection Relations
+        /// <summary>
+        /// Adds the "collectionFact -> skos:member -> conceptFact" assertion to the ontology data 
+        /// </summary>
+        public static void AddMemberAssertion(RDFOntologyData ontologyData, RDFOntologyFact collectionFact, RDFOntologyFact conceptFact) {
+            if (ontologyData       != null && collectionFact != null && conceptFact != null) {
+                var collectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString());
+                var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                var memberProperty  = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER.ToString());
+
+                //Add facts
+                ontologyData.AddFact(collectionFact);
+                ontologyData.AddFact(conceptFact);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(collectionFact, collectionClass);
+                ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
+
+                //Add skos:member assertion
+                ontologyData.AddAssertionRelation(collectionFact, (RDFOntologyObjectProperty)memberProperty, conceptFact);
+            }
+        }
+        #endregion
+
         #region Label Relations (SKOS-XL)
         /// <summary>
         /// Adds the "aLabel -> skosxl:labelRelation -> bLabel" assertion to the ontology data
