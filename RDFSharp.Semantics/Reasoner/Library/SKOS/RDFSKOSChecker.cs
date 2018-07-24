@@ -260,23 +260,41 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Checks if the skos:hiddenLabel annotation can be added to the given concept
+        /// Checks if the skos:hiddenLabel/skosxl:hiddenLabel annotation can be added to the given concept
         /// </summary>
         internal static Boolean CheckHiddenLabelAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral hiddenLabelLiteral) {
             var canAddHiddenLabelAnnot = false;
             var prefLabelProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
+            var prefLabelXLProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
             var altLabelProperty       = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.ALT_LABEL.ToString());
+            var altLabelXLProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL.ToString());
 
-            //Pairwise disjointness between skos:hiddenLabel and skos:prefLabel must be preserved
+            //Pairwise disjointness with skos:prefLabel/skosxl:prefLabel must be preserved
             canAddHiddenLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
                                                                    .SelectEntriesByPredicate(prefLabelProperty)
                                                                    .Any(x => x.TaxonomyObject.Equals(hiddenLabelLiteral)));
 
-            //Pairwise disjointness between skos:hiddenLabel and skos:altLabel must be preserved
+            if (canAddHiddenLabelAnnot) {
+                canAddHiddenLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
+                                                                            .SelectEntriesByPredicate(prefLabelXLProperty)
+                                                                            .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x)
+                                                                                                                       .SelectEntriesByPredicate(literalFormXLProperty)
+                                                                                                                       .Any(y => y.TaxonomyObject.Equals(altLabelLiteral))));                                                                                                      && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase))));
+            }
+
+            //Pairwise disjointness with skos:altLabel/skosxl:altLabel must be preserved
             if (canAddHiddenLabelAnnot) {
                 canAddHiddenLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
                                                                    .SelectEntriesByPredicate(altLabelProperty)
                                                                    .Any(x => x.TaxonomyObject.Equals(hiddenLabelLiteral)));
+            }
+
+            if (canAddHiddenLabelAnnot) {
+                canAddHiddenLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
+                                                                            .SelectEntriesByPredicate(altLabelXLProperty)
+                                                                            .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x)
+                                                                                                                       .SelectEntriesByPredicate(literalFormXLProperty)
+                                                                                                                       .Any(y => y.TaxonomyObject.Equals(altLabelLiteral))));                                                                                                      && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase))));
             }
 
             return canAddHiddenLabelAnnot;
