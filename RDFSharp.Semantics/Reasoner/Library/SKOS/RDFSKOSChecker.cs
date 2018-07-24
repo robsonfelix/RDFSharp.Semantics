@@ -207,7 +207,7 @@ namespace RDFSharp.Semantics.SKOS
                 //Check skosxl:hiddenLabel assertion
                 if (canAddPrefLabelAnnot) {
                     canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                              .SelectEntriesByPredicate(hiddenLabelXLProperty)
+                                                                              .SelectEntriesByPredicate(hidLabelXLProperty)
                                                                               .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x)
                                                                                                                          .SelectEntriesByPredicate(literalFormXLProperty)
                                                                                                                          .Any(y => y.TaxonomyObject.Equals(prefLabelLiteral))));
