@@ -121,44 +121,98 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Annotations
         /// <summary>
-        /// Checks if the skos:prefLabel annotation can be added to the given concept
+        /// Checks if the skos:prefLabel/skosxl:prefLabel annotation can be added to the given concept
         /// </summary>
         internal static Boolean CheckPrefLabelAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral prefLabelLiteral) {
-            var canAddPrefLabelAnnot = false;
-            var prefLabelProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
-            var altLabelProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.ALT_LABEL.ToString());
-            var hidLabelProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HIDDEN_LABEL.ToString());
-            var prefLabelLiteralLang = ((RDFPlainLiteral)prefLabelLiteral.Value).Language;
+            var canAddPrefLabelAnnot     = false;
+            var prefLabelProperty        = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
+            var prefLabelXLProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
+            var altLabelProperty         = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.ALT_LABEL.ToString());
+            var altLabelXLProperty       = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL.ToString());
+            var hidLabelProperty         = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HIDDEN_LABEL.ToString());
+            var hidLabelXLProperty       = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.HIDDEN_LABEL.ToString());
+            var literalFormXLProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
+            var prefLabelLiteralLang     = ((RDFPlainLiteral)prefLabelLiteral.Value).Language;
 
             //Plain literal without language tag: only one occurrence of this annotation is allowed
             if (String.IsNullOrEmpty(prefLabelLiteralLang)) {
-                canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                                   .SelectEntriesByPredicate(prefLabelProperty)
-                                                                                   .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
-                                                                                               && String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)));
+
+                //Check skos:prefLabel annotation
+                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
+                                                                                       .SelectEntriesByPredicate(prefLabelProperty)
+                                                                                       .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                                   && String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)));
+                //Check skosxl:prefLabel assertion
+                if (canAddPrefLabelAnnot) {
+                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
+                                                                              .SelectEntriesByPredicate(prefLabelXLProperty)
+                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x)
+                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
+                                                                                                                         .Any(y => y.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                                                                     && String.IsNullOrEmpty(((RDFPlainLiteral)y.TaxonomyObject.Value).Language))));
+                }
+
             }
 
             //Plain literal with language tag: only one occurrence of this annotation per language tag is allowed
             else {
-                canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                                   .SelectEntriesByPredicate(prefLabelProperty)
-                                                                                   .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
-                                                                                               && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
-                                                                                               && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase)));
+
+                //Check skos:prefLabel annotation
+                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
+                                                                                       .SelectEntriesByPredicate(prefLabelProperty)
+                                                                                       .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                                   && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
+                                                                                                   && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase)));
+            
+                //Check skosxl:prefLabel assertion
+                if (canAddPrefLabelAnnot) {
+                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
+                                                                              .SelectEntriesByPredicate(prefLabelXLProperty)
+                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x)
+                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
+                                                                                                                         .Any(y => y.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                                                                     && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
+                                                                                                                                     && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase))));
+                }
+            
             }
 
-            //Pairwise disjointness between skos:prefLabel and skos:altLabel must be preserved
+            //Pairwise disjointness with skos:altLabel/skosxl:altLabel must be preserved
             if (canAddPrefLabelAnnot) {
-                canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                 .SelectEntriesByPredicate(altLabelProperty)
-                                                                 .Any(x => x.TaxonomyObject.Equals(prefLabelLiteral)));
+
+                //Check skos:altLabel annotation
+                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
+                                                                     .SelectEntriesByPredicate(altLabelProperty)
+                                                                     .Any(x => x.TaxonomyObject.Equals(prefLabelLiteral)));
+                                                                 
+                //Check skosxl:altLabel assertion
+                if (canAddPrefLabelAnnot) {
+                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
+                                                                              .SelectEntriesByPredicate(altLabelXLProperty)
+                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x)
+                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
+                                                                                                                         .Any(y => y.TaxonomyObject.Equals(prefLabelLiteral))));
+                }
+                                                
             }
 
-            //Pairwise disjointness between skos:prefLabel and skos:hiddenLabel must be preserved
+            //Pairwise disjointness with skos:hiddenLabel/skosxl:hiddenLabel must be preserved
             if (canAddPrefLabelAnnot) {
-                canAddPrefLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                 .SelectEntriesByPredicate(hidLabelProperty)
-                                                                 .Any(x => x.TaxonomyObject.Equals(prefLabelLiteral)));
+
+                //Check skos:hiddenLabel annotation
+                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
+                                                                     .SelectEntriesByPredicate(hidLabelProperty)
+                                                                     .Any(x => x.TaxonomyObject.Equals(prefLabelLiteral)));
+                                                                 
+                //Check skosxl:hiddenLabel assertion
+                if (canAddPrefLabelAnnot) {
+                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
+                                                                              .SelectEntriesByPredicate(hiddenLabelXLProperty)
+                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x)
+                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
+                                                                                                                         .Any(y => y.TaxonomyObject.Equals(prefLabelLiteral))));
+                }
+  
             }
 
             return canAddPrefLabelAnnot;
