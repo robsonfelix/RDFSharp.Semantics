@@ -121,9 +121,9 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Annotations
         /// <summary>
-        /// Checks if the skos:prefLabel/skosxl:prefLabel annotation can be added to the given concept
+        /// Checks if the skos:prefLabel/skosxl:prefLabel informations can be added to the given concept
         /// </summary>
-        internal static Boolean CheckPrefLabelAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral prefLabelLiteral) {
+        internal static Boolean CheckPrefLabel(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral prefLabelLiteral) {
             var canAddPrefLabelAnnot     = false;
             var prefLabelProperty        = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
             var prefLabelXLProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
@@ -219,9 +219,9 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Checks if the skos:altLabel/skosxl:altLabel annotation can be added to the given concept
+        /// Checks if the skos:altLabel/skosxl:altLabel informations can be added to the given concept
         /// </summary>
-        internal static Boolean CheckAltLabelAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral altLabelLiteral) {
+        internal static Boolean CheckAltLabel(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral altLabelLiteral) {
             var canAddAltLabelAnnot   = false;
             var prefLabelProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
             var prefLabelXLProperty   = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
@@ -261,9 +261,9 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Checks if the skos:hiddenLabel/skosxl:hiddenLabel annotation can be added to the given concept
+        /// Checks if the skos:hiddenLabel/skosxl:hiddenLabel informations can be added to the given concept
         /// </summary>
-        internal static Boolean CheckHiddenLabelAnnotation(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral hiddenLabelLiteral) {
+        internal static Boolean CheckHiddenLabel(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral hiddenLabelLiteral) {
             var canAddHiddenLabelAnnot = false;
             var prefLabelProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
             var prefLabelXLProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
