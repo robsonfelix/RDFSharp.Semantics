@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <!-- RDFSharp.Semantics project properties -->
   <PropertyGroup>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -11,7 +10,6 @@
     <RootNamespace>RDFSharp.Semantics</RootNamespace>
     <AssemblyName>RDFSharp.Semantics</AssemblyName>
   </PropertyGroup>
-
   <!-- RDFSharp.Semantics build configurations -->
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -36,7 +34,6 @@
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Release\RDFSharp.Semantics.xml</DocumentationFile>
   </PropertyGroup>
-
   <!-- Microsoft .NET references -->
   <ItemGroup>
     <Reference Include="RDFSharp, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -46,7 +43,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
-
   <!-- RDFSharp.Semantics -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,19 +86,10 @@
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASEChecker.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASEHelper.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASEOntology.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASERuleset.cs" />
-    <Compile Include="Reasoner\Library\DC\RDFDCOntology.cs" />
-    <Compile Include="Reasoner\Library\FOAF\RDFFOAFOntology.cs" />
-    <Compile Include="Reasoner\Library\GEO\RDFGEOOntology.cs" />
-    <Compile Include="Reasoner\Library\SIOC\RDFSIOCOntology.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSChecker.cs" />
-	<Compile Include="Reasoner\Library\SKOS\RDFSKOSEnums.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSHelper.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSOntology.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSRuleset.cs" />
+    <Compile Include="Reasoner\BASE\RDFBASEChecker.cs" />
+    <Compile Include="Reasoner\BASE\RDFBASEHelper.cs" />
+    <Compile Include="Reasoner\BASE\RDFBASEOntology.cs" />
+    <Compile Include="Reasoner\BASE\RDFBASERuleset.cs" />
     <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
