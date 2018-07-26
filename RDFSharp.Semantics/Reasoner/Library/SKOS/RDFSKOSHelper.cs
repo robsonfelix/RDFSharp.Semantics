@@ -1030,19 +1030,13 @@ namespace RDFSharp.Semantics.SKOS
                 //Get skos:narrower concepts
                 var narrower    = data.Relations.Assertions.SelectEntriesBySubject(concept)
                                                            .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROWER.ToString()));
-
-                //Get skos:narrowMatch concepts
-                var narrowMatch = data.Relations.Assertions.SelectEntriesBySubject(concept)
-                                                           .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.NARROW_MATCH.ToString()));
-
-                //Merge results
-                foreach (var narrowConcept in narrower.UnionWith(narrowMatch)) {
-                    result.AddFact((RDFOntologyFact)narrowConcept.TaxonomyObject);
+                foreach (var narrowerConcept in narrower) {
+                    result.AddFact((RDFOntologyFact)narrowerConcept.TaxonomyObject);
                 }
 
                 //Get skos:narrowerTransitive concepts
-                result         = result.UnionWith(data.EnlistNarrowerConceptsOfInternal(concept, null))
-                                       .RemoveFact(concept); //Safety deletion
+                result          = result.UnionWith(data.EnlistNarrowerConceptsOfInternal(concept, null))
+                                        .RemoveFact(concept); //Safety deletion
 
             }
             return result;
