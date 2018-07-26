@@ -520,11 +520,11 @@ namespace RDFSharp.Semantics.SKOS
         /// </summary>
         public enum RDFSKOSMemberType {
             /// <summary>
-            /// skos:Concept
+            /// Member of the skos:Collection is a skos:Concept
             /// </summary>
             Concept = 0,
             /// <summary>
-            /// skos:Collection
+            /// Member of the skos:Collection is a skos:Collection
             /// </summary>
             Collection = 1
         }
