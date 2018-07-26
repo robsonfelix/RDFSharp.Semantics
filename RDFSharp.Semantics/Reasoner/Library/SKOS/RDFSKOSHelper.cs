@@ -590,7 +590,7 @@ namespace RDFSharp.Semantics.SKOS
                 var conceptClass        = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var labelClass          = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
                 var prefLabelProperty   = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
-		var literalFormProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
+		        var literalFormProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
 
                 //Only plain literals are allowed as skosxl:prefLabel assertions
                 if (prefLabelLiteral.Value  is RDFPlainLiteral) {
@@ -598,17 +598,17 @@ namespace RDFSharp.Semantics.SKOS
 
                         //Add fact and literal
                         ontologyData.AddFact(conceptFact);
-			ontologyData.AddFact(labelFact);
+			            ontologyData.AddFact(labelFact);
                         ontologyData.AddLiteral(prefLabelLiteral);
 
                         //Add classtype relation
                         ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
-			ontologyData.AddClassTypeRelation(labelFact, labelClass);
+			            ontologyData.AddClassTypeRelation(labelFact, labelClass);
 
                         //Add skosxl:prefLabel assertion
                         ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyObjectProperty)prefLabelProperty, labelFact);
 			
-			//Add skosxl:literalForm assertion
+			            //Add skosxl:literalForm assertion
                         ontologyData.AddAssertionRelation(labelFact, (RDFOntologyDatatypeProperty)literalFormProperty, prefLabelLiteral);
 
                     }
@@ -621,12 +621,12 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Adds the "conceptFact -> skosxl:altLabel -> labelFact" and "labelFact -> skosxl:literalForm -> altLabelLiteral" assertions to the ontology data
         /// </summary>
-        public static RDFOntologyData AddPrefLabelAssertion(this RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact labelFact, RDFOntologyLiteral altLabelLiteral) {
+        public static RDFOntologyData AddAltLabelAssertion(this RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact labelFact, RDFOntologyLiteral altLabelLiteral) {
             if (ontologyData           != null && conceptFact != null && labelFact != null && altLabelLiteral != null) {
                 var conceptClass        = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var labelClass          = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
                 var altLabelProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL.ToString());
-		var literalFormProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
+		        var literalFormProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
 
                 //Only plain literals are allowed as skosxl:altLabel assertions
                 if (altLabelLiteral.Value  is RDFPlainLiteral) {
@@ -634,17 +634,17 @@ namespace RDFSharp.Semantics.SKOS
 
                         //Add fact and literal
                         ontologyData.AddFact(conceptFact);
-			ontologyData.AddFact(labelFact);
+			            ontologyData.AddFact(labelFact);
                         ontologyData.AddLiteral(altLabelLiteral);
 
                         //Add classtype relation
                         ontologyData.AddClassTypeRelation(conceptFact, conceptClass);
-			ontologyData.AddClassTypeRelation(labelFact, labelClass);
+			            ontologyData.AddClassTypeRelation(labelFact, labelClass);
 
                         //Add skosxl:altLabel assertion
                         ontologyData.AddAssertionRelation(conceptFact, (RDFOntologyObjectProperty)altLabelProperty, labelFact);
 			
-			//Add skosxl:literalForm assertion
+			            //Add skosxl:literalForm assertion
                         ontologyData.AddAssertionRelation(labelFact, (RDFOntologyDatatypeProperty)literalFormProperty, altLabelLiteral);
 
                     }
