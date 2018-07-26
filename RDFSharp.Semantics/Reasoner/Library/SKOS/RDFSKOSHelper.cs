@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using RDFSharp.Model;
 
 namespace RDFSharp.Semantics.SKOS
@@ -516,23 +515,9 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Collection Relations
         /// <summary>
-        /// SKOSMemberType is an enumeration for supported types of skos:member objects
-        /// </summary>
-        public enum RDFSKOSMemberType {
-            /// <summary>
-            /// Member of the skos:Collection is a skos:Concept
-            /// </summary>
-            Concept = 0,
-            /// <summary>
-            /// Member of the skos:Collection is a skos:Collection
-            /// </summary>
-            Collection = 1
-        }
-
-        /// <summary>
         /// Adds the "collectionFact -> skos:member -> collectionMember" assertion to the ontology data 
         /// </summary>
-        public static RDFOntologyData AddMemberAssertion(this RDFOntologyData ontologyData, RDFOntologyFact collectionFact, RDFOntologyFact collectionMember, RDFSKOSMemberType skosMemberType) {
+        public static RDFOntologyData AddMemberAssertion(this RDFOntologyData ontologyData, RDFOntologyFact collectionFact, RDFOntologyFact collectionMember, RDFSKOSEnums.RDFSKOSMemberType skosMemberType) {
             if (ontologyData       != null && collectionFact != null && collectionMember != null) {
                 var collectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString());
                 var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
@@ -544,7 +529,7 @@ namespace RDFSharp.Semantics.SKOS
 
                 //Add classtype relation
                 ontologyData.AddClassTypeRelation(collectionFact, collectionClass);
-                if (skosMemberType == RDFSKOSMemberType.Concept)
+                if (skosMemberType == RDFSKOSEnums.RDFSKOSMemberType.Concept)
                     ontologyData.AddClassTypeRelation(collectionMember, conceptClass);
                 else
                     ontologyData.AddClassTypeRelation(collectionMember, collectionClass);

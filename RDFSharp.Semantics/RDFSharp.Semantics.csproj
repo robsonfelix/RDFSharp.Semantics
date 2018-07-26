@@ -99,6 +99,7 @@
     <Compile Include="Reasoner\Library\GEO\RDFGEOOntology.cs" />
     <Compile Include="Reasoner\Library\SIOC\RDFSIOCOntology.cs" />
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSChecker.cs" />
+	<Compile Include="Reasoner\Library\SKOS\RDFSKOSEnums.cs" />
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSHelper.cs" />
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSOntology.cs" />
     <Compile Include="Reasoner\Library\SKOS\RDFSKOSRuleset.cs" />
