@@ -26,7 +26,7 @@ namespace RDFSharp.Semantics.SKOS
     /// </summary>
     internal static class RDFSKOSChecker {
 
-        #region Assertions
+        #region Methods
         /// <summary>
         /// Checks if the skos:broader/skos:broaderTransitive/skos:broadMatch assertion can be added to the given aConcept with the given bConcept
         /// </summary>
@@ -117,9 +117,7 @@ namespace RDFSharp.Semantics.SKOS
 
             return canAddCloseOrExactMatchAssert;
         }
-        #endregion
 
-        #region Annotations
         /// <summary>
         /// Checks if the skos:prefLabel/skosxl:prefLabel informations can be added to the given concept
         /// </summary>
