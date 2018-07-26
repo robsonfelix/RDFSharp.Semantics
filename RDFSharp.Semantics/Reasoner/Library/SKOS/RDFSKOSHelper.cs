@@ -558,31 +558,6 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Label Relations (SKOS-XL)
         /// <summary>
-        /// Adds the "aLabel -> skosxl:labelRelation -> bLabel" assertion to the ontology data
-        /// </summary>
-        public static RDFOntologyData AddLabelRelationAssertion(this RDFOntologyData ontologyData, RDFOntologyFact aLabel, RDFOntologyFact bLabel) {
-            if (ontologyData             != null && aLabel != null && bLabel != null && !aLabel.Equals(bLabel)) {
-                var labelClass            = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
-                var labelRelationProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LABEL_RELATION.ToString());
-
-                //Add fact
-                ontologyData.AddFact(aLabel);
-                ontologyData.AddFact(bLabel);
-
-                //Add classtype relation
-                ontologyData.AddClassTypeRelation(aLabel, labelClass);
-                ontologyData.AddClassTypeRelation(bLabel, labelClass);
-
-                //Add skosxl:labelRelation assertion
-                ontologyData.AddAssertionRelation(aLabel, (RDFOntologyObjectProperty)labelRelationProperty, bLabel);
-                //Add skosxl:labelRelation assertion as inference
-                ontologyData.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(bLabel, (RDFOntologyObjectProperty)labelRelationProperty, aLabel)
-                                                 .SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
-            }
-            return ontologyData;
-        }
-
-        /// <summary>
         /// Adds the "conceptFact -> skosxl:prefLabel -> labelFact" and "labelFact -> skosxl:literalForm -> prefLabelLiteral" assertions to the ontology data
         /// </summary>
         public static RDFOntologyData AddPrefLabelAssertion(this RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyFact labelFact, RDFOntologyLiteral prefLabelLiteral) {
@@ -686,6 +661,31 @@ namespace RDFSharp.Semantics.SKOS
                     }
                 }
 
+            }
+            return ontologyData;
+        }
+
+        /// <summary>
+        /// Adds the "aLabel -> skosxl:labelRelation -> bLabel" assertion to the ontology data
+        /// </summary>
+        public static RDFOntologyData AddLabelRelationAssertion(this RDFOntologyData ontologyData, RDFOntologyFact aLabel, RDFOntologyFact bLabel) {
+            if (ontologyData             != null && aLabel != null && bLabel != null && !aLabel.Equals(bLabel)) {
+                var labelClass            = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString());
+                var labelRelationProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LABEL_RELATION.ToString());
+
+                //Add fact
+                ontologyData.AddFact(aLabel);
+                ontologyData.AddFact(bLabel);
+
+                //Add classtype relation
+                ontologyData.AddClassTypeRelation(aLabel, labelClass);
+                ontologyData.AddClassTypeRelation(bLabel, labelClass);
+
+                //Add skosxl:labelRelation assertion
+                ontologyData.AddAssertionRelation(aLabel, (RDFOntologyObjectProperty)labelRelationProperty, bLabel);
+                //Add skosxl:labelRelation assertion as inference
+                ontologyData.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(bLabel, (RDFOntologyObjectProperty)labelRelationProperty, aLabel)
+                                                 .SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
             }
             return ontologyData;
         }
