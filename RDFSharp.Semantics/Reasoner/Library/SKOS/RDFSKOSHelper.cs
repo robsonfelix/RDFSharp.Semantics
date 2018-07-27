@@ -26,7 +26,6 @@ namespace RDFSharp.Semantics.SKOS
     /// </summary>
     public static class RDFSKOSHelper {
 
-
         #region Modeling
 
         #region Facts
@@ -943,7 +942,6 @@ namespace RDFSharp.Semantics.SKOS
 
         #endregion
 
-
         #region Reasoning
 
         #region Semantic Relations
@@ -1256,7 +1254,6 @@ namespace RDFSharp.Semantics.SKOS
         #endregion
 		
         #endregion
-
 
     }
 
