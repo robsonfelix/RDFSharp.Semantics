@@ -59,7 +59,6 @@ namespace RDFSharp.Semantics
             Instance.Model.ClassModel.AddClass(RDFVocabulary.RDF.BAG.ToRDFOntologyClass());
             Instance.Model.ClassModel.AddClass(RDFVocabulary.RDF.SEQ.ToRDFOntologyClass());
             Instance.Model.ClassModel.AddClass(RDFVocabulary.RDF.LIST.ToRDFOntologyClass());
-            Instance.Model.ClassModel.AddClass(RDFVocabulary.RDF.NIL.ToRDFOntologyClass());
 
             //XSD
             Instance.Model.ClassModel.AddClass(RDFVocabulary.XSD.ANY_URI.ToRDFOntologyClass());
@@ -170,6 +169,10 @@ namespace RDFSharp.Semantics
             Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.INCOMPATIBLE_WITH.ToRDFOntologyAnnotationProperty());
             Instance.Model.PropertyModel.AddProperty(RDFVocabulary.OWL.PRIOR_VERSION.ToRDFOntologyAnnotationProperty());
 
+            #endregion
+
+            #region Facts
+            Instance.Data.AddFact(RDFVocabulary.RDF.NIL.ToRDFOntologyFact());
             #endregion
 
             #endregion
