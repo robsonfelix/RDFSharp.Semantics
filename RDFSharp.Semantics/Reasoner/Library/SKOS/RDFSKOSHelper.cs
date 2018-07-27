@@ -78,22 +78,6 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
-        /// Adds the given fact to the ontology data as instance of "skos:OrderedCollection"
-        /// </summary>
-        public static RDFOntologyData AddOrderedCollection(this RDFOntologyData ontologyData, RDFOntologyFact orderedCollectionFact) {
-            if (ontologyData              != null && orderedCollectionFact != null) {
-                var orderedCollectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString());
-
-                //Add fact
-                ontologyData.AddFact(orderedCollectionFact);
-
-                //Add classtype relation
-                ontologyData.AddClassTypeRelation(orderedCollectionFact, orderedCollectionClass);
-            }
-            return ontologyData;
-        }
-
-        /// <summary>
         /// Adds the given fact to the ontology data as instance of "skosxl:Label"
         /// </summary>
         public static RDFOntologyData AddLabel(this RDFOntologyData ontologyData, RDFOntologyFact labelFact) {
