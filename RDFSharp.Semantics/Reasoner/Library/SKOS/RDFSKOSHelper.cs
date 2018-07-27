@@ -1215,7 +1215,7 @@ namespace RDFSharp.Semantics.SKOS
         public static RDFOntologyData EnlistExactMatchConceptsOf(this RDFOntologyData data, RDFOntologyFact concept) {
             var result   = new RDFOntologyData();
             if (concept != null && data != null) {
-                result   = data.EnlistExactMatchesOfInternal(concept, null)
+                result   = data.EnlistExactMatchConceptsOfInternal(concept, null)
                                .RemoveFact(concept); //Safety deletion
             }
             return result;
@@ -1224,7 +1224,7 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Subsumes the "skos:exactMatch" taxonomy to discover direct and indirect exactmatches of the given concept
         /// </summary>
-        internal static RDFOntologyData EnlistExactMatchesOfInternal(this RDFOntologyData data, RDFOntologyFact concept, Dictionary<Int64, RDFOntologyFact> visitContext) {
+        internal static RDFOntologyData EnlistExactMatchConceptsOfInternal(this RDFOntologyData data, RDFOntologyFact concept, Dictionary<Int64, RDFOntologyFact> visitContext) {
             var result         = new RDFOntologyData();
 
             #region visitContext
@@ -1246,7 +1246,7 @@ namespace RDFSharp.Semantics.SKOS
             foreach (var em   in data.Relations.Assertions.SelectEntriesBySubject(concept)
                                                           .SelectEntriesByPredicate(exactMatchProp)) {
                 result.AddFact((RDFOntologyFact)em.TaxonomyObject);
-                result         = result.UnionWith(data.EnlistExactMatchesOfInternal((RDFOntologyFact)em.TaxonomyObject, visitContext));
+                result         = result.UnionWith(data.EnlistExactMatchConceptsOfInternal((RDFOntologyFact)em.TaxonomyObject, visitContext));
             }
 
             return result;
