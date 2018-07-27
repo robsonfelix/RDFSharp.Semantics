@@ -1239,7 +1239,7 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Collection Relations
         /// <summary>
-        /// Enlists the related concepts of the given concept within the given data
+        /// Enlists the skos:member concepts of the given skos:Collection within the given data
         /// </summary>
         public static RDFOntologyData EnlistMemberConceptsOf(this RDFOntologyData data, RDFOntologyFact collection) {
             var result         = new RDFOntologyData();
