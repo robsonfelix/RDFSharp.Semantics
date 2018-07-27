@@ -1236,7 +1236,38 @@ namespace RDFSharp.Semantics.SKOS
         #endregion
 
         #endregion
-		
+
+        #region Collection Relations
+        /// <summary>
+        /// Enlists the related concepts of the given concept within the given data
+        /// </summary>
+        public static RDFOntologyData EnlistMemberConceptsOf(this RDFOntologyData data, RDFOntologyFact collection) {
+            var result         = new RDFOntologyData();
+            if (collection    != null && data != null) {
+                var members    = data.Relations.Assertions.SelectEntriesBySubject(collection)
+                                                       .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER.ToString()));
+                foreach (var collMember in members) {
+
+                    //Member is instance of skos:Concept
+                    if (data.Relations.ClassType.SelectEntriesBySubject(collMember.TaxonomyObject)
+                                                .SelectEntriesByObject(RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()))
+                                                .EntriesCount > 0) {
+                        result.AddFact((RDFOntologyFact)collMember.TaxonomyObject);
+                    }
+
+                    //Member is instance of skos:Collection
+                    else if (data.Relations.ClassType.SelectEntriesBySubject(collMember.TaxonomyObject)
+                                                     .SelectEntriesByObject(RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString()))
+                                                     .EntriesCount > 0) {
+                        result = result.UnionWith(data.EnlistMemberConceptsOf((RDFOntologyFact)collMember.TaxonomyObject));
+                    }
+
+                }
+            }
+            return result;
+        }
+        #endregion
+
         #endregion
 
     }
