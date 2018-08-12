@@ -90,7 +90,7 @@
     <Compile Include="Library\BASE\RDFBASEHelper.cs" />
     <Compile Include="Library\BASE\RDFBASEOntology.cs" />
     <Compile Include="Library\BASE\RDFBASEReasonerRuleset.cs" />
-    <Compile Include="Library\BASE\RDFBASEValidatorRuleSet.cs" />
+    <Compile Include="Library\BASE\RDFBASEValidatorRuleset.cs" />
     <!-- Reasoner -->
     <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />

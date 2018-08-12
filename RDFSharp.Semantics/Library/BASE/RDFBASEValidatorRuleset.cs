@@ -22,10 +22,10 @@ namespace RDFSharp.Semantics
 {
 
     /// <summary>
-    /// RDFBASEValidatorRuleSet represents a predefined set of RDFS/OWL-DL rules which are applied by a validator 
+    /// RDFBASEValidatorRuleset represents a predefined set of RDFS/OWL-DL rules which are applied by a validator 
     /// on a given ontology in order to find error and inconsistency evidences affecting its model and data.
     /// </summary>
-    internal static class RDFBASEValidatorRuleSet {
+    internal static class RDFBASEValidatorRuleset {
 
         #region Rule:Vocabulary_Disjointness
         /// <summary>
