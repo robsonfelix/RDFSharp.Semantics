@@ -54,7 +54,7 @@
     <Compile Include="Library\SKOS\RDFSKOSEnums.cs" />
     <Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
     <Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
-    <Compile Include="Library\SKOS\RDFSKOSRuleset.cs" />
+    <Compile Include="Library\SKOS\RDFSKOSReasonerRuleset.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RDFSharp.Semantics\RDFSharp.Semantics.csproj">
