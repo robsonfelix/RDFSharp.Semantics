@@ -16,14 +16,12 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-[assembly: AssemblyTitle("RDFSharp.Semantics")]
-[assembly: AssemblyDescription("Model OWL-DL ontologies with RDFSharp")]
+[assembly: AssemblyTitle("RDFSharp.Semantics.Ontologies")]
+[assembly: AssemblyDescription("LinkedData ontologies ready to use with RDFSharp.Semantics")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marco De Salvo")]
 [assembly: AssemblyProduct("RDFSharp.Semantics")]
 [assembly: AssemblyCopyright("Marco De Salvo")]
 [assembly: AssemblyVersion("1.5.0")]
 [assembly: ComVisible(false)]
-[assembly: Guid("2BE71F3A-943B-464A-8FE8-7D7BCBF23100")]
-[assembly: InternalsVisibleTo("RDFSharp.Semantics.Ontologies")]
+[assembly: Guid("5E17E837-9223-487A-A51D-9FD992A6D898")]

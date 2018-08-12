@@ -14,27 +14,36 @@
    limitations under the License.
 */
 
-namespace RDFSharp.Semantics.SKOS
+using System;
+using System.Linq;
+using RDFSharp.Model;
+
+namespace RDFSharp.Semantics.Ontologies.SKOS
 {
 
     /// <summary>
-    /// RDFSKOSEnums represents a collector for all the enumerations used by the "RDFSharp.Semantics.SKOS" namespace
+    /// RDFSKOSRuleset implements a subset of SKOS entailment rules
     /// </summary>
-    public static class RDFSKOSEnums {
+    public static class RDFSKOSRuleset {
 
+        #region Properties
         /// <summary>
-        /// SKOSMemberType is an enumeration for supported types of skos:member objects
+        /// Counter of rules contained in the SKOS ruleset
         /// </summary>
-        public enum RDFSKOSMemberType {
-            /// <summary>
-            /// Member of the skos:Collection is a skos:Concept
-            /// </summary>
-            Concept = 0,
-            /// <summary>
-            /// Member of the skos:Collection is a skos:Collection
-            /// </summary>
-            Collection = 1
+        public static readonly Int32 RulesCount = 0;
+        #endregion
+
+        #region Ctors
+        /// <summary>
+        /// Static-ctor to initialize the SKOS ruleset
+        /// </summary>
+        static RDFSKOSRuleset() {
+
         }
+        #endregion
+
+        #region Methods
+        #endregion
 
     }
 

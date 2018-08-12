@@ -94,15 +94,6 @@
     <Compile Include="Reasoner\Library\BASE\RDFBASEHelper.cs" />
     <Compile Include="Reasoner\Library\BASE\RDFBASEOntology.cs" />
     <Compile Include="Reasoner\Library\BASE\RDFBASERuleset.cs" />
-    <Compile Include="Reasoner\Library\DC\RDFDCOntology.cs" />
-    <Compile Include="Reasoner\Library\FOAF\RDFFOAFOntology.cs" />
-    <Compile Include="Reasoner\Library\GEO\RDFGEOOntology.cs" />
-    <Compile Include="Reasoner\Library\SIOC\RDFSIOCOntology.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSChecker.cs" />
-	<Compile Include="Reasoner\Library\SKOS\RDFSKOSEnums.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSHelper.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSOntology.cs" />
-    <Compile Include="Reasoner\Library\SKOS\RDFSKOSRuleset.cs" />
     <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />

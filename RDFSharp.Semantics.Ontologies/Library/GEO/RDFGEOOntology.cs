@@ -16,7 +16,7 @@
 
 using RDFSharp.Model;
 
-namespace RDFSharp.Semantics.GEO
+namespace RDFSharp.Semantics.Ontologies.GEO
 {
 
     /// <summary>
