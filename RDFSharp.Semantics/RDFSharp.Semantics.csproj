@@ -85,15 +85,16 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
+	<!-- Library -->
+	<Compile Include="Library\BASE\RDFBASEChecker.cs" />
+    <Compile Include="Library\BASE\RDFBASEHelper.cs" />
+    <Compile Include="Library\BASE\RDFBASEOntology.cs" />
+    <Compile Include="Library\BASE\RDFBASERuleset.cs" />
     <!-- Reasoner -->
     <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASEChecker.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASEHelper.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASEOntology.cs" />
-    <Compile Include="Reasoner\Library\BASE\RDFBASERuleset.cs" />
     <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
