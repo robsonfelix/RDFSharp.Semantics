@@ -23,9 +23,9 @@ namespace RDFSharp.Semantics
 {
 
     /// <summary>
-    /// RDFBASERuleset implements a subset of RDFS/OWL-DL entailment rules
+    /// RDFBASEReasonerRuleset implements a subset of RDFS/OWL-DL entailment rules
     /// </summary>
-    public static class RDFBASERuleset {
+    public static class RDFBASEReasonerRuleset {
 
         #region Properties
 
@@ -119,7 +119,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Static-ctor to initialize the BASE ruleset
         /// </summary>
-        static RDFBASERuleset() {
+        static RDFBASEReasonerRuleset() {
 
 			#region RDFS
             //SubClassTransitivity (rdfs11)

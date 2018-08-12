@@ -66,8 +66,8 @@ namespace RDFSharp.Semantics
                         this.RuleDescription  = ruleDescription.Trim().ToUpperInvariant();
 
                         //Shift rule priority to guarantee preliminar execution of BASE rules
-                        if (rulePriority     <= RDFBASERuleset.RulesCount)
-                            this.RulePriority = rulePriority + (UInt32)RDFBASERuleset.RulesCount + 1;
+                        if (rulePriority     <= RDFBASEReasonerRuleset.RulesCount)
+                            this.RulePriority = rulePriority + (UInt32)RDFBASEReasonerRuleset.RulesCount + 1;
                         else
                             this.RulePriority = rulePriority;
 

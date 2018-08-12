@@ -113,7 +113,7 @@ namespace RDFSharp.Semantics
                 ontology            = ontology.UnionWith(RDFBASEOntology.Instance);
 
                 //STEP 2: Execute BASE rules
-                var baseRules       = this.Rules.Where(x => x.RulePriority <= RDFBASERuleset.RulesCount)
+                var baseRules       = this.Rules.Where(x => x.RulePriority <= RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var bRule in baseRules) {
                     RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", bRule));
@@ -122,7 +122,7 @@ namespace RDFSharp.Semantics
                 }
 
                 //STEP 3: Execute custom rules
-                var customRules     = this.Rules.Where(x => x.RulePriority > RDFBASERuleset.RulesCount)
+                var customRules     = this.Rules.Where(x => x.RulePriority > RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var cRule in customRules) {
                     RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", cRule));
