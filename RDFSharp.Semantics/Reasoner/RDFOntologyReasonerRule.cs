@@ -89,9 +89,16 @@ namespace RDFSharp.Semantics
 
         #region Interfaces
         /// <summary>
-        /// Gives the string representation of the reasoner rule
+        /// Gives the name of the reasoner rule
         /// </summary>
         public override String ToString() {
+            return this.RuleName;
+        }
+
+        /// <summary>
+        /// Gives the full representation of the reasoner rule
+        /// </summary>
+        public String ToFullString() {
             return this.RuleName + " (PRIORITY " + this.RulePriority + "): " + this.RuleDescription;
         }
         #endregion
