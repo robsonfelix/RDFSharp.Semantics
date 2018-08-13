@@ -55,6 +55,20 @@
     <Compile Include="RDFSemanticsException.cs" />
     <Compile Include="RDFSemanticsExtensions.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
+	<!-- Library -->
+    <Compile Include="Library\BASE\RDFBASEChecker.cs" />
+    <Compile Include="Library\BASE\RDFBASEHelper.cs" />
+    <Compile Include="Library\BASE\RDFBASEOntology.cs" />
+    <Compile Include="Library\BASE\RDFBASEReasonerRuleset.cs" />
+    <Compile Include="Library\BASE\RDFBASEValidatorRuleset.cs" />
+	<Compile Include="Library\DC\RDFDCOntology.cs" />
+	<Compile Include="Library\FOAF\RDFFOAFOntology.cs" />
+	<Compile Include="Library\GEO\RDFGEOOntology.cs" />
+	<Compile Include="Library\SIOC\RDFSIOCOntology.cs" />
+	<Compile Include="Library\SKOS\RDFSKOSChecker.cs" />
+	<Compile Include="Library\SKOS\RDFSKOSEnums.cs" />
+	<Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
+	<Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
@@ -86,12 +100,6 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
-    <!-- Library -->
-    <Compile Include="Library\BASE\RDFBASEChecker.cs" />
-    <Compile Include="Library\BASE\RDFBASEHelper.cs" />
-    <Compile Include="Library\BASE\RDFBASEOntology.cs" />
-    <Compile Include="Library\BASE\RDFBASEReasonerRuleset.cs" />
-    <Compile Include="Library\BASE\RDFBASEValidatorRuleset.cs" />
     <!-- Reasoner -->
     <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
     <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
