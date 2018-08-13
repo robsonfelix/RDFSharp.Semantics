@@ -96,6 +96,17 @@ namespace RDFSharp.Semantics.Ontologies.GEO
         }
         #endregion
 
+        #region Methods
+        /// <summary>
+        /// Adds the GEO ontology to the register, in order to be automatically 
+        /// recognized and supported during validation and reasoning activities
+        /// </summary>
+        public static void AddToRegister() {
+            if (!RDFOntologyRegister.Instance.StaticRegister.ContainsKey("GEO"))
+                 RDFOntologyRegister.Instance.StaticRegister.Add("GEO", Instance);
+        }
+        #endregion
+
     }
 
 }

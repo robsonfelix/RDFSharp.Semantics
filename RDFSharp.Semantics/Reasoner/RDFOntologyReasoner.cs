@@ -50,7 +50,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Default-ctor to build an empty ontology reasoner
         /// </summary>
-        public RDFOntologyReasoner(String reasonerDescription) {
+        internal RDFOntologyReasoner(String reasonerDescription) {
             this.ReasonerDescription = reasonerDescription;
             this.Rules               = new List<RDFOntologyReasonerRule>();
         }
@@ -74,13 +74,20 @@ namespace RDFSharp.Semantics
 
         #region Methods
 
-        #region Add
+        #region Create
+        /// <summary>
+        /// Creates a new reasoner with the given description
+        /// </summary>
+        public static RDFOntologyReasoner CreateNew(String reasonerDescription) {
+            return new RDFOntologyReasoner(reasonerDescription);
+        }
+
         /// <summary>
         /// Adds the given rule to the reasoner
         /// </summary>
-        public RDFOntologyReasoner AddRule(RDFOntologyReasonerRule rule) {
+        public RDFOntologyReasoner WithRule(RDFOntologyReasonerRule rule) {
             if (rule   != null) {
-                if (this.SelectRuleByName(rule.RuleName) == null) {
+                if (this.SelectRule(rule.RuleName) == null) {
                     this.Rules.Add(rule);
                 }
             }
@@ -92,7 +99,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Selects the given rule from the resoner
         /// </summary>
-        public RDFOntologyReasonerRule SelectRuleByName(String ruleName) {
+        public RDFOntologyReasonerRule SelectRule(String ruleName) {
             if (ruleName  != null &&  ruleName.Trim() != String.Empty)
                 return this.Rules.FirstOrDefault(r => r.RuleName.Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
             else
@@ -109,8 +116,8 @@ namespace RDFSharp.Semantics
                 var report          = new RDFOntologyReasonerReport();
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}'", ontology.Value));
 
-                //STEP 1: Expand ontology with BASE definitions
-                ontology            = ontology.UnionWith(RDFBASEOntology.Instance);
+                //STEP 1: Expand ontology
+                RDFSemanticsUtilities.ExpandOntology(ref ontology);
 
                 //STEP 2: Execute BASE rules
                 var baseRules       = this.Rules.Where(x => x.RulePriority <= RDFBASEReasonerRuleset.RulesCount)
@@ -130,8 +137,8 @@ namespace RDFSharp.Semantics
                     RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", cRule, infCounter));
                 }
 
-                //STEP 4: Unexpand ontology from  BASE definitions
-                ontology            = ontology.DifferenceWith(RDFBASEOntology.Instance);
+                //STEP 4: Unexpand ontology
+                RDFSemanticsUtilities.UnexpandOntology(ref ontology);
 
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}'", ontology.Value));
                 return report;

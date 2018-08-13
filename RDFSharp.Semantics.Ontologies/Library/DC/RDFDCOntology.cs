@@ -314,6 +314,17 @@ namespace RDFSharp.Semantics.Ontologies.DC
         }
         #endregion
 
+        #region Methods
+        /// <summary>
+        /// Adds the DC ontology to the register, in order to be automatically 
+        /// recognized and supported during validation and reasoning activities
+        /// </summary>
+        public static void AddToRegister() {
+            if (!RDFOntologyRegister.Instance.StaticRegister.ContainsKey("DC"))
+                 RDFOntologyRegister.Instance.StaticRegister.Add("DC", Instance);
+        }
+        #endregion
+
     }
 
 }

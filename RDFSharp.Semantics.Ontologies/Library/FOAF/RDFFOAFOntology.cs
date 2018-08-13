@@ -264,6 +264,17 @@ namespace RDFSharp.Semantics.Ontologies.FOAF
         }
         #endregion
 
+        #region Methods
+        /// <summary>
+        /// Adds the FOAF ontology to the register, in order to be automatically 
+        /// recognized and supported during validation and reasoning activities
+        /// </summary>
+        public static void AddToRegister() {
+            if (!RDFOntologyRegister.Instance.StaticRegister.ContainsKey("FOAF"))
+                 RDFOntologyRegister.Instance.StaticRegister.Add("FOAF", Instance);
+        }
+        #endregion
+
     }
 
 }
