@@ -53,7 +53,7 @@ namespace RDFSharp.Semantics
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build a reasoner rule
+        /// Default-ctor to build a reasoner rule with the given name, description and priority (lower is better)
         /// </summary>
         public RDFOntologyReasonerRule(String ruleName, 
                                        String ruleDescription,
@@ -100,6 +100,16 @@ namespace RDFSharp.Semantics
         /// </summary>
         public String ToFullString() {
             return this.RuleName + " (PRIORITY " + this.RulePriority + "): " + this.RuleDescription;
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Redefines the execution priority of the reasoner rule
+        /// </summary>
+        internal RDFOntologyReasonerRule SetPriority(UInt32 priority) {
+            this.RulePriority = priority;
+            return this;
         }
         #endregion
 
