@@ -51,6 +51,11 @@ namespace RDFSharp.Semantics {
         /// Dictionary of ontology entries composing the taxonomy
         /// </summary>
         internal Dictionary<Int64, RDFOntologyTaxonomyEntry> Entries { get; set; }
+
+        /// <summary>
+        /// SyncLock for entries
+        /// </summary>
+        internal Object SyncLock { get; set; }
         #endregion
 
         #region Ctors
@@ -60,6 +65,7 @@ namespace RDFSharp.Semantics {
         internal RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory category) {
             this.Category = category;
             this.Entries  = new Dictionary<Int64, RDFOntologyTaxonomyEntry>();
+            this.SyncLock = new object();
         }
         #endregion
 
@@ -88,9 +94,11 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal Boolean AddEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
             if (taxonomyEntry != null) {
-                if (!this.ContainsEntry(taxonomyEntry)) {
-                     this.Entries.Add(taxonomyEntry.TaxonomyEntryID, taxonomyEntry);
-                     return true;
+                lock (this.SyncLock) {
+                      if (!this.ContainsEntry(taxonomyEntry)) {
+                           this.Entries.Add(taxonomyEntry.TaxonomyEntryID, taxonomyEntry);
+                           return true;
+                      }
                 }
             }
             return false;
@@ -104,9 +112,11 @@ namespace RDFSharp.Semantics {
         /// </summary>
         internal Boolean RemoveEntry(RDFOntologyTaxonomyEntry taxonomyEntry) {
             if (taxonomyEntry != null) {
-                if (this.ContainsEntry(taxonomyEntry)) {
-                    this.Entries.Remove(taxonomyEntry.TaxonomyEntryID);
-                    return true;
+                lock (this.SyncLock) {
+                      if (this.ContainsEntry(taxonomyEntry)) {
+                          this.Entries.Remove(taxonomyEntry.TaxonomyEntryID);
+                          return true;
+                      }
                 }
             }
             return false;
