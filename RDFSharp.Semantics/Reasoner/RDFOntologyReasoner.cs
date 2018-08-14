@@ -123,18 +123,18 @@ namespace RDFSharp.Semantics
                 var baseRules       = this.Rules.Where(x => x.RulePriority <= RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var bRule in baseRules) {
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", bRule));
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'...", bRule));
                     var infCounter  = bRule.ExecuteRule(ontology, report);
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", bRule, infCounter));
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", bRule, infCounter));
                 }
 
                 //STEP 3: Execute custom rules
                 var customRules     = this.Rules.Where(x => x.RulePriority > RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var cRule in customRules) {
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'", cRule));
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'...", cRule));
                     var infCounter  = cRule.ExecuteRule(ontology, report);
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} new evidences", cRule, infCounter));
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", cRule, infCounter));
                 }
 
                 //STEP 4: Unexpand ontology
