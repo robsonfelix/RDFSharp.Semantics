@@ -45,6 +45,11 @@ namespace RDFSharp.Semantics
         /// List of evidences
         /// </summary>
         internal List<RDFOntologyValidatorEvidence> Evidences { get; set; }
+
+        /// <summary>
+        /// SyncLock for evidences
+        /// </summary>
+        internal Object SyncLock { get; set; }
         #endregion
 
         #region Ctors
@@ -52,7 +57,8 @@ namespace RDFSharp.Semantics
         /// Default-ctor to build an empty report
         /// </summary>
         internal RDFOntologyValidatorReport() {
-            this.Evidences = new List<RDFOntologyValidatorEvidence>();            
+            this.Evidences = new List<RDFOntologyValidatorEvidence>();
+            this.SyncLock  = new Object();
         }
         #endregion
 
@@ -73,8 +79,30 @@ namespace RDFSharp.Semantics
         #endregion
 
         #region Methods
+
+        #region Add
         /// <summary>
-        /// Enlist the names of the rules which have been applied by the validator
+        /// Adds the given evidence to the validation report
+        /// </summary>
+        internal void AddEvidence(RDFOntologyValidatorEvidence evidence) {
+            lock (this.SyncLock) { 
+                  this.Evidences.Add(evidence);
+            }
+        }
+
+        /// <summary>
+        /// Merges the evidences of the given report
+        /// </summary>
+        internal void MergeEvidences(RDFOntologyValidatorReport report) {
+            lock (this.SyncLock) {
+                  this.Evidences.AddRange(report.Evidences);
+            }
+        }
+        #endregion
+
+        #region Select
+        /// <summary>
+        /// Enlist the names of the rules applied by the validator
         /// </summary>
         public List<String> EnlistRuleNames() {
             return new List<String>() {
@@ -120,13 +148,8 @@ namespace RDFSharp.Semantics
             return this.Evidences.FindAll(e => e.EvidenceProvenance.ToUpperInvariant().Equals(rulename.Trim().ToUpperInvariant(), StringComparison.Ordinal) &&
                                                e.EvidenceCategory.Equals(RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error));
         }
+        #endregion
 
-        /// <summary>
-        /// Adds the given evidence to the validation report
-        /// </summary>
-        internal void AddEvidence(RDFOntologyValidatorEvidence evidence) {
-            this.Evidences.Add(evidence);
-        }
         #endregion
 
     }

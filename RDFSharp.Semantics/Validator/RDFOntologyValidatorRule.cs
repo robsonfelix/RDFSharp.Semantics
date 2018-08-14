@@ -38,7 +38,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Delegate for the function which will be executed as body of the rule
         /// </summary>
-        internal delegate void ValidationRuleDelegate(RDFOntology ontology, RDFOntologyValidatorReport report);
+        internal delegate RDFOntologyValidatorReport ValidationRuleDelegate(RDFOntology ontology);
 
         /// <summary>
         /// Function which will be executed as body of the rule

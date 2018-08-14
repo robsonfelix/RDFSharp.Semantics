@@ -121,7 +121,7 @@ namespace RDFSharp.Semantics
             RDFSemanticsUtilities.ExpandOntology(ref ontology);
             
             //Execute rules
-            Parallel.ForEach(Rules, rule => { rule.ExecuteRule(ontology, report); });
+            Parallel.ForEach(Rules, rule => { report.MergeEvidences(rule.ExecuteRule(ontology)); });
 
             //Unexpand ontology
             RDFSemanticsUtilities.UnexpandOntology(ref ontology);
