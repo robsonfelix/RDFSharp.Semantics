@@ -120,6 +120,7 @@ namespace RDFSharp.Semantics
                 RDFSemanticsUtilities.ExpandOntology(ref ontology);
 
                 //STEP 2: Execute BASE rules
+                #region BASE rules
                 var baseRules       = this.Rules.Where(x   => x.RulePriority <= RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var bRule in baseRules) {
@@ -128,8 +129,10 @@ namespace RDFSharp.Semantics
                     report.Merge(bRuleReport);
                     RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", bRule, bRuleReport.EvidencesCount));
                 }
+                #endregion
 
                 //STEP 3: Execute custom rules
+                #region Custom rules
                 var customRules     = this.Rules.Where(x   => x.RulePriority > RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var cRule in customRules) {
@@ -138,6 +141,7 @@ namespace RDFSharp.Semantics
                     report.Merge(cRuleReport);
                     RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", cRule, cRuleReport.EvidencesCount));
                 }
+                #endregion
 
                 //STEP 4: Unexpand ontology
                 RDFSemanticsUtilities.UnexpandOntology(ref ontology);
