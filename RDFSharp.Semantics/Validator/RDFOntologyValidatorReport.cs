@@ -101,7 +101,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Gets the warning evidences of the given validation rule
         /// </summary>
-        public List<RDFOntologyValidatorEvidence> SelectWarningsByRuleName(String rulename="") {
+        public List<RDFOntologyValidatorEvidence> SelectWarningsByRule(String rulename="") {
             return this.Evidences.FindAll(e => e.EvidenceProvenance.ToUpperInvariant().Equals(rulename.Trim().ToUpperInvariant(), StringComparison.Ordinal) && 
                                                e.EvidenceCategory.Equals(RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Warning));
         }
@@ -116,7 +116,7 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Gets the error evidences of the given validation rule
         /// </summary>
-        public List<RDFOntologyValidatorEvidence> SelectErrorsByRuleName(String rulename = "") {
+        public List<RDFOntologyValidatorEvidence> SelectErrorsByRule(String rulename = "") {
             return this.Evidences.FindAll(e => e.EvidenceProvenance.ToUpperInvariant().Equals(rulename.Trim().ToUpperInvariant(), StringComparison.Ordinal) &&
                                                e.EvidenceCategory.Equals(RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error));
         }
