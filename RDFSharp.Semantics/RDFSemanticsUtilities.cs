@@ -1729,14 +1729,6 @@ namespace RDFSharp.Semantics
             foreach (var regOnt in RDFOntologyRegister.Instance)
                 ontology = ontology.UnionWith(regOnt);
         }
-
-        /// <summary>
-        /// Unexpands the given ontology by subtracting the registered ontologies
-        /// </summary>
-        internal static void UnexpandOntology(ref RDFOntology ontology) {
-            foreach (var regOnt in RDFOntologyRegister.Instance)
-                ontology = ontology.DifferenceWith(regOnt);
-        }
         #endregion
 
     }

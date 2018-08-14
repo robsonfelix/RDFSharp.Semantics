@@ -117,14 +117,11 @@ namespace RDFSharp.Semantics
             var report      = new RDFOntologyValidatorReport();
             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}'", ontology.Value));
 
-            //Expand ontology
+            //STEP 1: Expand ontology
             RDFSemanticsUtilities.ExpandOntology(ref ontology);
             
-            //Execute rules
+            //STEP 2: Execute rules
             Parallel.ForEach(Rules, rule => { report.MergeEvidences(rule.ExecuteRule(ontology)); });
-
-            //Unexpand ontology
-            RDFSemanticsUtilities.UnexpandOntology(ref ontology);
 
             RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator has been applied on Ontology '{0}'", ontology.Value));
             return report;

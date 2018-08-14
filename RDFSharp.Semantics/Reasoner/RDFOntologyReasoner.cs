@@ -143,9 +143,6 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                //STEP 4: Unexpand ontology
-                RDFSemanticsUtilities.UnexpandOntology(ref ontology);
-
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}'", ontology.Value));
                 return report;
             }
