@@ -221,6 +221,10 @@ namespace RDFSharp.Semantics
             Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.XSD.UNSIGNED_SHORT.ToRDFOntologyClass(), subClassOf, RDFVocabulary.XSD.UNSIGNED_INT.ToRDFOntologyClass()));
             Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.XSD.UNSIGNED_BYTE.ToRDFOntologyClass(), subClassOf, RDFVocabulary.XSD.UNSIGNED_SHORT.ToRDFOntologyClass()));
 
+            //ClassType
+            var type = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
+            Instance.Data.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.RDF.NIL.ToRDFOntologyFact(), type, RDFVocabulary.RDF.LIST.ToRDFOntologyClass()));
+
             #endregion
 
         }
