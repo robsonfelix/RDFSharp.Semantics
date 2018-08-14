@@ -55,17 +55,14 @@ namespace RDFSharp.Semantics
         /// <summary>
         /// Default-ctor to build a reasoner rule with the given name, description and priority (lower is better)
         /// </summary>
-        public RDFOntologyReasonerRule(String ruleName, 
-                                       String ruleDescription,
-                                       UInt32 rulePriority,
-                                       ReasonerRuleDelegate ruleDelegate) {
+        public RDFOntologyReasonerRule(String ruleName, String ruleDescription, UInt32 rulePriority, ReasonerRuleDelegate ruleDelegate) {
             if (ruleName                     != null && ruleName.Trim()        != String.Empty) {
                 if (ruleDescription          != null && ruleDescription.Trim() != String.Empty) {
                     if (ruleDelegate         != null) {
-                        this.RuleName         = ruleName.Trim().ToUpperInvariant();
-                        this.RuleDescription  = ruleDescription.Trim().ToUpperInvariant();
+                        this.RuleName         = ruleName.Trim();
+                        this.RuleDescription  = ruleDescription.Trim();
 
-                        //Shift rule priority to guarantee preliminar execution of BASE rules
+                        //Shift-up rule priority to guarantee preliminar execution of BASE rules
                         if (rulePriority     <= RDFBASEReasonerRuleset.RulesCount)
                             this.RulePriority = rulePriority + (UInt32)RDFBASEReasonerRuleset.RulesCount + 1;
                         else

@@ -101,7 +101,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFOntologyReasonerRule SelectRule(String ruleName) {
             if (ruleName  != null &&  ruleName.Trim() != String.Empty)
-                return this.Rules.FirstOrDefault(r => r.RuleName.Equals(ruleName.Trim().ToUpperInvariant(), StringComparison.Ordinal));
+                return this.Rules.FirstOrDefault(r => r.RuleName.Equals(ruleName.Trim(), StringComparison.OrdinalIgnoreCase));
             else
                 return null;
         }
