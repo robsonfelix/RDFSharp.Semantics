@@ -46,6 +46,11 @@ namespace RDFSharp.Semantics
         /// Dictionary of evidences
         /// </summary>
         internal Dictionary<Int64, RDFOntologyReasonerEvidence> Evidences { get; set; }
+
+        /// <summary>
+        /// SyncLock for evidences
+        /// </summary>
+        internal Object SyncLock { get; set; }
         #endregion
 
         #region Ctors
@@ -54,6 +59,7 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal RDFOntologyReasonerReport() {
             this.Evidences = new Dictionary<Int64, RDFOntologyReasonerEvidence>();
+            this.SyncLock  = new Object();
         }
         #endregion
 
@@ -74,6 +80,30 @@ namespace RDFSharp.Semantics
         #endregion
 
         #region Methods
+
+        #region Add
+        /// <summary>
+        /// Adds the given evidence to the reasoner report
+        /// </summary>
+        internal void AddEvidence(RDFOntologyReasonerEvidence evidence) {
+            lock (this.SyncLock) { 
+                  if (!this.Evidences.ContainsKey(evidence.EvidenceContent.TaxonomyEntryID)) { 
+                       this.Evidences.Add(evidence.EvidenceContent.TaxonomyEntryID, evidence);
+                  }
+            }
+        }
+
+        /// <summary>
+        /// Merges the evidences of the given report
+        /// </summary>
+        internal void Merge(RDFOntologyReasonerReport report) {
+            foreach(var evidence in report) {
+                this.AddEvidence(evidence);
+            }
+        }
+        #endregion
+
+        #region Select
         /// <summary>
         /// Gets the evidences having the given category
         /// </summary>
@@ -108,15 +138,8 @@ namespace RDFSharp.Semantics
         public List<RDFOntologyReasonerEvidence> SelectEvidencesByContentObject(RDFOntologyResource evidenceContentObject) {
             return this.Evidences.Values.Where(e => e.EvidenceContent.TaxonomyObject.Equals(evidenceContentObject)).ToList();
         }
+        #endregion
 
-        /// <summary>
-        /// Adds the given evidence to the reasoner report
-        /// </summary>
-        internal void AddEvidence(RDFOntologyReasonerEvidence evidence) {
-            if(!this.Evidences.ContainsKey(evidence.EvidenceContent.TaxonomyEntryID)) { 
-                this.Evidences.Add(evidence.EvidenceContent.TaxonomyEntryID, evidence);
-            }
-        }
         #endregion
 
     }

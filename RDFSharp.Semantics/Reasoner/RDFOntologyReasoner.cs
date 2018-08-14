@@ -107,7 +107,7 @@ namespace RDFSharp.Semantics
         }
         #endregion
 
-        #region Apply
+        #region Reason
         /// <summary>
         /// Applies the reasoner on the given ontology, producing a reasoning report.
         /// </summary>
@@ -120,21 +120,23 @@ namespace RDFSharp.Semantics
                 RDFSemanticsUtilities.ExpandOntology(ref ontology);
 
                 //STEP 2: Execute BASE rules
-                var baseRules       = this.Rules.Where(x => x.RulePriority <= RDFBASEReasonerRuleset.RulesCount)
+                var baseRules       = this.Rules.Where(x   => x.RulePriority <= RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var bRule in baseRules) {
                     RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'...", bRule));
-                    var infCounter  = bRule.ExecuteRule(ontology, report);
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", bRule, infCounter));
+                    var bRuleReport = bRule.ExecuteRule(ontology);
+                    report.Merge(bRuleReport);
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", bRule, bRuleReport.EvidencesCount));
                 }
 
                 //STEP 3: Execute custom rules
-                var customRules     = this.Rules.Where(x => x.RulePriority > RDFBASEReasonerRuleset.RulesCount)
+                var customRules     = this.Rules.Where(x   => x.RulePriority > RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var cRule in customRules) {
                     RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'...", cRule));
-                    var infCounter  = cRule.ExecuteRule(ontology, report);
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", cRule, infCounter));
+                    var cRuleReport = cRule.ExecuteRule(ontology);
+                    report.Merge(cRuleReport);
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", cRule, cRuleReport.EvidencesCount));
                 }
 
                 //STEP 4: Unexpand ontology
@@ -143,7 +145,9 @@ namespace RDFSharp.Semantics
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}'", ontology.Value));
                 return report;
             }
-            throw new RDFSemanticsException("Cannot apply RDFOntologyReasoner because given \"ontology\" parameter is null.");
+            else {
+                return new RDFOntologyReasonerReport();
+            }
         }
         #endregion
 
