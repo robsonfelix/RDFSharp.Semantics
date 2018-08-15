@@ -1311,11 +1311,11 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Enlists the skos:member concepts of the given skos:Collection within the given data
         /// </summary>
-        public static RDFOntologyData GetMembersOf(this RDFOntologyData data, RDFOntologyFact collection) {
+        public static RDFOntologyData GetMembersOfCollection(this RDFOntologyData data, RDFOntologyFact collection) {
             var result         = new RDFOntologyData();
             if (collection    != null && data != null) {
                 var members    = data.Relations.Assertions.SelectEntriesBySubject(collection)
-                                                       .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER.ToString()));
+                                                          .SelectEntriesByPredicate(RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER.ToString()));
                 foreach (var collMember in members) {
 
                     //Member is instance of skos:Concept
@@ -1329,7 +1329,7 @@ namespace RDFSharp.Semantics.SKOS
                     else if (data.Relations.ClassType.SelectEntriesBySubject(collMember.TaxonomyObject)
                                                      .SelectEntriesByObject(RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString()))
                                                      .EntriesCount > 0) {
-                        result = result.UnionWith(data.GetMembersOf((RDFOntologyFact)collMember.TaxonomyObject));
+                        result = result.UnionWith(data.GetMembersOfCollection((RDFOntologyFact)collMember.TaxonomyObject));
                     }
 
                 }
