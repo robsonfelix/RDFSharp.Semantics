@@ -30,38 +30,6 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Facts
         /// <summary>
-        /// Adds the given fact to the ontology data as instance of "skos:Collection"
-        /// </summary>
-        public static RDFOntologyData AddCollection(this RDFOntologyData ontologyData, RDFOntologyFact collectionFact) {
-            if (ontologyData       != null && collectionFact != null) {
-                var collectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString());
-
-                //Add fact
-                ontologyData.AddFact(collectionFact);
-
-                //Add classtype relation
-                ontologyData.AddClassTypeRelation(collectionFact, collectionClass);
-            }
-            return ontologyData;
-        }
-
-        /// <summary>
-        /// Adds the given fact to the ontology data as instance of "skos:OrderedCollection"
-        /// </summary>
-        public static RDFOntologyData AddOrderedCollection(this RDFOntologyData ontologyData, RDFOntologyFact orderedCollectionFact) {
-            if (ontologyData          != null && orderedCollectionFact != null) {
-                var ordCollectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString());
-
-                //Add fact
-                ontologyData.AddFact(orderedCollectionFact);
-
-                //Add classtype relation
-                ontologyData.AddClassTypeRelation(orderedCollectionFact, ordCollectionClass);
-            }
-            return ontologyData;
-        }
-
-        /// <summary>
         /// Adds the given fact to the ontology data as instance of "skos:Concept"
         /// </summary>
         public static RDFOntologyData AddConcept(this RDFOntologyData ontologyData, RDFOntologyFact conceptFact) {
@@ -516,25 +484,25 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Adds the "collectionFact -> skos:member -> collectionMember" assertion to the ontology data 
         /// </summary>
-        public static RDFOntologyData AddMemberAssertion(this RDFOntologyData ontologyData, RDFOntologyFact collectionFact, RDFOntologyFact collectionMember, RDFSKOSEnums.RDFSKOSMemberType skosMemberType) {
-            if (ontologyData       != null && collectionFact != null && collectionMember != null) {
+        public static RDFOntologyData AddCollection(this RDFOntologyData ontologyData, RDFOntologyFact collection, RDFOntologyFact member, RDFSKOSEnums.RDFSKOSMemberType skosMemberType) {
+            if (ontologyData       != null && collection != null && member != null) {
                 var collectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString());
                 var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var memberProperty  = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER.ToString());
 
                 //Add facts
-                ontologyData.AddFact(collectionFact);
-                ontologyData.AddFact(collectionMember);
+                ontologyData.AddFact(collection);
+                ontologyData.AddFact(member);
 
                 //Add classtype relation
-                ontologyData.AddClassTypeRelation(collectionFact, collectionClass);
+                ontologyData.AddClassTypeRelation(collection, collectionClass);
                 if (skosMemberType == RDFSKOSEnums.RDFSKOSMemberType.Concept)
-                    ontologyData.AddClassTypeRelation(collectionMember, conceptClass);
+                    ontologyData.AddClassTypeRelation(member, conceptClass);
                 else
-                    ontologyData.AddClassTypeRelation(collectionMember, collectionClass);
+                    ontologyData.AddClassTypeRelation(member, collectionClass);
 
                 //Add skos:member assertion
-                ontologyData.AddAssertionRelation(collectionFact, (RDFOntologyObjectProperty)memberProperty, collectionMember);
+                ontologyData.AddAssertionRelation(collection, (RDFOntologyObjectProperty)memberProperty, member);
             }
             return ontologyData;
         }
@@ -542,41 +510,41 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Adds the "orderedCollectionFact -> skos:memberList -> (orderedCollectionMemberFacts)" assertion to the ontology data 
         /// </summary>
-        public static RDFOntologyData AddMemberListAssertion(this RDFOntologyData ontologyData, RDFOntologyFact orderedCollectionFact, List<RDFOntologyFact> orderedCollectionMemberFacts) {
-            if (ontologyData                  != null && orderedCollectionFact != null && orderedCollectionMemberFacts != null) {
-                if (RDFSKOSChecker.CheckMemberListAssertion(ontologyData, orderedCollectionFact)) {
-                    var orderedCollectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString());
-                    var conceptClass           = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
-                    var memberListProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER_LIST.ToString());
-                    var rdfFirstProperty       = RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty();
-                    var rdfRestProperty        = RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty();
-                    var rdfNilFact             = RDFVocabulary.RDF.NIL.ToRDFOntologyFact();
+        public static RDFOntologyData AddOrderedCollection(this RDFOntologyData ontologyData, RDFOntologyFact orderedCollection, List<RDFOntologyFact> members) {
+            if (ontologyData                   != null && orderedCollection != null && members != null) {
+                if (RDFSKOSChecker.CheckMemberListAssertion(ontologyData, orderedCollection)) {
+                    var orderedCollectionClass  = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString());
+                    var conceptClass            = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                    var memberListProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER_LIST.ToString());
+                    var rdfFirstProperty        = RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty();
+                    var rdfRestProperty         = RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty();
+                    var rdfNilFact              = RDFVocabulary.RDF.NIL.ToRDFOntologyFact();
 
                     //Add facts
-                    ontologyData.AddFact(orderedCollectionFact);
-                    orderedCollectionMemberFacts.ForEach(x => ontologyData.AddFact(x));
+                    ontologyData.AddFact(orderedCollection);
+                    members.ForEach(x => ontologyData.AddFact(x));
 
                     //Add classtype relations
-                    ontologyData.AddClassTypeRelation(orderedCollectionFact, orderedCollectionClass);
-                    orderedCollectionMemberFacts.ForEach(x => ontologyData.AddClassTypeRelation(x, conceptClass));
+                    ontologyData.AddClassTypeRelation(orderedCollection, orderedCollectionClass);
+                    members.ForEach(x => ontologyData.AddClassTypeRelation(x, conceptClass));
 
                     //Add assertions
-                    var reifSubj               = new RDFOntologyFact(new RDFResource());
-                    ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
-                    if (orderedCollectionMemberFacts.Count == 0) {
+                    var reifSubj                = new RDFOntologyFact(new RDFResource());
+                    ontologyData.AddAssertionRelation(orderedCollection, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
+                    if (members.Count == 0) {
                         ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, rdfNilFact);
                         ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty,  rdfNilFact);
                     }
                     else {
-                        var itemCount          = 0;
-                        foreach (var orderedCollectionMemberFact in orderedCollectionMemberFacts) {
+                        var itemCount           = 0;
+                        foreach (var member    in members) {
 
                             //rdf:first
-                            ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, orderedCollectionMemberFact);
+                            ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, member);
 
                             //rdf:rest
                             itemCount++;
-                            if (itemCount       < orderedCollectionMemberFacts.Count) {
+                            if (itemCount       < members.Count) {
                                 var newReifSubj = new RDFOntologyFact(new RDFResource());
                                 ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty, newReifSubj);
                                 reifSubj        = newReifSubj;
