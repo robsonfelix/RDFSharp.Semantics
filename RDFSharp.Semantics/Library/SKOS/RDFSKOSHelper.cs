@@ -568,6 +568,7 @@ namespace RDFSharp.Semantics.SKOS
                 }
                 else {
                     var itemCount = 0;
+                    ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
                     foreach (var orderedCollectionMemberFact in orderedCollectionMemberFacts) {
 
                         //rdf:first
