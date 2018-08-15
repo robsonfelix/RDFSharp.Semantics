@@ -111,8 +111,7 @@ namespace RDFSharp.Semantics
                 //STEP 1: Expand ontology
                 var expOntology = ontology.UnionWith(RDFBASEOntology.Instance);
 
-                //STEP 2: Execute rules
-                
+                //STEP 2: Execute rules                
                 Parallel.ForEach(Rules, rule => {
                     report.MergeEvidences(rule.ExecuteRule(expOntology));
                 });
