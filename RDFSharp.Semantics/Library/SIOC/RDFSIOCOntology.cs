@@ -340,17 +340,6 @@ namespace RDFSharp.Semantics.SIOC
         }
         #endregion
 
-        #region Methods
-        /// <summary>
-        /// Adds the SIOC ontology to the register, in order to be automatically 
-        /// recognized and supported during validation and reasoning activities
-        /// </summary>
-        public static void AddToRegister() {
-            if (!RDFOntologyRegister.Instance.StaticRegister.ContainsKey("SIOC"))
-                 RDFOntologyRegister.Instance.StaticRegister.Add("SIOC", Instance);
-        }
-        #endregion
-
     }
 
 }

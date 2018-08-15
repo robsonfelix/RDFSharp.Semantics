@@ -104,26 +104,21 @@ namespace RDFSharp.Semantics
         /// Validate the given ontology against a set of RDFS/OWL-DL rules, detecting errors and inconsistencies affecting its model and data.
         /// </summary>
         public static RDFOntologyValidatorReport Validate(this RDFOntology ontology) {
-            if (ontology != null)
-                return AnalyzeOntology(ontology);
-            else
-                return new RDFOntologyValidatorReport();
-        }
+            var report          = new RDFOntologyValidatorReport();
+            if (ontology       != null) {
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}'...", ontology.Value));
 
-        /// <summary>
-        /// Analyzes the given ontology and produces a detailed report of found evidences
-        /// </summary>
-        internal static RDFOntologyValidatorReport AnalyzeOntology(RDFOntology ontology) {
-            var report      = new RDFOntologyValidatorReport();
-            RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator is going to be applied on Ontology '{0}'", ontology.Value));
+                //STEP 1: Expand ontology
+                var expOntology = ontology.UnionWith(RDFBASEOntology.Instance);
 
-            //STEP 1: Expand ontology
-            RDFSemanticsUtilities.ExpandOntology(ref ontology);
-            
-            //STEP 2: Execute rules
-            Parallel.ForEach(Rules, rule => { report.MergeEvidences(rule.ExecuteRule(ontology)); });
+                //STEP 2: Execute rules
+                
+                Parallel.ForEach(Rules, rule => {
+                    report.MergeEvidences(rule.ExecuteRule(expOntology));
+                });
 
-            RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator has been applied on Ontology '{0}'", ontology.Value));
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Validator has been applied on Ontology '{0}': found " + report.EvidencesCount + " evidences.", ontology.Value));
+            }
             return report;
         }
         #endregion

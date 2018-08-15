@@ -1721,16 +1721,6 @@ namespace RDFSharp.Semantics
         }
         #endregion
 
-        #region Expansion
-        /// <summary>
-        /// Expands the given ontology by adding the registered ontologies
-        /// </summary>
-        internal static void ExpandOntology(ref RDFOntology ontology) {
-            foreach (var regOnt in RDFOntologyRegister.Instance)
-                ontology = ontology.UnionWith(regOnt);
-        }
-        #endregion
-
     }
 
 }

@@ -113,14 +113,14 @@ namespace RDFSharp.Semantics
         /// </summary>
         public RDFOntologyReasonerReport ApplyToOntology(ref RDFOntology ontology) {
             if (ontology           != null) {
-                var report          = new RDFOntologyReasonerReport();
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}'", ontology.Value));
 
                 //STEP 1: Expand ontology
-                RDFSemanticsUtilities.ExpandOntology(ref ontology);
+                ontology            = ontology.UnionWith(RDFBASEOntology.Instance);
 
                 //STEP 2: Execute BASE rules
                 #region BASE rules
+                var report          = new RDFOntologyReasonerReport();
                 var baseRules       = this.Rules.Where(x   => x.RulePriority <= RDFBASEReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var bRule in baseRules) {
