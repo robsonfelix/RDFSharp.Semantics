@@ -41,6 +41,7 @@ namespace RDFSharp.Semantics
         static RDFOntologyValidator() {
             Rules = new List<RDFOntologyValidatorRule>() {
 
+                #region BASE
                 //Vocabulary_Disjointness
                 new RDFOntologyValidatorRule(
                     "Vocabulary_Disjointness", 
@@ -94,6 +95,7 @@ namespace RDFSharp.Semantics
                     "Deprecation", 
                     "This rule checks for usage of deprecated classes and properties",
                     RDFBASEValidatorRuleset.Deprecation)
+                #endregion
 
             };
         }
