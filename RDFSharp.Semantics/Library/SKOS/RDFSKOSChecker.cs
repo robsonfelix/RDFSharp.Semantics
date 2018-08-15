@@ -299,6 +299,20 @@ namespace RDFSharp.Semantics.SKOS
 
             return canAddHiddenLabelAnnot;
         }
+
+        /// <summary>
+        /// Checks if the skos:memberList assertion can be added to the given orderedCollectionFact
+        /// </summary>
+        internal static Boolean CheckMemberListAssertion(RDFOntologyData ontologyData, RDFOntologyFact orderedCollectionFact) {
+            var canAddMemberListAssert = false;
+
+            //Only one instance of this skos:OrderedCollection is allowed (FunctionalProperty)
+            canAddMemberListAssert     = (ontologyData.Relations.Assertions.SelectEntriesBySubject(orderedCollectionFact)
+                                                                           .SelectEntriesByPredicate(RDFVocabulary.SKOS.MEMBER_LIST.ToRDFOntologyObjectProperty())
+                                                                           .EntriesCount == 0);
+
+            return canAddMemberListAssert;
+        }
         #endregion
 
     }

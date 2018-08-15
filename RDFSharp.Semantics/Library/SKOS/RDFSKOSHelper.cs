@@ -543,18 +543,15 @@ namespace RDFSharp.Semantics.SKOS
         /// Adds the "orderedCollectionFact -> skos:memberList -> (orderedCollectionMemberFacts)" assertion to the ontology data 
         /// </summary>
         public static RDFOntologyData AddMemberListAssertion(this RDFOntologyData ontologyData, RDFOntologyFact orderedCollectionFact, List<RDFOntologyFact> orderedCollectionMemberFacts) {
-            if (ontologyData              != null && orderedCollectionFact != null && orderedCollectionMemberFacts != null) {
-                var orderedCollectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString());
-                var conceptClass           = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
-                var memberListProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER_LIST.ToString());
-                var rdfFirstProperty       = RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty();
-                var rdfRestProperty        = RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty();
-                var rdfNilFact             = RDFVocabulary.RDF.NIL.ToRDFOntologyFact();
+            if (ontologyData                  != null && orderedCollectionFact != null && orderedCollectionMemberFacts != null) {
+                if (RDFSKOSChecker.CheckMemberListAssertion(ontologyData, orderedCollectionFact)) {
+                    var orderedCollectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToString());
+                    var conceptClass           = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
+                    var memberListProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER_LIST.ToString());
+                    var rdfFirstProperty       = RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty();
+                    var rdfRestProperty        = RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty();
+                    var rdfNilFact             = RDFVocabulary.RDF.NIL.ToRDFOntologyFact();
 
-                //Only one instance of this skos:OrderedCollection is allowed
-                if (ontologyData.Relations.Assertions.SelectEntriesBySubject(orderedCollectionFact)
-                                                     .SelectEntriesByPredicate(memberListProperty)
-                                                     .EntriesCount == 0) {
                     //Add facts
                     ontologyData.AddFact(orderedCollectionFact);
                     orderedCollectionMemberFacts.ForEach(x => ontologyData.AddFact(x));
@@ -564,15 +561,14 @@ namespace RDFSharp.Semantics.SKOS
                     orderedCollectionMemberFacts.ForEach(x => ontologyData.AddClassTypeRelation(x, conceptClass));
 
                     //Add assertions
-                    var reifSubj      = new RDFOntologyFact(new RDFResource());
+                    var reifSubj               = new RDFOntologyFact(new RDFResource());
+                    ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
                     if (orderedCollectionMemberFacts.Count == 0) {
-                        ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
                         ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, rdfNilFact);
-                        ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty, rdfNilFact);
+                        ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty,  rdfNilFact);
                     }
                     else {
-                        var itemCount = 0;
-                        ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
+                        var itemCount          = 0;
                         foreach (var orderedCollectionMemberFact in orderedCollectionMemberFacts) {
 
                             //rdf:first
@@ -591,7 +587,8 @@ namespace RDFSharp.Semantics.SKOS
 
                         }
                     }
-                }   
+
+                }  
             }
             return ontologyData;
         }
