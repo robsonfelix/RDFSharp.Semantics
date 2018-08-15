@@ -20,7 +20,7 @@ namespace RDFSharp.Semantics
 {
 
     /// <summary>
-    /// RDFBASEChecker is responsible for implicit validation of ontologies during modeling
+    /// RDFBASEChecker is responsible for implicit RDFS/OWL-DL validation of ontologies during modeling
     /// </summary>
     internal static class RDFBASEChecker {
 
