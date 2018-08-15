@@ -22,7 +22,7 @@ namespace RDFSharp.Semantics
 {
 
     /// <summary>
-    /// RDFBASEValidatorRuleset implements a subset of RDFS/OWL-DL vaildation rules
+    /// RDFBASEValidatorRuleset implements a subset of RDFS/OWL-DL validation rules
     /// </summary>
     internal static class RDFBASEValidatorRuleset {
 
