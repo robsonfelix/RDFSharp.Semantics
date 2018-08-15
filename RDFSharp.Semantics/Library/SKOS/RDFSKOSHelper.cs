@@ -482,33 +482,30 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Collection Relations
         /// <summary>
-        /// Adds the "collectionFact -> skos:member -> collectionMember" assertion to the ontology data 
+        /// Adds the given skos:Collection instance to the ontology data, along with its skos:Concept members
         /// </summary>
-        public static RDFOntologyData AddCollection(this RDFOntologyData ontologyData, RDFOntologyFact collection, RDFOntologyFact member, RDFSKOSEnums.RDFSKOSMemberType skosMemberType) {
-            if (ontologyData       != null && collection != null && member != null) {
+        public static RDFOntologyData AddCollection(this RDFOntologyData ontologyData, RDFOntologyFact collection, List<RDFOntologyFact> members) {
+            if (ontologyData       != null && collection != null && members != null) {
                 var collectionClass = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString());
                 var conceptClass    = RDFSKOSOntology.Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString());
                 var memberProperty  = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.MEMBER.ToString());
 
                 //Add facts
                 ontologyData.AddFact(collection);
-                ontologyData.AddFact(member);
+                members.ForEach(m   => ontologyData.AddFact(m));
 
                 //Add classtype relation
                 ontologyData.AddClassTypeRelation(collection, collectionClass);
-                if (skosMemberType == RDFSKOSEnums.RDFSKOSMemberType.Concept)
-                    ontologyData.AddClassTypeRelation(member, conceptClass);
-                else
-                    ontologyData.AddClassTypeRelation(member, collectionClass);
+                members.ForEach(m   => ontologyData.AddClassTypeRelation(m, conceptClass));
 
                 //Add skos:member assertion
-                ontologyData.AddAssertionRelation(collection, (RDFOntologyObjectProperty)memberProperty, member);
+                members.ForEach(m   => ontologyData.AddAssertionRelation(collection, (RDFOntologyObjectProperty)memberProperty, m));
             }
             return ontologyData;
         }
 
         /// <summary>
-        /// Adds the "orderedCollectionFact -> skos:memberList -> (orderedCollectionMemberFacts)" assertion to the ontology data 
+        /// Adds the given skos:OrderedCollection instance to the ontology data, along with its skos:Concept members 
         /// </summary>
         public static RDFOntologyData AddOrderedCollection(this RDFOntologyData ontologyData, RDFOntologyFact orderedCollection, List<RDFOntologyFact> members) {
             if (ontologyData                   != null && orderedCollection != null && members != null) {
@@ -522,16 +519,16 @@ namespace RDFSharp.Semantics.SKOS
 
                     //Add facts
                     ontologyData.AddFact(orderedCollection);
-                    members.ForEach(x => ontologyData.AddFact(x));
+                    members.ForEach(x           => ontologyData.AddFact(x));
 
                     //Add classtype relations
                     ontologyData.AddClassTypeRelation(orderedCollection, orderedCollectionClass);
-                    members.ForEach(x => ontologyData.AddClassTypeRelation(x, conceptClass));
+                    members.ForEach(x           => ontologyData.AddClassTypeRelation(x, conceptClass));
 
                     //Add assertions
                     var reifSubj                = new RDFOntologyFact(new RDFResource());
                     ontologyData.AddAssertionRelation(orderedCollection, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
-                    if (members.Count == 0) {
+                    if (members.Count          == 0) {
                         ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, rdfNilFact);
                         ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty,  rdfNilFact);
                     }
