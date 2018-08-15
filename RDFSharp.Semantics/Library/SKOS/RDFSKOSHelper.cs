@@ -551,42 +551,47 @@ namespace RDFSharp.Semantics.SKOS
                 var rdfRestProperty        = RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty();
                 var rdfNilFact             = RDFVocabulary.RDF.NIL.ToRDFOntologyFact();
 
-                //Add facts
-                ontologyData.AddFact(orderedCollectionFact);
-                orderedCollectionMemberFacts.ForEach(x => ontologyData.AddFact(x));
+                //Only one instance of this skos:OrderedCollection is allowed
+                if (ontologyData.Relations.Assertions.SelectEntriesBySubject(orderedCollectionFact)
+                                                     .SelectEntriesByPredicate(memberListProperty)
+                                                     .EntriesCount == 0) {
+                    //Add facts
+                    ontologyData.AddFact(orderedCollectionFact);
+                    orderedCollectionMemberFacts.ForEach(x => ontologyData.AddFact(x));
 
-                //Add classtype relations
-                ontologyData.AddClassTypeRelation(orderedCollectionFact, orderedCollectionClass);
-                orderedCollectionMemberFacts.ForEach(x => ontologyData.AddClassTypeRelation(x, conceptClass));
+                    //Add classtype relations
+                    ontologyData.AddClassTypeRelation(orderedCollectionFact, orderedCollectionClass);
+                    orderedCollectionMemberFacts.ForEach(x => ontologyData.AddClassTypeRelation(x, conceptClass));
 
-                //Add assertions
-                var reifSubj      = new RDFOntologyFact(new RDFResource());
-                if (orderedCollectionMemberFacts.Count == 0) {
-                    ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
-                    ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, rdfNilFact);
-                    ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty,  rdfNilFact);
-                }
-                else {
-                    var itemCount = 0;
-                    ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
-                    foreach (var orderedCollectionMemberFact in orderedCollectionMemberFacts) {
-
-                        //rdf:first
-                        ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, orderedCollectionMemberFact);
-
-                        //rdf:rest
-                        itemCount++;
-                        if (itemCount       < orderedCollectionMemberFacts.Count)  {
-                            var newReifSubj = new RDFOntologyFact(new RDFResource());
-                            ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty, newReifSubj);
-                            reifSubj        = newReifSubj;
-                        }
-                        else {
-                            ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty, rdfNilFact);
-                        }
-
+                    //Add assertions
+                    var reifSubj      = new RDFOntologyFact(new RDFResource());
+                    if (orderedCollectionMemberFacts.Count == 0) {
+                        ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
+                        ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, rdfNilFact);
+                        ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty, rdfNilFact);
                     }
-                }
+                    else {
+                        var itemCount = 0;
+                        ontologyData.AddAssertionRelation(orderedCollectionFact, (RDFOntologyObjectProperty)memberListProperty, reifSubj);
+                        foreach (var orderedCollectionMemberFact in orderedCollectionMemberFacts) {
+
+                            //rdf:first
+                            ontologyData.AddAssertionRelation(reifSubj, rdfFirstProperty, orderedCollectionMemberFact);
+
+                            //rdf:rest
+                            itemCount++;
+                            if (itemCount       < orderedCollectionMemberFacts.Count) {
+                                var newReifSubj = new RDFOntologyFact(new RDFResource());
+                                ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty, newReifSubj);
+                                reifSubj        = newReifSubj;
+                            }
+                            else {
+                                ontologyData.AddAssertionRelation(reifSubj, rdfRestProperty, rdfNilFact);
+                            }
+
+                        }
+                    }
+                }   
             }
             return ontologyData;
         }
