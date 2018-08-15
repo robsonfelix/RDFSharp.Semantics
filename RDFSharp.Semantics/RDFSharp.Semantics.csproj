@@ -66,7 +66,6 @@
 	<Compile Include="Library\GEO\RDFGEOOntology.cs" />
 	<Compile Include="Library\SIOC\RDFSIOCOntology.cs" />
 	<Compile Include="Library\SKOS\RDFSKOSChecker.cs" />
-	<Compile Include="Library\SKOS\RDFSKOSEnums.cs" />
 	<Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
 	<Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
     <!-- Ontology -->
