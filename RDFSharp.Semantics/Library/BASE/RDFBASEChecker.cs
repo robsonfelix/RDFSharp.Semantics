@@ -38,9 +38,9 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckSubClassOfCompatibility(RDFOntologyClassModel classModel, 
                                                              RDFOntologyClass childClass,
                                                              RDFOntologyClass motherClass) {
-            return (!classModel.IsSubClassOf(motherClass, childClass)
-                        && !classModel.IsEquivalentClassOf(motherClass, childClass) 
-                            && !classModel.IsDisjointClassWith(motherClass, childClass));
+            return (!classModel.CheckIsSubClassOf(motherClass, childClass)
+                        && !classModel.CheckIsEquivalentClassOf(motherClass, childClass) 
+                            && !classModel.CheckIsDisjointClassWith(motherClass, childClass));
         }
 
         /// <summary>
@@ -49,9 +49,9 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckEquivalentClassCompatibility(RDFOntologyClassModel classModel,
                                                                   RDFOntologyClass aClass,
                                                                   RDFOntologyClass bClass) {
-            return (!classModel.IsSubClassOf(aClass, bClass)
-                        && !classModel.IsSuperClassOf(aClass, bClass)
-                            && !classModel.IsDisjointClassWith(aClass, bClass));
+            return (!classModel.CheckIsSubClassOf(aClass, bClass)
+                        && !classModel.CheckIsSuperClassOf(aClass, bClass)
+                            && !classModel.CheckIsDisjointClassWith(aClass, bClass));
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckDisjointWithCompatibility(RDFOntologyClassModel classModel,
                                                                RDFOntologyClass aClass,
                                                                RDFOntologyClass bClass) {
-            return (!classModel.IsSubClassOf(aClass, bClass)
-                        && !classModel.IsSuperClassOf(aClass, bClass)
-                            && !classModel.IsEquivalentClassOf(aClass, bClass));
+            return (!classModel.CheckIsSubClassOf(aClass, bClass)
+                        && !classModel.CheckIsSuperClassOf(aClass, bClass)
+                            && !classModel.CheckIsEquivalentClassOf(aClass, bClass));
         }
         #endregion
 
@@ -80,8 +80,8 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckSubPropertyOfCompatibility(RDFOntologyPropertyModel propertyModel,
                                                                 RDFOntologyObjectProperty childProperty,
                                                                 RDFOntologyObjectProperty motherProperty) {
-            return (!propertyModel.IsSubPropertyOf(motherProperty, childProperty)
-                        && !propertyModel.IsEquivalentPropertyOf(motherProperty, childProperty));
+            return (!propertyModel.CheckIsSubPropertyOf(motherProperty, childProperty)
+                        && !propertyModel.CheckIsEquivalentPropertyOf(motherProperty, childProperty));
         }
 
         /// <summary>
@@ -90,8 +90,8 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckSubPropertyOfCompatibility(RDFOntologyPropertyModel propertyModel,
                                                                 RDFOntologyDatatypeProperty childProperty,
                                                                 RDFOntologyDatatypeProperty motherProperty) {
-            return (!propertyModel.IsSubPropertyOf(motherProperty, childProperty)
-                        && !propertyModel.IsEquivalentPropertyOf(motherProperty, childProperty));
+            return (!propertyModel.CheckIsSubPropertyOf(motherProperty, childProperty)
+                        && !propertyModel.CheckIsEquivalentPropertyOf(motherProperty, childProperty));
         }
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckEquivalentPropertyCompatibility(RDFOntologyPropertyModel propertyModel,
                                                                      RDFOntologyObjectProperty aProperty,
                                                                      RDFOntologyObjectProperty bProperty) {
-            return (!propertyModel.IsSubPropertyOf(aProperty, bProperty)
-                        && !propertyModel.IsSuperPropertyOf(aProperty, bProperty));
+            return (!propertyModel.CheckIsSubPropertyOf(aProperty, bProperty)
+                        && !propertyModel.CheckIsSuperPropertyOf(aProperty, bProperty));
         }
 
         /// <summary>
@@ -110,8 +110,8 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckEquivalentPropertyCompatibility(RDFOntologyPropertyModel propertyModel,
                                                                      RDFOntologyDatatypeProperty aProperty,
                                                                      RDFOntologyDatatypeProperty bProperty) {
-            return (!propertyModel.IsSubPropertyOf(aProperty, bProperty)
-                        && !propertyModel.IsSuperPropertyOf(aProperty, bProperty));
+            return (!propertyModel.CheckIsSubPropertyOf(aProperty, bProperty)
+                        && !propertyModel.CheckIsSuperPropertyOf(aProperty, bProperty));
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckInverseOfPropertyCompatibility(RDFOntologyPropertyModel propertyModel,
                                                                     RDFOntologyObjectProperty aProperty,
                                                                     RDFOntologyObjectProperty bProperty) {
-            return (!propertyModel.IsSubPropertyOf(aProperty, bProperty)
-                        && !propertyModel.IsSuperPropertyOf(aProperty, bProperty)
-                            && !propertyModel.IsEquivalentPropertyOf(aProperty, bProperty));
+            return (!propertyModel.CheckIsSubPropertyOf(aProperty, bProperty)
+                        && !propertyModel.CheckIsSuperPropertyOf(aProperty, bProperty)
+                            && !propertyModel.CheckIsEquivalentPropertyOf(aProperty, bProperty));
         }
         #endregion
 
@@ -143,7 +143,7 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckSameAsCompatibility(RDFOntologyData ontologyData, 
                                                          RDFOntologyFact aFact, 
                                                          RDFOntologyFact bFact) {
-            return (!ontologyData.IsDifferentFactFrom(aFact, bFact));
+            return (!ontologyData.CheckIsDifferentFactFrom(aFact, bFact));
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckDifferentFromCompatibility(RDFOntologyData ontologyData, 
                                                                 RDFOntologyFact aFact, 
                                                                 RDFOntologyFact bFact) {
-            return (!ontologyData.IsSameFactAs(aFact, bFact));
+            return (!ontologyData.CheckIsSameFactAs(aFact, bFact));
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace RDFSharp.Semantics
                                                                       RDFOntologyFact aFact,
                                                                       RDFOntologyObjectProperty objectProperty,
                                                                       RDFOntologyFact bFact) {
-            return !ontologyData.IsTransitiveAssertionOf(bFact, objectProperty, aFact);
+            return !ontologyData.CheckIsTransitiveAssertionOf(bFact, objectProperty, aFact);
         }
         #endregion
 

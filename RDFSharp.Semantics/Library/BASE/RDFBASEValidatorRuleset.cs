@@ -492,7 +492,7 @@ namespace RDFSharp.Semantics
 
                     //Domain class cannot be a datarange or literal-compatible class
                     if (!litCheckCache.ContainsKey(domain.PatternMemberID)) {
-                         litCheckCache.Add(domain.PatternMemberID, ontology.Model.ClassModel.IsLiteralCompatibleClass(domain));
+                         litCheckCache.Add(domain.PatternMemberID, ontology.Model.ClassModel.CheckIsLiteralCompatible(domain));
                     }
                     if (litCheckCache[domain.PatternMemberID]) {
                         report.AddEvidence(new RDFOntologyValidatorEvidence(
@@ -507,7 +507,7 @@ namespace RDFSharp.Semantics
                         //Cache-Miss
                         if (!classCache.ContainsKey(domain.PatternMemberID)) {
                              //It's a non literal-compatible class, so we can speed up things by calling the internal method
-                             classCache.Add(domain.PatternMemberID, ontology.EnlistMembersOfNonLiteralCompatibleClass(domain));
+                             classCache.Add(domain.PatternMemberID, ontology.GetMembersOfNonLiteralCompatibleClass(domain));
                         }
 
                         //Cache-Check
@@ -532,7 +532,7 @@ namespace RDFSharp.Semantics
 
                         //Cache-Miss
                         if (!classCache.ContainsKey(range.PatternMemberID)) {
-                             classCache.Add(range.PatternMemberID, ontology.EnlistMembersOf(range));
+                             classCache.Add(range.PatternMemberID, ontology.GetMembersOf(range));
                         }
 
                         //Cache-Check
@@ -550,7 +550,7 @@ namespace RDFSharp.Semantics
 
                         //Cache-Miss
                         if (!classCache.ContainsKey(range.PatternMemberID)) {
-                             classCache.Add(range.PatternMemberID, ontology.EnlistMembersOf(range));
+                             classCache.Add(range.PatternMemberID, ontology.GetMembersOf(range));
                         }
 
                         //Cache-Check
@@ -589,7 +589,7 @@ namespace RDFSharp.Semantics
                 #region Domain VS Range
                 if (((RDFOntologyObjectProperty)invOf.TaxonomySubject).Domain != null  &&
                     ((RDFOntologyObjectProperty)invOf.TaxonomyObject).Range   != null)  {
-                      if (!ontology.Model.ClassModel.IsRangeClassOf(((RDFOntologyObjectProperty)invOf.TaxonomySubject).Domain, (RDFOntologyObjectProperty)invOf.TaxonomyObject)) {
+                      if (!ontology.Model.ClassModel.CheckIsRangeOf(((RDFOntologyObjectProperty)invOf.TaxonomySubject).Domain, (RDFOntologyObjectProperty)invOf.TaxonomyObject)) {
                            report.AddEvidence(new RDFOntologyValidatorEvidence(
                                RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error,
                                "InverseOf",
@@ -603,7 +603,7 @@ namespace RDFSharp.Semantics
                 #region Range VS Domain
                 if (((RDFOntologyObjectProperty)invOf.TaxonomySubject).Range != null  &&
                     ((RDFOntologyObjectProperty)invOf.TaxonomyObject).Domain != null)  {
-                      if (!ontology.Model.ClassModel.IsDomainClassOf(((RDFOntologyObjectProperty)invOf.TaxonomySubject).Range, (RDFOntologyObjectProperty)invOf.TaxonomyObject)) {
+                      if (!ontology.Model.ClassModel.CheckIsDomainOf(((RDFOntologyObjectProperty)invOf.TaxonomySubject).Range, (RDFOntologyObjectProperty)invOf.TaxonomyObject)) {
                            report.AddEvidence(new RDFOntologyValidatorEvidence(
                                RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error,
                                "InverseOf",
@@ -636,7 +636,7 @@ namespace RDFSharp.Semantics
 
                     #region Domain
                     if (symProp.Domain != null) {
-                        if (!ontology.IsMemberOf((RDFOntologyFact)asn.TaxonomyObject, symProp.Domain)) {
+                        if (!ontology.CheckIsMemberOf((RDFOntologyFact)asn.TaxonomyObject, symProp.Domain)) {
                              report.AddEvidence(new RDFOntologyValidatorEvidence(
                                  RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error,
                                  "SymmetricProperty",
@@ -649,7 +649,7 @@ namespace RDFSharp.Semantics
 
                     #region Range
                     if (symProp.Range  != null) {
-                        if (!ontology.IsMemberOf((RDFOntologyFact)asn.TaxonomySubject, symProp.Range)) {
+                        if (!ontology.CheckIsMemberOf((RDFOntologyFact)asn.TaxonomySubject, symProp.Range)) {
                              report.AddEvidence(new RDFOntologyValidatorEvidence(
                                  RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error,
                                  "SymmetricProperty",
@@ -689,7 +689,7 @@ namespace RDFSharp.Semantics
                     var cTypeClass  = ontology.Model.ClassModel.SelectClass(cType.TaxonomyObject.ToString());
                     if (cTypeClass != null) {
                         if (!litCheckCache.ContainsKey(cTypeClass.PatternMemberID)) {
-                             litCheckCache.Add(cTypeClass.PatternMemberID, ontology.Model.ClassModel.IsLiteralCompatibleClass(cTypeClass));
+                             litCheckCache.Add(cTypeClass.PatternMemberID, ontology.Model.ClassModel.CheckIsLiteralCompatible(cTypeClass));
                         }
                         if (litCheckCache[cTypeClass.PatternMemberID]) {
                             report.AddEvidence(new RDFOntologyValidatorEvidence(
@@ -709,7 +709,7 @@ namespace RDFSharp.Semantics
                 //ClassTypes of a fact cannot be disjoint
                 foreach (var cType in classTypes) {
                     if  (!disjWithCache.ContainsKey(cType.PatternMemberID)) {
-                          disjWithCache.Add(cType.PatternMemberID, ontology.Model.ClassModel.EnlistDisjointClassesWith(cType));
+                          disjWithCache.Add(cType.PatternMemberID, ontology.Model.ClassModel.GetDisjointClassesWith(cType));
                     }
                     foreach (var disjWithCType in disjWithCache[cType.PatternMemberID].IntersectWith(classTypes)) {
                         report.AddEvidence(new RDFOntologyValidatorEvidence(
@@ -763,7 +763,7 @@ namespace RDFSharp.Semantics
                          }
 
                          //FunctionalProperty cannot be TransitiveProperty (even indirectly)
-                         if (prop.IsTransitiveProperty() || ontology.Model.PropertyModel.EnlistSuperPropertiesOf(prop).Any(p => p.IsTransitiveProperty())) {
+                         if (prop.IsTransitiveProperty() || ontology.Model.PropertyModel.GetSuperPropertiesOf(prop).Any(p => p.IsTransitiveProperty())) {
                              report.AddEvidence(new RDFOntologyValidatorEvidence(
                                  RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error,
                                  "GlobalCardinalityConstraint",
@@ -793,7 +793,7 @@ namespace RDFSharp.Semantics
                          }
 
                          //InverseFunctionalProperty cannot be TransitiveProperty (even indirectly)
-                         if (prop.IsTransitiveProperty() || ontology.Model.PropertyModel.EnlistSuperPropertiesOf(prop).Any(p => p.IsTransitiveProperty())) {
+                         if (prop.IsTransitiveProperty() || ontology.Model.PropertyModel.GetSuperPropertiesOf(prop).Any(p => p.IsTransitiveProperty())) {
                              report.AddEvidence(new RDFOntologyValidatorEvidence(
                                  RDFSemanticsEnums.RDFOntologyValidatorEvidenceCategory.Error,
                                  "GlobalCardinalityConstraint",
@@ -837,7 +837,7 @@ namespace RDFSharp.Semantics
                                   String.Format("Unset the ontology property '{0}' as 'owl:TransitiveProperty', or remove the local cardinality constraint '{1}' applied on it.", restrProp, cardRestr)
                               ));
                         }
-                        foreach (var subProps in ontology.Model.PropertyModel.EnlistSubPropertiesOf(restrProp)) {
+                        foreach (var subProps in ontology.Model.PropertyModel.GetSubPropertiesOf(restrProp)) {
                             if  (subProps.IsObjectProperty()) {
                                  if (((RDFOntologyObjectProperty)subProps).Transitive) {
                                        report.AddEvidence(new RDFOntologyValidatorEvidence(

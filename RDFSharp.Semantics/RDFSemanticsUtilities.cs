@@ -485,7 +485,7 @@ namespace RDFSharp.Semantics
 
                 #region Step 5: Init Data
                 foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
-                                                                                && !ontology.Model.ClassModel.IsLiteralCompatibleClass(cls))) {
+                                                                                && !ontology.Model.ClassModel.CheckIsLiteralCompatible(cls))) {
                     foreach(var t  in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
                         var f       = ontology.Data.SelectFact(t.Subject.ToString());
                         if (f      == null) {
