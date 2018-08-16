@@ -18,7 +18,7 @@ namespace RDFSharp.Semantics
 {
 
     /// <summary>
-    /// RDFOntologyDataMetadata represents a collector for relations connecting describing ontology facts.
+    /// RDFOntologyDataMetadata represents a collector for relations connecting ontology facts.
     /// </summary>
     public class RDFOntologyDataMetadata {
 
