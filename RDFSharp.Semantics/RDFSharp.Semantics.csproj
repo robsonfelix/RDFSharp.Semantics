@@ -68,6 +68,10 @@
 	<Compile Include="Library\SKOS\RDFSKOSChecker.cs" />
 	<Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
 	<Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
+    <Compile Include="Library\SKOS\Data\RDFSKOSAnnotations.cs" />
+    <Compile Include="Library\SKOS\Data\RDFSKOSConcept.cs" />
+    <Compile Include="Library\SKOS\Data\RDFSKOSConceptScheme.cs" />
+    <Compile Include="Library\SKOS\Data\RDFSKOSConceptSchemeMetadata.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
