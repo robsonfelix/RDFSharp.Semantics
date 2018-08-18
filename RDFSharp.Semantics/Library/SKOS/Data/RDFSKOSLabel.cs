@@ -20,15 +20,15 @@ namespace RDFSharp.Semantics.SKOS
 {
 
     /// <summary>
-    /// RDFSKOSConcept represents an instance of skos:Concept within an instance of skos:ConceptScheme
+    /// RDFSKOSLabel represents an instance of skosxl:Label within an instance of skos:ConceptScheme
     /// </summary>
-    public class RDFSKOSConcept: RDFOntologyFact {
+    public class RDFSKOSLabel: RDFOntologyFact {
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build a skos:Concept with the given name
+        /// Default-ctor to build a skosxl:Label with the given name
         /// </summary>
-        public RDFSKOSConcept(RDFResource conceptName): base(conceptName) { }
+        public RDFSKOSLabel(RDFResource labelName) : base(labelName) { }
         #endregion
 
     }

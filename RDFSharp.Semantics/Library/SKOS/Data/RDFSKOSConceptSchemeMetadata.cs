@@ -23,6 +23,8 @@ namespace RDFSharp.Semantics.SKOS
     public class RDFSKOSConceptSchemeMetadata {
 
         #region Properties
+
+        #region SKOS
         /// <summary>
         /// "skos:hasTopConcept" relations
         /// </summary>
@@ -94,11 +96,42 @@ namespace RDFSharp.Semantics.SKOS
         public RDFOntologyTaxonomy Notation { get; internal set; }
         #endregion
 
+        #region SKOS-XL
+        /// <summary>
+        /// "skosxl:prefLabel" relations
+        /// </summary>
+        public RDFOntologyTaxonomy PrefLabel { get; internal set; }
+
+        /// <summary>
+        /// "skosxl:altLabel" relations
+        /// </summary>
+        public RDFOntologyTaxonomy AltLabel { get; internal set; }
+
+        /// <summary>
+        /// "skosxl:hiddenLabel" relations
+        /// </summary>
+        public RDFOntologyTaxonomy HiddenLabel { get; internal set; }
+
+        /// <summary>
+        /// "skosxl:LiteralForm" relations
+        /// </summary>
+        public RDFOntologyTaxonomy LiteralForm { get; internal set; }
+
+        /// <summary>
+        /// "skosxl:LabelRelation" relations
+        /// </summary>
+        public RDFOntologyTaxonomy LabelRelation { get; internal set; }
+        #endregion
+
+        #endregion
+
         #region Ctors
         /// <summary>
         /// Default-ctor to build an empty conceptscheme metadata
         /// </summary>
         internal RDFSKOSConceptSchemeMetadata() {
+
+            //SKOS
             this.TopConcept         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
             this.Broader            = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
             this.BroaderTransitive  = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
@@ -113,6 +146,14 @@ namespace RDFSharp.Semantics.SKOS
             this.CloseMatch         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
             this.ExactMatch         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
             this.Notation           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+
+            //SKOS-XL
+            this.PrefLabel          = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.AltLabel           = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.HiddenLabel        = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.LiteralForm        = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+            this.LabelRelation      = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);
+
         }
         #endregion
 

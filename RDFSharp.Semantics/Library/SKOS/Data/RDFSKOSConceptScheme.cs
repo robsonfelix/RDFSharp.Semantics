@@ -37,10 +37,24 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
+        /// Count of the labels composing the scheme
+        /// </summary>
+        public Int64 LabelsCount {
+            get { return this.Labels.Count; }
+        }
+
+        /// <summary>
         /// Gets the enumerator on the concepts of the scheme for iteration
         /// </summary>
         public IEnumerator<RDFSKOSConcept> ConceptsEnumerator {
             get { return this.Concepts.Values.GetEnumerator(); }
+        }
+
+        /// <summary>
+        /// Gets the enumerator on the labels of the scheme for iteration
+        /// </summary>
+        public IEnumerator<RDFSKOSLabel> LabelsEnumerator {
+            get { return this.Labels.Values.GetEnumerator(); }
         }
 
         /// <summary>
@@ -57,6 +71,11 @@ namespace RDFSharp.Semantics.SKOS
         /// Concepts contained in the scheme (encodes the 'skos:inScheme' relation)
         /// </summary>
         internal Dictionary<Int64, RDFSKOSConcept> Concepts { get; set; }
+
+        /// <summary>
+        /// Labels contained in the scheme
+        /// </summary>
+        internal Dictionary<Int64, RDFSKOSLabel> Labels { get; set; }
         #endregion
 
         #region Ctors
@@ -65,6 +84,7 @@ namespace RDFSharp.Semantics.SKOS
         /// </summary>
         public RDFSKOSConceptScheme(RDFResource conceptName) : base(conceptName) {
             this.Concepts  = new Dictionary<Int64, RDFSKOSConcept>();
+            this.Labels    = new Dictionary<Int64, RDFSKOSLabel>();
             this.Relations = new RDFSKOSConceptSchemeMetadata();
         }
         #endregion
@@ -99,16 +119,40 @@ namespace RDFSharp.Semantics.SKOS
             }
             return this;
         }
+
+        /// <summary>
+        /// Adds the given label to the scheme
+        /// </summary>
+        public RDFSKOSConceptScheme AddLabel(RDFSKOSLabel label) {
+            if (label != null) {
+                if (!this.Labels.ContainsKey(label.PatternMemberID)) {
+                     this.Labels.Add(label.PatternMemberID, label);
+                }
+            }
+            return this;
+        }
         #endregion
 
         #region Remove
         /// <summary>
         /// Removes the given concept from the scheme
         /// </summary>
-        public RDFSKOSConceptScheme RemoveFact(RDFSKOSConcept concept) {
+        public RDFSKOSConceptScheme RemoveConcept(RDFSKOSConcept concept) {
             if (concept != null) {
                 if (this.Concepts.ContainsKey(concept.PatternMemberID)) {
                     this.Concepts.Remove(concept.PatternMemberID);
+                }
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the given label from the scheme
+        /// </summary>
+        public RDFSKOSConceptScheme RemoveLabel(RDFSKOSLabel label) {
+            if (label != null) {
+                if (this.Labels.ContainsKey(label.PatternMemberID)) {
+                    this.Labels.Remove(label.PatternMemberID);
                 }
             }
             return this;
@@ -120,10 +164,23 @@ namespace RDFSharp.Semantics.SKOS
         /// Selects the concept represented by the given string from the scheme
         /// </summary>
         public RDFSKOSConcept SelectConcept(String concept) {
-            if (concept        != null) {
-                Int64 conceptID = RDFModelUtilities.CreateHash(concept);
+            if (concept         != null) {
+                Int64 conceptID  = RDFModelUtilities.CreateHash(concept);
                 if (this.Concepts.ContainsKey(conceptID)) {
                     return this.Concepts[conceptID];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Selects the label represented by the given string from the scheme
+        /// </summary>
+        public RDFSKOSLabel SelectLabel(String label) {
+            if (label         != null) {
+                Int64 labelID  = RDFModelUtilities.CreateHash(label);
+                if (this.Labels.ContainsKey(labelID)) {
+                    return this.Labels[labelID];
                 }
             }
             return null;
@@ -145,6 +202,13 @@ namespace RDFSharp.Semantics.SKOS
                     }
                 }
 
+                //Add intersection labels
+                foreach (var l in this.Labels.Values) {
+                    if (conceptScheme.Labels.ContainsKey(l.PatternMemberID)) {
+                        result.AddLabel(l);
+                    }
+                }
+
                 //Add intersection relations
                 result.Relations.TopConcept         = this.Relations.TopConcept.IntersectWith(conceptScheme.Relations.TopConcept);
                 result.Relations.Broader            = this.Relations.Broader.IntersectWith(conceptScheme.Relations.Broader);
@@ -160,6 +224,11 @@ namespace RDFSharp.Semantics.SKOS
                 result.Relations.CloseMatch         = this.Relations.CloseMatch.IntersectWith(conceptScheme.Relations.CloseMatch);
                 result.Relations.ExactMatch         = this.Relations.ExactMatch.IntersectWith(conceptScheme.Relations.ExactMatch);
                 result.Relations.Notation           = this.Relations.Notation.IntersectWith(conceptScheme.Relations.Notation);
+                result.Relations.PrefLabel          = this.Relations.PrefLabel.IntersectWith(conceptScheme.Relations.PrefLabel);
+                result.Relations.AltLabel           = this.Relations.AltLabel.IntersectWith(conceptScheme.Relations.AltLabel);
+                result.Relations.HiddenLabel        = this.Relations.HiddenLabel.IntersectWith(conceptScheme.Relations.HiddenLabel);
+                result.Relations.LiteralForm        = this.Relations.LiteralForm.IntersectWith(conceptScheme.Relations.LiteralForm);
+                result.Relations.LabelRelation      = this.Relations.LabelRelation.IntersectWith(conceptScheme.Relations.LabelRelation);
 
                 //Add intersection annotations
                 result.Annotations.PrefLabel        = this.Annotations.PrefLabel.IntersectWith(conceptScheme.Annotations.PrefLabel);
@@ -188,6 +257,11 @@ namespace RDFSharp.Semantics.SKOS
                 result.AddConcept(c);
             }
 
+            //Add labels from this scheme
+            foreach (var l    in this.Labels.Values) {
+                result.AddLabel(l);
+            }
+
             //Add relations from this scheme
             result.Relations.TopConcept         = result.Relations.TopConcept.UnionWith(this.Relations.TopConcept);
             result.Relations.Broader            = result.Relations.Broader.UnionWith(this.Relations.Broader);
@@ -203,6 +277,11 @@ namespace RDFSharp.Semantics.SKOS
             result.Relations.CloseMatch         = result.Relations.CloseMatch.UnionWith(this.Relations.CloseMatch);
             result.Relations.ExactMatch         = result.Relations.ExactMatch.UnionWith(this.Relations.ExactMatch);
             result.Relations.Notation           = result.Relations.Notation.UnionWith(this.Relations.Notation);
+            result.Relations.PrefLabel          = result.Relations.PrefLabel.UnionWith(this.Relations.PrefLabel);
+            result.Relations.AltLabel           = result.Relations.AltLabel.UnionWith(this.Relations.AltLabel);
+            result.Relations.HiddenLabel        = result.Relations.HiddenLabel.UnionWith(this.Relations.HiddenLabel);
+            result.Relations.LiteralForm        = result.Relations.LiteralForm.UnionWith(this.Relations.LiteralForm);
+            result.Relations.LabelRelation      = result.Relations.LabelRelation.UnionWith(this.Relations.LabelRelation);
 
             //Add annotations from this scheme
             result.Annotations.PrefLabel        = result.Annotations.PrefLabel.UnionWith(this.Annotations.PrefLabel);
@@ -224,6 +303,11 @@ namespace RDFSharp.Semantics.SKOS
                     result.AddConcept(c);
                 }
 
+                //Add labels from the given scheme
+                foreach (var l in conceptScheme.Labels.Values) {
+                    result.AddLabel(l);
+                }
+
                 //Add relations from the given scheme
                 result.Relations.TopConcept         = result.Relations.TopConcept.UnionWith(conceptScheme.Relations.TopConcept);
                 result.Relations.Broader            = result.Relations.Broader.UnionWith(conceptScheme.Relations.Broader);
@@ -239,6 +323,11 @@ namespace RDFSharp.Semantics.SKOS
                 result.Relations.CloseMatch         = result.Relations.CloseMatch.UnionWith(conceptScheme.Relations.CloseMatch);
                 result.Relations.ExactMatch         = result.Relations.ExactMatch.UnionWith(conceptScheme.Relations.ExactMatch);
                 result.Relations.Notation           = result.Relations.Notation.UnionWith(conceptScheme.Relations.Notation);
+                result.Relations.PrefLabel          = result.Relations.PrefLabel.UnionWith(conceptScheme.Relations.PrefLabel);
+                result.Relations.AltLabel           = result.Relations.AltLabel.UnionWith(conceptScheme.Relations.AltLabel);
+                result.Relations.HiddenLabel        = result.Relations.HiddenLabel.UnionWith(conceptScheme.Relations.HiddenLabel);
+                result.Relations.LiteralForm        = result.Relations.LiteralForm.UnionWith(conceptScheme.Relations.LiteralForm);
+                result.Relations.LabelRelation      = result.Relations.LabelRelation.UnionWith(conceptScheme.Relations.LabelRelation);
 
                 //Add annotations from the given scheme
                 result.Annotations.PrefLabel        = result.Annotations.PrefLabel.UnionWith(conceptScheme.Annotations.PrefLabel);
@@ -271,6 +360,13 @@ namespace RDFSharp.Semantics.SKOS
                     }
                 }
 
+                //Add difference labels
+                foreach (var l in this.Labels.Values) {
+                    if (!conceptScheme.Labels.ContainsKey(l.PatternMemberID)) {
+                         result.AddLabel(l);
+                    }
+                }
+
                 //Add difference relations
                 result.Relations.TopConcept         = this.Relations.TopConcept.DifferenceWith(conceptScheme.Relations.TopConcept);
                 result.Relations.Broader            = this.Relations.Broader.DifferenceWith(conceptScheme.Relations.Broader);
@@ -286,6 +382,11 @@ namespace RDFSharp.Semantics.SKOS
                 result.Relations.CloseMatch         = this.Relations.CloseMatch.DifferenceWith(conceptScheme.Relations.CloseMatch);
                 result.Relations.ExactMatch         = this.Relations.ExactMatch.DifferenceWith(conceptScheme.Relations.ExactMatch);
                 result.Relations.Notation           = this.Relations.Notation.DifferenceWith(conceptScheme.Relations.Notation);
+                result.Relations.PrefLabel          = this.Relations.PrefLabel.DifferenceWith(conceptScheme.Relations.PrefLabel);
+                result.Relations.AltLabel           = this.Relations.AltLabel.DifferenceWith(conceptScheme.Relations.AltLabel);
+                result.Relations.HiddenLabel        = this.Relations.HiddenLabel.DifferenceWith(conceptScheme.Relations.HiddenLabel);
+                result.Relations.LiteralForm        = this.Relations.LiteralForm.DifferenceWith(conceptScheme.Relations.LiteralForm);
+                result.Relations.LabelRelation      = this.Relations.LabelRelation.DifferenceWith(conceptScheme.Relations.LabelRelation);
 
                 //Add difference annotations
                 result.Annotations.PrefLabel        = this.Annotations.PrefLabel.DifferenceWith(conceptScheme.Annotations.PrefLabel);
@@ -307,6 +408,11 @@ namespace RDFSharp.Semantics.SKOS
                     result.AddConcept(c);
                 }
 
+                //Add labels from this scheme
+                foreach (var l in this.Labels.Values) {
+                    result.AddLabel(l);
+                }
+
                 //Add relations from this scheme
                 result.Relations.TopConcept         = result.Relations.TopConcept.UnionWith(this.Relations.TopConcept);
                 result.Relations.Broader            = result.Relations.Broader.UnionWith(this.Relations.Broader);
@@ -322,6 +428,11 @@ namespace RDFSharp.Semantics.SKOS
                 result.Relations.CloseMatch         = result.Relations.CloseMatch.UnionWith(this.Relations.CloseMatch);
                 result.Relations.ExactMatch         = result.Relations.ExactMatch.UnionWith(this.Relations.ExactMatch);
                 result.Relations.Notation           = result.Relations.Notation.UnionWith(this.Relations.Notation);
+                result.Relations.PrefLabel          = result.Relations.PrefLabel.UnionWith(this.Relations.PrefLabel);
+                result.Relations.AltLabel           = result.Relations.AltLabel.UnionWith(this.Relations.AltLabel);
+                result.Relations.HiddenLabel        = result.Relations.HiddenLabel.UnionWith(this.Relations.HiddenLabel);
+                result.Relations.LiteralForm        = result.Relations.LiteralForm.UnionWith(this.Relations.LiteralForm);
+                result.Relations.LabelRelation      = result.Relations.LabelRelation.UnionWith(this.Relations.LabelRelation);
 
                 //Add annotations from this scheme
                 result.Annotations.PrefLabel        = result.Annotations.PrefLabel.UnionWith(this.Annotations.PrefLabel);
@@ -353,6 +464,9 @@ namespace RDFSharp.Semantics.SKOS
                 result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.SKOS.CONCEPT));
                 result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.SKOS.IN_SCHEME, (RDFResource)this.Value));
             }
+            foreach (var l in this.Labels.Values) {
+                result.AddTriple(new RDFTriple((RDFResource)l.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.SKOS.SKOSXL.LABEL));
+            }
 
             //Relations
             result          = result.UnionWith(this.Relations.TopConcept.ToRDFGraph(infexpBehavior))
@@ -368,7 +482,12 @@ namespace RDFSharp.Semantics.SKOS
                                     .UnionWith(this.Relations.MappingRelation.ToRDFGraph(infexpBehavior))
                                     .UnionWith(this.Relations.CloseMatch.ToRDFGraph(infexpBehavior))
                                     .UnionWith(this.Relations.ExactMatch.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.Notation.ToRDFGraph(infexpBehavior));
+                                    .UnionWith(this.Relations.Notation.ToRDFGraph(infexpBehavior))
+                                    .UnionWith(this.Relations.PrefLabel.ToRDFGraph(infexpBehavior))
+                                    .UnionWith(this.Relations.AltLabel.ToRDFGraph(infexpBehavior))
+                                    .UnionWith(this.Relations.HiddenLabel.ToRDFGraph(infexpBehavior))
+                                    .UnionWith(this.Relations.LiteralForm.ToRDFGraph(infexpBehavior))
+                                    .UnionWith(this.Relations.LabelRelation.ToRDFGraph(infexpBehavior));
 
             //Annotations
             result          = result.UnionWith(this.Annotations.PrefLabel.ToRDFGraph(infexpBehavior))
@@ -396,11 +515,17 @@ namespace RDFSharp.Semantics.SKOS
             result.AddFact(this);
             foreach(var  c in this)  {  result.AddFact(c);  }
 
+            //Labels
+            foreach (var l in this.Labels.Values) { result.AddFact(l); }
+
             //InScheme
             result.AddClassTypeRelation(this, RDFVocabulary.SKOS.CONCEPT_SCHEME.ToRDFOntologyClass());
             foreach (var c in this)  {
                 result.AddClassTypeRelation(c, RDFVocabulary.SKOS.CONCEPT.ToRDFOntologyClass());
                 result.AddAssertionRelation(c, RDFVocabulary.SKOS.IN_SCHEME.ToRDFOntologyObjectProperty(), this);
+            }
+            foreach (var l in this.Labels.Values) {
+                result.AddClassTypeRelation(l, RDFVocabulary.SKOS.SKOSXL.LABEL.ToRDFOntologyClass());
             }
 
             //Assertions
@@ -417,7 +542,12 @@ namespace RDFSharp.Semantics.SKOS
                                                                      .UnionWith(this.Relations.MappingRelation)
                                                                      .UnionWith(this.Relations.CloseMatch)
                                                                      .UnionWith(this.Relations.ExactMatch)
-                                                                     .UnionWith(this.Relations.Notation);
+                                                                     .UnionWith(this.Relations.Notation)
+                                                                     .UnionWith(this.Relations.PrefLabel)
+                                                                     .UnionWith(this.Relations.AltLabel)
+                                                                     .UnionWith(this.Relations.HiddenLabel)
+                                                                     .UnionWith(this.Relations.LiteralForm)
+                                                                     .UnionWith(this.Relations.LabelRelation);
 
 
             //Annotations

@@ -28,290 +28,249 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Methods
         /// <summary>
-        /// Checks if the skos:broader/skos:broaderTransitive/skos:broadMatch assertion can be added to the given aConcept with the given bConcept
+        /// Checks if the skos:broader/skos:broaderTransitive/skos:broadMatch relation can be added to the given aConcept with the given bConcept
         /// </summary>
-        internal static Boolean CheckBroaderAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
-            var canAddBroaderAssert = false;
+        internal static Boolean CheckBroaderRelation(RDFSKOSConceptScheme conceptScheme, 
+                                                     RDFSKOSConcept aConcept, 
+                                                     RDFSKOSConcept bConcept) {
+            var canAddBroaderRel = false;
 
             //Avoid clash with hierarchical relations
-            canAddBroaderAssert     = !RDFSKOSHelper.CheckNarrower(ontologyData, aConceptFact, bConceptFact);
+            canAddBroaderRel     = !conceptScheme.CheckHasNarrowerConcept(aConcept, bConcept);
 
             //Avoid clash with associative relations
-            if (canAddBroaderAssert) {
-                canAddBroaderAssert = !RDFSKOSHelper.CheckRelated(ontologyData, aConceptFact, bConceptFact);
+            if (canAddBroaderRel) {
+                canAddBroaderRel = !conceptScheme.CheckHasRelatedConcept(aConcept, bConcept);
             }
 
             //Avoid clash with mapping relations
-            if (canAddBroaderAssert) {
-                canAddBroaderAssert = (!RDFSKOSHelper.CheckNarrowMatch(ontologyData, aConceptFact, bConceptFact) &&
-                                       !RDFSKOSHelper.CheckCloseMatch(ontologyData, aConceptFact, bConceptFact)  &&
-                                       !RDFSKOSHelper.CheckExactMatch(ontologyData, aConceptFact, bConceptFact)  &&
-                                       !RDFSKOSHelper.CheckRelatedMatch(ontologyData, aConceptFact, bConceptFact));
+            if (canAddBroaderRel) {
+                canAddBroaderRel = (!conceptScheme.CheckHasNarrowMatchConcept(aConcept, bConcept) &&
+                                    !conceptScheme.CheckHasCloseMatchConcept(aConcept, bConcept)  &&
+                                    !conceptScheme.CheckHasExactMatchConcept(aConcept, bConcept)  &&
+                                    !conceptScheme.CheckHasRelatedMatchConcept(aConcept, bConcept));
             }
 
-            return canAddBroaderAssert;
+            return canAddBroaderRel;
         }
 
         /// <summary>
-        /// Checks if the skos:narrower/skos:narrowerTransitive/skos:narrowMatch assertion can be added to the given aConcept with the given bConcept
+        /// Checks if the skos:narrower/skos:narrowerTransitive/skos:narrowMatch relation can be added to the given aConcept with the given bConcept
         /// </summary>
-        internal static Boolean CheckNarrowerAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
-            var canAddNarrowerAssert = false;
+        internal static Boolean CheckNarrowerRelation(RDFSKOSConceptScheme conceptScheme, 
+                                                      RDFSKOSConcept aConcept, 
+                                                      RDFSKOSConcept bConcept) {
+            var canAddNarrowerRel = false;
 
             //Avoid clash with hierarchical relations
-            canAddNarrowerAssert     = !RDFSKOSHelper.CheckBroader(ontologyData, aConceptFact, bConceptFact);
+            canAddNarrowerRel     = !conceptScheme.CheckHasBroaderConcept(aConcept, bConcept);
 
             //Avoid clash with associative relations
-            if (canAddNarrowerAssert) {
-                canAddNarrowerAssert = !RDFSKOSHelper.CheckRelated(ontologyData, aConceptFact, bConceptFact);
+            if (canAddNarrowerRel) {
+                canAddNarrowerRel = !conceptScheme.CheckHasRelatedConcept(aConcept, bConcept);
             }
 
             //Avoid clash with mapping relations
-            if (canAddNarrowerAssert) {
-                canAddNarrowerAssert = (!RDFSKOSHelper.CheckBroadMatch(ontologyData, aConceptFact, bConceptFact) &&
-                                        !RDFSKOSHelper.CheckCloseMatch(ontologyData, aConceptFact, bConceptFact) &&
-                                        !RDFSKOSHelper.CheckExactMatch(ontologyData, aConceptFact, bConceptFact) &&
-                                        !RDFSKOSHelper.CheckRelatedMatch(ontologyData, aConceptFact, bConceptFact));
+            if (canAddNarrowerRel) {
+                canAddNarrowerRel = (!conceptScheme.CheckHasBroadMatchConcept(aConcept, bConcept) &&
+                                     !conceptScheme.CheckHasCloseMatchConcept(aConcept, bConcept) &&
+                                     !conceptScheme.CheckHasExactMatchConcept(aConcept, bConcept) &&
+                                     !conceptScheme.CheckHasRelatedMatchConcept(aConcept, bConcept));
             }
 
-            return canAddNarrowerAssert;
+            return canAddNarrowerRel;
         }
 
         /// <summary>
-        /// Checks if the skos:related/skos:relatedMatch assertion can be added to the given aConcept with the given bConcept
+        /// Checks if the skos:related/skos:relatedMatch relation can be added to the given aConcept with the given bConcept
         /// </summary>
-        internal static Boolean CheckRelatedAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
-            var canAddRelatedAssert = false;
+        internal static Boolean CheckRelatedRelation(RDFSKOSConceptScheme conceptScheme, 
+                                                     RDFSKOSConcept aConcept, 
+                                                     RDFSKOSConcept bConcept) {
+            var canAddRelatedRel = false;
 
             //Avoid clash with hierarchical relations
-            canAddRelatedAssert     = (!RDFSKOSHelper.CheckBroader(ontologyData, aConceptFact, bConceptFact)     &&
-                                       !RDFSKOSHelper.CheckNarrower(ontologyData, aConceptFact, bConceptFact));
+            canAddRelatedRel     = (!conceptScheme.CheckHasBroaderConcept(aConcept,  bConcept) &&
+                                    !conceptScheme.CheckHasNarrowerConcept(aConcept, bConcept));
 
             //Avoid clash with mapping relations
-            if (canAddRelatedAssert) {
-                canAddRelatedAssert = (!RDFSKOSHelper.CheckBroadMatch(ontologyData, aConceptFact, bConceptFact)  &&
-                                       !RDFSKOSHelper.CheckNarrowMatch(ontologyData, aConceptFact, bConceptFact) &&
-                                       !RDFSKOSHelper.CheckCloseMatch(ontologyData, aConceptFact, bConceptFact)  &&
-                                       !RDFSKOSHelper.CheckExactMatch(ontologyData, aConceptFact, bConceptFact));
+            if (canAddRelatedRel) {
+                canAddRelatedRel = (!conceptScheme.CheckHasBroadMatchConcept(aConcept, bConcept)  &&
+                                    !conceptScheme.CheckHasNarrowMatchConcept(aConcept, bConcept) &&
+                                    !conceptScheme.CheckHasCloseMatchConcept(aConcept, bConcept)  &&
+                                    !conceptScheme.CheckHasExactMatchConcept(aConcept, bConcept));
             }
 
-            return canAddRelatedAssert;
+            return canAddRelatedRel;
         }
 
         /// <summary>
-        /// Checks if the skos:closeMatch/skos:exactMatch assertion can be added to the given aConcept with the given bConcept
+        /// Checks if the skos:closeMatch/skos:exactMatch relation can be added to the given aConcept with the given bConcept
         /// </summary>
-        internal static Boolean CheckCloseOrExactMatchAssertion(RDFOntologyData ontologyData, RDFOntologyFact aConceptFact, RDFOntologyFact bConceptFact) {
-            var canAddCloseOrExactMatchAssert = false;
+        internal static Boolean CheckCloseOrExactMatchRelation(RDFSKOSConceptScheme conceptScheme, 
+                                                               RDFSKOSConcept aConcept, 
+                                                               RDFSKOSConcept bConcept) {
+            var canAddCloseOrExactMatchRel = false;
 
             //Avoid clash with hierarchical relations
-            canAddCloseOrExactMatchAssert     = (!RDFSKOSHelper.CheckBroader(ontologyData, aConceptFact, bConceptFact)     &&
-                                                 !RDFSKOSHelper.CheckNarrower(ontologyData, aConceptFact, bConceptFact));
+            canAddCloseOrExactMatchRel     = (!conceptScheme.CheckHasBroaderConcept(aConcept,  bConcept) &&
+                                              !conceptScheme.CheckHasNarrowerConcept(aConcept, bConcept));
 
             //Avoid clash with mapping relations
-            if (canAddCloseOrExactMatchAssert) {
-                canAddCloseOrExactMatchAssert = (!RDFSKOSHelper.CheckBroadMatch(ontologyData, aConceptFact, bConceptFact)  &&
-                                                 !RDFSKOSHelper.CheckNarrowMatch(ontologyData, aConceptFact, bConceptFact) &&
-                                                 !RDFSKOSHelper.CheckRelated(ontologyData, aConceptFact, bConceptFact));
+            if (canAddCloseOrExactMatchRel) {
+                canAddCloseOrExactMatchRel = (!conceptScheme.CheckHasBroadMatchConcept(aConcept, bConcept)  &&
+                                              !conceptScheme.CheckHasNarrowMatchConcept(aConcept, bConcept) &&
+                                              !conceptScheme.CheckHasRelatedMatchConcept(aConcept, bConcept));
             }
 
-            return canAddCloseOrExactMatchAssert;
+            return canAddCloseOrExactMatchRel;
         }
 
         /// <summary>
         /// Checks if the skos:prefLabel/skosxl:prefLabel informations can be added to the given concept
         /// </summary>
-        internal static Boolean CheckPrefLabel(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral prefLabelLiteral) {
-            var canAddPrefLabelAnnot     = false;
-            var prefLabelProperty        = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
-            var prefLabelXLProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
-            var altLabelProperty         = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.ALT_LABEL.ToString());
-            var altLabelXLProperty       = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL.ToString());
-            var hidLabelProperty         = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HIDDEN_LABEL.ToString());
-            var hidLabelXLProperty       = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.HIDDEN_LABEL.ToString());
-            var literalFormXLProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
-            var prefLabelLiteralLang     = ((RDFPlainLiteral)prefLabelLiteral.Value).Language;
+        internal static Boolean CheckPrefLabel(RDFSKOSConceptScheme conceptScheme, 
+                                               RDFOntologyFact concept, 
+                                               RDFOntologyLiteral literal) {
+            var canAddPrefLabelInfo     = false;
+            var prefLabelLiteralLang    = ((RDFPlainLiteral)literal.Value).Language;
 
-            //Plain literal without language tag: only one occurrence of this annotation is allowed
+            //Plain literal without language tag: only one occurrence of this information is allowed
             if (String.IsNullOrEmpty(prefLabelLiteralLang)) {
 
                 //Check skos:prefLabel annotation
-                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                                       .SelectEntriesByPredicate(prefLabelProperty)
-                                                                                       .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
-                                                                                                   && String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)));
-                //Check skosxl:prefLabel assertion
-                if (canAddPrefLabelAnnot) {
-                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                              .SelectEntriesByPredicate(prefLabelXLProperty)
-                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                         .Any(y => y.TaxonomyObject.Value is RDFPlainLiteral
-                                                                                                                                     && String.IsNullOrEmpty(((RDFPlainLiteral)y.TaxonomyObject.Value).Language))));
+                canAddPrefLabelInfo     = !(conceptScheme.Annotations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                               .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                           && String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)));
+                //Check skosxl:prefLabel relation
+                if (canAddPrefLabelInfo) {
+                    canAddPrefLabelInfo = !(conceptScheme.Relations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                             .Any(x => conceptScheme.Relations.LiteralForm.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                          .Any(y => y.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                                                                      && String.IsNullOrEmpty(((RDFPlainLiteral)y.TaxonomyObject.Value).Language))));
                 }
 
             }
 
-            //Plain literal with language tag: only one occurrence of this annotation per language tag is allowed
+            //Plain literal with language tag: only one occurrence of this information per language tag is allowed
             else {
 
                 //Check skos:prefLabel annotation
-                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                                       .SelectEntriesByPredicate(prefLabelProperty)
-                                                                                       .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
-                                                                                                   && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
-                                                                                                   && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase)));
+                canAddPrefLabelInfo     = !(conceptScheme.Annotations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                               .Any(x => x.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                           && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
+                                                                                           && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase)));
             
-                //Check skosxl:prefLabel assertion
-                if (canAddPrefLabelAnnot) {
-                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                              .SelectEntriesByPredicate(prefLabelXLProperty)
-                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                         .Any(y => y.TaxonomyObject.Value is RDFPlainLiteral
-                                                                                                                                     && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
-                                                                                                                                     && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase))));
+                //Check skosxl:prefLabel relation
+                if (canAddPrefLabelInfo) {
+                    canAddPrefLabelInfo = !(conceptScheme.Relations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                             .Any(x => conceptScheme.Relations.LiteralForm.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                          .Any(y => y.TaxonomyObject.Value is RDFPlainLiteral
+                                                                                                                                      && !String.IsNullOrEmpty(((RDFPlainLiteral)x.TaxonomyObject.Value).Language)
+                                                                                                                                      && (((RDFPlainLiteral)x.TaxonomyObject.Value).Language).Equals(prefLabelLiteralLang, StringComparison.OrdinalIgnoreCase))));
                 }
             
             }
 
             //Pairwise disjointness with skos:altLabel/skosxl:altLabel must be preserved
-            if (canAddPrefLabelAnnot) {
+            if (canAddPrefLabelInfo) {
 
                 //Check skos:altLabel annotation
-                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                     .SelectEntriesByPredicate(altLabelProperty)
-                                                                     .Any(x => x.TaxonomyObject.Equals(prefLabelLiteral)));
+                canAddPrefLabelInfo     = !(conceptScheme.Annotations.AltLabel.SelectEntriesBySubject(concept)
+                                                                              .Any(x => x.TaxonomyObject.Equals(literal)));
                                                                  
-                //Check skosxl:altLabel assertion
-                if (canAddPrefLabelAnnot) {
-                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                              .SelectEntriesByPredicate(altLabelXLProperty)
-                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                         .Any(y => y.TaxonomyObject.Equals(prefLabelLiteral))));
+                //Check skosxl:altLabel relation
+                if (canAddPrefLabelInfo) {
+                    canAddPrefLabelInfo = !(conceptScheme.Relations.AltLabel.SelectEntriesBySubject(concept)
+                                                                            .Any(x => conceptScheme.Relations.LiteralForm.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                         .Any(y => y.TaxonomyObject.Equals(literal))));
                 }
                                                 
             }
 
             //Pairwise disjointness with skos:hiddenLabel/skosxl:hiddenLabel must be preserved
-            if (canAddPrefLabelAnnot) {
+            if (canAddPrefLabelInfo) {
 
                 //Check skos:hiddenLabel annotation
-                canAddPrefLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                     .SelectEntriesByPredicate(hidLabelProperty)
-                                                                     .Any(x => x.TaxonomyObject.Equals(prefLabelLiteral)));
+                canAddPrefLabelInfo     = !(conceptScheme.Annotations.HiddenLabel.SelectEntriesBySubject(concept)
+                                                                                 .Any(x => x.TaxonomyObject.Equals(literal)));
                                                                  
                 //Check skosxl:hiddenLabel assertion
-                if (canAddPrefLabelAnnot) {
-                    canAddPrefLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                              .SelectEntriesByPredicate(hidLabelXLProperty)
-                                                                              .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                         .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                         .Any(y => y.TaxonomyObject.Equals(prefLabelLiteral))));
+                if (canAddPrefLabelInfo) {
+                    canAddPrefLabelInfo = !(conceptScheme.Relations.HiddenLabel.SelectEntriesBySubject(concept)
+                                                                               .Any(x => conceptScheme.Relations.LiteralForm.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                            .Any(y => y.TaxonomyObject.Equals(literal))));
                 }
   
             }
 
-            return canAddPrefLabelAnnot;
+            return canAddPrefLabelInfo;
         }
 
         /// <summary>
         /// Checks if the skos:altLabel/skosxl:altLabel informations can be added to the given concept
         /// </summary>
-        internal static Boolean CheckAltLabel(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral altLabelLiteral) {
-            var canAddAltLabelAnnot   = false;
-            var prefLabelProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
-            var prefLabelXLProperty   = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
-            var hidLabelProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.HIDDEN_LABEL.ToString());
-            var hidLabelXLProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.HIDDEN_LABEL.ToString());
-            var literalFormXLProperty = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
-
+        internal static Boolean CheckAltLabel(RDFSKOSConceptScheme conceptScheme, 
+                                              RDFOntologyFact concept, 
+                                              RDFOntologyLiteral literal) {
+            var canAddAltLabelInfo   = false;
+            
             //Pairwise disjointness with skos:prefLabel/skosxl:prefLabel must be preserved
-            canAddAltLabelAnnot       = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                  .SelectEntriesByPredicate(prefLabelProperty)
-                                                                  .Any(x => x.TaxonomyObject.Equals(altLabelLiteral)));
+            canAddAltLabelInfo       = !(conceptScheme.Annotations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                            .Any(x => x.TaxonomyObject.Equals(literal)));
 
-            if (canAddAltLabelAnnot) {
-                canAddAltLabelAnnot   = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                           .SelectEntriesByPredicate(prefLabelXLProperty)
-                                                                           .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                      .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                      .Any(y => y.TaxonomyObject.Equals(altLabelLiteral))));
+            if (canAddAltLabelInfo) {
+                canAddAltLabelInfo   = !(conceptScheme.Relations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                          .Any(x => conceptScheme.Relations.LiteralForm.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                       .Any(y => y.TaxonomyObject.Equals(literal))));
             }
 
             //Pairwise disjointness with skos:hiddenLabel/skosxl:hiddenLabel must be preserved
-            if (canAddAltLabelAnnot) {
-                canAddAltLabelAnnot   = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                  .SelectEntriesByPredicate(hidLabelProperty)
-                                                                  .Any(x => x.TaxonomyObject.Equals(altLabelLiteral)));
+            if (canAddAltLabelInfo) {
+                canAddAltLabelInfo   = !(conceptScheme.Annotations.HiddenLabel.SelectEntriesBySubject(concept)
+                                                                              .Any(x => x.TaxonomyObject.Equals(literal)));
             }
  
-            if (canAddAltLabelAnnot) {
-                canAddAltLabelAnnot   = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                           .SelectEntriesByPredicate(hidLabelXLProperty)
-                                                                           .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                      .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                      .Any(y => y.TaxonomyObject.Equals(altLabelLiteral))));
+            if (canAddAltLabelInfo) {
+                canAddAltLabelInfo   = !(conceptScheme.Relations.HiddenLabel.SelectEntriesBySubject(concept)
+                                                                            .Any(x => conceptScheme.Relations.HiddenLabel.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                         .Any(y => y.TaxonomyObject.Equals(literal))));
             }
 
-            return canAddAltLabelAnnot;
+            return canAddAltLabelInfo;
         }
 
         /// <summary>
         /// Checks if the skos:hiddenLabel/skosxl:hiddenLabel informations can be added to the given concept
         /// </summary>
-        internal static Boolean CheckHiddenLabel(RDFOntologyData ontologyData, RDFOntologyFact conceptFact, RDFOntologyLiteral hiddenLabelLiteral) {
-            var canAddHiddenLabelAnnot = false;
-            var prefLabelProperty      = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.PREF_LABEL.ToString());
-            var prefLabelXLProperty    = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL.ToString());
-            var altLabelProperty       = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.ALT_LABEL.ToString());
-            var altLabelXLProperty     = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL.ToString());
-            var literalFormXLProperty  = RDFSKOSOntology.Instance.Model.PropertyModel.SelectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM.ToString());
+        internal static Boolean CheckHiddenLabel(RDFSKOSConceptScheme conceptScheme, 
+                                                 RDFOntologyFact concept, 
+                                                 RDFOntologyLiteral literal) {
+            var canAddHiddenLabelInfo = false;
 
             //Pairwise disjointness with skos:prefLabel/skosxl:prefLabel must be preserved
-            canAddHiddenLabelAnnot     = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                   .SelectEntriesByPredicate(prefLabelProperty)
-                                                                   .Any(x => x.TaxonomyObject.Equals(hiddenLabelLiteral)));
+            canAddHiddenLabelInfo     = !(conceptScheme.Annotations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                             .Any(x => x.TaxonomyObject.Equals(literal)));
 
-            if (canAddHiddenLabelAnnot) {
-                canAddHiddenLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                            .SelectEntriesByPredicate(prefLabelXLProperty)
-                                                                            .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                       .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                       .Any(y => y.TaxonomyObject.Equals(hiddenLabelLiteral))));
+            if (canAddHiddenLabelInfo) {
+                canAddHiddenLabelInfo = !(conceptScheme.Relations.PrefLabel.SelectEntriesBySubject(concept)
+                                                                           .Any(x => conceptScheme.Relations.LiteralForm.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                        .Any(y => y.TaxonomyObject.Equals(literal))));
             }
 
             //Pairwise disjointness with skos:altLabel/skosxl:altLabel must be preserved
-            if (canAddHiddenLabelAnnot) {
-                canAddHiddenLabelAnnot = !(ontologyData.Annotations.CustomAnnotations.SelectEntriesBySubject(conceptFact)
-                                                                   .SelectEntriesByPredicate(altLabelProperty)
-                                                                   .Any(x => x.TaxonomyObject.Equals(hiddenLabelLiteral)));
+            if (canAddHiddenLabelInfo) {
+                canAddHiddenLabelInfo = !(conceptScheme.Annotations.AltLabel.SelectEntriesBySubject(concept)
+                                                                            .Any(x => x.TaxonomyObject.Equals(literal)));
             }
 
-            if (canAddHiddenLabelAnnot) {
-                canAddHiddenLabelAnnot = !(ontologyData.Relations.Assertions.SelectEntriesBySubject(conceptFact)
-                                                                            .SelectEntriesByPredicate(altLabelXLProperty)
-                                                                            .Any(x => ontologyData.Relations.Assertions.SelectEntriesBySubject(x.TaxonomyObject)
-                                                                                                                       .SelectEntriesByPredicate(literalFormXLProperty)
-                                                                                                                       .Any(y => y.TaxonomyObject.Equals(hiddenLabelLiteral))));
+            if (canAddHiddenLabelInfo) {
+                canAddHiddenLabelInfo = !(conceptScheme.Relations.AltLabel.SelectEntriesBySubject(concept)
+                                                                          .Any(x => conceptScheme.Relations.LiteralForm.SelectEntriesBySubject(x.TaxonomyObject)
+                                                                                                                       .Any(y => y.TaxonomyObject.Equals(literal))));
             }
 
-            return canAddHiddenLabelAnnot;
-        }
-
-        /// <summary>
-        /// Checks if the skos:memberList assertion can be added to the given orderedCollectionFact
-        /// </summary>
-        internal static Boolean CheckMemberListAssertion(RDFOntologyData ontologyData, RDFOntologyFact orderedCollectionFact) {
-            var canAddMemberListAssert = false;
-
-            //Only one instance of this skos:OrderedCollection is allowed (FunctionalProperty)
-            canAddMemberListAssert     = (ontologyData.Relations.Assertions.SelectEntriesBySubject(orderedCollectionFact)
-                                                                           .SelectEntriesByPredicate(RDFVocabulary.SKOS.MEMBER_LIST.ToRDFOntologyObjectProperty())
-                                                                           .EntriesCount == 0);
-
-            return canAddMemberListAssert;
+            return canAddHiddenLabelInfo;
         }
         #endregion
 
