@@ -70,10 +70,10 @@
     <Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
     <Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
     <Compile Include="Library\SKOS\RDFSKOSRelations.cs" />
-    <Compile Include="Library\SKOS\Data\RDFSKOSCollection.cs" />
-    <Compile Include="Library\SKOS\Data\RDFSKOSConcept.cs" />
-    <Compile Include="Library\SKOS\Data\RDFSKOSConceptScheme.cs" />
-    <Compile Include="Library\SKOS\Data\RDFSKOSLabel.cs" />
+    <Compile Include="Library\SKOS\Abstractions\RDFSKOSCollection.cs" />
+    <Compile Include="Library\SKOS\Abstractions\RDFSKOSConcept.cs" />
+    <Compile Include="Library\SKOS\Abstractions\RDFSKOSConceptScheme.cs" />
+    <Compile Include="Library\SKOS\Abstractions\RDFSKOSLabel.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
