@@ -65,15 +65,15 @@
     <Compile Include="Library\FOAF\RDFFOAFOntology.cs" />
     <Compile Include="Library\GEO\RDFGEOOntology.cs" />
     <Compile Include="Library\SIOC\RDFSIOCOntology.cs" />
+    <Compile Include="Library\SKOS\RDFSKOSAnnotations.cs" />
     <Compile Include="Library\SKOS\RDFSKOSChecker.cs" />
     <Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
     <Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
-    <Compile Include="Library\SKOS\Data\RDFSKOSAnnotations.cs" />
+    <Compile Include="Library\SKOS\RDFSKOSRelations.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSCollection.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSConcept.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSConceptScheme.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSLabel.cs" />
-    <Compile Include="Library\SKOS\Data\RDFSKOSRelations.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
