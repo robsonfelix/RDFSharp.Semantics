@@ -72,8 +72,8 @@
     <Compile Include="Library\SKOS\Data\RDFSKOSCollection.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSConcept.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSConceptScheme.cs" />
-    <Compile Include="Library\SKOS\Data\RDFSKOSConceptSchemeMetadata.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSLabel.cs" />
+    <Compile Include="Library\SKOS\Data\RDFSKOSRelations.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />

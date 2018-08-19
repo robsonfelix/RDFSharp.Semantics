@@ -18,9 +18,9 @@ namespace RDFSharp.Semantics.SKOS
 {
 
     /// <summary>
-    /// RDFSKOSConceptSchemeMetadata represents a collector for relations connecting skos concepts.
+    /// RDFSKOSRelations represents a collector for relations connecting skos concepts.
     /// </summary>
-    public class RDFSKOSConceptSchemeMetadata {
+    public class RDFSKOSRelations {
 
         #region Properties
 
@@ -127,9 +127,9 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build an empty conceptscheme metadata
+        /// Default-ctor to build an empty relations metadata
         /// </summary>
-        internal RDFSKOSConceptSchemeMetadata() {
+        internal RDFSKOSRelations() {
 
             //SKOS
             this.TopConcept         = new RDFOntologyTaxonomy(RDFSemanticsEnums.RDFOntologyTaxonomyCategory.Data);

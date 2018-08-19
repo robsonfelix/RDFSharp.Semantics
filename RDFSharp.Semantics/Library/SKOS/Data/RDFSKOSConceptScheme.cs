@@ -79,7 +79,7 @@ namespace RDFSharp.Semantics.SKOS
         /// <summary>
         /// Relations describing concepts of the scheme
         /// </summary>
-        public RDFSKOSConceptSchemeMetadata Relations { get; internal set; }
+        public RDFSKOSRelations Relations { get; internal set; }
 
         /// <summary>
         /// Concepts contained in the scheme (encodes the 'skos:inScheme' relation)
@@ -106,7 +106,7 @@ namespace RDFSharp.Semantics.SKOS
             this.Collections = new Dictionary<Int64, RDFSKOSCollection>();
             this.Labels      = new Dictionary<Int64, RDFSKOSLabel>();
             this.Annotations = new RDFSKOSAnnotations();
-            this.Relations   = new RDFSKOSConceptSchemeMetadata();
+            this.Relations   = new RDFSKOSRelations();
         }
         #endregion
 
