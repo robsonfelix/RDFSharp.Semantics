@@ -651,11 +651,13 @@ namespace RDFSharp.Semantics.SKOS
 
             //Collections
             foreach (var c in this.Collections.Values) {
+                result.AddAssertionRelation(c, RDFVocabulary.SKOS.IN_SCHEME.ToRDFOntologyObjectProperty(), this);
                 result      = result.UnionWith(c.ToRDFOntologyData());
             }
 
             //OrderedCollections
             foreach (var o in this.OrderedCollections.Values) {
+                result.AddAssertionRelation(o, RDFVocabulary.SKOS.IN_SCHEME.ToRDFOntologyObjectProperty(), this);
                 result      = result.UnionWith(o.ToRDFOntologyData());
             }
 
