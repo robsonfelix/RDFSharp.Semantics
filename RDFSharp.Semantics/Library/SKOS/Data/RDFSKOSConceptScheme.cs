@@ -37,6 +37,13 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
+        /// Count of the collections composing the scheme
+        /// </summary>
+        public Int64 CollectionsCount {
+            get { return this.Collections.Count; }
+        }
+
+        /// <summary>
         /// Count of the labels composing the scheme
         /// </summary>
         public Int64 LabelsCount {
@@ -48,6 +55,13 @@ namespace RDFSharp.Semantics.SKOS
         /// </summary>
         public IEnumerator<RDFSKOSConcept> ConceptsEnumerator {
             get { return this.Concepts.Values.GetEnumerator(); }
+        }
+
+        /// <summary>
+        /// Gets the enumerator on the collections of the scheme for iteration
+        /// </summary>
+        public IEnumerator<RDFSKOSCollection> CollectionsEnumerator {
+            get { return this.Collections.Values.GetEnumerator(); }
         }
 
         /// <summary>
@@ -73,6 +87,11 @@ namespace RDFSharp.Semantics.SKOS
         internal Dictionary<Int64, RDFSKOSConcept> Concepts { get; set; }
 
         /// <summary>
+        /// Collections contained in the scheme
+        /// </summary>
+        internal Dictionary<Int64, RDFSKOSCollection> Collections { get; set; }
+
+        /// <summary>
         /// Labels contained in the scheme
         /// </summary>
         internal Dictionary<Int64, RDFSKOSLabel> Labels { get; set; }
@@ -80,12 +99,14 @@ namespace RDFSharp.Semantics.SKOS
 
         #region Ctors
         /// <summary>
-        /// Default-ctor to build a skos:ConceptScheme with the given name
+        /// Default-ctor to build a conceptScheme with the given name
         /// </summary>
         public RDFSKOSConceptScheme(RDFResource conceptName) : base(conceptName) {
-            this.Concepts  = new Dictionary<Int64, RDFSKOSConcept>();
-            this.Labels    = new Dictionary<Int64, RDFSKOSLabel>();
-            this.Relations = new RDFSKOSConceptSchemeMetadata();
+            this.Concepts    = new Dictionary<Int64, RDFSKOSConcept>();
+            this.Collections = new Dictionary<Int64, RDFSKOSCollection>();
+            this.Labels      = new Dictionary<Int64, RDFSKOSLabel>();
+            this.Annotations = new RDFSKOSAnnotations();
+            this.Relations   = new RDFSKOSConceptSchemeMetadata();
         }
         #endregion
 
@@ -121,6 +142,18 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
+        /// Adds the given collection to the scheme
+        /// </summary>
+        public RDFSKOSConceptScheme AddCollection(RDFSKOSCollection collection) {
+            if (collection != null) {
+                if (!this.Collections.ContainsKey(collection.PatternMemberID)) {
+                     this.Collections.Add(collection.PatternMemberID, collection);
+                }
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Adds the given label to the scheme
         /// </summary>
         public RDFSKOSConceptScheme AddLabel(RDFSKOSLabel label) {
@@ -141,6 +174,18 @@ namespace RDFSharp.Semantics.SKOS
             if (concept != null) {
                 if (this.Concepts.ContainsKey(concept.PatternMemberID)) {
                     this.Concepts.Remove(concept.PatternMemberID);
+                }
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the given collection from the scheme
+        /// </summary>
+        public RDFSKOSConceptScheme RemoveCollection(RDFSKOSCollection collection) {
+            if (collection != null) {
+                if (this.Collections.ContainsKey(collection.PatternMemberID)) {
+                    this.Collections.Remove(collection.PatternMemberID);
                 }
             }
             return this;
@@ -174,6 +219,19 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
+        /// Selects the collection represented by the given string from the scheme
+        /// </summary>
+        public RDFSKOSCollection SelectCollection(String collection) {
+            if (collection         != null) {
+                Int64 collectionID  = RDFModelUtilities.CreateHash(collection);
+                if (this.Collections.ContainsKey(collectionID)) {
+                    return this.Collections[collectionID];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Selects the label represented by the given string from the scheme
         /// </summary>
         public RDFSKOSLabel SelectLabel(String label) {
@@ -199,6 +257,13 @@ namespace RDFSharp.Semantics.SKOS
                 foreach (var c in this) {
                      if (conceptScheme.Concepts.ContainsKey(c.PatternMemberID)) {
                          result.AddConcept(c);
+                    }
+                }
+
+                //Add intersection collections
+                foreach (var c in this.Collections.Values) {
+                    if  (conceptScheme.Collections.ContainsKey(c.PatternMemberID)) {
+                         result.AddCollection(c);
                     }
                 }
 
@@ -257,6 +322,11 @@ namespace RDFSharp.Semantics.SKOS
                 result.AddConcept(c);
             }
 
+            //Add collections from this scheme
+            foreach (var c    in this.Collections.Values) {
+                result.AddCollection(c);
+            }
+
             //Add labels from this scheme
             foreach (var l    in this.Labels.Values) {
                 result.AddLabel(l);
@@ -301,6 +371,11 @@ namespace RDFSharp.Semantics.SKOS
                 //Add concepts from the given scheme
                 foreach (var c in conceptScheme) {
                     result.AddConcept(c);
+                }
+
+                //Add collections from the given scheme
+                foreach (var c in conceptScheme.Collections.Values) {
+                    result.AddCollection(c);
                 }
 
                 //Add labels from the given scheme
@@ -360,6 +435,13 @@ namespace RDFSharp.Semantics.SKOS
                     }
                 }
 
+                //Add difference collections
+                foreach (var c in this.Collections.Values) {
+                    if (!conceptScheme.Collections.ContainsKey(c.PatternMemberID)) {
+                         result.AddCollection(c);
+                    }
+                }
+
                 //Add difference labels
                 foreach (var l in this.Labels.Values) {
                     if (!conceptScheme.Labels.ContainsKey(l.PatternMemberID)) {
@@ -406,6 +488,11 @@ namespace RDFSharp.Semantics.SKOS
                 //Add concepts from this scheme
                 foreach (var c in this) {
                     result.AddConcept(c);
+                }
+
+                //Add collections from this scheme
+                foreach (var c in this.Collections.Values) {
+                    result.AddCollection(c);
                 }
 
                 //Add labels from this scheme
@@ -456,53 +543,7 @@ namespace RDFSharp.Semantics.SKOS
         /// Gets a graph representation of this scheme, exporting inferences according to the selected behavior
         /// </summary>
         public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
-            var result      = new RDFGraph();
-
-            //InScheme
-            result.AddTriple(new RDFTriple((RDFResource)this.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.SKOS.CONCEPT_SCHEME));
-            foreach (var c in this) {
-                result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.SKOS.CONCEPT));
-                result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.SKOS.IN_SCHEME, (RDFResource)this.Value));
-            }
-            foreach (var l in this.Labels.Values) {
-                result.AddTriple(new RDFTriple((RDFResource)l.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.SKOS.SKOSXL.LABEL));
-            }
-
-            //Relations
-            result          = result.UnionWith(this.Relations.TopConcept.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.Broader.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.BroaderTransitive.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.BroadMatch.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.Narrower.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.NarrowerTransitive.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.NarrowMatch.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.Related.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.RelatedMatch.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.SemanticRelation.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.MappingRelation.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.CloseMatch.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.ExactMatch.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.Notation.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.PrefLabel.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.AltLabel.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.HiddenLabel.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.LiteralForm.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Relations.LabelRelation.ToRDFGraph(infexpBehavior));
-
-            //Annotations
-            result          = result.UnionWith(this.Annotations.PrefLabel.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.AltLabel.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.HiddenLabel.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.Note.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.ChangeNote.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.EditorialNote.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.HistoryNote.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.ScopeNote.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.Definition.ToRDFGraph(infexpBehavior))
-                                    .UnionWith(this.Annotations.Example.ToRDFGraph(infexpBehavior));
-
-            result.Context  = new Uri(this.Value.ToString());
-            return result;
+            return this.ToRDFOntologyData().ToRDFGraph(infexpBehavior);
         }
         
         /// <summary>
@@ -511,20 +552,25 @@ namespace RDFSharp.Semantics.SKOS
         public RDFOntologyData ToRDFOntologyData() {
             var result      = new RDFOntologyData();
 
-            //Facts
+            //ConceptScheme
             result.AddFact(this);
-            foreach(var  c in this)  {  result.AddFact(c);  }
-
-            //Labels
-            foreach (var l in this.Labels.Values) { result.AddFact(l); }
-
-            //InScheme
             result.AddClassTypeRelation(this, RDFVocabulary.SKOS.CONCEPT_SCHEME.ToRDFOntologyClass());
-            foreach (var c in this)  {
+
+            //Concepts
+            foreach (var c in this) {
+                result.AddFact(c);
                 result.AddClassTypeRelation(c, RDFVocabulary.SKOS.CONCEPT.ToRDFOntologyClass());
                 result.AddAssertionRelation(c, RDFVocabulary.SKOS.IN_SCHEME.ToRDFOntologyObjectProperty(), this);
             }
+
+            //Collections
+            foreach (var c in this.Collections.Values) {
+                result      = result.UnionWith(c.ToRDFOntologyData());
+            }
+
+            //Labels
             foreach (var l in this.Labels.Values) {
+                result.AddFact(l);
                 result.AddClassTypeRelation(l, RDFVocabulary.SKOS.SKOSXL.LABEL.ToRDFOntologyClass());
             }
 

@@ -69,6 +69,7 @@
     <Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
     <Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSAnnotations.cs" />
+    <Compile Include="Library\SKOS\Data\RDFSKOSCollection.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSConcept.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSConceptScheme.cs" />
     <Compile Include="Library\SKOS\Data\RDFSKOSConceptSchemeMetadata.cs" />
