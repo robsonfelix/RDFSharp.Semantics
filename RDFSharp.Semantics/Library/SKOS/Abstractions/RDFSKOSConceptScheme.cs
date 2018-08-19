@@ -44,6 +44,13 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
+        /// Count of the ordered collections composing the scheme
+        /// </summary>
+        public Int64 OrderedCollectionsCount {
+            get { return this.OrderedCollections.Count; }
+        }
+
+        /// <summary>
         /// Count of the labels composing the scheme
         /// </summary>
         public Int64 LabelsCount {
@@ -62,6 +69,13 @@ namespace RDFSharp.Semantics.SKOS
         /// </summary>
         public IEnumerator<RDFSKOSCollection> CollectionsEnumerator {
             get { return this.Collections.Values.GetEnumerator(); }
+        }
+
+        /// <summary>
+        /// Gets the enumerator on the ordered collections of the scheme for iteration
+        /// </summary>
+        public IEnumerator<RDFSKOSOrderedCollection> OrderedCollectionsEnumerator {
+            get { return this.OrderedCollections.Values.GetEnumerator(); }
         }
 
         /// <summary>
@@ -92,6 +106,11 @@ namespace RDFSharp.Semantics.SKOS
         internal Dictionary<Int64, RDFSKOSCollection> Collections { get; set; }
 
         /// <summary>
+        /// OrderedCollections contained in the scheme
+        /// </summary>
+        internal Dictionary<Int64, RDFSKOSOrderedCollection> OrderedCollections { get; set; }
+
+        /// <summary>
         /// Labels contained in the scheme
         /// </summary>
         internal Dictionary<Int64, RDFSKOSLabel> Labels { get; set; }
@@ -102,11 +121,12 @@ namespace RDFSharp.Semantics.SKOS
         /// Default-ctor to build a conceptScheme with the given name
         /// </summary>
         public RDFSKOSConceptScheme(RDFResource conceptName) : base(conceptName) {
-            this.Concepts    = new Dictionary<Int64, RDFSKOSConcept>();
-            this.Collections = new Dictionary<Int64, RDFSKOSCollection>();
-            this.Labels      = new Dictionary<Int64, RDFSKOSLabel>();
-            this.Annotations = new RDFSKOSAnnotations();
-            this.Relations   = new RDFSKOSRelations();
+            this.Concepts           = new Dictionary<Int64, RDFSKOSConcept>();
+            this.Collections        = new Dictionary<Int64, RDFSKOSCollection>();
+            this.OrderedCollections = new Dictionary<Int64, RDFSKOSOrderedCollection>();
+            this.Labels             = new Dictionary<Int64, RDFSKOSLabel>();
+            this.Annotations        = new RDFSKOSAnnotations();
+            this.Relations          = new RDFSKOSRelations();
         }
         #endregion
 
@@ -154,6 +174,18 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
+        /// Adds the given ordered collection to the scheme
+        /// </summary>
+        public RDFSKOSConceptScheme AddOrderedCollection(RDFSKOSOrderedCollection orderedCollection) {
+            if (orderedCollection != null) {
+                if (!this.OrderedCollections.ContainsKey(orderedCollection.PatternMemberID)) {
+                     this.OrderedCollections.Add(orderedCollection.PatternMemberID, orderedCollection);
+                }
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Adds the given label to the scheme
         /// </summary>
         public RDFSKOSConceptScheme AddLabel(RDFSKOSLabel label) {
@@ -186,6 +218,18 @@ namespace RDFSharp.Semantics.SKOS
             if (collection != null) {
                 if (this.Collections.ContainsKey(collection.PatternMemberID)) {
                     this.Collections.Remove(collection.PatternMemberID);
+                }
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the given ordered collection from the scheme
+        /// </summary>
+        public RDFSKOSConceptScheme RemoveOrderedCollection(RDFSKOSOrderedCollection orderedCollection) {
+            if (orderedCollection != null) {
+                if (this.OrderedCollections.ContainsKey(orderedCollection.PatternMemberID)) {
+                    this.OrderedCollections.Remove(orderedCollection.PatternMemberID);
                 }
             }
             return this;
@@ -232,6 +276,19 @@ namespace RDFSharp.Semantics.SKOS
         }
 
         /// <summary>
+        /// Selects the ordered collection represented by the given string from the scheme
+        /// </summary>
+        public RDFSKOSOrderedCollection SelectOrderedCollection(String orderedCollection) {
+            if (orderedCollection         != null) {
+                Int64 orderedCollectionID  = RDFModelUtilities.CreateHash(orderedCollection);
+                if (this.OrderedCollections.ContainsKey(orderedCollectionID)) {
+                    return this.OrderedCollections[orderedCollectionID];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Selects the label represented by the given string from the scheme
         /// </summary>
         public RDFSKOSLabel SelectLabel(String label) {
@@ -267,10 +324,17 @@ namespace RDFSharp.Semantics.SKOS
                     }
                 }
 
+                //Add intersection ordered collections
+                foreach (var o in this.OrderedCollections.Values) {
+                    if  (conceptScheme.OrderedCollections.ContainsKey(o.PatternMemberID)) {
+                         result.AddOrderedCollection(o);
+                    }
+                }
+
                 //Add intersection labels
                 foreach (var l in this.Labels.Values) {
-                    if (conceptScheme.Labels.ContainsKey(l.PatternMemberID)) {
-                        result.AddLabel(l);
+                    if  (conceptScheme.Labels.ContainsKey(l.PatternMemberID)) {
+                         result.AddLabel(l);
                     }
                 }
 
@@ -327,6 +391,11 @@ namespace RDFSharp.Semantics.SKOS
                 result.AddCollection(c);
             }
 
+            //Add ordered collections from this scheme
+            foreach (var o    in this.OrderedCollections.Values) {
+                result.AddOrderedCollection(o);
+            }
+
             //Add labels from this scheme
             foreach (var l    in this.Labels.Values) {
                 result.AddLabel(l);
@@ -376,6 +445,11 @@ namespace RDFSharp.Semantics.SKOS
                 //Add collections from the given scheme
                 foreach (var c in conceptScheme.Collections.Values) {
                     result.AddCollection(c);
+                }
+
+                //Add ordered collections from the given scheme
+                foreach (var o in conceptScheme.OrderedCollections.Values) {
+                    result.AddOrderedCollection(o);
                 }
 
                 //Add labels from the given scheme
@@ -442,6 +516,13 @@ namespace RDFSharp.Semantics.SKOS
                     }
                 }
 
+                //Add difference ordered collections
+                foreach (var o in this.OrderedCollections.Values) {
+                    if (!conceptScheme.OrderedCollections.ContainsKey(o.PatternMemberID)) {
+                         result.AddOrderedCollection(o);
+                    }
+                }
+
                 //Add difference labels
                 foreach (var l in this.Labels.Values) {
                     if (!conceptScheme.Labels.ContainsKey(l.PatternMemberID)) {
@@ -493,6 +574,11 @@ namespace RDFSharp.Semantics.SKOS
                 //Add collections from this scheme
                 foreach (var c in this.Collections.Values) {
                     result.AddCollection(c);
+                }
+
+                //Add ordered collections from this scheme
+                foreach (var o in this.OrderedCollections.Values) {
+                    result.AddOrderedCollection(o);
                 }
 
                 //Add labels from this scheme
@@ -566,6 +652,11 @@ namespace RDFSharp.Semantics.SKOS
             //Collections
             foreach (var c in this.Collections.Values) {
                 result      = result.UnionWith(c.ToRDFOntologyData());
+            }
+
+            //OrderedCollections
+            foreach (var o in this.OrderedCollections.Values) {
+                result      = result.UnionWith(o.ToRDFOntologyData());
             }
 
             //Labels

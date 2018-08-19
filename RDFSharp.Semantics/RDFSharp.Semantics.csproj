@@ -74,6 +74,7 @@
     <Compile Include="Library\SKOS\Abstractions\RDFSKOSConcept.cs" />
     <Compile Include="Library\SKOS\Abstractions\RDFSKOSConceptScheme.cs" />
     <Compile Include="Library\SKOS\Abstractions\RDFSKOSLabel.cs" />
+    <Compile Include="Library\SKOS\Abstractions\RDFSKOSOrderedCollection.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
