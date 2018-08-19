@@ -202,6 +202,7 @@ namespace RDFSharp.Semantics.SKOS
 
             //Collections
             foreach (var cl in this.Collections.Values) {
+                result.AddAssertionRelation(this, RDFVocabulary.SKOS.MEMBER.ToRDFOntologyObjectProperty(), cl);
                 result       = result.UnionWith(cl.ToRDFOntologyData());
             }
 
