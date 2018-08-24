@@ -167,6 +167,7 @@ namespace RDFSharp.Semantics.SKOS
                     result.AddClassTypeRelation(conceptsEnum.Current.Item2, RDFVocabulary.SKOS.CONCEPT.ToRDFOntologyClass());
 
                     //first
+                    result.AddClassTypeRelation(reifSubj, RDFVocabulary.RDF.LIST.ToRDFOntologyClass());
                     result.AddAssertionRelation(reifSubj, rdfFirstProperty, conceptsEnum.Current.Item2);
 
                     //rest
