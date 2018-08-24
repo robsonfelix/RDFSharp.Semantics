@@ -665,6 +665,7 @@ namespace RDFSharp.Semantics.SKOS
             foreach (var l in this.Labels.Values) {
                 result.AddFact(l);
                 result.AddClassTypeRelation(l, RDFVocabulary.SKOS.SKOSXL.LABEL.ToRDFOntologyClass());
+                result.AddAssertionRelation(l, RDFVocabulary.SKOS.IN_SCHEME.ToRDFOntologyObjectProperty(), this);
             }
 
             //Assertions
