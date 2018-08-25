@@ -900,7 +900,7 @@ namespace RDFSharp.Semantics {
             var result      = new RDFGraph();
 
             //Definitions
-            foreach (var p in this.Where(prop => !RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(prop.PatternMemberID))) {
+            foreach (var p in this.Where(prop => !RDFBASEChecker.CheckReservedProperty(prop))) {
                 if  (p.IsAnnotationProperty()) {
                      result.AddTriple(new RDFTriple((RDFResource)p.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.ANNOTATION_PROPERTY));
                 }
