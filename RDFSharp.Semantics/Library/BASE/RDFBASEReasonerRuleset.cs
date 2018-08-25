@@ -317,7 +317,7 @@ namespace RDFSharp.Semantics
             var type             = RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty();
 
             //Calculate the set of available classes on which to perform the reasoning (exclude BASE classes and literal-compatible classes)
-            var availableclasses = ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
+            var availableclasses = ontology.Model.ClassModel.Where(cls => !RDFBASEChecker.CheckReservedClass(cls)
                                                                              && !ontology.Model.ClassModel.CheckIsLiteralCompatible(cls));
             foreach (var c      in availableclasses) {
 

@@ -484,7 +484,7 @@ namespace RDFSharp.Semantics
 
 
                 #region Step 5: Init Data
-                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID)
+                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFBASEChecker.CheckReservedClass(cls)
                                                                                 && !ontology.Model.ClassModel.CheckIsLiteralCompatible(cls))) {
                     foreach(var t  in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
                         var f       = ontology.Data.SelectFact(t.Subject.ToString());
@@ -923,7 +923,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 6.6: Finalize ClassModel [RDFS:SubClassOf|OWL:EquivalentClass|OWL:DisjointWith]]
-                foreach (var c in ontology.Model.ClassModel.Where(cls => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(cls.PatternMemberID))) {
+                foreach (var c in ontology.Model.ClassModel.Where(cls => !RDFBASEChecker.CheckReservedClass(cls))) {
 
                     #region SubClassOf
                     foreach (var scof in subclassOf.SelectTriplesBySubject((RDFResource)c.Value)) {

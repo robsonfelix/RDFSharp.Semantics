@@ -856,16 +856,16 @@ namespace RDFSharp.Semantics {
         /// Gets a graph representation of this ontology class model, exporting inferences according to the selected behavior
         /// </summary>
         public RDFGraph ToRDFGraph(RDFSemanticsEnums.RDFOntologyInferenceExportBehavior infexpBehavior) {
-            var result        = new RDFGraph();
+            var result           = new RDFGraph();
 
             //Definitions
-            foreach(var    c in this.Where(c => !RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(c.PatternMemberID))) {
+            foreach(var    c    in this.Where(c => !RDFBASEChecker.CheckReservedClass(c))) {
 
                 //Restriction
                 if (c.IsRestrictionClass()) {
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.RDF.TYPE, RDFVocabulary.OWL.RESTRICTION));
                     result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ON_PROPERTY, (RDFResource)((RDFOntologyRestriction)c).OnProperty.Value));
-                    if (c is RDFOntologyAllValuesFromRestriction) {
+                    if (c       is RDFOntologyAllValuesFromRestriction) {
                         result.AddTriple(new RDFTriple((RDFResource)c.Value, RDFVocabulary.OWL.ALL_VALUES_FROM, (RDFResource)((RDFOntologyAllValuesFromRestriction)c).FromClass.Value));
                      }
                      else if (c is RDFOntologySomeValuesFromRestriction) {
