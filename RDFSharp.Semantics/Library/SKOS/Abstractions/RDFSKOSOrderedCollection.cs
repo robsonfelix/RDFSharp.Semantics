@@ -140,9 +140,6 @@ namespace RDFSharp.Semantics.SKOS
         /// </summary>
         public RDFOntologyData ToRDFOntologyData() {
             var result                  = new RDFOntologyData();
-            var rdfFirstProperty        = RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty();
-            var rdfRestProperty         = RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty();
-            var rdfNilFact              = RDFVocabulary.RDF.NIL.ToRDFOntologyFact();
 
             //OrderedCollection
             result.AddFact(this);
@@ -155,9 +152,9 @@ namespace RDFSharp.Semantics.SKOS
             //Concepts
             var reifSubj                = new RDFOntologyFact((RDFResource)this.Representative.Value);
             if (this.ConceptsCount     == 0) {
-                result.AddClassTypeRelation(reifSubj, RDFVocabulary.RDF.LIST.ToRDFOntologyClass());
-                result.AddAssertionRelation(reifSubj, rdfFirstProperty, rdfNilFact);
-                result.AddAssertionRelation(reifSubj, rdfRestProperty,  rdfNilFact);
+                result.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(reifSubj,  RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(),  RDFVocabulary.RDF.LIST.ToRDFOntologyClass()));
+                result.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(reifSubj, RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty(), RDFVocabulary.RDF.NIL.ToRDFOntologyFact()));
+                result.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(reifSubj, RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty(),  RDFVocabulary.RDF.NIL.ToRDFOntologyFact()));
             }
             else {
                 var itemCounter         = 0;
@@ -167,18 +164,18 @@ namespace RDFSharp.Semantics.SKOS
                     result.AddClassTypeRelation(conceptsEnum.Current.Item2, RDFVocabulary.SKOS.CONCEPT.ToRDFOntologyClass());
 
                     //first
-                    result.AddClassTypeRelation(reifSubj, RDFVocabulary.RDF.LIST.ToRDFOntologyClass());
-                    result.AddAssertionRelation(reifSubj, rdfFirstProperty, conceptsEnum.Current.Item2);
+                    result.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(reifSubj,  RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(),  RDFVocabulary.RDF.LIST.ToRDFOntologyClass()));
+                    result.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(reifSubj, RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty(), conceptsEnum.Current.Item2));
 
                     //rest
                     itemCounter++;
                     if (itemCounter     < this.ConceptsCount) {
                         var newReifSubj = new RDFOntologyFact(new RDFResource());
-                        result.AddAssertionRelation(reifSubj, rdfRestProperty, newReifSubj);
+                        result.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(reifSubj, RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty(), newReifSubj));
                         reifSubj        = newReifSubj;
                     }
                     else {
-                        result.AddAssertionRelation(reifSubj, rdfRestProperty, rdfNilFact);
+                        result.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(reifSubj, RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty(), RDFVocabulary.RDF.NIL.ToRDFOntologyFact()));
                     }
                 }
             }
