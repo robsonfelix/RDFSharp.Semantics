@@ -33,13 +33,6 @@ namespace RDFSharp.Semantics
         internal static Boolean CheckReservedClass(RDFOntologyClass ontClass) {
             return (RDFBASEOntology.Instance.Model.ClassModel.Classes.ContainsKey(ontClass.PatternMemberID));
         }
-        /// <summary>
-        /// Checks if the given class is a reserved BASE ontology class, but does not consider 
-        /// it as reserved if it is contained in the provided list of exception classes
-        /// </summary>
-        internal static Boolean CheckReservedClassWithException(RDFOntologyClass ontClass, List<RDFOntologyClass> unreservedClasses) {
-            return (CheckReservedClass(ontClass) && !unreservedClasses.Any(x => x.Equals(ontClass)));
-        }
 
         /// <summary>
         /// Checks if the given childclass can be set subclassof the given motherclass
@@ -81,13 +74,6 @@ namespace RDFSharp.Semantics
         /// </summary>
         internal static Boolean CheckReservedProperty(RDFOntologyProperty ontProperty) {
             return (RDFBASEOntology.Instance.Model.PropertyModel.Properties.ContainsKey(ontProperty.PatternMemberID));
-        }
-        /// <summary>
-        /// Checks if the given property is a reserved BASE ontology property, but does not consider 
-        /// it as reserved if it is contained in the provided list of exception properties
-        /// </summary>
-        internal static Boolean CheckReservedPropertyWithException(RDFOntologyProperty ontProperty, List<RDFOntologyProperty> unreservedProperties) {
-            return (CheckReservedProperty(ontProperty) && !unreservedProperties.Any(x => x.Equals(ontProperty)));
         }
 
         /// <summary>

@@ -286,8 +286,8 @@ namespace RDFSharp.Semantics
                                                     RDFOntologyClass ontologyClass) {
             if (ontologyFact != null && ontologyClass != null) {
 
-                //Enforce preliminary check on usage of BASE classes (allowed exceptions: rdf:List)
-                if (!RDFBASEChecker.CheckReservedClassWithException(ontologyClass, new List<RDFOntologyClass>() { RDFVocabulary.RDF.LIST.ToRDFOntologyClass() })) {
+                //Enforce preliminary check on usage of BASE classes
+                if (!RDFBASEChecker.CheckReservedClass(ontologyClass)) {
 
                      //Enforce taxonomy checks before adding the ClassType relation
                      if (RDFBASEChecker.CheckClassTypeCompatibility(ontologyClass)) {
@@ -367,8 +367,7 @@ namespace RDFSharp.Semantics
             if (aFact              != null && objectProperty != null && bFact != null) {
 
                 //Enforce preliminary check on usage of BASE properties
-                var unreservedProps = new List<RDFOntologyProperty>() { RDFVocabulary.RDF.FIRST.ToRDFOntologyProperty(), RDFVocabulary.RDF.REST.ToRDFOntologyProperty() };
-                if (!RDFBASEChecker.CheckReservedPropertyWithException(objectProperty, unreservedProps)) {
+                if (!RDFBASEChecker.CheckReservedProperty(objectProperty)) {
 
                      //Enforce taxonomy checks before adding the assertion
                      //Creation of transitive cycles is not allowed (OWL-DL)
@@ -403,8 +402,7 @@ namespace RDFSharp.Semantics
             if (ontologyFact       != null && datatypeProperty != null && ontologyLiteral != null) {
 
                 //Enforce preliminary check on usage of BASE properties
-                var unreservedProps = new List<RDFOntologyProperty>() { RDFVocabulary.RDF.FIRST.ToRDFOntologyProperty(), RDFVocabulary.RDF.REST.ToRDFOntologyProperty() };
-                if (!RDFBASEChecker.CheckReservedPropertyWithException(datatypeProperty, unreservedProps)) {
+                if (!RDFBASEChecker.CheckReservedProperty(datatypeProperty)) {
                      this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, datatypeProperty, ontologyLiteral));
                      this.AddLiteral(ontologyLiteral);
                 }

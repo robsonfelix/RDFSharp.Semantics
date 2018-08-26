@@ -483,8 +483,7 @@ namespace RDFSharp.Semantics
 
 
                 #region Step 5: Init Data
-                var unreservedCls   = new List<RDFOntologyClass>() { RDFVocabulary.RDF.LIST.ToRDFOntologyClass() };
-                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFBASEChecker.CheckReservedClassWithException(cls, unreservedCls)
+                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFBASEChecker.CheckReservedClass(cls)
                                                                                 && !ontology.Model.ClassModel.CheckIsLiteralCompatible(cls))) {
                     foreach(var t  in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
                         var f       = ontology.Data.SelectFact(t.Subject.ToString());
@@ -1027,8 +1026,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Assertion
-                var unreservedProps   = new List<RDFOntologyProperty>() { RDFVocabulary.RDF.FIRST.ToRDFOntologyProperty(), RDFVocabulary.RDF.REST.ToRDFOntologyProperty() };
-                foreach (var p       in ontology.Model.PropertyModel.Where(prop => !RDFBASEChecker.CheckReservedPropertyWithException(prop, unreservedProps)
+                foreach (var p       in ontology.Model.PropertyModel.Where(prop => !RDFBASEChecker.CheckReservedProperty(prop)
                                                                                         && !prop.IsAnnotationProperty())) {
                     foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value).Where(triple => !triple.Subject.Equals(ontology)
                                                                                                                    && !ontology.Model.ClassModel.Classes.ContainsKey(triple.Subject.PatternMemberID)
@@ -1064,7 +1062,7 @@ namespace RDFSharp.Semantics
                         }
 
                         //Check if the property is an owl:DatatypeProperty
-                        else if (p.IsDatatypeProperty()) {
+                        else if(p.IsDatatypeProperty()) {
                             if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
                                 ontology.Data.AddAssertionRelation(subjFct, (RDFOntologyDatatypeProperty)p, ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
@@ -1074,30 +1072,6 @@ namespace RDFSharp.Semantics
                                 //from graph, because datatype property links to a fact
                                 RDFSemanticsEvents.RaiseSemanticsWarning(String.Format("Assertion relation on fact '{0}' cannot be imported from graph, because datatype property '{1}' links to a fact.", t.Subject, p));
 
-                            }
-                        }
-
-                        //Threat the property as plain rdf:Property
-                        else {
-                            if (t.TripleFlavor     == RDFModelEnums.RDFTripleFlavors.SPO) {
-
-                                //Avoid potential OWL-Full condition: assertions cannot have classes or properties as object
-                                if (ontology.Model.ClassModel.SelectClass(t.Object.ToString())       == null  && 
-                                    ontology.Model.PropertyModel.SelectProperty(t.Object.ToString()) == null)  { 
-
-                                    //Create the fact even if not explicitly classtyped
-                                    var objFct      = ontology.Data.SelectFact(t.Object.ToString());
-                                    if (objFct     == null) {
-                                        objFct      = (new RDFResource(t.Object.ToString())).ToRDFOntologyFact();
-                                        ontology.Data.AddFact(objFct);
-                                    }
-                                    ontology.Data.AddAssertionRelation(subjFct, ((RDFResource)p.Value).ToRDFOntologyObjectProperty(), objFct);
-
-                                }
-
-                            }
-                            else {
-                                ontology.Data.AddAssertionRelation(subjFct, ((RDFResource)p.Value).ToRDFOntologyDatatypeProperty(), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
                             }
                         }
 
