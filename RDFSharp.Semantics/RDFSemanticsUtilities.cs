@@ -53,6 +53,7 @@ namespace RDFSharp.Semantics
                 var rdfType         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.TYPE);
                 var rdfFirst        = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST);
                 var rdfRest         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.REST);
+                var skosMemberList  = ontGraph.SelectTriplesByPredicate(RDFVocabulary.SKOS.MEMBER_LIST);
                 var subclassOf      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_CLASS_OF);
                 var subpropOf       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_PROPERTY_OF);
                 var domain          = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.DOMAIN);
@@ -977,7 +978,7 @@ namespace RDFSharp.Semantics
                 }
                 #endregion
 
-                #region Step 6.7: Finalize Data [OWL:SameAs|OWL:DifferentFrom|ASSERTIONS]
+                #region Step 6.7: Finalize Data [OWL:SameAs|OWL:DifferentFrom|SKOS:OrderedCollection|ASSERTIONS]
 
                 #region SameAs
                 foreach (var t            in sameAs) {
@@ -1021,6 +1022,58 @@ namespace RDFSharp.Semantics
                          }
 
                          ontology.Data.AddDifferentFromRelation(subjFct, objFct);
+                    }
+                }
+                #endregion
+
+                #region OrderedCollection (SKOS)
+                foreach (var ordCol             in skosMemberList) {
+                    if (ordCol.TripleFlavor     == RDFModelEnums.RDFTripleFlavors.SPO) {
+                        var ordColRepresentFact  = new RDFOntologyFact((RDFResource)ordCol.Object);
+
+                        //Representative of skos:OrderedCollection is a fact of type rdf:List
+                        ontology.Data.AddFact(ordColRepresentFact);
+                        
+                        #region DeserializeOrderedCollection
+                        var nilFound             = false;
+                        var itemRest             = (RDFResource)ordCol.Object;
+                        while (!nilFound) {
+                            ontology.Data.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(itemRest.ToRDFOntologyFact(), RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), RDFVocabulary.RDF.LIST.ToRDFOntologyClass()));
+
+                            #region rdf:first
+                            var first            = rdfFirst.SelectTriplesBySubject(itemRest)
+                                                           .FirstOrDefault();
+                            if (first           != null && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
+
+                                //Items of skos:OrderedCollection are facts of type skos:Concept
+                                ontology.Data.AddFact(((RDFResource)first.Object).ToRDFOntologyFact());
+                                ontology.Data.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(((RDFResource)first.Object).ToRDFOntologyFact(), RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), RDFVocabulary.SKOS.CONCEPT.ToRDFOntologyClass()));
+                                ontology.Data.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(itemRest.ToRDFOntologyFact(), RDFVocabulary.RDF.FIRST.ToRDFOntologyObjectProperty(), ((RDFResource)first.Object).ToRDFOntologyFact()));
+                                
+                                #region rdf:rest
+                                var rest         = rdfRest.SelectTriplesBySubject(itemRest)
+                                                          .FirstOrDefault();
+                                if (rest        != null) {
+                                    if (rest.Object.Equals(RDFVocabulary.RDF.NIL)) {
+                                        ontology.Data.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(itemRest.ToRDFOntologyFact(), RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty(), RDFVocabulary.RDF.NIL.ToRDFOntologyFact()));
+                                        nilFound = true;
+                                    }
+                                    else  {
+                                        ontology.Data.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(itemRest.ToRDFOntologyFact(), RDFVocabulary.RDF.REST.ToRDFOntologyObjectProperty(), ((RDFResource)rest.Object).ToRDFOntologyFact()));
+                                        itemRest = (RDFResource)rest.Object;
+                                    }
+                                }
+                                #endregion
+
+                            }
+                            else {
+                                nilFound         = true;
+                            }
+                            #endregion
+
+                        }
+                        #endregion
+
                     }
                 }
                 #endregion
