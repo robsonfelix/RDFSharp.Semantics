@@ -151,11 +151,11 @@ namespace RDFSharp.Semantics.SKOS
 
             //Representative
             result.AddFact(this.Representative);
-            result.AddClassTypeRelation(this.Representative, RDFVocabulary.RDF.LIST.ToRDFOntologyClass());
 
             //Concepts
             var reifSubj                = new RDFOntologyFact((RDFResource)this.Representative.Value);
             if (this.ConceptsCount     == 0) {
+                result.AddClassTypeRelation(reifSubj, RDFVocabulary.RDF.LIST.ToRDFOntologyClass());
                 result.AddAssertionRelation(reifSubj, rdfFirstProperty, rdfNilFact);
                 result.AddAssertionRelation(reifSubj, rdfRestProperty,  rdfNilFact);
             }
