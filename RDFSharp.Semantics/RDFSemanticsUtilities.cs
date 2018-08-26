@@ -344,8 +344,7 @@ namespace RDFSharp.Semantics
                             while (!nilFound) {
 
                                 #region rdf:first
-                                var first  = ontGraph.SelectTriplesBySubject(itemRest)
-                                                     .SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST)
+                                var first  = rdfFirst.SelectTriplesBySubject(itemRest)
                                                      .FirstOrDefault();
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
                                     var compClass    = ontology.Model.ClassModel.SelectClass(first.Object.ToString());
@@ -361,9 +360,8 @@ namespace RDFSharp.Semantics
                                     }
 
                                     #region rdf:rest
-                                    var rest         = ontGraph.SelectTriplesBySubject(itemRest)
-                                                               .SelectTriplesByPredicate(RDFVocabulary.RDF.REST)
-                                                               .FirstOrDefault();
+                                    var rest         = rdfRest.SelectTriplesBySubject(itemRest)
+                                                              .FirstOrDefault();
                                     if (rest        != null) {
                                         if (rest.Object.Equals(RDFVocabulary.RDF.NIL)) {
                                             nilFound = true;
@@ -407,8 +405,7 @@ namespace RDFSharp.Semantics
                             while (!nilFound) {
 
                                 #region rdf:first
-                                var first  = ontGraph.SelectTriplesBySubject(itemRest)
-                                                     .SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST)
+                                var first  = rdfFirst.SelectTriplesBySubject(itemRest)
                                                      .FirstOrDefault();
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
                                     var compClass    = ontology.Model.ClassModel.SelectClass(first.Object.ToString());
@@ -425,9 +422,8 @@ namespace RDFSharp.Semantics
 
 
                                     #region rdf:rest
-                                    var rest         = ontGraph.SelectTriplesBySubject(itemRest)
-                                                               .SelectTriplesByPredicate(RDFVocabulary.RDF.REST)
-                                                               .FirstOrDefault();
+                                    var rest         = rdfRest.SelectTriplesBySubject(itemRest)
+                                                              .FirstOrDefault();
                                     if (rest        != null) {
                                         if (rest.Object.Equals(RDFVocabulary.RDF.NIL)) {
                                             nilFound = true;
@@ -700,8 +696,7 @@ namespace RDFSharp.Semantics
                             while (!nilFound) {
 
                                 #region rdf:first
-                                var first  = ontGraph.SelectTriplesBySubject(itemRest)
-                                                     .SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST)
+                                var first  = rdfFirst.SelectTriplesBySubject(itemRest)
                                                      .FirstOrDefault();
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
 
@@ -714,9 +709,8 @@ namespace RDFSharp.Semantics
                                     ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyEnumerateClass)ec, enumMember);
 
                                     #region rdf:rest
-                                    var rest         = ontGraph.SelectTriplesBySubject(itemRest)
-                                                               .SelectTriplesByPredicate(RDFVocabulary.RDF.REST)
-                                                               .FirstOrDefault();
+                                    var rest         = rdfRest.SelectTriplesBySubject(itemRest)
+                                                              .FirstOrDefault();
                                     if (rest        != null) {
                                         if (rest.Object.Equals(RDFVocabulary.RDF.NIL)) {
                                             nilFound = true;
@@ -769,16 +763,14 @@ namespace RDFSharp.Semantics
                             while (!nilFound) {
 
                                 #region rdf:first
-                                var first  = ontGraph.SelectTriplesBySubject(itemRest)
-                                                     .SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST)
+                                var first  = rdfFirst.SelectTriplesBySubject(itemRest)
                                                      .FirstOrDefault();
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
                                     ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)dr, ((RDFLiteral)first.Object).ToRDFOntologyLiteral());
 
                                     #region rdf:rest
-                                    var rest         = ontGraph.SelectTriplesBySubject(itemRest)
-                                                               .SelectTriplesByPredicate(RDFVocabulary.RDF.REST)
-                                                               .FirstOrDefault();
+                                    var rest         = rdfRest.SelectTriplesBySubject(itemRest)
+                                                              .FirstOrDefault();
                                     if (rest        != null) {
                                         if (rest.Object.Equals(RDFVocabulary.RDF.NIL)) {
                                             nilFound = true;
