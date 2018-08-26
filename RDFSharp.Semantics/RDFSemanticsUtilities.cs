@@ -1085,16 +1085,22 @@ namespace RDFSharp.Semantics
 
                         //Threat the property as plain rdf:Property
                         else {
-                            if (t.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
+                            if (t.TripleFlavor     == RDFModelEnums.RDFTripleFlavors.SPO) {
 
-                                //Create the fact even if not explicitly classtyped
-                                var objFct      = ontology.Data.SelectFact(t.Object.ToString());
-                                if (objFct     == null) {
-                                    objFct      = (new RDFResource(t.Object.ToString())).ToRDFOntologyFact();
-                                    ontology.Data.AddFact(objFct);
+                                //Avoid potential OWL-Full condition: assertions cannot have classes or properties as object
+                                if (ontology.Model.ClassModel.SelectClass(t.Object.ToString())       == null  && 
+                                    ontology.Model.PropertyModel.SelectProperty(t.Object.ToString()) == null)  { 
+
+                                    //Create the fact even if not explicitly classtyped
+                                    var objFct      = ontology.Data.SelectFact(t.Object.ToString());
+                                    if (objFct     == null) {
+                                        objFct      = (new RDFResource(t.Object.ToString())).ToRDFOntologyFact();
+                                        ontology.Data.AddFact(objFct);
+                                    }
+                                    ontology.Data.AddAssertionRelation(subjFct, ((RDFResource)p.Value).ToRDFOntologyObjectProperty(), objFct);
+
                                 }
 
-                                ontology.Data.AddAssertionRelation(subjFct, ((RDFResource)p.Value).ToRDFOntologyObjectProperty(), objFct);
                             }
                             else {
                                 ontology.Data.AddAssertionRelation(subjFct, ((RDFResource)p.Value).ToRDFOntologyDatatypeProperty(), ((RDFLiteral)t.Object).ToRDFOntologyLiteral());
