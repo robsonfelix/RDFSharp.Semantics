@@ -168,6 +168,12 @@ namespace RDFSharp.Semantics.SKOS
             if (collection != null) {
                 if (!this.Collections.ContainsKey(collection.PatternMemberID)) {
                      this.Collections.Add(collection.PatternMemberID, collection);
+                     //Also add concepts of the collection
+                     foreach (var cn in collection.Concepts.Values)
+                         this.AddConcept(cn);
+                     //Also adds collections of the collection
+                     foreach (var cl in collection.Collections.Values)
+                         this.AddCollection(cl);
                 }
             }
             return this;
@@ -177,9 +183,12 @@ namespace RDFSharp.Semantics.SKOS
         /// Adds the given ordered collection to the scheme
         /// </summary>
         public RDFSKOSConceptScheme AddOrderedCollection(RDFSKOSOrderedCollection orderedCollection) {
-            if (orderedCollection != null) {
+            if (orderedCollection    != null) {
                 if (!this.OrderedCollections.ContainsKey(orderedCollection.PatternMemberID)) {
                      this.OrderedCollections.Add(orderedCollection.PatternMemberID, orderedCollection);
+                     //Also add concepts of the ordered collection
+                     foreach (var cn in orderedCollection.Concepts.Values.OrderBy(x => x.Item1))
+                         this.AddConcept(cn.Item2);
                 }
             }
             return this;
