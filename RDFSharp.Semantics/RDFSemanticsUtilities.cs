@@ -51,6 +51,8 @@ namespace RDFSharp.Semantics
                 var priorVersion    = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.PRIOR_VERSION);
 
                 var rdfType         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.TYPE);
+                var rdfFirst        = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.FIRST);
+                var rdfRest         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDF.REST);
                 var subclassOf      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_CLASS_OF);
                 var subpropOf       = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.SUB_PROPERTY_OF);
                 var domain          = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.DOMAIN);
