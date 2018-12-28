@@ -8,3 +8,5 @@
 /RDFSharp.Semantics/obj
 /RDFSharp.Semantics.Reasoner/bin
 /RDFSharp.Semantics.Reasoner/obj
+/RDFSharp.Semantics.Validator/bin
+/RDFSharp.Semantics.Validator/obj

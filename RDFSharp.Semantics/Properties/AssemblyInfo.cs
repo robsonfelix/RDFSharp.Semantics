@@ -28,3 +28,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("2BE71F3A-943B-464A-8FE8-7D7BCBF23100")]
 //Internals
 [assembly: InternalsVisibleTo("RDFSharp.Semantics.Reasoner")]
+[assembly: InternalsVisibleTo("RDFSharp.Semantics.Validator")]
