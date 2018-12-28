@@ -287,10 +287,10 @@ namespace RDFSharp.Semantics
             if (ontologyFact != null && ontologyClass != null) {
 
                 //Enforce preliminary check on usage of BASE classes
-                if (!RDFBASEChecker.CheckReservedClass(ontologyClass)) {
+                if (!RDFOntologyChecker.CheckReservedClass(ontologyClass)) {
 
                      //Enforce taxonomy checks before adding the ClassType relation
-                     if (RDFBASEChecker.CheckClassTypeCompatibility(ontologyClass)) {
+                     if (RDFOntologyChecker.CheckClassTypeCompatibility(ontologyClass)) {
                          this.Relations.ClassType.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, RDFVocabulary.RDF.TYPE.ToRDFOntologyObjectProperty(), ontologyClass));
                      }
                      else {
@@ -320,7 +320,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                 //Enforce taxonomy checks before adding the SameAs relation
-                if (RDFBASEChecker.CheckSameAsCompatibility(this, aFact, bFact)) {
+                if (RDFOntologyChecker.CheckSameAsCompatibility(this, aFact, bFact)) {
                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), bFact));
                     this.Relations.SameAs.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.SAME_AS.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -343,7 +343,7 @@ namespace RDFSharp.Semantics
             if (aFact != null && bFact != null && !aFact.Equals(bFact)) {
 
                //Enforce taxonomy checks before adding the DifferentFrom relation
-                if (RDFBASEChecker.CheckDifferentFromCompatibility(this, aFact, bFact)) {
+                if (RDFOntologyChecker.CheckDifferentFromCompatibility(this, aFact, bFact)) {
                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(aFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), bFact));
                     this.Relations.DifferentFrom.AddEntry(new RDFOntologyTaxonomyEntry(bFact, RDFVocabulary.OWL.DIFFERENT_FROM.ToRDFOntologyObjectProperty(), aFact).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                 }
@@ -367,11 +367,11 @@ namespace RDFSharp.Semantics
             if (aFact              != null && objectProperty != null && bFact != null) {
 
                 //Enforce preliminary check on usage of BASE properties
-                if (!RDFBASEChecker.CheckReservedProperty(objectProperty)) {
+                if (!RDFOntologyChecker.CheckReservedProperty(objectProperty)) {
 
                      //Enforce taxonomy checks before adding the assertion
                      //Creation of transitive cycles is not allowed (OWL-DL)
-                     if (RDFBASEChecker.CheckTransitiveAssertionCompatibility(this, aFact, objectProperty, bFact)) {
+                     if (RDFOntologyChecker.CheckTransitiveAssertionCompatibility(this, aFact, objectProperty, bFact)) {
                          this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(aFact, objectProperty, bFact));
                      }
                      else {
@@ -402,7 +402,7 @@ namespace RDFSharp.Semantics
             if (ontologyFact       != null && datatypeProperty != null && ontologyLiteral != null) {
 
                 //Enforce preliminary check on usage of BASE properties
-                if (!RDFBASEChecker.CheckReservedProperty(datatypeProperty)) {
+                if (!RDFOntologyChecker.CheckReservedProperty(datatypeProperty)) {
                      this.Relations.Assertions.AddEntry(new RDFOntologyTaxonomyEntry(ontologyFact, datatypeProperty, ontologyLiteral));
                      this.AddLiteral(ontologyLiteral);
                 }

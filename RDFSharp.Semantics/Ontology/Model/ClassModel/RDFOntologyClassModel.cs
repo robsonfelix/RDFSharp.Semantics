@@ -325,10 +325,10 @@ namespace RDFSharp.Semantics {
             if (childClass != null && motherClass != null && !childClass.Equals(motherClass)) {
 
                 //Enforce preliminary checks on usage of BASE classes
-                if (!RDFBASEChecker.CheckReservedClass(childClass) && !RDFBASEChecker.CheckReservedClass(motherClass)) {
+                if (!RDFOntologyChecker.CheckReservedClass(childClass) && !RDFOntologyChecker.CheckReservedClass(motherClass)) {
 
                      //Enforce taxonomy checks before adding the subClassOf relation
-                     if (RDFBASEChecker.CheckSubClassOfCompatibility(this, childClass, motherClass)) {
+                     if (RDFOntologyChecker.CheckSubClassOfCompatibility(this, childClass, motherClass)) {
                          this.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(childClass, RDFVocabulary.RDFS.SUB_CLASS_OF.ToRDFOntologyObjectProperty(), motherClass));
                      }
                      else {
@@ -358,10 +358,10 @@ namespace RDFSharp.Semantics {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
                 //Enforce preliminary checks on usage of BASE classes
-                if (!RDFBASEChecker.CheckReservedClass(aClass) && !RDFBASEChecker.CheckReservedClass(bClass)) {
+                if (!RDFOntologyChecker.CheckReservedClass(aClass) && !RDFOntologyChecker.CheckReservedClass(bClass)) {
 
                      //Enforce taxonomy checks before adding the equivalentClass relation
-                     if (RDFBASEChecker.CheckEquivalentClassCompatibility(this, aClass, bClass)) {
+                     if (RDFOntologyChecker.CheckEquivalentClassCompatibility(this, aClass, bClass)) {
                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty(), bClass));
                          this.Relations.EquivalentClass.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFVocabulary.OWL.EQUIVALENT_CLASS.ToRDFOntologyObjectProperty(), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                      }
@@ -392,10 +392,10 @@ namespace RDFSharp.Semantics {
             if (aClass != null && bClass != null && !aClass.Equals(bClass)) {
 
                 //Enforce preliminary checks on usage of BASE classes
-                if (!RDFBASEChecker.CheckReservedClass(aClass) && !RDFBASEChecker.CheckReservedClass(bClass)) {
+                if (!RDFOntologyChecker.CheckReservedClass(aClass) && !RDFOntologyChecker.CheckReservedClass(bClass)) {
 
                     //Enforce taxonomy checks before adding the disjointWith relation
-                    if (RDFBASEChecker.CheckDisjointWithCompatibility(this, aClass, bClass)) {
+                    if (RDFOntologyChecker.CheckDisjointWithCompatibility(this, aClass, bClass)) {
                         this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(aClass, RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty(), bClass));
                         this.Relations.DisjointWith.AddEntry(new RDFOntologyTaxonomyEntry(bClass, RDFVocabulary.OWL.DISJOINT_WITH.ToRDFOntologyObjectProperty(), aClass).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
                      }
@@ -859,7 +859,7 @@ namespace RDFSharp.Semantics {
             var result           = new RDFGraph();
 
             //Definitions
-            foreach(var    c    in this.Where(c => !RDFBASEChecker.CheckReservedClass(c))) {
+            foreach(var    c    in this.Where(c => !RDFOntologyChecker.CheckReservedClass(c))) {
 
                 //Restriction
                 if (c.IsRestrictionClass()) {

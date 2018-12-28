@@ -56,12 +56,12 @@
     <Compile Include="RDFSemanticsExtensions.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
     <!-- Library -->
-    <Compile Include="Library\BASE\RDFBASEChecker.cs" />
-    <Compile Include="Library\BASE\RDFBASEHelper.cs" />
     <Compile Include="Library\BASE\RDFBASEOntology.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
+    <Compile Include="Ontology\RDFOntologyChecker.cs" />
+    <Compile Include="Ontology\RDFOntologyHelper.cs" />
     <Compile Include="Ontology\RDFOntologyResource.cs" />
     <Compile Include="Ontology\RDFOntologyTaxonomy.cs" />
     <Compile Include="Ontology\RDFOntologyTaxonomyEntry.cs" />

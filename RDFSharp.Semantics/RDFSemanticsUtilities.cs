@@ -292,7 +292,7 @@ namespace RDFSharp.Semantics
                         if (onProp        != null) {
 
                             //Ensure to not try creating a restriction over an annotation property
-                            if (!onProp.IsAnnotationProperty() && !RDFBASEChecker.CheckReservedProperty(onProp)) {
+                            if (!onProp.IsAnnotationProperty() && !RDFOntologyChecker.CheckReservedProperty(onProp)) {
                                  var restr = new RDFOntologyRestriction((RDFResource)r.Subject, onProp);
                                  ontology.Model.ClassModel.AddClass(restr);
                             }
@@ -484,7 +484,7 @@ namespace RDFSharp.Semantics
 
 
                 #region Step 5: Init Data
-                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFBASEChecker.CheckReservedClass(cls)
+                foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFOntologyChecker.CheckReservedClass(cls)
                                                                                 && !ontology.Model.ClassModel.CheckIsLiteralCompatible(cls))) {
                     foreach(var t  in rdfType.SelectTriplesByObject((RDFResource)c.Value)) {
                         var f       = ontology.Data.SelectFact(t.Subject.ToString());
@@ -805,7 +805,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 6.4: Finalize RDFS:[Domain|Range]
-                foreach (var p in ontology.Model.PropertyModel.Where(prop => !RDFBASEChecker.CheckReservedProperty(prop)
+                foreach (var p in ontology.Model.PropertyModel.Where(prop => !RDFOntologyChecker.CheckReservedProperty(prop)
                                                                                   && !prop.IsAnnotationProperty())) {
        
                     #region Domain
@@ -846,7 +846,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 6.5: Finalize PropertyModel [RDFS:SubPropertyOf|OWL:EquivalentProperty|OWL:InverseOf]
-                foreach (var p in ontology.Model.PropertyModel.Where(prop => !RDFBASEChecker.CheckReservedProperty(prop)
+                foreach (var p in ontology.Model.PropertyModel.Where(prop => !RDFOntologyChecker.CheckReservedProperty(prop)
                                                                                   && !prop.IsAnnotationProperty())) {
 
                     #region SubPropertyOf
@@ -919,7 +919,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Step 6.6: Finalize ClassModel [RDFS:SubClassOf|OWL:EquivalentClass|OWL:DisjointWith]]
-                foreach (var c in ontology.Model.ClassModel.Where(cls => !RDFBASEChecker.CheckReservedClass(cls))) {
+                foreach (var c in ontology.Model.ClassModel.Where(cls => !RDFOntologyChecker.CheckReservedClass(cls))) {
 
                     #region SubClassOf
                     foreach (var scof in subclassOf.SelectTriplesBySubject((RDFResource)c.Value)) {
@@ -1079,7 +1079,7 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #region Assertion
-                foreach (var p       in ontology.Model.PropertyModel.Where(prop => !RDFBASEChecker.CheckReservedProperty(prop)
+                foreach (var p       in ontology.Model.PropertyModel.Where(prop => !RDFOntologyChecker.CheckReservedProperty(prop)
                                                                                         && !prop.IsAnnotationProperty())) {
                     foreach(var    t in ontGraph.SelectTriplesByPredicate((RDFResource)p.Value).Where(triple => !triple.Subject.Equals(ontology)
                                                                                                                    && !ontology.Model.ClassModel.Classes.ContainsKey(triple.Subject.PatternMemberID)
