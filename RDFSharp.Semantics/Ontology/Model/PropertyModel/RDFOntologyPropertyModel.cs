@@ -199,14 +199,14 @@ namespace RDFSharp.Semantics {
         /// Exposes a typed enumerator on the property model's properties
         /// </summary>
         IEnumerator<RDFOntologyProperty> IEnumerable<RDFOntologyProperty>.GetEnumerator() {
-            return this.Properties.Values.GetEnumerator();
+            return this.PropertiesEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the property model's properties
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Properties.Values.GetEnumerator();
+            return this.PropertiesEnumerator;
         }
         #endregion
 

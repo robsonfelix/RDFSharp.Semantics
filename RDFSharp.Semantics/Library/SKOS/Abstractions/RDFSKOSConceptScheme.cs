@@ -135,14 +135,14 @@ namespace RDFSharp.Semantics.SKOS
         /// Exposes a typed enumerator on the scheme's concepts
         /// </summary>
         IEnumerator<RDFSKOSConcept> IEnumerable<RDFSKOSConcept>.GetEnumerator() {
-            return this.Concepts.Values.GetEnumerator();
+            return this.ConceptsEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the scheme's concepts
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Concepts.Values.GetEnumerator();
+            return this.ConceptsEnumerator;
         }
         #endregion
 

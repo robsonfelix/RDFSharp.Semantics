@@ -95,14 +95,14 @@ namespace RDFSharp.Semantics
         /// Exposes a typed enumerator on the data's facts
         /// </summary>
         IEnumerator<RDFOntologyFact> IEnumerable<RDFOntologyFact>.GetEnumerator() {
-            return this.Facts.Values.GetEnumerator();
+            return this.FactsEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the data's facts
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Facts.Values.GetEnumerator();
+            return this.FactsEnumerator;
         }
         #endregion
 

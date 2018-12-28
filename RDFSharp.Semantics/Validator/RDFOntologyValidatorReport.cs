@@ -67,14 +67,14 @@ namespace RDFSharp.Semantics
         /// Exposes a typed enumerator on the validation report's evidences
         /// </summary>
         IEnumerator<RDFOntologyValidatorEvidence> IEnumerable<RDFOntologyValidatorEvidence>.GetEnumerator() {
-            return this.Evidences.GetEnumerator();
+            return this.EvidencesEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the validation report's evidences
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Evidences.GetEnumerator();
+            return this.EvidencesEnumerator;
         }
         #endregion
 

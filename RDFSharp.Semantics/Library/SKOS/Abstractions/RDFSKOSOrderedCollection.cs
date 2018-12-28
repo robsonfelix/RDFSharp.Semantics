@@ -69,6 +69,8 @@ namespace RDFSharp.Semantics.SKOS
         }
         #endregion
 
+        #region Methods
+
         #region Add
         /// <summary>
         /// Adds the given concept to the collection
@@ -182,6 +184,8 @@ namespace RDFSharp.Semantics.SKOS
 
             return result;
         }
+        #endregion
+
         #endregion
 
     }

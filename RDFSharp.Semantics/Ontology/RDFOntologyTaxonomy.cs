@@ -74,14 +74,14 @@ namespace RDFSharp.Semantics {
         /// Exposes a typed enumerator on the taxonomy entries
         /// </summary>
         IEnumerator<RDFOntologyTaxonomyEntry> IEnumerable<RDFOntologyTaxonomyEntry>.GetEnumerator() {
-            return this.Entries.Values.GetEnumerator();
+            return this.EntriesEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the taxonomy entries
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Entries.Values.GetEnumerator();
+            return this.EntriesEnumerator;
         }
         #endregion
 

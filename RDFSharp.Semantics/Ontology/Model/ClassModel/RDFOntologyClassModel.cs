@@ -145,14 +145,14 @@ namespace RDFSharp.Semantics {
         /// Exposes a typed enumerator on the class model's classes
         /// </summary>
         IEnumerator<RDFOntologyClass> IEnumerable<RDFOntologyClass>.GetEnumerator() {
-            return this.Classes.Values.GetEnumerator();
+            return this.ClassesEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the ontology class model's classes
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Classes.Values.GetEnumerator();
+            return this.ClassesEnumerator;
         }
         #endregion
 

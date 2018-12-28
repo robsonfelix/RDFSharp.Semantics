@@ -68,14 +68,14 @@ namespace RDFSharp.Semantics.Reasoner
         /// Exposes a typed enumerator on the reasoner report's evidences
         /// </summary>
         IEnumerator<RDFOntologyReasonerEvidence> IEnumerable<RDFOntologyReasonerEvidence>.GetEnumerator() {
-            return this.Evidences.Values.GetEnumerator();
+            return this.EvidencesEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the reasoner report's evidences
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Evidences.Values.GetEnumerator();
+            return this.EvidencesEnumerator;
         }
         #endregion
 

@@ -29,15 +29,17 @@ namespace RDFSharp.Semantics.Reasoner
 
         #region Properties
         /// <summary>
-        /// Description of the reasoner
-        /// </summary>
-        public String ReasonerDescription { get; internal set; }
-
-        /// <summary>
         /// Count of the rules composing the reasoner
         /// </summary>
         public Int32 RulesCount {
             get { return this.Rules.Count; }
+        }
+
+        /// <summary>
+        /// Gets the enumerator on the reasoner's rules for iteration
+        /// </summary>
+        public IEnumerator<RDFOntologyReasonerRule> RulesEnumerator {
+            get { return this.Rules.GetEnumerator(); }
         }
 
         /// <summary>
@@ -50,9 +52,8 @@ namespace RDFSharp.Semantics.Reasoner
         /// <summary>
         /// Default-ctor to build an empty ontology reasoner
         /// </summary>
-        internal RDFOntologyReasoner(String reasonerDescription) {
-            this.ReasonerDescription = reasonerDescription;
-            this.Rules               = new List<RDFOntologyReasonerRule>();
+        internal RDFOntologyReasoner() {
+            this.Rules = new List<RDFOntologyReasonerRule>();
         }
         #endregion
 
@@ -61,14 +62,14 @@ namespace RDFSharp.Semantics.Reasoner
         /// Exposes a typed enumerator on the reasoner's rules
         /// </summary>
         IEnumerator<RDFOntologyReasonerRule> IEnumerable<RDFOntologyReasonerRule>.GetEnumerator() {
-            return this.Rules.GetEnumerator();
+            return this.RulesEnumerator;
         }
 
         /// <summary>
         /// Exposes an untyped enumerator on the reasoner's rules
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() {
-            return this.Rules.GetEnumerator();
+            return this.RulesEnumerator;
         }
         #endregion
 
@@ -78,8 +79,8 @@ namespace RDFSharp.Semantics.Reasoner
         /// <summary>
         /// Creates a new reasoner with the given description
         /// </summary>
-        public static RDFOntologyReasoner CreateNew(String reasonerDescription) {
-            return new RDFOntologyReasoner(reasonerDescription);
+        public static RDFOntologyReasoner CreateNew() {
+            return new RDFOntologyReasoner();
         }
 
         /// <summary>
