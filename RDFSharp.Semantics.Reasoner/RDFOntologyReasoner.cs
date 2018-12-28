@@ -125,10 +125,10 @@ namespace RDFSharp.Semantics.Reasoner
                 var baseRules       = this.Rules.Where(x   => x.RulePriority <= RDFOntologyReasonerRuleset.RulesCount)
                                                 .OrderBy(x => x.RulePriority);
                 foreach (var bRule in baseRules) {
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of reasoning rule '{0}'...", bRule));
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Launching execution of BASE reasoning rule '{0}'...", bRule));
                     var bRuleReport = bRule.ExecuteRule(ontology);
                     report.Merge(bRuleReport);
-                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of reasoning rule '{0}': found {1} evidences.", bRule, bRuleReport.EvidencesCount));
+                    RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Completed execution of BASE reasoning rule '{0}': found {1} evidences.", bRule, bRuleReport.EvidencesCount));
                 }
                 #endregion
 
