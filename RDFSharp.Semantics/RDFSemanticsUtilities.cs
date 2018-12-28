@@ -15,7 +15,6 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using RDFSharp.Model;
@@ -37,8 +36,8 @@ namespace RDFSharp.Semantics
             if (ontGraph           != null) {
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Graph '{0}' is going to be parsed as Ontology: triples not having supported ontology semantics may be discarded.", ontGraph.Context));
 
-
                 #region Step 1: Prefetch
+                
                 var versionInfo     = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_INFO);
                 var versionIRI      = ontGraph.SelectTriplesByPredicate(RDFVocabulary.OWL.VERSION_IRI);
                 var comment         = ontGraph.SelectTriplesByPredicate(RDFVocabulary.RDFS.COMMENT);
@@ -88,7 +87,6 @@ namespace RDFSharp.Semantics
                 var importsAnn      = RDFVocabulary.OWL.IMPORTS.ToRDFOntologyAnnotationProperty();
                 #endregion
 
-
                 #region Step 2: Init Ontology
                 ontology            = new RDFOntology(new RDFResource(ontGraph.Context.ToString())).UnionWith(RDFBASEOntology.Instance);
                 ontology.Value      = new RDFResource(ontGraph.Context.ToString());
@@ -101,7 +99,6 @@ namespace RDFSharp.Semantics
                      }
                 }
                 #endregion
-
 
                 #region Step 3: Init PropertyModel
 
@@ -242,7 +239,6 @@ namespace RDFSharp.Semantics
                 #endregion
 
                 #endregion
-
 
                 #region Step 4: Init ClassModel
 
@@ -482,7 +478,6 @@ namespace RDFSharp.Semantics
 
                 #endregion
 
-
                 #region Step 5: Init Data
                 foreach (var c     in ontology.Model.ClassModel.Where(cls => !RDFOntologyChecker.CheckReservedClass(cls)
                                                                                 && !ontology.Model.ClassModel.CheckIsLiteralCompatible(cls))) {
@@ -496,7 +491,6 @@ namespace RDFSharp.Semantics
                     }
                 }
                 #endregion
-
 
                 #region Step 6: Finalize
 
@@ -1727,11 +1721,16 @@ namespace RDFSharp.Semantics
 
                 #endregion
 
+                #region Step 6.9: Finalize Ontology
+                ontology       = ontology.DifferenceWith(RDFBASEOntology.Instance);
+                ontology.Value = new RDFResource(ontGraph.Context.ToString());
                 #endregion
 
+                #endregion
 
+                RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Graph '{0}' has been parsed as Ontology.", ontGraph.Context));
             }
-            return ontology.DifferenceWith(RDFBASEOntology.Instance);
+            return ontology;
         }
 
         /// <summary>
