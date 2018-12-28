@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.Reasoner
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.Validator", "RDFSharp.Semantics.Validator\RDFSharp.Semantics.Validator.csproj", "{C8D60DDF-C944-497D-BE77-B04B185F1D21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.LinkedData", "RDFSharp.Semantics.LinkedData\RDFSharp.Semantics.LinkedData.csproj", "{5B864C1C-711A-4349-AA56-77EE3BFDC4E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{C8D60DDF-C944-497D-BE77-B04B185F1D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8D60DDF-C944-497D-BE77-B04B185F1D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8D60DDF-C944-497D-BE77-B04B185F1D21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B864C1C-711A-4349-AA56-77EE3BFDC4E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B864C1C-711A-4349-AA56-77EE3BFDC4E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B864C1C-711A-4349-AA56-77EE3BFDC4E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B864C1C-711A-4349-AA56-77EE3BFDC4E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

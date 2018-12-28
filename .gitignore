@@ -10,3 +10,5 @@
 /RDFSharp.Semantics.Reasoner/obj
 /RDFSharp.Semantics.Validator/bin
 /RDFSharp.Semantics.Validator/obj
+/RDFSharp.Semantics.LinkedData/bin
+/RDFSharp.Semantics.LinkedData/obj

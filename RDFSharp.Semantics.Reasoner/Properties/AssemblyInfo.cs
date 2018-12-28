@@ -17,7 +17,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RDFSharp.Semantics.Reasoner")]
-[assembly: AssemblyDescription("Evaluate OWL-DL ontologies with RDFSharp")]
+[assembly: AssemblyDescription("Evaluate OWL-DL ontologies with RDFSharp.Semantics")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marco De Salvo")]
 [assembly: AssemblyProduct("RDFSharp.Semantics")]

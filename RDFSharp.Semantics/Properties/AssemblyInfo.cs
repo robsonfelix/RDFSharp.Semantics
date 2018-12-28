@@ -29,3 +29,4 @@ using System.Runtime.InteropServices;
 //Internals
 [assembly: InternalsVisibleTo("RDFSharp.Semantics.Reasoner")]
 [assembly: InternalsVisibleTo("RDFSharp.Semantics.Validator")]
+[assembly: InternalsVisibleTo("RDFSharp.Semantics.LinkedData")]

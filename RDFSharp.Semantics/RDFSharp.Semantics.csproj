@@ -59,20 +59,6 @@
     <Compile Include="Library\BASE\RDFBASEChecker.cs" />
     <Compile Include="Library\BASE\RDFBASEHelper.cs" />
     <Compile Include="Library\BASE\RDFBASEOntology.cs" />
-    <Compile Include="Library\DC\RDFDCOntology.cs" />
-    <Compile Include="Library\FOAF\RDFFOAFOntology.cs" />
-    <Compile Include="Library\GEO\RDFGEOOntology.cs" />
-    <Compile Include="Library\SIOC\RDFSIOCOntology.cs" />
-    <Compile Include="Library\SKOS\RDFSKOSAnnotations.cs" />
-    <Compile Include="Library\SKOS\RDFSKOSChecker.cs" />
-    <Compile Include="Library\SKOS\RDFSKOSHelper.cs" />
-    <Compile Include="Library\SKOS\RDFSKOSOntology.cs" />
-    <Compile Include="Library\SKOS\RDFSKOSRelations.cs" />
-    <Compile Include="Library\SKOS\Abstractions\RDFSKOSCollection.cs" />
-    <Compile Include="Library\SKOS\Abstractions\RDFSKOSConcept.cs" />
-    <Compile Include="Library\SKOS\Abstractions\RDFSKOSConceptScheme.cs" />
-    <Compile Include="Library\SKOS\Abstractions\RDFSKOSLabel.cs" />
-    <Compile Include="Library\SKOS\Abstractions\RDFSKOSOrderedCollection.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
