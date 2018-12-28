@@ -41,7 +41,7 @@
   <ItemGroup>
     <Reference Include="RDFSharp, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RDFSharp.1.0.4\lib\net40\RDFSharp.dll</HintPath>
-	  <Private>True</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,7 +59,6 @@
     <Compile Include="Library\BASE\RDFBASEChecker.cs" />
     <Compile Include="Library\BASE\RDFBASEHelper.cs" />
     <Compile Include="Library\BASE\RDFBASEOntology.cs" />
-    <Compile Include="Library\BASE\RDFBASEReasonerRuleset.cs" />
     <Compile Include="Library\BASE\RDFBASEValidatorRuleset.cs" />
     <Compile Include="Library\DC\RDFDCOntology.cs" />
     <Compile Include="Library\FOAF\RDFFOAFOntology.cs" />
@@ -105,11 +104,6 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
-    <!-- Reasoner -->
-    <Compile Include="Reasoner\RDFOntologyReasoner.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerEvidence.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerReport.cs" />
-    <Compile Include="Reasoner\RDFOntologyReasonerRule.cs" />
     <!-- Validator -->
     <Compile Include="Validator\RDFOntologyValidator.cs" />
     <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />

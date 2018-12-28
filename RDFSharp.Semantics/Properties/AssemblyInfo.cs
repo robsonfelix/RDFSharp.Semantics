@@ -15,6 +15,7 @@
 */
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RDFSharp.Semantics")]
 [assembly: AssemblyDescription("Model OWL-DL ontologies with RDFSharp")]
@@ -25,3 +26,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.4")]
 [assembly: ComVisible(false)]
 [assembly: Guid("2BE71F3A-943B-464A-8FE8-7D7BCBF23100")]
+//Internals
+[assembly: InternalsVisibleTo("RDFSharp.Semantics.Reasoner")]

@@ -6,3 +6,5 @@
 /packages
 /RDFSharp.Semantics/bin
 /RDFSharp.Semantics/obj
+/RDFSharp.Semantics.Reasoner/bin
+/RDFSharp.Semantics.Reasoner/obj
