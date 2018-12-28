@@ -50,6 +50,11 @@
   <!-- RDFSharp.Semantics.Validator -->
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDFOntologyValidator.cs" />
+    <Compile Include="RDFOntologyValidatorEvidence.cs" />
+    <Compile Include="RDFOntologyValidatorReport.cs" />
+    <Compile Include="RDFOntologyValidatorRule.cs" />
+    <Compile Include="RDFOntologyValidatorRuleset.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RDFSharp.Semantics\RDFSharp.Semantics.csproj">

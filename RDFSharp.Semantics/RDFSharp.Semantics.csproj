@@ -59,7 +59,6 @@
     <Compile Include="Library\BASE\RDFBASEChecker.cs" />
     <Compile Include="Library\BASE\RDFBASEHelper.cs" />
     <Compile Include="Library\BASE\RDFBASEOntology.cs" />
-    <Compile Include="Library\BASE\RDFBASEValidatorRuleset.cs" />
     <Compile Include="Library\DC\RDFDCOntology.cs" />
     <Compile Include="Library\FOAF\RDFFOAFOntology.cs" />
     <Compile Include="Library\GEO\RDFGEOOntology.cs" />
@@ -104,14 +103,9 @@
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyAnnotationProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyDatatypeProperty.cs" />
     <Compile Include="Ontology\Model\PropertyModel\Properties\RDFOntologyObjectProperty.cs" />
-    <!-- Validator -->
-    <Compile Include="Validator\RDFOntologyValidator.cs" />
-    <Compile Include="Validator\RDFOntologyValidatorEvidence.cs" />
-    <Compile Include="Validator\RDFOntologyValidatorReport.cs" />
-    <Compile Include="Validator\RDFOntologyValidatorRule.cs" />
   </ItemGroup>
 
-  <!-- NuGet -->
+  <!-- NuGet Configurations -->
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
