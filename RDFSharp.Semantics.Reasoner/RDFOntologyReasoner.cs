@@ -118,6 +118,7 @@ namespace RDFSharp.Semantics.Reasoner
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner is going to be applied on Ontology '{0}'...", ontology.Value));
 
                 //STEP 1: Expand ontology
+                var ontologyValue   = ontology.Value;
                 ontology            = ontology.UnionWith(RDFBASEOntology.Instance);
 
                 //STEP 2: Execute BASE rules
@@ -146,6 +147,7 @@ namespace RDFSharp.Semantics.Reasoner
 
                 //STEP 4: Unexpand ontology
                 ontology            = ontology.DifferenceWith(RDFBASEOntology.Instance);
+                ontology.Value      = ontologyValue;
 
                 RDFSemanticsEvents.RaiseSemanticsInfo(String.Format("Reasoner has been applied on Ontology '{0}': found " + report.EvidencesCount + " evidences.", ontology.Value));
             }
