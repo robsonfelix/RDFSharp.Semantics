@@ -55,7 +55,6 @@
     <Compile Include="RDFSemanticsException.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
     <!-- Ontology -->
-    <Compile Include="Ontology\RDFBASEOntology.cs" />
     <Compile Include="Ontology\RDFOntology.cs" />
     <Compile Include="Ontology\RDFOntologyAnnotations.cs" />
     <Compile Include="Ontology\RDFOntologyChecker.cs" />
