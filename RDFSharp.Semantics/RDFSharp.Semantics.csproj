@@ -53,7 +53,6 @@
     <Compile Include="RDFSemanticsEnums.cs" />
     <Compile Include="RDFSemanticsEvents.cs" />
     <Compile Include="RDFSemanticsException.cs" />
-    <Compile Include="RDFSemanticsExtensions.cs" />
     <Compile Include="RDFSemanticsUtilities.cs" />
     <!-- Ontology -->
     <Compile Include="Ontology\RDFBASEOntology.cs" />

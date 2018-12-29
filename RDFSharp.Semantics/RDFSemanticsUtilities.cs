@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using RDFSharp.Model;
+using RDFSharp.Query;
 
 namespace RDFSharp.Semantics
 {
@@ -1771,6 +1772,116 @@ namespace RDFSharp.Semantics
 
             return result;
         }
+        #endregion
+
+        #region Extensions
+
+        #region Model Extensions
+        /// <summary>
+        /// Gets an ontology class of the given nature from the given RDF resource
+        /// </summary>
+        public static RDFOntologyClass ToRDFOntologyClass(this RDFResource ontResource,
+                                                            RDFSemanticsEnums.RDFOntologyClassNature nature = RDFSemanticsEnums.RDFOntologyClassNature.OWL) {
+            return new RDFOntologyClass(ontResource, nature);
+        }
+
+        /// <summary>
+        /// Gets an ontology property from the given RDF resource
+        /// </summary>
+        internal static RDFOntologyProperty ToRDFOntologyProperty(this RDFResource ontResource) {
+            return new RDFOntologyProperty(ontResource);
+        }
+
+        /// <summary>
+        /// Gets an ontology object property from the given RDF resource
+        /// </summary>
+        public static RDFOntologyObjectProperty ToRDFOntologyObjectProperty(this RDFResource ontResource) {
+            return new RDFOntologyObjectProperty(ontResource);
+        }
+
+        /// <summary>
+        /// Gets an ontology datatype property from the given RDF resource
+        /// </summary>
+        public static RDFOntologyDatatypeProperty ToRDFOntologyDatatypeProperty(this RDFResource ontResource) {
+            return new RDFOntologyDatatypeProperty(ontResource);
+        }
+
+        /// <summary>
+        /// Gets an ontology annotation property from the given RDF resource
+        /// </summary>
+        public static RDFOntologyAnnotationProperty ToRDFOntologyAnnotationProperty(this RDFResource ontResource) {
+            return new RDFOntologyAnnotationProperty(ontResource);
+        }
+
+        /// <summary>
+        /// Gets an ontology fact from the given RDF resource
+        /// </summary>
+        public static RDFOntologyFact ToRDFOntologyFact(this RDFResource ontResource) {
+            return new RDFOntologyFact(ontResource);
+        }
+
+        /// <summary>
+        /// Gets an ontology literal from the given RDF literal
+        /// </summary>
+        public static RDFOntologyLiteral ToRDFOntologyLiteral(this RDFLiteral ontLiteral) {
+            return new RDFOntologyLiteral(ontLiteral);
+        }
+        #endregion
+
+        #region Query Extensions
+        /// <summary>
+        /// Applies the given SPARQL SELECT query to the given ontology (which is converted into
+        /// a RDF graph including semantic inferences in respect of the given export behavior)
+        /// </summary>
+        public static RDFSelectQueryResult ApplyToOntology(this RDFSelectQuery selectQuery,
+                                                           RDFOntology ontology,
+                                                           RDFSemanticsEnums.RDFOntologyInferenceExportBehavior ontologyInferenceExportBehavior = RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.ModelAndData) {
+            if (selectQuery != null && ontology != null)
+                return selectQuery.ApplyToGraph(ontology.ToRDFGraph(ontologyInferenceExportBehavior));
+
+            return new RDFSelectQueryResult();
+        }
+
+        /// <summary>
+        /// Applies the given SPARQL ASK query to the given ontology (which is converted into
+        /// a RDF graph including semantic inferences in respect of the given export behavior)
+        /// </summary>
+        public static RDFAskQueryResult ApplyToOntology(this RDFAskQuery askQuery,
+                                                        RDFOntology ontology,
+                                                        RDFSemanticsEnums.RDFOntologyInferenceExportBehavior ontologyInferenceExportBehavior = RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.ModelAndData) {
+            if (askQuery != null && ontology != null)
+                return askQuery.ApplyToGraph(ontology.ToRDFGraph(ontologyInferenceExportBehavior));
+
+            return new RDFAskQueryResult();
+        }
+
+        /// <summary>
+        /// Applies the given SPARQL CONSTRUCT query to the given ontology (which is converted into
+        /// a RDF graph including semantic inferences in respect of the given export behavior)
+        /// </summary>
+        public static RDFConstructQueryResult ApplyToOntology(this RDFConstructQuery constructQuery,
+                                                              RDFOntology ontology,
+                                                              RDFSemanticsEnums.RDFOntologyInferenceExportBehavior ontologyInferenceExportBehavior = RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.ModelAndData) {
+            if (constructQuery != null && ontology != null)
+                return constructQuery.ApplyToGraph(ontology.ToRDFGraph(ontologyInferenceExportBehavior));
+
+            return new RDFConstructQueryResult(RDFNamespaceRegister.DefaultNamespace.ToString());
+        }
+
+        /// <summary>
+        /// Applies the given SPARQL DESCRIBE query to the given ontology (which is converted into
+        /// a RDF graph including semantic inferences in respect of the given export behavior)
+        /// </summary>
+        public static RDFDescribeQueryResult ApplyToOntology(this RDFDescribeQuery describeQuery,
+                                                             RDFOntology ontology,
+                                                             RDFSemanticsEnums.RDFOntologyInferenceExportBehavior ontologyInferenceExportBehavior = RDFSemanticsEnums.RDFOntologyInferenceExportBehavior.ModelAndData) {
+            if (describeQuery != null && ontology != null)
+                return describeQuery.ApplyToGraph(ontology.ToRDFGraph(ontologyInferenceExportBehavior));
+
+            return new RDFDescribeQueryResult(RDFNamespaceRegister.DefaultNamespace.ToString());
+        }
+        #endregion
+
         #endregion
 
     }
