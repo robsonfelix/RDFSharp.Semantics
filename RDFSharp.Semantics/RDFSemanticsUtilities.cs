@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using RDFSharp.Model;
@@ -347,7 +348,7 @@ namespace RDFSharp.Semantics
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
                                     var compClass    = ontology.Model.ClassModel.SelectClass(first.Object.ToString());
                                     if (compClass   != null) {
-                                        ontology.Model.ClassModel.AddUnionOfRelation((RDFOntologyUnionClass)uc, compClass);
+                                        ontology.Model.ClassModel.AddUnionOfRelation((RDFOntologyUnionClass)uc, new List<RDFOntologyClass>() { compClass });
                                     }
                                     else {
 
@@ -408,7 +409,7 @@ namespace RDFSharp.Semantics
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPO) {
                                     var compClass    = ontology.Model.ClassModel.SelectClass(first.Object.ToString());
                                     if (compClass   != null) {
-                                        ontology.Model.ClassModel.AddIntersectionOfRelation((RDFOntologyIntersectionClass)ic, compClass);
+                                        ontology.Model.ClassModel.AddIntersectionOfRelation((RDFOntologyIntersectionClass)ic, new List<RDFOntologyClass>() { compClass });
                                     }
                                     else {
 
@@ -701,7 +702,7 @@ namespace RDFSharp.Semantics
                                         enumMember   = (new RDFResource(first.Object.ToString())).ToRDFOntologyFact();
                                         ontology.Data.AddFact(enumMember);
                                     }
-                                    ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyEnumerateClass)ec, enumMember);
+                                    ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyEnumerateClass)ec, new List<RDFOntologyFact>() { enumMember });
 
                                     #region rdf:rest
                                     var rest         = rdfRest.SelectTriplesBySubject(itemRest)
@@ -761,7 +762,7 @@ namespace RDFSharp.Semantics
                                 var first  = rdfFirst.SelectTriplesBySubject(itemRest)
                                                      .FirstOrDefault();
                                 if (first != null   && first.TripleFlavor == RDFModelEnums.RDFTripleFlavors.SPL) {
-                                    ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)dr, ((RDFLiteral)first.Object).ToRDFOntologyLiteral());
+                                    ontology.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)dr, new List<RDFOntologyLiteral>() { ((RDFLiteral)first.Object).ToRDFOntologyLiteral() });
 
                                     #region rdf:rest
                                     var rest         = rdfRest.SelectTriplesBySubject(itemRest)

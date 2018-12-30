@@ -14,6 +14,7 @@
    limitations under the License.
 */
 
+using System.Collections.Generic;
 using RDFSharp.Model;
 
 namespace RDFSharp.Semantics.LinkedData.SKOS
@@ -114,8 +115,13 @@ namespace RDFSharp.Semantics.LinkedData.SKOS
             Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.SKOSXL.LABEL.ToString()));
 
             //UnionOf
-            Instance.Model.ClassModel.AddUnionOfRelation((RDFOntologyUnionClass)Instance.Model.ClassModel.SelectClass("bnode:ConceptCollection"), Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()));
-            Instance.Model.ClassModel.AddUnionOfRelation((RDFOntologyUnionClass)Instance.Model.ClassModel.SelectClass("bnode:ConceptCollection"), Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString()));
+            Instance.Model.ClassModel.AddUnionOfRelation(
+                (RDFOntologyUnionClass)Instance.Model.ClassModel.SelectClass("bnode:ConceptCollection"),
+                new List<RDFOntologyClass>() {
+                    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.CONCEPT.ToString()),
+                    Instance.Model.ClassModel.SelectClass(RDFVocabulary.SKOS.COLLECTION.ToString())
+                }
+            );
 
             #endregion
 

@@ -426,45 +426,45 @@ namespace RDFSharp.Semantics {
         }
 
         /// <summary>
-        /// Adds the "ontologyEnumerateClass -> owl:oneOf -> ontologyFact" relation to the class model 
+        /// Foreach of the given facts, adds the "ontologyEnumerateClass -> owl:oneOf -> ontologyFact" relation to the class model 
         /// </summary>
         public RDFOntologyClassModel AddOneOfRelation(RDFOntologyEnumerateClass ontologyEnumerateClass, 
-                                                      RDFOntologyFact ontologyFact) {
-            if (ontologyEnumerateClass != null && ontologyFact != null) {
-                this.Relations.OneOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyEnumerateClass, RDFVocabulary.OWL.ONE_OF.ToRDFOntologyObjectProperty(), ontologyFact));
+                                                      List<RDFOntologyFact> ontologyFacts) {
+            if (ontologyEnumerateClass != null && ontologyFacts != null) { 
+                ontologyFacts.ForEach(f => this.Relations.OneOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyEnumerateClass, RDFVocabulary.OWL.ONE_OF.ToRDFOntologyObjectProperty(), f)));
             }
             return this;
         }
 
         /// <summary>
-        /// Adds the "ontologyDataRangeClass -> owl:oneOf -> ontologyLiteral" relation to the class model 
+        /// Foreach of the given literals, adds the "ontologyDataRangeClass -> owl:oneOf -> ontologyLiteral" relation to the class model 
         /// </summary>
         public RDFOntologyClassModel AddOneOfRelation(RDFOntologyDataRangeClass ontologyDataRangeClass, 
-                                                      RDFOntologyLiteral ontologyLiteral) {
-            if (ontologyDataRangeClass != null && ontologyLiteral != null) {
-                this.Relations.OneOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyDataRangeClass, RDFVocabulary.OWL.ONE_OF.ToRDFOntologyDatatypeProperty(), ontologyLiteral));
+                                                      List<RDFOntologyLiteral> ontologyLiterals) {
+            if (ontologyDataRangeClass != null && ontologyLiterals != null) { 
+                ontologyLiterals.ForEach(l => this.Relations.OneOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyDataRangeClass, RDFVocabulary.OWL.ONE_OF.ToRDFOntologyDatatypeProperty(), l)));
             }
             return this;
         }
 
         /// <summary>
-        /// Adds the "ontologyIntersectionClass -> owl:intersectionOf -> ontologyClass" relation to the class model 
+        /// Foreach of the given classes, adds the "ontologyIntersectionClass -> owl:intersectionOf -> ontologyClass" relation to the class model 
         /// </summary>
         public RDFOntologyClassModel AddIntersectionOfRelation(RDFOntologyIntersectionClass ontologyIntersectionClass, 
-                                                               RDFOntologyClass ontologyClass) {
-            if (ontologyIntersectionClass != null && ontologyClass != null && !ontologyIntersectionClass.Equals(ontologyClass)) {
-                this.Relations.IntersectionOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyIntersectionClass, RDFVocabulary.OWL.INTERSECTION_OF.ToRDFOntologyObjectProperty(), ontologyClass));
+                                                               List<RDFOntologyClass> ontologyClasses) {
+            if (ontologyIntersectionClass != null && ontologyClasses != null && !ontologyClasses.Any(c => c.Equals(ontologyIntersectionClass))) { 
+                ontologyClasses.ForEach(c => this.Relations.IntersectionOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyIntersectionClass, RDFVocabulary.OWL.INTERSECTION_OF.ToRDFOntologyObjectProperty(), c)));
             }
             return this;
         }
 
         /// <summary>
-        /// Adds the "ontologyUnionClass -> owl:unionOf -> ontologyClass" relation to the class model 
+        /// Foreach of the given classes, adds the "ontologyUnionClass -> owl:unionOf -> ontologyClass" relation to the class model 
         /// </summary>
         public RDFOntologyClassModel AddUnionOfRelation(RDFOntologyUnionClass ontologyUnionClass, 
-                                                        RDFOntologyClass ontologyClass) {
-            if (ontologyUnionClass != null && ontologyClass != null && !ontologyUnionClass.Equals(ontologyClass)) {
-                this.Relations.UnionOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyUnionClass, RDFVocabulary.OWL.UNION_OF.ToRDFOntologyObjectProperty(), ontologyClass));
+                                                        List<RDFOntologyClass> ontologyClasses) {
+            if (ontologyUnionClass != null && ontologyClasses != null && !ontologyClasses.Any(c => c.Equals(ontologyUnionClass))) { 
+                ontologyClasses.ForEach(c => this.Relations.UnionOf.AddEntry(new RDFOntologyTaxonomyEntry(ontologyUnionClass, RDFVocabulary.OWL.UNION_OF.ToRDFOntologyObjectProperty(), c)));
             }
             return this;
         }

@@ -14,6 +14,7 @@
    limitations under the License.
 */
 
+using System.Collections.Generic;
 using RDFSharp.Model;
 
 namespace RDFSharp.Semantics.LinkedData.FOAF
@@ -161,8 +162,13 @@ namespace RDFSharp.Semantics.LinkedData.FOAF
             Instance.Model.ClassModel.AddDisjointWithRelation(Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PROJECT.ToString()), Instance.Model.ClassModel.SelectClass(RDFVocabulary.FOAF.PERSON.ToString()));
 
             //OneOf
-            Instance.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)Instance.Model.ClassModel.SelectClass("bnode:Genders"), new RDFOntologyLiteral(new RDFTypedLiteral("female", RDFModelEnums.RDFDatatypes.XSD_STRING)));
-            Instance.Model.ClassModel.AddOneOfRelation((RDFOntologyDataRangeClass)Instance.Model.ClassModel.SelectClass("bnode:Genders"), new RDFOntologyLiteral(new RDFTypedLiteral("male", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            Instance.Model.ClassModel.AddOneOfRelation(
+                (RDFOntologyDataRangeClass)Instance.Model.ClassModel.SelectClass("bnode:Genders"), 
+                new List<RDFOntologyLiteral>() {
+                    new RDFOntologyLiteral(new RDFTypedLiteral("female", RDFModelEnums.RDFDatatypes.XSD_STRING)),
+                    new RDFOntologyLiteral(new RDFTypedLiteral("male", RDFModelEnums.RDFDatatypes.XSD_STRING))
+                }
+            );
 
             #endregion
 
