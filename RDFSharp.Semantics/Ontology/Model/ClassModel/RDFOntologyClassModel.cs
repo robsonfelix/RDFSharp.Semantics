@@ -172,6 +172,13 @@ namespace RDFSharp.Semantics {
         }
 
         /// <summary>
+        /// Adds the given restriction class to the ontology class model
+        /// </summary>
+        public RDFOntologyClassModel AddRestriction(RDFOntologyRestriction ontologyRestriction) {
+            return this.AddClass(ontologyRestriction);
+        }
+
+        /// <summary>
         /// Adds the given standard annotation to the given ontology class
         /// </summary>
         public RDFOntologyClassModel AddStandardAnnotation(RDFSemanticsEnums.RDFOntologyStandardAnnotation standardAnnotation,
@@ -474,6 +481,13 @@ namespace RDFSharp.Semantics {
                 }
             }
             return this;
+        }
+
+        /// <summary>
+        /// Removes the given restriction class from the ontology class model
+        /// </summary>
+        public RDFOntologyClassModel RemoveRestriction(RDFOntologyRestriction ontologyRestriction) {
+            return this.RemoveClass(ontologyRestriction);
         }
 
         /// <summary>
