@@ -707,21 +707,18 @@ namespace RDFSharp.Semantics
             var result       = new RDFOntologyData();
             if (ontClass    != null && ontology != null) {
 
-                //Merge BASE ontology
-                ontology     = ontology.UnionWith(RDFBASEOntology.Instance);
+                //Expand ontology
+                var expOnt   = ontology.UnionWith(RDFBASEOntology.Instance);
 
                 //DataRange/Literal-Compatible
-                if (ontology.Model.ClassModel.CheckIsLiteralCompatible(ontClass)) {
-                    result   = ontology.GetMembersOfLiteralCompatibleClass(ontClass);
+                if (expOnt.Model.ClassModel.CheckIsLiteralCompatible(ontClass)) {
+                    result   = expOnt.GetMembersOfLiteralCompatibleClass(ontClass);
                 }
 
                 //Restriction/Composite/Enumerate/Class
                 else {
-                    result   = ontology.GetMembersOfNonLiteralCompatibleClass(ontClass);
+                    result   = expOnt.GetMembersOfNonLiteralCompatibleClass(ontClass);
                 }
-
-                //Unmerge BASE ontology
-                ontology     = ontology.DifferenceWith(RDFBASEOntology.Instance);
 
             }
             return result;
