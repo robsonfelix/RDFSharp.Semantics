@@ -726,7 +726,7 @@ namespace RDFSharp.Semantics {
             #endregion
 
             #region Materializations
-            //SubClassOf
+            //These materialized inferences are needed in order to properly cleanup working ontologies after reasoning activities 
             Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.XSD.BYTE.ToRDFOntologyClass(), subClassOf, RDFVocabulary.XSD.INT.ToRDFOntologyClass()).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
             Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.XSD.BYTE.ToRDFOntologyClass(), subClassOf, RDFVocabulary.XSD.LONG.ToRDFOntologyClass()).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
             Instance.Model.ClassModel.Relations.SubClassOf.AddEntry(new RDFOntologyTaxonomyEntry(RDFVocabulary.XSD.BYTE.ToRDFOntologyClass(), subClassOf, RDFVocabulary.XSD.INTEGER.ToRDFOntologyClass()).SetInference(RDFSemanticsEnums.RDFOntologyInferenceType.API));
