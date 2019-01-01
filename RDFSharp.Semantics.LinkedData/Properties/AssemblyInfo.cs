@@ -14,14 +14,6 @@
    limitations under the License.
 */
 
-using System.Reflection;
 using System.Runtime.InteropServices;
-[assembly: AssemblyTitle("RDFSharp.Semantics.LinkedData")]
-[assembly: AssemblyDescription("LinkedData OWL-DL ontologies modeled with RDFSharp.Semantics")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Marco De Salvo")]
-[assembly: AssemblyProduct("RDFSharp.Semantics")]
-[assembly: AssemblyCopyright("Marco De Salvo")]
-[assembly: AssemblyVersion("1.0.4")]
 [assembly: ComVisible(false)]
 [assembly: Guid("5B864C1C-711A-4349-AA56-77EE3BFDC4E8")]

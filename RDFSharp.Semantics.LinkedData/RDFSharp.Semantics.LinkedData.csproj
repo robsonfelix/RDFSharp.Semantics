@@ -1,81 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- RDFSharp.Semantics.LinkedData project properties -->
   <PropertyGroup>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5B864C1C-711A-4349-AA56-77EE3BFDC4E8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RDFSharp.Semantics.LinkedData</RootNamespace>
+    <AssemblyTitle>RDFSharp.Semantics.LinkedData</AssemblyTitle>
     <AssemblyName>RDFSharp.Semantics.LinkedData</AssemblyName>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <Version>2.0.0.0</Version>
+    <Authors>Marco De Salvo</Authors>
+    <Copyright>Marco De Salvo</Copyright>
+	<Description>LinkedData OWL-DL ontologies modeled with RDFSharp.Semantics</Description>
+	<TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>false</SignAssembly>
+    <Product>RDFSharp.Semantics</Product>
   </PropertyGroup>
 
-  <!-- RDFSharp.Semantics.LinkedData build configurations -->
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Platform>AnyCPU</Platform>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <OutputPath>bin\Debug\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\Debug\netstandard2.0\RDFSharp.Semantics.LinkedData.xml</DocumentationFile>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\Debug\RDFSharp.Semantics.LinkedData.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn />
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Platform>AnyCPU</Platform>
+	<DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>bin\Release\netstandard2.0\RDFSharp.Semantics.LinkedData.xml</DocumentationFile>
+    <WarningLevel>0</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn />
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
-    <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\Release\RDFSharp.Semantics.LinkedData.xml</DocumentationFile>
   </PropertyGroup>
 
-  <!-- Microsoft .NET references -->
   <ItemGroup>
-    <Reference Include="RDFSharp, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RDFSharp.1.0.4\lib\net40\RDFSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <PackageReference Include="RDFSharp" Version="2.0.0" />
   </ItemGroup>
 
-  <!-- RDFSharp.Semantics.LinkedData -->
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-	<Compile Include="DC\RDFDCOntology.cs" />
-    <Compile Include="FOAF\RDFFOAFOntology.cs" />
-    <Compile Include="GEO\RDFGEOOntology.cs" />
-    <Compile Include="SIOC\RDFSIOCOntology.cs" />
-    <Compile Include="SKOS\Abstractions\RDFSKOSCollection.cs" />
-    <Compile Include="SKOS\Abstractions\RDFSKOSConcept.cs" />
-    <Compile Include="SKOS\Abstractions\RDFSKOSConceptScheme.cs" />
-    <Compile Include="SKOS\Abstractions\RDFSKOSLabel.cs" />
-    <Compile Include="SKOS\Abstractions\RDFSKOSOrderedCollection.cs" />
-    <Compile Include="SKOS\RDFSKOSAnnotations.cs" />
-    <Compile Include="SKOS\RDFSKOSChecker.cs" />
-    <Compile Include="SKOS\RDFSKOSHelper.cs" />
-    <Compile Include="SKOS\RDFSKOSOntology.cs" />
-    <Compile Include="SKOS\RDFSKOSRelations.cs" />
+    <ProjectReference Include="..\RDFSharp.Semantics\RDFSharp.Semantics.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RDFSharp.Semantics\RDFSharp.Semantics.csproj">
-      <Project>{2BE71F3A-943B-464A-8FE8-7D7BCBF23100}</Project>
-      <Name>RDFSharp.Semantics</Name>
-    </ProjectReference>
-  </ItemGroup>
-
-  <!-- NuGet Configurations -->
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 
 </Project>

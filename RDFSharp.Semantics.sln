@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics", "RDFSharp.Semantics\RDFSharp.Semantics.csproj", "{2BE71F3A-943B-464A-8FE8-7D7BCBF23100}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFSharp.Semantics.Reasoner", "RDFSharp.Semantics.Reasoner\RDFSharp.Semantics.Reasoner.csproj", "{CB4B033C-E243-43F9-BA10-9050BDD9ADBC}"
@@ -34,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FDD2B7E0-5BC5-4636-997B-778F43D467E8}
 	EndGlobalSection
 EndGlobal
