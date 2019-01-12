@@ -33,5 +33,8 @@ RDFSharp.Semantics has a modular API made up of four layers:
     </ul>
 </ul>
 <hr>
-RDFSharp.Semantics is also available on <b><a href="http://www.nuget.org/packages?q=rdfsharp.semantics">NuGet</a></b>!
+Did you know that...
+<ul>
+    <li>RDFSharp.Semantics is also available on <b><a href="http://www.nuget.org/packages?q=rdfsharp.semantics">NuGet</a></b>!</li>
+</ul>
 <hr>
