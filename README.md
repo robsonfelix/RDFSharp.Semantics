@@ -1,4 +1,6 @@
 # RDFSharp.Semantics
+[![NuGet Badge](https://buildstats.info/nuget/RDFSharp.Semantics)](https://www.nuget.org/packages/RDFSharp.Semantics)
+
 <b><a href="https://github.com/mdesalvo/RDFSharp">RDFSharp</a></b> extension for <b>OWL-DL</b> ontology modeling, validation and reasoning.
 
 <hr>
@@ -32,9 +34,3 @@ RDFSharp.Semantics has a modular API made up of four layers:
         <li>Build <i>SKOS/SKOS-XL</i> taxonomies with a friendly, powerful and complete .NET API</li>
     </ul>
 </ul>
-<hr>
-Did you know that...
-<ul>
-    <li>RDFSharp.Semantics is also available on <b><a href="http://www.nuget.org/packages?q=rdfsharp.semantics">NuGet</a></b>!</li>
-</ul>
-<hr>
